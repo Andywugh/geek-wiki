@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Java并发 on 程序员安仔</title><link>https://www.shellio.cc/categories/java%E5%B9%B6%E5%8F%91/</link><description>Recent content in Java并发 on 程序员安仔</description><generator>Hugo -- gohugo.io</generator><language>zh-hans</language><copyright>个人技术博客</copyright><lastBuildDate>Thu, 06 Oct 2022 22:42:23 +0800</lastBuildDate><atom:link href="https://www.shellio.cc/categories/java%E5%B9%B6%E5%8F%91/index.xml" rel="self" type="application/rss+xml"/><item><title>Java 中的异步计算</title><link>https://www.shellio.cc/docs/java/concurrency/default/8/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/8/</guid><description>本文我们来了解下 Java 8 引入的 CompletableFuture 类，了解下该类提供的功能和用例。
+Java 中的异步计算 异步计算很难推理的，因为我们的大脑是同步的，会将任何计算看成是一系列的同步计算。
+我们在实现异步计算时，往往会把回调的动作分散在代码中或者深深地嵌套在彼此内部，这种情况下，当我们需要处理其中一个步骤中可能发生的错误时，情况变得更糟。
+人生的一大悲剧是，尽管 Java 5 已经看到了这种恶性循环，提供了Future 接口作为异步计算的结果，但它没有提供任何方法来组合这些计算或处理可能的错误。
+直到Java 8，才引入了 CompletableFuture 类。该类不仅实现了 Future 接口，还实现了 CompletionStage 接口。此接口定义了可与异步计算步骤组合的异步计算步骤契约。
+官方文档真是拗口，简单来说，CompletionStage 接口规范了一个异步计算步骤如何与另一个异步计算步骤组合。
+CompletableFuture 类还是一个集大成者，即是一个构建块，也是一个框架，提供了大约 50 种不同的方法来构造，组合，执行异步计算步骤和处理错误。
+API数量如此之多，第一眼看到简直就傻眼了，不过好在它们可以分门别类，因为它们大多属于几个明确且不同的用例。
+将 CompletableFuture 当作简单的 Future 使用 为什么可以 ？
+因为CompletableFuture 类实现了 Future 接口，因此我们可以将其用作 Future 实现，但需要自己实现额外的完成逻辑。
+例如，我们可以使用无任何参数的构造函数来创建此类的实例，用于表示未来的某些结果，然后将其交给使用者，并在将来的某个时间调用 complete() 方法完成。消费者可以使用 get() 方法来阻止当前线程，直到提供此结果。
+1public Future&amp;lt;String&amp;gt; calculateAsync() throws InterruptedException { 2 CompletableFuture&amp;lt;String&amp;gt; completableFuture 3 = new CompletableFuture&amp;lt;&amp;gt;(); 4 Executors.newCachedThreadPool().submit(() -&amp;gt; { 5 Thread.sleep(500); 6 completableFuture.complete(&amp;#34;Hello&amp;#34;); 7 return null; 8 }); 9 return completableFuture; 上面的实例中，我们创建了一个创建 CompletableFuture 实例的方法，把计算分离到另一个线程中并立即返回 Future。当计算完成后，该方法通过将结果提供给 complete() 方法来完成 Future。</description></item><item><title>ForkJoinPool 线程池</title><link>https://www.shellio.cc/docs/java/concurrency/default/2/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/2/</guid><description>fork/join 框架是 Java 7 中引入的 ，它是一个工具，通过 「 分而治之 」 的方法尝试将所有可用的处理器内核使用起来帮助加速并行处理。
+在实际使用过程中，这种 「 分而治之 」的方法意味着框架首先要 fork ，递归地将任务分解为较小的独立子任务，直到它们足够简单以便异步执行。然后，join 部分开始工作，将所有子任务的结果递归地连接成单个结果，或者在返回 void 的任务的情况下，程序只是等待每个子任务执行完毕。
+为了提供有效的并行执行，fork/join 框架使用了一个名为 ForkJoinPool 的线程池，用于管理 ForkJoinWorkerThread 类型的工作线程。
+ForkJoinPool 线程池 ForkJoinPool 是 fork/join 框架的核心，是 ExecutorService 的一个实现，用于管理工作线程，并提供了一些工具来帮助获取有关线程池状态和性能的信息。
+工作线程一次只能执行一个任务。
+ForkJoinPool 线程池并不会为每个子任务创建一个单独的线程，相反，池中的每个线程都有自己的双端队列用于存储任务 （ double-ended queue ）( 或 deque，发音 deck ）。
+这种架构使用了一种名为工作窃取（ work-stealing ）算法来平衡线程的工作负载。
+工作窃取（ work-stealing ）算法 要怎么解释 「 工作窃取算法 」 呢 ？
+简单来说，就是 空闲的线程试图从繁忙线程的 deques 中 窃取 工作。
+默认情况下，每个工作线程从其自己的双端队列中获取任务。但如果自己的双端队列中的任务已经执行完毕，双端队列为空时，工作线程就会从另一个忙线程的双端队列尾部或全局入口队列中获取任务，因为这是最大概率可能找到工作的地方。
+这种方法最大限度地减少了线程竞争任务的可能性。它还减少了工作线程寻找任务的次数，因为它首先在最大可用的工作块上工作。
+ForkJoinPool 线程池的实例化 Java 8 在Java 8 中，创建 ForkJoinPool 实例的最简单的方式就是使用其静态方法 commonPool()。</description></item><item><title>组合 Futures</title><link>https://www.shellio.cc/docs/java/concurrency/default/9/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/9/</guid><description>上一章节中我们讲解了 CompletableFuture 的一些基本用法，比如如何使用和如何处理异步计算结果。本章节我们继续，主要讲解如何使用 CompletableFuture 来组合异步计算的结果
+组合 Futures CompletableFuture API 最吸引人的部分，应该是能够在一系列链式计算步骤中组合 CompletableFuture 实例。这种链式的结果本身就是CompletableFuture，允许进一步链接和组合。
+这种方法在函数式语言中无处不在，通常被称为 「一元 ( monadic ) 设计模式 」。
+CompletableFuture 提供了方法 thenCompose() 用于按顺序链接两个 Futures。该方法的参数是一个能够返回 CompletableFuture 实例的函数或表达式。而该函数或表达式的参数则是先前计算步骤的结果，这允许我们在下一个 CompletableFuture 的 lambda 中使用这个值。
+例如下面这个示例
+1CompletableFuture&amp;lt;String&amp;gt; completableFuture 2 = CompletableFuture.supplyAsync(() -&amp;gt; DDKK.COM 弟弟快看) 3 .thenCompose(s -&amp;gt; CompletableFuture.supplyAsync(() -&amp;gt; s + 程序员编程资料站)); 4assertEquals(&amp;#34;DDKK.COM 弟弟快看，程序员编程资料站&amp;#34;, completableFuture.get()); thenCompose() 方法与 thenApply() 一起实现了一元设计模式的基本构建块，它们与Java 8 中提供的 Stream 和 Optional 类的 map 和flatMap 方法密切相关。
+两个方法都接收一个函数并将其应用于计算结果，但 thenCompose() （ flatMap() ）方法接收一个函数，该函数返回相同类型的另一个对象，这样，就允许将这些类的实例组合为构建块。
+如果要执行两个独立的 Futures 并对其结果执行某些操作，可以使用 Future 的 thenCombine() 并传递能够接收两个参数的函数或表达式来处理这两个结果。</description></item><item><title/><link>https://www.shellio.cc/docs/java/concurrency/default/6/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/6/</guid><description>ForkJoinPool 是Java 7 中引入的 fork/join 框架的核心之一。它解决了一个常见的问题： 如何在递归中生成多个任务。因为，即使是使用一个简单的 ThreadPoolExecutor ，也会在不断的递归中快速耗尽线程。因为每个任务或子任务都需要自己的线程来运行。
+在fork/join 框架中，任何任务都可以生成 ( fork ) 多个子任务并使用 join() 方法等待它们的完成。fork/join 框架的好处是它不会为每个任务或子任务创建新线程，而是实现了 工作窃取 ( Work Stealing ) 算法。关于 fork/join 框架的详细信息，你可以访问我们的 一文秒懂 Java Fork/Join。
+接下来，我们看一个使用 ForkJoinPool 遍历节点树并计算所有叶值之和的简单示例。在这个示例中，树是一个由节点，int 值和一组子节点组成。
+1static class TreeNode { 2 int value; 3 Set&amp;lt;TreeNode&amp;gt; children; 4 TreeNode(int value, TreeNode... children) { 5 this.value = value; 6 this.children = Sets.newHashSet(children); 7 } 创建了树 TreeNode 之后，如果我们想要并行地对树中的所有值求和，我们需要实现一个 RecursiveTask&amp;lt;Integer&amp;gt; 接口。每个任务都接收自己的节点，并将其值添加到其子节点的值之和上。
+要计算子节点值的总和，任务实现执行以下操作
+1、 将子节点集合转换为流(stream)；
+2、
+因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 映射前面操作中创建的流，为每个元素创建一个新的CountingTask；</description></item><item><title>给 Maven 添加 Guava 依赖</title><link>https://www.shellio.cc/docs/java/concurrency/default/7/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/7/</guid><description>Guava 是托管在 Github.com 上的流行的 Google 开源的 Java 线程池库。
+Guava 包含了许多有用的并发类，同时还包含了几个方便的 ExecutorService 实现，但这些实现类都无法通过直接实例化或子类化来创建实例。取而代之的是提供了 MoreExecutors 助手类来创建它们的实例。
+给 Maven 添加 Guava 依赖 为了将Google Guava 库包含进当前的项目中，需要将下面的依赖项添加到 Maven pom 文件中。
+1&amp;lt;dependency&amp;gt; 2 &amp;lt;groupId&amp;gt;com.google.guava&amp;lt;/groupId&amp;gt; 3 &amp;lt;artifactId&amp;gt;guava&amp;lt;/artifactId&amp;gt; 4 &amp;lt;version&amp;gt;26.0&amp;lt;/version&amp;gt; 5&amp;lt;/dependency&amp;gt; 你可以在 Maven 中央仓库 中找到最新版本的 Guava 库
+直接执行者和直接执行者服务 有时候，我们希望在当前线程或线程池中执行任务，具体在哪里取决于某些条件。这种情况下，你应该会更喜欢使用单个 Executor 接口，且只需切换实现即可。
+虽然将当前线程中的任务的 Executor 或 ExecutorService 的提取出来单独实现并不困难，但它仍然需要编写一些样板代码。
+值得庆幸的是，Guava 为我们提供了预定义的实例。
+下面的范例演示了如何在同一个线程中执行任务。简单起见，提交的任务会将当前线程休眠 500 毫秒并阻塞当前线程，并在执行的调用完成后让结果立即可用
+1 Executor executor = MoreExecutors.directExecutor(); 2AtomicBoolean executed = new AtomicBoolean(); 3executor.execute(() -&amp;gt; { 4 try { 5 Thread.</description></item><item><title>Java 中的线程池</title><link>https://www.shellio.cc/docs/java/concurrency/default/3/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/3/</guid><description>本文我们将讲解 Java 中的线程池 ( Thread Pool )，从 Java 标准库中的线程池的不同实现开始，到 Google 开发的 Guava 库的前世今生。
+本章节涉及到很多前几个章节中阐述的知识点。我们希望你是按照顺序阅读下来的，不然有些知识会一头雾水。
+Java 语言的实现中，把 Java 线程一一映射到操作系统级的线程，而后者是操作系统的资源，这意味着，如果开发者毫无节制地创建线程，那么线程资源就会被快速的耗尽。
+在Windows 操作系统上，每个线程要预留出 1m 的内存空间，意味着 2G 的内存理论上做多只能创建 2048 个线程。而在 Linux 上，最大线程数由常量 PTHREAD_THREADS_MAX 决定，一般为 1024。
+出于模拟并行性的目的，Java 线程之间的上下文切换也由操作系统完成。因为线程上下文切换需要消耗时间，所以，一个简单的观点是：产生的线程越多，每个线程花在实际工作上的时间就越少。
+为什么会有线程上下文切换？
+一台电脑，运行起来后，它的 CPU 是固定的，05 年之前，还是单核时代，也就是一次只能运行一个线程，虽然随着时间的推移，现在的 CPU 已经有很多个核心，比如 8 核 16 核之类的。但相比于一个应用程序能够创建的线程数，那真的是太少了。而每个核心一次只能运行一个线程，所以多个线程需要运行时就需要来回不停的在多个线程间切换，这就是线程之间的上下文切换。
+为了节制创建线程的数量，也为了节省创建线程的开销，因此提出了线程池的概念。线程池模式有助于节省多线程应用程序中的资源，还可以在某些预定义的限制内包含并行性。
+当我们使用线程池时，我们可以以并行任务的形式编写并发代码并将其提交到线程池的实例中执行。
+这个线程池实例控制了多个重用线程以执行这些任务。
+这种线程池模式，允许我们控制应用程序创建的线程数，生命周期，以及计划任务的执行并将传入的任务保留在队列中。
+Java 中的线程池 Executors、Executor 和 ExecutorService Executors 是一个帮助类，提供了创建几种预配置线程池实例的方法。如果你不需要应用任何自定义的微调，可以调用这些方法创建默认配置的线程池，因为它能节省很多时间和代码。
+Executor 和 ExecutorService 接口则用于与 Java 中不同线程池的实现协同工作。通常，你应该将代码与线程池的实际实现分离，并在整个应用程序中使用这些接口。
+Executor 接口提供了一个 execute() 方法将 Runnable 实例提交到线程池中执行。
+下面的代码是一个快速示例，演示了如何使用 Executors API 获取包含了单个线程池和无限队列支持的 Executor 实例，以便按顺序执行任务。</description></item><item><title>Java 并发编程面试题</title><link>https://www.shellio.cc/docs/java/concurrency/default/10/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/10/</guid><description>应聘Java 岗，总是免不了几个 Java 并发编程的面试题，不过大多数都局限在 java.util.concurrent 包下的知识和实现问题。本文针对 Java 并发相关的常见的面试题做一些解释。
+Q1: 进程和线程的区别？ 这是一个非常基础的面试题，如果这道题没有回答的比较满意，一般情况下，面试官会认为应聘者在并发方面的基础只是不牢固，就不会继续深入询问其它并发问题了。
+1、 进程和线程都是并发单元，但它们有一个根本区别：进程不共享公共内存，而线程则共享；
+2、 从操作系统的角度来看，进程是一个独立的软件，在其自己的虚拟内存空间中运行任何一个多任务操作系统（这几乎意味着任何现代操作系统）都必须将内存中的进程分开，这样一个失败的进程就不会通过加扰公共内存来拖累所有其它进程因此，进程通常是隔离的，它们通过进程间通信进行协作，进程间通信由操作系统定义为一种中间API；
+3、 相反，线程是应用程序的一部分，它与同一应用程序的其他线程共享公共内存使用公共内存可以减少大量开销，因此使用线程可以更快的交换数据和进行线程间协作；
+关于进程间通讯那一块可以不用回答，如果你不懂的话，不必然会导致接下来的某个问题是 进程间通讯的的原理.
+Q2: 如何创建一个线程实例并且运行它？ 这道题考察的是对 Runnable 的理解。
+创建一个线程的实例，有两种方法可供选择:
+1、 把Runnable的实例传递给Thread的构造函数并调用start()方法；
+1Thread thread1 = new Thread(() -&amp;gt; 2 System.out.println(&amp;#34;Hello World from Runnable!&amp;#34;)); 3thread1.start(); Runnable是一个函数接口，因此可以作为 lambda 表达式传递
+2、 因为线程本身也实现了Runnable接口，所以另一种创建线程的方法是创建一个匿名子类，覆写它的run()方法，然后调用start()；
+1Thread thread2 = new Thread() { 2 @Override 3 public void run() { 4 System.out.println(&amp;#34;Hello World from subclass!&amp;#34;); 5 } 6}; 7thread2.start(); Q3: 描述线程的不同状态以及何时发生状态转换 ？ 这道题考察的是对线程生命周期的理解。</description></item><item><title>扩展一个线程 （ Thread 类 )</title><link>https://www.shellio.cc/docs/java/concurrency/default/18/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/18/</guid><description>写Java 代码的时候，我们经常会有这样的疑问：我到底是实现一个 Runnable 呢，还是扩展一个 Thread 类？
+你的答案是什么呢？ 那有没有标准答案呢？
+答案是什么呢？
+我们先来分析下，看看哪种方法在实践中更有意义以及为什么？
+扩展一个线程 （ Thread 类 ) 简单起见，我们就来定义一个扩展自 Thread 的 SimpleThread 类
+1public class SimpleThread extends Thread { 2 private String message; 3 // standard logger, constructor 4 @Override 5 public void run() { 6 log.info(message); 7 } 代码也真是简单了，然后我们看看如何运行这个 SimpleThread 类
+1@Test 2public void givenAThread_whenRunIt_thenResult() 3 throws Exception { 4 Thread thread = new SimpleThread( 5 &amp;#34;SimpleThread executed using Thread&amp;#34;); 6 thread.start(); 7 thread.</description></item><item><title>BlockingQueue 的队列类型</title><link>https://www.shellio.cc/docs/java/concurrency/default/12/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/12/</guid><description>本文中，我们将介绍一个 java.util.concurrent 包提供的用于解决并发生产者 – 消费者问题的最有用的类 – BlockQueue。我们将介绍BlockingQueue 接口的 API 以及如何使用该接口的方法使编写并发程序更容易。
+在本文的后面，我们将展示一个具有多个生产者线程和多个消费者线程的简单程序的示例。
+BlockingQueue 的队列类型 java.util.concurrent 提供了两种类型的 BlockingQueue：
+1、 无限队列（unboundedqueue）–几乎可以无限增长；
+2、 有限队列（boundedqueue）–定义了最大容量；
+无限队列 创建一个无限队列的方法很简单
+1BlockingQueue&amp;lt;String&amp;gt; blockingQueue = new LinkedBlockingDeque&amp;lt;&amp;gt;(); 上面这段代码中，blockingQueue 的容量将设置为 Integer.MAX_VALUE 。
+向无限队列添加元素的所有操作都将永远不会阻塞，因此它可以增长到非常大的容量。
+使用无限 BlockingQueue 设计生产者 – 消费者模型时最重要的是 消费者应该能够像生产者向队列添加消息一样快地消费消息 。否则，内存可能会填满，然后就会得到一个 OutOfMemory 异常。
+有限队列 第二种类型的队列是有限队列。我们可以通过将容量作为参数传递给构造函数来创建这样的队列
+1BlockingQueue&amp;lt;String&amp;gt; blockingQueue = new LinkedBlockingDeque&amp;lt;&amp;gt;(10); 上面这句代码中，我们设置了 blockingQueue 的容量为 10 。这意味着当消费者尝试将元素添加到已经满了的队列时，结果取决于添加元素的方法（ offer() 、add() 、put() ) ，它将阻塞，直到有足够的空间可以插入元素。否则，添加操作将会失败。
+使用有限队列是设计并发程序的好方法，因为当我们将元素插入到已经满了的队列时，这些操作需要等到消费者赶上并在队列中提供一些空间。这种机制可以让那个我们不做任何其它更改就可以实现节流。
+BlockingQueue API BlockingQueue 接口的所有方法可以分为两大类：负责向队列添加元素的方法和检索这些元素的方法。
+在队列满/空的情况下，来自这两个组的每个方法的行为都不同。
+添加元素 BlockingQueue 提供了以下方法用于添加元素
+方法 说明 add() 如果插入成功则返回 true，否则抛出 IllegalStateException 异常 put() 将指定的元素插入队列，如果队列满了，那么会阻塞直到有空间插入 offer() 如果插入成功则返回 true，否则返回 false offer(E e, long timeout, TimeUnit unit) 尝试将元素插入队列，如果队列已满，那么会阻塞直到有空间插入 检索元素 BlockingQueue 提供了以下方法用于检索元素</description></item><item><title>Java 中的线程同步 ( Thread Synchronization )</title><link>https://www.shellio.cc/docs/java/concurrency/default/19_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/19_miss/</guid><description>大家有没有发现，其实 「 一文秒懂 」 系列讲述的都是多线程并发开发的问题。这个话题太大了，估计没有上百篇文章都解释不清楚。
+本文，我们来讲解下 Java 并发中的基础的基础，核心的核心，Java 并发编程中的最基本的机制之一 – 「 线程同步 」
+为了方便你理解并发编程中的各种概念和术语，我们首先会来一阵扫盲，讨论一些基本的并发相关术语和方法。接着，我们将开发一个简单的应用程序，并在合格应用程序里处理并发问题，以方便大家理解和巩固 wait() 和 notify()。
+Java 中的线程同步 ( Thread Synchronization ) 在并发编程中，在多线程环境下，多个线程可能会尝试修改同一资源。如果线程管理不当，这显然会导致一致性问题。
+Java 中的哨兵块 ( guarded block ) Java 中，可以用来协调多个线程操作的一个工具是 「 哨兵块 」。这个哨兵块会在恢复执行前检查特定条件。
+基于这种哨兵检查的思想，Java 在所有类的基类 Object 中提供了两个方法
+方法 说明 Object.wait() 暂停一个线程 Object.notify() 唤醒一个线程 是不是有点难以理解，别担心，看下面这个图，这个图描绘了线程的的生命周期。
+虽然从上图中可以看出，有多个方法可以控制一个线程的生命周期，但本章节，我们只讨论 notify() 方法和 wait() 方法
+wait() 方法 对照上图，简单的说，当我们调用 wait() 时会强制当前线程等待，直到某个其它线程在同一个对象上调用 notify() 或 notifyAll() 方法。
+因此，当前线程必须拥有对象的监视器。根据 Java docs 的说法，这可能发生在
+我们已经为给定对象执行了同步实例方法 我们已经在给定对象上执行了 synchronized 块的主体 通过为 Class 类型的对象执行同步静态方法 请注意，一次只有一个活动线程可以拥有对象的监视器。</description></item><item><title>ThreadLocalRandom Via Random</title><link>https://www.shellio.cc/docs/java/concurrency/default/16/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/16/</guid><description>随机数生成是一个非常常见的操作，而且 Java 也提供了 java.util.Random 类用于生成随机数，而且呢，这个类也是线程安全的，就是有一点不好，在多线程下，它的性能不佳。
+为什么多线程下，Random 的性能不佳？
+因为，它采用了多个线程共享一个 Random 实例。这样就会导致多个线程争用。
+为了解决这个问题，Java 7 引入了 java.util.concurrent.ThreadLocalRandom 类，用于在多线程环境中生成随机数。
+本文接下来的部分，就来看看如何 ThreadLocalRandom 如何执行以及如何在实际应用程序中使用它。
+ThreadLocalRandom Via Random ThreadLocalRandom 是 ThreadLocal 类和 Random 类的组合，它与当前线程隔离，通过简单地避免对 Random 对象的任何并发访问，在多线程环境中实现了更好的性能。
+也就是说，相比于 java.util.Random 类全局的提供随机数生成， 使用 ThreadLocalRandom，一个线程获得的随机数不受另一个线程的影响。
+另一个与 Random 类不同的是，ThreadLocalRandom 不支持显式设置种子。因为它重写了从 Random 继承的 setSeed(long seed) 方法，会在调用时始终抛出 UnsupportedOperationException。
+接下来我们看看如何使用 ThreadLocalRandom 生成随机 int、long 和 double 值。
+使用 ThreadLocalRandom 生成随机数 根据Oracle 文档，我们只需要调用 ThreadLocalRandom.current() 方法，就能返回当前线程的 ThreadLocalRandom 实例。然后，我们可以通过实例的相关方法来生成随机值。
+比如下面的代码，生成一个没有任何边界的随机 int 值
+1int unboundedRandomValue = ThreadLocalRandom.current().nextInt()); 其实是有边界的，它的边界就是 int 的边界。</description></item><item><title>Java 中的多线程</title><link>https://www.shellio.cc/docs/java/concurrency/default/17_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/17_miss/</guid><description>本文中，我想详细的讨论下 Java 中的核心概念 – 线程的生命周期。我会使用一张我自制的图片加上实用的代码片段，一步一步的详细剖析线程的各个状态和各个状态之间如何转换。
+Java 中的多线程 Java 语言中， 多线程是由 Thread 的核心概念驱动的。因为多线程中的每一个线程都相互独立，有着自己的生命周期和状态转换。
+我们先来看一张草图，这图描述了 Java 线程的各种状态和转换过程。
+是不是很杂乱无章？ 看不懂没关系，我们接下来会详细介绍各个状态。
+Java 线程中的生命周期 Java 中，每一个线程都是 java.lang.Thread 类的实例。而且，Java 个线程生命周期中的各个状态都定义在 Thread 类的一个静态的 State 枚举中。
+State 枚举定义了线程的所有潜在状态。总共有 6 个，分别对应者上图中的 6 个绿色背景的矩形和椭圆型。
+NEW : 新创建的，且未调用 start() 方法开始执行的线程。 RUNNABLE : 已经在运行中的线程或正在等待资源分配的准备运行的线程。 BLOCKED : 等待获取进入或重新进入同步块或方法的监视器锁的线程。 WAITING : 等待其他一些线程执行特定操作，没有任何时间限制。 TIMED_WAITING: 等待某个其他线程在指定时间段内执行特定操作 TERMINATED : 线程完成了它的任务。 需要注意的是： 在任何给定的时间点，线程只能处于这些状态之一。
+NEW 状态，应该很好理解，比如，车，厂家生产出来，只要还没被卖出过，那么它就是新的 ( NEW ) RUNNABLE 只要线程不出于其它状态，它就是 RUNNABLE 状态。怎么理解呢？ 车买来了，只要它没坏没出什么毛病没借给别人，那么它就出于可开状态，不管是呆在家里吃灰还是已经在上路运行。 WAITING : 无时间显示的等待其它线程完成任务时就处于这个状态，怎么理解呢？比如长假告诉公路大堵车，要等待别人前进了几个蜗牛步我们才能往前几个蜗牛步，有时候一等就是昏天暗地，可能长达几天，也可能，一辈子吧。 TIMED_WAITING : 一直处于 WAITING 总不是办法，所以可能会设置一个超时时间，如果过了时间，就不等待了。同样的，如果可以后退，那么我们在堵车的时候可能会等待那么十几分钟，发现确实走不了，就等了呗。 TERMINATED : 当一个线程结束了它的任务（可能完成了，也可能没完成）就会处于这个状态。如果拿车做比喻，那么当车彻底报废，已经再也不能上路了，就处于这个状态。 其实拿车作比喻感觉有点怪，我觉得拿追女朋友来做比喻比较恰当些。</description></item><item><title>锁 ( lock ) 和同步块 ( synchronized block ) 之间的差异</title><link>https://www.shellio.cc/docs/java/concurrency/default/13/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/13/</guid><description>对于Java 来讲，锁 （ Lock ) 是一种比标准同步块 （ synchronized block ） 更灵活，更复杂的线程同步机制。
+其实，Java 1.5 就已经存在 Lock 接口了。这个 Lock 接口在 java.util.concurrent.lock 包中定义，提供了大量的锁操作。
+本文中，我们将讲解 Lock 接口的不同实现并介绍如何在应用程序中使用锁。
+锁 ( lock ) 和同步块 ( synchronized block ) 之间的差异 使用synchronized 块和使用 Lock API 之间几乎没有区别：
+同步块完全包含在方法中 : 在独立的方法中，我们可以使用 Lock 提供的 lock() 和 unlock() 实现锁和解锁操作。 同步块不支持公平竞争，任何线程都可以获取释放的锁定，且不能指定优先级。但锁 ( Lock ) 就不一样了，可以通过指定公平属性来实现 Lock 中的公平性。这可以确保最长的等待线程被授予锁定权限。 如果线程无法访问同步块，则会阻塞该线程。Lock 则提供了 tryLock() 方法。线程只有在可用且不被任何其他线程保持时才获取锁定。这减少了线程等待锁定的阻塞时间。 处于 「 等待 」 状态以获取对同步块的访问的线程不能被中断。Lock 提供了一个 lockInterruptibly() 方法，可用于在等待锁定时中断线程。 从上面的对比来看，同步块的所有机制，锁 ( Lock ) 都有相应的 API 对应。</description></item><item><title>守护线程和用户线程的区别</title><link>https://www.shellio.cc/docs/java/concurrency/default/14/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/14/</guid><description>在这篇简短的文章中，我们将讲解下 Java 中的守护线程，看看它们可以做什么。我们还将解释守护线程和用户线程之间的区别。
+守护线程和用户线程的区别 Java 提供了两种类型的线程：守护线程 和 用户线程
+用户线程 是高优先级线程。JVM 会在终止之前等待任何用户线程完成其任务。 用户线程 是低优先级线程。其唯一作用是为用户线程提供服务。 由于守护线程的作用是为用户线程提供服务，并且仅在用户线程运行时才需要，因此一旦所有用户线程完成执行，JVM 就会终止。也就是说 守护线程不会阻止 JVM 退出。
+这也是为什么通常存在于守护线程中的无限循环不会导致问题，因为任何代码（包括 finally 块 ）都不会在所有用户线程完成执行后执行。
+这也是为什么我们并不推荐 在守护线程中执行 I/O 任务 。因为可能导致无法正确关闭资源。
+但是，守护线程并不是 100% 不能阻止 JVM 退出的。守护线程中设计不良的代码可能会阻止 JVM 退出。例如，在正在运行的守护线程上调用Thread.join() 可以阻止应用程序的关闭。
+守护线程能用来做什么？ 常见的做法，就是将守护线程用于后台支持任务，比如垃圾回收、释放未使用对象的内存、从缓存中删除不需要的条目。
+咦，按照这个解释，那么大多数 JVM 线程都是守护线程。
+如何创建守护线程 ？ 守护线程也是一个线程，因此它的创建和启动其实和普通线程没什么区别？
+要将普通线程设置为守护线程，方法很简单，只需要调用 Thread.setDaemon() 方法即可。
+例如下面这段代码，假设我们继承 Thread 类创建了一个新类 NewThread 。那么我们就可以创建这个类的实例并设置为守护线程
+1NewThread daemonThread = new NewThread(); 2daemonThread.setDaemon(true); 3daemonThread.start(); 在Java 语言中，线程的状态是自动继承的。任
+因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 何线程都会继承创建它的线程的守护程序状态。怎么理解呢？
+1、 如果一个线程是普通线程（用户线程），那么它创建的子线程默认也是普通线程（用户线程）；
+2、 如果一个线程是守护线程，那么它创建的子线程默认也是守护线程；
+因此，我们可以推演出： 由于主线程是用户线程，因此在 main() 方法内创建的任何线程默认为用户线程。</description></item><item><title>创建 Future</title><link>https://www.shellio.cc/docs/java/concurrency/default/15/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/15/</guid><description>写了几篇 Java 一文秒懂 XXX 系列的文章后，对 Java 并发编程的设计思想真的是竖然起敬。
+Future 定义在 java.util.concurrent 包中，这是一个接口，自 Java 1.5 以来一直存在的接口，用于处理异步调用和处理并发编程。
+创建 Future 简单地说，Future 类表示异步计算的未来结果 – 在处理完成后最终将出现在 Future 中的结果。
+是不是又很难理解，文字越少，内容越多。上面这句话的意思，就是主线程会创建一个 Future 接口的对象，然后启动并发线程，并告诉并发线程，一旦你执行完毕，就把结果存储在这个 Future 对象里。
+因此，理解 Future 的第一步，就是要知道如何创建和返回 Future 实例。
+一般情况下，我们会把长时间运行的逻辑放在异步线程中进行处理，这是使用 Future 接口最理想的场景。主线程只要简单的将异步任务封装在 Future 里，然后开始等待 Future 的完成，在这段等待的时间内，可以处理一些其它逻辑，一旦 Future 执行完毕，就可以从中获取执行的结果并进一步处理。
+针对上面这种表述，我们来看看具体哪些场景可以使用 Future :
+计算密集型（ 数学和科学计算 ） 操纵大数据结构（ 大数据 ） 远程方法调用（下载文件，HTML 爬取，Web 服务） 实现了 Future 的 FutureTask 我们先来看一段代码:
+1public class SquareCalculator { 2 private ExecutorService executor 3 = Executors.newSingleThreadExecutor(); 4 public Future&amp;lt;Integer&amp;gt; calculate(Integer input) { 5 return executor.</description></item><item><title>并发编程中使用 CountDownLatch</title><link>https://www.shellio.cc/docs/java/concurrency/default/11/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/11/</guid><description>本章节我们来讨论下 java.util.concurrent.CountDownLatch 这个类，顺带演示下如何在一些实际例子中使用它。
+CountDownLatch 类的作用呢？ 怎么说呢？ 简单来说，我们可以使用它来阻塞线程，直到其他线程完成给定任务。
+并发编程中使用 CountDownLatch 简而言之，CountDownLatch 有一个计数器字段，我们可以根据需要减少它，因此，我们可以使用它来阻止调用线程，直到它被计数到零。
+如果我们正在进行一些并行处理，我们可以使用与计数器相同的值来实例化 CountDownLatch，因为我们想要处理多个线程。然后，我们可以在每个线程完成后调用 countdown()，保证调用 await() 的依赖线程将阻塞，直到工作线程完成。
+使用 CountDownLatch 等待线程池完成 我们通过创建一个 Worker 来尝试这个模式，并使用 CountDownLatch 字段来指示它何时完成
+1public class Worker implements Runnable { 2 private List&amp;lt;String&amp;gt; outputScraper; 3 private CountDownLatch countDownLatch; 4 public Worker(List&amp;lt;String&amp;gt; outputScraper, CountDownLatch countDownLatch) { 5 this.outputScraper = outputScraper; 6 this.countDownLatch = countDownLatch; 7 } 8 @Override 9 public void run() { 10 doSomeWork(); 11 outputScraper.add(&amp;#34;Counted down&amp;#34;); 12 countDownLatch.countDown(); 13 } 然后，我们创建一个测试，以证明我们可以让 CountDownLatch 等待 Worker 实例完成</description></item><item><title>ThreadPoolExecutor</title><link>https://www.shellio.cc/docs/java/concurrency/default/4/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/4/</guid><description>因为上一章节篇幅有限，所以我决定把 一文秒懂 Java 线程池 拆分为三篇文章单独介绍。本章节，我们就来看看 ThreadPoolExecutor 。
+ThreadPoolExecutor ThreadPoolExecutor 是一个可被继承 ( extends ) 的线程池实现，包含了用于微调的许多参数和钩子。
+我们并不会讨论 ThreadPoolExecutor 类中的所有的参数和钩子，只会讨论几个主要的配置参数：
+1、 corePoolSize；
+2、 maximumPoolSize；
+3、 keepAliveTime；
+ThreadPoolExecutor 创建的线程池由固定数量的核心线程组成，这些线程在 ThreadPoolExecutor 生命周期内始终存在，除此之外还有一些额外的线程可能会被创建，并会在不需要时主动销毁。corePoolSize 参数用于指定在线程池中实例化并保留的核心线程数。如果所有核心线程都忙，并且提交了更多任务，则允许线程池增长到 maximumPoolSize 。
+keepAliveTime 参数是额外的线程（ 即，实例化超过 corePoolSize 的线程 ）在空闲状态下的存活时间。
+这三个参数涵盖了广泛的使用场景，但最典型的配置是在 Executors 静态方法中预定义的。
+Executors.newFixedThreadPool() 例如，Executors.newFixedThreadPool() 静态方法创建了一个 ThreadPoolExecutor ，它的参数 corePoolSize 和 maximumPoolSize 都是相等的，且参数 keepAliveTime 始终为 0 ，也就意味着此线程池中的线程数始终相同。
+1ThreadPoolExecutor executor = 2 (ThreadPoolExecutor) Executors.newFixedThreadPool(2); 3executor.submit(() -&amp;gt; { 4 Thread.sleep(1000); 5 return null; 6}); 7executor.submit(() -&amp;gt; { 8 Thread.</description></item><item><title>范例 2</title><link>https://www.shellio.cc/docs/java/concurrency/default/5/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/5/</guid><description>ScheduledThreadPoolExecutor 扩展自 一文秒懂 Java 线程池之 ThreadPoolExecutor 讲解的 了ThreadPoolExecutor 类，并且添加了其它方法实现了 ScheduledExecutorService 接口。
+schedule() 方法允许在指定的延迟后执行一次任务 scheduleAtFixedRate() 方法允许在指定的初始延迟后执行任务，然后以一定的周期重复执行，其中 period 参数用于指定两个任务的开始时间之间的间隔时间，因此任务执行的频率是固定的。 scheduleWithFixedDelay() 方法类似于 scheduleAtFixedRate() ，它也重复执行给定的任务，但period 参数用于指定前一个任务的结束和下一个任务的开始之间的间隔时间。也就是指定下一个任务延时多久后才执行。执行频率可能会有所不同，具体取决于执行任何给定任务所需的时间。 静态方法 Executors.newScheduledThreadPool() 方法用于创建包含了指定 corePoolSize，无上限 maximumPoolSize 和 0 存活时间 keepAliveTime 的 ScheduledThreadPoolExecutor 实例。
+例如下面的示例创建了一个包含了 5 个核心线程的 `S
+因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 cheduledThreadPoolExecutor实例，且每隔 500 毫秒运行一个输出Hello World` 的任务
+1ScheduledExecutorService executor = Executors.newScheduledThreadPool(5); 2executor.schedule(() -&amp;gt; { 3 System.out.println(&amp;#34;Hello World&amp;#34;); 4}, 500, TimeUnit.MILLISECONDS); 范例 2 下面的代码则演示了如何在 500 毫秒延迟后执行任务，然后每 100 毫秒重复执行一次。
+1CountDownLatch lock = new CountDownLatch(3); 2ScheduledExecutorService executor = Executors.</description></item><item><title>实例化 ExecutorService</title><link>https://www.shellio.cc/docs/java/concurrency/default/1/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/1/</guid><description>ExecutorService 是 Java java.util.concurrent 包的重要组成部分，是 Java JDK 提供的框架，用于简化异步模式下任务的执行。
+一般来说，ExecutorService 会自动提供一个线程池和相关 API，用于为其分配任务。
+实例化 ExecutorService 实例化ExecutorService 的方式有两种：一种是工厂方法，另一种是直接创建。
+Executors.newFixedThreadPool() 工厂方法创建 ExecutorService 实例 创建ExecutorService 实例的最简单方法是使用 Executors 类的提供的工厂方法。比如
+1ExecutorService executor = Executors.newFixedThreadPool(10); 当然还有其它很多工厂方法，每种工厂方法都可以创建满足特定用例的预定义 ExecutorService 实例。你所需要做的就是找到自己想要的合适的方法。这些方法都在 Oracle 的 JDK 官方文档中有列出
+直接创建 ExecutorService 的实例 因为ExecutorService 是只是一个接口，因此可以使用其任何实现类的实例。Java java.util.concurrent 包已经预定义了几种实现可供我们选择，或者你也可以创建自己的实现。
+例如，ThreadPoolExecutor 类实现了 ExecutorService 接口并提供了一些构造函数用于配置执行程序服务及其内部池。
+1ExecutorService executorService = 2 new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, 3 new LinkedBlockingQueue&amp;lt;Runnable&amp;gt;() 4); 你可能会注意到，上面的代码与工厂方法 newSingleThreadExecutor() 的 源代码 非常相似。对于大多数情况，不需要详细的手动配置。
+将任务分配给 ExecutorService ExecutorService 可以执行 Runnable 和 Callable 任务。为了使本文简单易懂。我们将使用两个两个原始任务，如下面的代码所示。</description></item></channel></rss>

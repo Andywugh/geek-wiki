@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Docker on 程序员安仔</title><link>https://www.shellio.cc/categories/docker/</link><description>Recent content in Docker on 程序员安仔</description><generator>Hugo -- gohugo.io</generator><language>zh-hans</language><copyright>个人技术博客</copyright><lastBuildDate>Thu, 06 Oct 2022 22:42:23 +0800</lastBuildDate><atom:link href="https://www.shellio.cc/categories/docker/index.xml" rel="self" type="application/rss+xml"/><item><title>八、Docker top 查看容器进程</title><link>https://www.shellio.cc/docs/cloud-native/docker/8/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/8/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>二、Docker 架构</title><link>https://www.shellio.cc/docs/cloud-native/docker/2/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/2/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括 1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>二十、Docker build 构建镜像</title><link>https://www.shellio.cc/docs/cloud-native/docker/20/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/20/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>二十八、Docker 安装 MongoDB</title><link>https://www.shellio.cc/docs/cloud-native/docker/28/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/28/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>二十二、Docker 部署 Nginx 环境</title><link>https://www.shellio.cc/docs/cloud-native/docker/22/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/22/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>二十九、Docker 安装 Apache</title><link>https://www.shellio.cc/docs/cloud-native/docker/29/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/29/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>二十六、Docker 安装 Python</title><link>https://www.shellio.cc/docs/cloud-native/docker/26/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/26/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>二十七、Docker 安装 Redis</title><link>https://www.shellio.cc/docs/cloud-native/docker/27/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/27/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>二十三、Docker 部署 PHP 环境</title><link>https://www.shellio.cc/docs/cloud-native/docker/23/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/23/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>二十四、Docker 安装 MySQL</title><link>https://www.shellio.cc/docs/cloud-native/docker/24/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/24/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>二十五、Docker 安装 Tomcat</title><link>https://www.shellio.cc/docs/cloud-native/docker/25/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/25/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>二十一、Docker 镜像打标签</title><link>https://www.shellio.cc/docs/cloud-native/docker/21/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/21/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>九、Docker inspect 容器元数据</title><link>https://www.shellio.cc/docs/cloud-native/docker/9/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/9/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>六、Docker run 运行镜像</title><link>https://www.shellio.cc/docs/cloud-native/docker/6/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/6/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>七、Docker 容器</title><link>https://www.shellio.cc/docs/cloud-native/docker/7/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/7/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>三、Ubuntu 安装 Docker</title><link>https://www.shellio.cc/docs/cloud-native/docker/3/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/3/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用 Linux 常用的命令；
+2、 知道大部分的 Linux 常识，比如终端、service、ip、用户、组等；
+3、 熟练使用 Ubuntu 或者 Centos 或者 MacOS 种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker 的应用场景 1、 Web 应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的 OpenShift 或 CloudFoundry 平台来搭建自己的 PaaS 环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；</description></item><item><title>三十、Docker 命令大全</title><link>https://www.shellio.cc/docs/cloud-native/docker/30/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/30/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>十、Docker start 启动容器</title><link>https://www.shellio.cc/docs/cloud-native/docker/10/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/10/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用 Linux 常用的命令；
+2、 知道大部分的 Linux 常识，比如终端、service、ip、用户、组等；
+3、 熟练使用 Ubuntu 或者 Centos 或者 MacOS 种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker 的应用场景 1、 Web 应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的 OpenShift 或 CloudFoundry 平台来搭建自己的 PaaS 环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；</description></item><item><title>十八、Docker commit 更新镜像</title><link>https://www.shellio.cc/docs/cloud-native/docker/18/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/18/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>十二、Docker rm 删除已停止的容器</title><link>https://www.shellio.cc/docs/cloud-native/docker/12/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/12/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>十九、Docker Dockerfile 创建镜像</title><link>https://www.shellio.cc/docs/cloud-native/docker/19/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/19/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>十六、Docker images 本地镜像列表</title><link>https://www.shellio.cc/docs/cloud-native/docker/16/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/16/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>十七、Docker 查找镜像</title><link>https://www.shellio.cc/docs/cloud-native/docker/17/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/17/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>十三、Docker 命名容器</title><link>https://www.shellio.cc/docs/cloud-native/docker/13/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/13/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>十四、Docker 容器运行 Web 应用</title><link>https://www.shellio.cc/docs/cloud-native/docker/14/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/14/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>十五、Docker 端口映射</title><link>https://www.shellio.cc/docs/cloud-native/docker/15/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/15/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>十一、Docker restart 重启容器</title><link>https://www.shellio.cc/docs/cloud-native/docker/11/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/11/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>四、CentOS Docker 安装</title><link>https://www.shellio.cc/docs/cloud-native/docker/4/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/4/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用 Linux 常用的命令；
+2、 知道大部分的 Linux 常识，比如终端、service、ip、用户、组等；
+3、 熟练使用 Ubuntu 或者 Centos 或者 MacOS 种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker 的应用场景 1、 Web 应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的 OpenShift 或 CloudFoundry 平台来搭建自己的 PaaS 环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；</description></item><item><title>五、Windows 安装 Docker</title><link>https://www.shellio.cc/docs/cloud-native/docker/5/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/5/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>一、Docker 基础教程</title><link>https://www.shellio.cc/docs/cloud-native/docker/1/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/1/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 1、 会使用 Linux 常用的命令；
+2、 知道大部分的 Linux 常识，比如终端、service、ip、用户、组等；
+3、 熟练使用 Ubuntu 或者 Centos 或者 MacOS 种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker 的应用场景 1、 Web 应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的 OpenShift 或 CloudFoundry 平台来搭建自己的 PaaS 环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；</description></item></channel></rss>

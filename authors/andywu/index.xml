@@ -1,0 +1,1874 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>安图新 on 程序员安仔</title><link>https://www.shellio.cc/authors/andywu/</link><description>Recent content in 安图新 on 程序员安仔</description><generator>Hugo -- gohugo.io</generator><language>zh-hans</language><copyright>个人技术博客</copyright><atom:link href="https://www.shellio.cc/authors/andywu/index.xml" rel="self" type="application/rss+xml"/><item><title>C++ 常量</title><link>https://www.shellio.cc/docs/programing/c++/default/8/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/8/</guid><description>C++ 常量 常量是固定值，在程序执行期间不会改变。这些固定的值，又叫做字面量。
+常量可以是任何的基本数据类型，可分为整型数字、浮点数字、字符、字符串和布尔值。
+常量就像是常规的变量，只不过常量的值在定义后不能进行修改。
+整数常量 整数常量可以是十进制、八进制或十六进制的常量。前缀指定基数：0x 或 0X 表示十六进制，0 表示八进制，不带前缀则默认表示十进制。
+整数常量也可以带一个后缀，后缀是 U 和 L 的组合，U 表示无符号整数（unsigned），L 表示长整数（long）。后缀可以是大写，也可以是小写，U 和 L 的顺序任意。
+下面列举几个整数常量的实例：
+1212 // 合法的 2215u // 合法的 30xFeeL // 合法的 4078 // 非法的：8 不是八进制的数字 5032UU // 非法的：不能重复后缀 以下是各种类型的整数常量的实例：
+185 // 十进制 20213 // 八进制 30x4b // 十六进制 430 // 整数 530u // 无符号整数 630l // 长整数 730ul // 无符号长整数 浮点常量 浮点常量由整数部分、小数点、小数部分和指数部分组成。您可以使用小数形式或者指数形式来表示浮点常量。
+当使用小数形式表示时，必须包含小数点、指数，或同时包含两者。当使用指数形式表示时，必须包含整数部分、小数部分，或同时包含两者。带符号的指数是用 e 或 E 引入的。
+下面列举几个浮点常量的实例：
+13.14159 // 合法的 2314159E-5L // 合法的 3510E // 非法的：不完整的指数 4210f // 非法的：没有小数或指数 5.</description></item><item><title>八、Docker top 查看容器进程</title><link>https://www.shellio.cc/docs/cloud-native/docker/8/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/8/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>Java 中的异步计算</title><link>https://www.shellio.cc/docs/java/concurrency/default/8/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/8/</guid><description>本文我们来了解下 Java 8 引入的 CompletableFuture 类，了解下该类提供的功能和用例。
+Java 中的异步计算 异步计算很难推理的，因为我们的大脑是同步的，会将任何计算看成是一系列的同步计算。
+我们在实现异步计算时，往往会把回调的动作分散在代码中或者深深地嵌套在彼此内部，这种情况下，当我们需要处理其中一个步骤中可能发生的错误时，情况变得更糟。
+人生的一大悲剧是，尽管 Java 5 已经看到了这种恶性循环，提供了Future 接口作为异步计算的结果，但它没有提供任何方法来组合这些计算或处理可能的错误。
+直到Java 8，才引入了 CompletableFuture 类。该类不仅实现了 Future 接口，还实现了 CompletionStage 接口。此接口定义了可与异步计算步骤组合的异步计算步骤契约。
+官方文档真是拗口，简单来说，CompletionStage 接口规范了一个异步计算步骤如何与另一个异步计算步骤组合。
+CompletableFuture 类还是一个集大成者，即是一个构建块，也是一个框架，提供了大约 50 种不同的方法来构造，组合，执行异步计算步骤和处理错误。
+API数量如此之多，第一眼看到简直就傻眼了，不过好在它们可以分门别类，因为它们大多属于几个明确且不同的用例。
+将 CompletableFuture 当作简单的 Future 使用 为什么可以 ？
+因为CompletableFuture 类实现了 Future 接口，因此我们可以将其用作 Future 实现，但需要自己实现额外的完成逻辑。
+例如，我们可以使用无任何参数的构造函数来创建此类的实例，用于表示未来的某些结果，然后将其交给使用者，并在将来的某个时间调用 complete() 方法完成。消费者可以使用 get() 方法来阻止当前线程，直到提供此结果。
+1public Future&amp;lt;String&amp;gt; calculateAsync() throws InterruptedException { 2 CompletableFuture&amp;lt;String&amp;gt; completableFuture 3 = new CompletableFuture&amp;lt;&amp;gt;(); 4 Executors.newCachedThreadPool().submit(() -&amp;gt; { 5 Thread.sleep(500); 6 completableFuture.complete(&amp;#34;Hello&amp;#34;); 7 return null; 8 }); 9 return completableFuture; 上面的实例中，我们创建了一个创建 CompletableFuture 实例的方法，把计算分离到另一个线程中并立即返回 Future。当计算完成后，该方法通过将结果提供给 complete() 方法来完成 Future。</description></item><item><title>八、建造者模式 ( Builder Pattern )</title><link>https://www.shellio.cc/docs/code-design/8_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/8_miss/</guid><description>建造者模式（Builder Pattern）使用多个简单的对象一步一步构建成一个复杂的对象
+一个Builder 类会一步一步构造最终的对象，该 Builder 类是独立于其他对象的
+建造者模式属于创建型模式，它提供了一种创建对象的最佳方式。
+介绍 1、 意图：
+将一个复杂的构建与其表示相分离，使得同样的构建过程可以创建不同的表示
+2、 主要解决：
+主要解决在软件系统中，有时候面临着”一个复杂对象”的创建工作，其通常由各个部分的子对象用一定的算法构成；由于需求的变化，这个复杂对象的各个部分经常面临着剧烈的变化，但是将它们组合在一起的算法却相对稳定
+3、 何时使用：
+一些基本部件不会变，而其组合经常变化的时候
+4、 如何解决：
+将变与不变分离开
+5、 关键代码：
+建造者：创建和提供实例
+导演：管理建造出来的实例的依赖关系
+6、 应用实例：
+1、 去肯德基，汉堡、可乐、薯条、炸鸡翅等是不变的，而其组合是经常变化的，生成出所谓的”套餐”；
+2、 JAVA中的StringBuilder；
+7、 优点：
+1、 建造者独立，易扩展；
+2、 便于控制细节风险；
+8、 缺点：
+1、 产品必须有共同点，范围有限制；
+2、 如内部变化复杂，会有很多的建造类；
+9、 使用场景：
+1、 需要生成的对象具有复杂的内部结构；
+2、 需要生成的对象内部属性本身相互依赖；
+10、 注意事项：
+与工厂模式的区别是：建造者模式更加关注与零件装配的顺序
+实现 我们以一家快餐店为例
+一个典型的套餐可以是一个汉堡（Burger）和一杯冷饮（Cold drink）
+汉堡（Burger）可以是素食汉堡（Veg Burger）或鸡肉汉堡（Chicken Burger），它们是包在纸盒中 冷饮（Cold drink）可以是可口可乐（coke）或百事可乐（pepsi），它们是装在瓶子中
+创建一个表示食物条目（比如汉堡和冷饮）的 Item 接口和实现 Item 接口的实体类， 以及一个表示食物包装的 Packing 接口和实现 Packing 接口的实体类，汉堡是包在纸盒中，冷饮是装在瓶子中</description></item><item><title>C++ 环境设置</title><link>https://www.shellio.cc/docs/programing/c++/default/2/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/2/</guid><description>C++ 环境设置 本地环境设置 如果您想要设置 C++ 语言环境，您需要确保电脑上有以下两款可用的软件，文本编辑器和 C++ 编译器。
+文本编辑器 这将用于输入您的程序。文本编辑器包括 Windows Notepad、OS Edit command、Brief、Epsilon、EMACS 和 vim/vi。
+文本编辑器的名称和版本在不同的操作系统上可能会有所不同。例如，Notepad 通常用于 Windows 操作系统上，vim/vi 可用于 Windows 和 Linux/UNIX 操作系统上。
+通过编辑器创建的文件通常称为源文件，源文件包含程序源代码。C++ 程序的源文件通常使用扩展名 .cpp、.cp 或 .c。
+在开始编程之前，请确保您有一个文本编辑器，且有足够的经验来编写一个计算机程序，然后把它保存在一个文件中，编译并执行它。
+C++ 编译器 写在源文件中的源代码是人类可读的源。它需要”编译”，转为机器语言，这样 CPU 可以按给定指令执行程序。
+C++编译器用于把源代码编译成最终的可执行程序。
+大多数的 C++ 编译器并不在乎源文件的扩展名，但是如果您未指定扩展名，则默认使用 .cpp。
+最常用的免费可用的编译器是 GNU 的 C/C++ 编译器，如果您使用的是 HP 或 Solaris，则可以使用各自操作系统上的编译器。
+以下部分将指导您如何在不同的操作系统上安装 GNU 的 C/C++ 编译器。这里同时提到 C/C++，主要是因为 GNU 的 gcc 编译器适合于 C 和 C++ 编程语言。
+安装 GNU 的 C/C++ 编译器 UNIX/Linux 上的安装 如果您使用的是 Linux 或 UNIX，请在命令行使用下面的命令来检查您的系统上是否安装了 GCC：</description></item><item><title>二、Docker 架构</title><link>https://www.shellio.cc/docs/cloud-native/docker/2/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/2/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括 1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>ForkJoinPool 线程池</title><link>https://www.shellio.cc/docs/java/concurrency/default/2/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/2/</guid><description>fork/join 框架是 Java 7 中引入的 ，它是一个工具，通过 「 分而治之 」 的方法尝试将所有可用的处理器内核使用起来帮助加速并行处理。
+在实际使用过程中，这种 「 分而治之 」的方法意味着框架首先要 fork ，递归地将任务分解为较小的独立子任务，直到它们足够简单以便异步执行。然后，join 部分开始工作，将所有子任务的结果递归地连接成单个结果，或者在返回 void 的任务的情况下，程序只是等待每个子任务执行完毕。
+为了提供有效的并行执行，fork/join 框架使用了一个名为 ForkJoinPool 的线程池，用于管理 ForkJoinWorkerThread 类型的工作线程。
+ForkJoinPool 线程池 ForkJoinPool 是 fork/join 框架的核心，是 ExecutorService 的一个实现，用于管理工作线程，并提供了一些工具来帮助获取有关线程池状态和性能的信息。
+工作线程一次只能执行一个任务。
+ForkJoinPool 线程池并不会为每个子任务创建一个单独的线程，相反，池中的每个线程都有自己的双端队列用于存储任务 （ double-ended queue ）( 或 deque，发音 deck ）。
+这种架构使用了一种名为工作窃取（ work-stealing ）算法来平衡线程的工作负载。
+工作窃取（ work-stealing ）算法 要怎么解释 「 工作窃取算法 」 呢 ？
+简单来说，就是 空闲的线程试图从繁忙线程的 deques 中 窃取 工作。
+默认情况下，每个工作线程从其自己的双端队列中获取任务。但如果自己的双端队列中的任务已经执行完毕，双端队列为空时，工作线程就会从另一个忙线程的双端队列尾部或全局入口队列中获取任务，因为这是最大概率可能找到工作的地方。
+这种方法最大限度地减少了线程竞争任务的可能性。它还减少了工作线程寻找任务的次数，因为它首先在最大可用的工作块上工作。
+ForkJoinPool 线程池的实例化 Java 8 在Java 8 中，创建 ForkJoinPool 实例的最简单的方式就是使用其静态方法 commonPool()。</description></item><item><title>二、设计模式 – 简介</title><link>https://www.shellio.cc/docs/code-design/2/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/2/</guid><description>设计模式（Design pattern）是重构解决方案
+这点很重要，尤其是现在 B/S 一统天下的局面，过早考虑设计模式，得不偿失
+设计模式（Design pattern）代表了最佳的实践，通常被面向对象的软件开发人员所采用
+很多教程都说设计模式是被有经验的人使用，其实只要定义了一个类，或多或少都在使用它们，而不是有没有经验 只是有经验的人知道自己在使用设计模式，而且知道怎么做的更好
+设计模式是软件开发人员在软件开发过程中面临复杂度问题的一般问题的解决方案
+这些解决方案是众多软件开发人员经过相当长的一段时间的试验和错误总结出来的
+设计模式是复杂度解决方案，不是小程序的解决方案(就一两个类文件，用设计模式那是增加复杂度)
+设计模式是一套被反复使用的、多数人知晓的、经过分类编目的、代码设计经验的总结
+使用设计模式是为了重用代码、让代码更容易被他人理解、保证代码可靠性
+毫无疑问，设计模式于己于他人于系统都是多赢的，设计模式使代码编制真正工程化，设计模式是软件工程的基石，如同大厦的一块块砖石一样
+项目中合理地运用设计模式可以完美地解决很多问题，每种模式在现实中都有相应的原理来与之对应，每种模式都描述了一个在我们周围不断重复发生的问题，以及该问题的核心解决方案，这也是设计模式能被广泛应用的原因
+什么是 GOF（Gang of Four）？ 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 1994 年，Erich Gamma、Richard Helm、Ralph Johnson 和 John Vlissides 四人合著出版了一本名为 Design Patterns – Elements of Reusable Object-Oriented Software（中文译名：设计模式 – 可复用的面向对象软件元素） 的书
+书名真的是误导人啊… 为啥不添加上重构两字
+该书首次提到了软件开发中设计模式的概念
+四位作者合称 GOF（四人帮，全拼 Gang of Four）
+他们所提出的设计模式主要是基于以下的面向对象设计原则
+1、 面向接口编程而不是对实现编程；
+2、 优先使用对象组合而不是继承；
+设计模式的使用 设计模式在软件开发中的两个主要用途
+1、 开发人员的共同平台；
+设计模式提供了一个标准的术语系统，且具体到特定的情景
+例如，单例设计模式意味着使用单个对象，这样所有熟悉单例设计模式的开发人员都能使用单个对象，并且可以通过这种方式告诉对方，程序使用的是单例模式
+2、 最佳的实践；
+设计模式已经经历了很长一段时间的发展，它们提供了软件开发过程中面临的一般问题的最佳解决方案
+学习这些模式有助于经验不足的开发人员通过一种简单快捷的方式来学习软件设计</description></item><item><title>C++ 日期 &amp; 时间</title><link>https://www.shellio.cc/docs/programing/c++/default/20/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/20/</guid><description>C++ 日期 &amp;amp; 时间 C++标准库没有提供所谓的日期类型。C++ 继承了 C 语言用于日期和时间操作的结构和函数。为了使用日期和时间相关的函数和结构，需要在 C++ 程序中引用 头文件。
+有四个与时间相关的类型：clock_t、time_t、size_t 和 tm。类型 clock_t、size_t 和 time_t 能够把系统时间和日期表示为某种整数。
+结构类型 tm 把日期和时间以 C 结构的形式保存，tm 结构的定义如下：
+1struct tm { 2 int tm_sec; // 秒，正常范围从 0 到 59，但允许至 61 3 int tm_min; // 分，范围从 0 到 59 4 int tm_hour; // 小时，范围从 0 到 23 5 int tm_mday; // 一月中的第几天，范围从 1 到 31 6 int tm_mon; // 月，范围从 0 到 11 7 int tm_year; // 自 1900 年起的年数 8 int tm_wday; // 一周中的第几天，范围从 0 到 6，从星期日算起 9 int tm_yday; // 一年中的第几天，范围从 0 到 365，从 1 月 1 日算起 10 int tm_isdst; // 夏令时 下面是C/C++ 中关于日期和时间的重要函数。所有这些函数都是 C/C++ 标准库的组成部分，您可以在 C++ 标准库中查看一下各个函数的细节。</description></item><item><title>二十、Docker build 构建镜像</title><link>https://www.shellio.cc/docs/cloud-native/docker/20/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/20/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>二十、解释器模式 ( Interpreter Pattern )</title><link>https://www.shellio.cc/docs/code-design/20_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/20_miss/</guid><description>解释器模式（Interpreter Pattern）实现了一个表达式接口，该接口解释一个特定的上下文
+这种模式被用在 SQL 解析、符号处理引擎等
+解释器模式提供了评估语言的语法或表达式的方式，它属于行为型模式
+摘要 1、 意图：
+给定一个语言，定义它的文法表示，并定义一个解释器，这个解释器使用该标识来解释语言中的句子
+2、 主要解决：
+对于一些固定文法构建一个解释句子的解释器
+3、 何时使用：
+如果一种特定类型的问题发生的频率足够高，那么可能就值得将该问题的各个实例表述为一个简单语言中的句子。这样就可以构建一个解释器，该解释器通过解释这些句子来解决该问题
+4、 如何解决：
+构件语法树，定义终结符与非终结符
+5、 关键代码：
+构件环境类，包含解释器之外的一些全局信息，一般是 HashMap
+6、 应用实例：
+编译器、运算表达式计算
+7、 优点：
+1、 可扩展性比较好，灵活；
+2、 增加了新的解释表达式的方式；
+3、 易于实现简单文法；
+8、 缺点：
+1、 可利用场景比较少；
+2、 对于复杂的文法比较难维护；
+3、 解释器模式会引起类膨胀；
+4、 解释器模式采用递归调用方法；
+9、 使用场景：
+1、 可以将一个需要解释执行的语言中的句子表示为一个抽象语法树；
+2、 一些重复出现的问题可以用一种简单的语言来进行表达；
+3、 一个简单语法需要解释的场景；
+10、 注意事项：
+可利用场景比较少，JAVA 中如果碰到可以用 expression4J 代替
+实现 1、 定义一个接口Expression和实现了Expression接口的实体类；
+2、 定义作为上下文中主要解释器的TerminalExpression类，其他的类OrExpression、AndExpression用于创建组合式表达式；
+3、 定义类InterpreterPatternDemo使用Expression类创建规则和演示表达式的解析；
+范例 1. 创建一个表达式接口 Expression.java
+1public interface Expression { 2 public boolean interpret(String context); 2.</description></item><item><title>C++ 数据封装</title><link>https://www.shellio.cc/docs/programing/c++/default/28/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/28/</guid><description>C++ 数据封装 所有的C++ 程序都有以下两个基本要素：
+**程序语句（代码）：**这是程序中执行动作的部分，它们被称为函数。 **程序数据：**数据是程序的信息，会受到程序函数的影响。 封装是面向对象编程中的把数据和操作数据的函数绑定在一起的一个概念，这样能避免受到外界的干扰和误用，从而确保了安全。数据封装引申出了另一个重要的 OOP 概念，即数据隐藏。
+数据封装是一种把数据和操作数据的函数捆绑在一起的机制，数据抽象是一种仅向用户暴露接口而把具体的实现细节隐藏起来的机制。
+C++通过创建类来支持封装和数据因此。我们已经知道，类包含私有成员（private）、保护成员（protected）和公有成员（public）成员。默认情况下，在类中定义的所有项目都是私有的。例如：
+1class Box 2 public: 3 double getVolume(void) 4 { 5 return length * breadth * height; 6 } 7 private: 8 double length; // 长度 9 double breadth; // 宽度 10 double height; // 高度 11}; 变量length、breadth 和 height 都是私有的（private）。这意味着它们只能被 Box 类中的其他成员访问，而不能被程序中其他部分访问。这是实现封装的一种方式。
+为了使类中的成员变成公有的（即，程序中的其他部分也能访问），必须在这些成员前使用 public 关键字进行声明。所有定义在 public 标识符后边的变量或函数可以被程序中所有其他的函数访问。
+把一个类定义为另一个类的友元类，会暴露实现细节，从而降低了封装性。理想的做法是尽可能地对外隐藏每个类的实现细节。
+数据封装的实例 C++程序中，任何带有公有和私有成员的类都可以作为数据封装和数据抽象的实例。请看下面的实例：
+1#include &amp;lt;iostream&amp;gt; 2using namespace std; 3class Adder{ 4 public: 5 // 构造函数 6 Adder(int i = 0) 7 { 8 total = i; 9 } 10 // 对外的接口 11 void addNum(int number) 12 { 13 total += number; 14 } 15 // 对外的接口 16 int getTotal() 17 { 18 return total; 19 }; 20 private: 21 // 对外隐藏的数据 22 int total; 23}; 24int main( ) 25 Adder a; 26 a.</description></item><item><title>二十八、Docker 安装 MongoDB</title><link>https://www.shellio.cc/docs/cloud-native/docker/28/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/28/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>二十八、模板模式 ( Template Pattern )</title><link>https://www.shellio.cc/docs/code-design/28_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/28_miss/</guid><description>模板模式（Template Pattern）中，一个抽象类公开定义了执行它的方法的方式/模板。它的子类可以按需要重写方法实现，但调用将以抽象类中定义的方式进行
+模板模式属于行为型模式
+摘要 1、 意图：
+1定义一个操作中的算法的骨架，而将一些步骤延迟到子类中 2模板方法使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤 2、 主要解决：
+1一些方法通用，却在每一个子类都重新写了这一方法 3、 何时使用：
+1有一些通用的方法 4、 如何解决：
+1将这些通用算法抽象出来 5、 关键代码：
+1在抽象类实现，其他步骤在子类实现 6、 应用实例：
+11. 在造房子的时候，地基、走线、水管都一样，只有在建筑的后期才有加壁橱加栅栏等差异 22. 西游记里面菩萨定好的 81 难，这就是一个顶层的逻辑骨架 33. Spring 中对 Hibernate 的支持，将一些已经定好的方法封装起来，比如开启事务、获取 Session、关闭 Session 等，程序员不重复写那些已经规范好的代码，直接丢一个实体就可以保存 7、 优点：
+11. 封装不变部分，扩展可变部分 22. 提取公共代码，便于维护 33. 行为由父类控制，子类实现 8、 缺点：
+1每一个不同的实现都需要一个子类来实现，导致类的个数增加，使得系统更加庞大 9、 使用场景：
+11. 有多个子类共有的方法，且逻辑相同 22. 重要的、复杂的方法，可以考虑作为模板方法 10、 注意事项：
+1为防止恶意操作，一般模板方法都加上 final 关键词 实现 1、 创建一个定义操作的Game抽象类，其中，模板方法设置为final，这样它就不会被重写；
+2、 定义类Cricket和Football扩展Game，重写了抽象类的方法；
+3、 定义类TemplatePatternDemo使用Game来演示模板模式的用法；
+范例 1. 创建一个抽象类，它的模板方法被设置为 final Game.java</description></item><item><title>C++ 数据结构</title><link>https://www.shellio.cc/docs/programing/c++/default/22/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/22/</guid><description>C++ 数据结构 C/C++ 数组允许定义可存储相同类型数据项的变量，但是结构是 C++ 中另一种用户自定义的可用的数据类型，它允许您存储不同类型的数据项。
+结构用于表示一条记录，假设您想要跟踪图书馆中书本的动态，您可能需要跟踪每本书的下列属性：
+Title Author Subject Book ID 定义结构 为了定义结构，您必须使用 struct 语句。struct 语句定义了一个包含多个成员的新的数据类型，struct 语句的格式如下：
+1struct [structure tag] 2 member definition; 3 member definition; 4 ... 5 member definition; 6} [one or more structure variables]; structure tag 是可选的，每个 member definition 是标准的变量定义，比如 int i; 或者 float f; 或者其他有效的变量定义。在结构定义的末尾，最后一个分号之前，您可以指定一个或多个结构变量，这是可选的。下面是声明 Book 结构的方式：
+1struct Books 2 char title[50]; 3 char author[50]; 4 char subject[100]; 5 int book_id; }book;
+访问结构成员 为了访问结构的成员，我们使用成员访问运算符（.）。成员访问运算符是结构变量名称和我们要访问的结构成员之间的一个句号。您可以使用 struct 关键字来定义结构类型的变量。下面的实例演示了结构的用法：</description></item><item><title>二十二、Docker 部署 Nginx 环境</title><link>https://www.shellio.cc/docs/cloud-native/docker/22/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/22/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>二十二、中介者模式 ( Mediator Pattern )</title><link>https://www.shellio.cc/docs/code-design/22_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/22_miss/</guid><description>中介者模式（Mediator Pattern）提供了一个中介类，该类通常处理不同类之间的通信，并支持松耦合，使代码易于维护
+中介者模式是用来降低多个对象和类之间的通信复杂性
+中介者模式属于行为型模式
+介绍 1、 意图：
+用一个中介对象来封装一系列的对象交互，中介者使各对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互
+2、 主要解决：
+对象与对象之间存在大量的关联关系，这样势必会导致系统的结构变得很复杂，同时若一个对象发生改变，我们也需要跟踪与之相关联的对象，同时做出相应的处理
+3、 何时使用：
+多个类相互耦合，形成了网状结构
+4、 如何解决：
+将上述网状结构分离为星型结构
+5、 关键代码：
+对象Colleague 之间的通信封装到一个类中单独处理
+6、 应用实例：
+1、 中国加入WTO之前是各个国家相互贸易，结构复杂，现在是各个国家通过WTO来互相贸易；
+2、 机场调度系统；
+3、 MVC框架，其中C（控制器）就是M（模型）和V（视图）的中介者；
+7、 优点：
+1、 降低了类的复杂度，将一对多转化成了一对一；
+2、 各个类之间的解耦；
+3、 符合迪米特原则；
+8、 缺点：
+中介者会庞大，变得复杂难以维护
+9、 使用场景：
+1、 系统中对象之间存在比较复杂的引用关系，导致它们之间的依赖关系结构混乱而且难以复用该对象；
+2、 想通过一个中间类来封装多个类中的行为，而又不想生成太多的子类；
+10、 注意事项：
+不应当在职责混乱的时候使用
+实现 我们通过聊天室实例来演示中介者模式：多个用户可以向聊天室发送消息，聊天室向所有的用户显示消息
+1、 定义中介类ChatRoom；
+2、 定义用户类User，User对象使用ChatRoom方法来分享他们的消息；
+3、 定义MediatorPatternDemo类使用User对象来显示他们之间的通信；
+范例 1. 创建中介类 ChatRoom.java
+因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 1// author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 2// Copyright © 2015-2065 ddkk.</description></item><item><title>C++ 接口（抽象类）</title><link>https://www.shellio.cc/docs/programing/c++/default/29/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/29/</guid><description>C++ 接口（抽象类） 接口描述了类的行为和功能，而不需要完成类的特定实现。
+C++接口是使用抽象类来实现的，抽象类与数据抽象互不混淆，数据抽象是一个把实现细节与相关的数据分离开的概念。
+如果类中至少有一个函数被声明为纯虚函数，则这个类就是抽象类。纯虚函数是通过在声明中使用 “= 0” 来指定的，如下所示：
+1class Box 2 public: 3 // 纯虚函数 4 virtual double getVolume() = 0; 5 private: 6 double length; // 长度 7 double breadth; // 宽度 8 double height; // 高度 9}; 设计抽象类（通常称为 ABC）的目的，是为了给其他类提供一个可以继承的适当的基类。抽象类不能被用于实例化对象，它只能作为接口使用。如果试图实例化一个抽象类的对象，会导致编译错误。
+因此，如果一个 ABC 的子类需要被实例化，则必须实现每个虚函数，这也意味着 C++ 支持使用 ABC 声明接口。如果没有在派生类中重载纯虚函数，就尝试实例化该类的对象，会导致编译错误。
+可用于实例化对象的类被称为具体类。
+抽象类的实例 请看下面的实例，基类 Shape 提供了一个接口 getArea()，在两个派生类 Rectangle 和 Triangle 中分别实现了 getArea()：
+1#include &amp;lt;iostream&amp;gt; 2using namespace std; 3// 基类 4class Shape 5public: 6 // 提供接口框架的纯虚函数 7 virtual int getArea() = 0; 8 void setWidth(int w) 9 { 10 width = w; 11 } 12 void setHeight(int h) 13 { 14 height = h; 15 } 16protected: 17 int width; 18 int height; 19}; 20// 派生类 21class Rectangle: public Shape 22public: 23 int getArea() 24 { 25 return (width * height); 26 } 27}; 28class Triangle: public Shape 29public: 30 int getArea() 31 { 32 return (width * height)/2; 33 } 34}; 35int main(void) 36 Rectangle Rect; 37 Triangle Tri; 38 Rect.</description></item><item><title>二十九、Docker 安装 Apache</title><link>https://www.shellio.cc/docs/cloud-native/docker/29/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/29/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>二十九、访问者模式 ( Visitor Pattern )</title><link>https://www.shellio.cc/docs/code-design/29_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/29_miss/</guid><description>访问者模式（Visitor Pattern）使用了一个访问者类，它改变了元素类的执行算法，通过这种方式，元素的执行算法可以随着访问者改变而改变
+访问者模式中，元素对象已接受访问者对象，这样访问者对象就可以处理元素对象上的操作
+访问者模式属于行为型模式
+摘要 1、 意图：
+主要将数据结构与数据操作分离
+2、 主要解决：
+稳定的数据结构和易变的操作耦合问题。
+3、 何时使用：
+需要对一个对象结构中的对象进行很多不同的并且不相关的操作，而需要避免让这些操作”污染”这些对象的类，使用访问者模式将这些封装到类中
+4、 如何解决：
+在被访问的类里面加一个对外提供接待访问者的接口
+5、 关键代码：
+在数据基础类里面有一个方法接受访问者，将自身引用传入访问者
+6、 应用实例：
+您在朋友家做客，您是访问者，朋友接受您的访问，您通过朋友的描述，然后对朋友的描述做出一个判断，这就是访问者模式
+7、 优点：
+1、 符合单一职责原则；
+2、 优秀的扩展性；
+3、 灵活性；
+8、 缺点：
+1、 具体元素对访问者公布细节，违反了迪米特原则；
+2、 具体元素变更比较困难；
+3、 违反了依赖倒置原则，依赖了具体类，没有依赖抽象；
+9、 使用场景：
+1、 对象结构中对象对应的类很少改变，但经常需要在此对象结构上定义新的操作；
+2、 需要对一个对象结构中的对象进行很多不同的并且不相关的操作，而需要避免让这些操作“污染”这些对象的类，也不希望在增加新操作时修改这些类；
+10、 注意事项：
+访问者可以对功能进行统一，可以做报表、UI、拦截器与过滤器
+实现 1、 创建一个定义接受操作的ComputerPart接口；
+2、 定义类Keyboard、Mouse、Monitor和Computer实现ComputerPart接口；
+3、 定义另一个接口ComputerPartVisitor，它定义了访问者类的操作；
+4、 定义类Computer使用实体访问者来执行相应的动作；
+5、 定义类VisitorPatternDemo使用Computer、ComputerPartVisitor类来演示访问者模式的用法；
+范例 1. 定义一个表示元素的接口 ComputerPart.java
+1// author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 2// Copyright © 2015-2065 ddkk.</description></item><item><title>C++ 多态</title><link>https://www.shellio.cc/docs/programing/c++/default/26/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/26/</guid><description>C++ 多态 多态按字面的意思就是多种形态。当类之间存在层次结构，并且类之间是通过继承关联时，就会用到多态。
+C++多态意味着调用成员函数时，会根据调用函数的对象的类型来执行不同的函数。
+下面的实例中，基类 Shape 被派生为两个类，如下所示：
+1#include &amp;lt;iostream&amp;gt; 2using namespace std; 3class Shape { 4 protected: 5 int width, height; 6 public: 7 Shape( int a=0, int b=0) 8 { 9 width = a; 10 height = b; 11 } 12 int area() 13 { 14 cout &amp;lt;&amp;lt; &amp;#34;Parent class area :&amp;#34; &amp;lt;&amp;lt;endl; 15 return 0; 16 } 17}; 18class Rectangle: public Shape{ 19 public: 20 Rectangle( int a=0, int b=0):Shape(a, b) { } 21 int area () 22 { 23 cout &amp;lt;&amp;lt; &amp;#34;Rectangle class area :&amp;#34; &amp;lt;&amp;lt;endl; 24 return (width * height); 25 } 26}; 27class Triangle: public Shape{ 28 public: 29 Triangle( int a=0, int b=0):Shape(a, b) { } 30 int area () 31 { 32 cout &amp;lt;&amp;lt; &amp;#34;Triangle class area :&amp;#34; &amp;lt;&amp;lt;endl; 33 return (width * height / 2); 34 } 35}; 36// 程序的主函数 37int main( ) 38 Shape *shape; 39 Rectangle rec(10,7); 40 Triangle tri(10,5); 41 // 存储矩形的地址 42 shape = &amp;amp;rec; 43 // 调用矩形的求面积函数 area 44 shape-&amp;gt;area(); 45 // 存储三角形的地址 46 shape = &amp;amp;tri; 47 // 调用三角形的求面积函数 area 48 shape-&amp;gt;area(); 49 return 0; 当上面的代码被编译和执行时，它会产生下列结果：</description></item><item><title>二十六、Docker 安装 Python</title><link>https://www.shellio.cc/docs/cloud-native/docker/26/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/26/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>二十六、空对象模式 ( Null Object Pattern )</title><link>https://www.shellio.cc/docs/code-design/26_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/26_miss/</guid><description>在空对象模式（Null Object Pattern）中，一个空对象取代 NULL 对象实例的检查
+Null 对象不是检查空值，而是反应一个不做任何动作的关系，这样的 Null 对象也可以在数据不可用的时候提供默认的行为。
+在空对象模式中，我们创建一个指定各种要执行的操作的抽象类和扩展该类的实体类，还创建一个未对该类做任何实现的空对象类，该空对象类将无缝地使用在需要检查空值的地方
+实现 我们将创建一个定义操作（在这里，是客户的名称）的 AbstractCustomer 抽象类，和扩展了 AbstractCustomer 类的实体类
+工厂类CustomerFactory 基于客户传递的名字来返回 RealCustomer 或 NullCustomer 对象
+NullPatternDemo ，我们的演示类使用 CustomerFactory 来演示空对象模式的用法
+范例 1. 创建一个抽象类 AbstractCustomer 1// author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 2// Copyright © 2015-2065 ddkk.com. All rights reserved. 3package com.ddkk.gof; 4public abstract class AbstractCustomer 5 protected String name; 6 public abstract boolean isNil(); 7 public abstract String getName(); 2. 创建扩展了上述类的实体类 RealCustomer 1// author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 2// Copyright © 2015-2065 ddkk.</description></item><item><title>C++ 数据抽象</title><link>https://www.shellio.cc/docs/programing/c++/default/27/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/27/</guid><description>C++ 数据抽象 数据抽象是指，只向外界提供关键信息，并隐藏其后台的实现细节，即只表现必要的信息而不呈现细节。
+数据抽象是一种依赖于接口和实现分离的编程（设计）技术。
+让我们举一个现实生活中的真实例子，比如一台电视机，您可以打开和关闭、切换频道、调整音量、添加外部组件（如喇叭、录像机、DVD 播放器），但是您不知道它的内部实现细节，也就是说，您并不知道它是如何通过缆线接收信号，如何转换信号，并最终显示在屏幕上。
+因此，我们可以说电视把它的内部实现和外部接口分离开了，您无需知道它的内部实现原理，直接通过它的外部接口（比如电源按钮、遥控器、声量控制器）就可以操控电视。
+现在，让我们言归正传，就 C++ 编程而言，C++ 类为数据抽象提供了可能。它们向外界提供了大量用于操作对象数据的公共方法，也就是说，外界实际上并不清楚类的内部实现。
+例如，您的程序可以调用 sort() 函数，而不需要知道函数中排序数据所用到的算法。实际上，函数排序的底层实现会因库的版本不同而有所差异，只要接口不变，函数调用就可以照常工作。
+在C++ 中，我们使用类来定义我们自己的抽象数据类型（ADT）。您可以使用类 ostream 的 cout 对象来输出数据到标准输出，如下所示：
+1#include &amp;lt;iostream&amp;gt; 2using namespace std; 3int main( ) 4 cout &amp;lt;&amp;lt; &amp;#34;Hello C++&amp;#34; &amp;lt;&amp;lt;endl; 5 return 0; 在这里，您不需要理解 cout 是如何在用户的屏幕上显示文本。您只需要知道公共接口即可，cout 的底层实现可以自由改变。
+访问标签强制抽象 在C++ 中，我们使用访问标签来定义类的抽象接口。一个类可以包含零个或多个访问标签：
+使用公共标签定义的成员都可以访问该程序的所有部分。一个类型的数据抽象视图是由它的公共成员来定义的。 使用私有标签定义的成员无法访问到使用类的代码。私有部分对使用类型的代码隐藏了实现细节。 访问标签出现的频率没有限制。每个访问标签指定了紧随其后的成员定义的访问级别。指定的访问级别会一直有效，直到遇到下一个访问标签或者遇到类主体的关闭右括号为止。
+数据抽象的好处 数据抽象有两个重要的优势：
+类的内部受到保护，不会因无意的用户级错误导致对象状态受损。 类实现可能随着时间的推移而发生变化，以便应对不断变化的需求，或者应对那些要求不改变用户级代码的错误报告。 如果只在类的私有部分定义数据成员，编写该类的作者就可以随意更改数据。如果实现发生改变，则只需要检查类的代码，看看这个改变会导致哪些影响。如果数据是公有的，则任何直接访问旧表示形式的数据成员的函数都可能受到影响。
+数据抽象的实例 C++程序中，任何带有公有和私有成员的类都可以作为数据抽象的实例。请看下面的实例：
+因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 1#include &amp;lt;iostream&amp;gt; 2using namespace std; 3class Adder{ 4 public: 5 // 构造函数 6 Adder(int i = 0) 7 { 8 total = i; 9 } 10 // 对外的接口 11 void addNum(int number) 12 { 13 total += number; 14 } 15 // 对外的接口 16 int getTotal() 17 { 18 return total; 19 }; 20 private: 21 // 对外隐藏的数据 22 int total; 23}; 24int main( ) 25 Adder a; 26 a.</description></item><item><title>二十七、Docker 安装 Redis</title><link>https://www.shellio.cc/docs/cloud-native/docker/27/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/27/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>二十七、策略模式 ( Strategy Pattern )</title><link>https://www.shellio.cc/docs/code-design/27_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/27_miss/</guid><description>模板模式（Template Pattern）中，一个抽象类公开定义了执行它的方法的方式/模板。它的子类可以按需要重写方法实现，但调用将以抽象类中定义的方式进行
+模板模式属于行为型模式
+摘要 1、 意图：
+定义一个操作中的算法的骨架，而将一些步骤延迟到子类中
+模板方法使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤
+2、 主要解决：
+一些方法通用，却在每一个子类都重新写了这一方法
+3、 何时使用：
+有一些通用的方法
+4、 如何解决：
+将这些通用算法抽象出来
+5、 关键代码：
+在抽象类实现，其他步骤在子类实现
+6、 应用实例：
+1、 在造房子的时候，地基、走线、水管都一样，只有在建筑的后期才有加壁橱加栅栏等差异；
+2、 西游记里面菩萨定好的81难，这就是一个顶层的逻辑骨架；
+3、 Spring中对Hibernate的支持，将一些已经定好的方法封装起来，比如开启事务、获取Session、关闭Session等，程序员不重复写那些已经规范好的代码，直接丢一个实体就可以保存；
+7、 优点：
+1、 封装不变部分，扩展可变部分；
+2、 提取公共代码，便于维护；
+3、 行为由父类控制，子类实现；
+8、 缺点：
+每一个不同的实现都需要一个子类来实现，导致类的个数增加，使得系统更加庞大
+9、 使用场景：
+1、 有多个子类共有的方法，且逻辑相同；
+2、 重要的、复杂的方法，可以考虑作为模板方法；
+10、 注意事项：
+为防止恶意操作，一般模板方法都加上 final 关键词
+实现 1、 创建一个定义操作的Game抽象类，其中，模板方法设置为final，这样它就不会被重写；
+2、 定义类Cricket和Football扩展Game，重写了抽象类的方法；
+3、 定义类TemplatePatternDemo使用Game来演示模板模式的用法；
+范例 1. 创建一个抽象类，它的模板方法被设置为 final Game.java
+1// author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 2// Copyright © 2015-2065 ddkk.</description></item><item><title>C++ 类 &amp; 对象</title><link>https://www.shellio.cc/docs/programing/c++/default/23/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/23/</guid><description>C++ 类 &amp;amp; 对象 C++在 C 语言的基础上增加了面向对象编程，C++ 支持面向对象程序设计。类是 C++ 的核心特性，通常被称为用户定义的类型。
+类用于指定对象的形式，它包含了数据表示法和用于处理数据的方法。类中的数据和方法称为类的成员。函数在一个类被称为类的成员。
+C++ 类定义 定义一个类，本质上是定义一个数据类型的蓝图。这实际上并没有定义任何数据，但它定义了类的名称意味着什么，也就是说，它定义了类的对象包括了什么，以及可以在这个对象上执行哪些操作。
+类定义是以关键字 class 开头，后跟类的名称。类的主体是包含在一对花括号中。类定义后必须跟着一个分号或一个声明列表。例如，我们使用关键字 class 定义 Box 数据类型，如下所示：
+1class Box 2 public: 3 double length; // Length of a box 4 double breadth; // Breadth of a box 5 double height; // Height of a box 6}; 关键字public 确定了类成员的访问属性。在类对象作用域内，公共成员在类的外部是可访问的。您也可以指定类的成员为 private 或 protected，这个我们稍后会进行讲解。
+定义 C++ 对象 类提供了对象的蓝图，所以基本上，对象是根据类来创建的。声明类的对象，就像声明基本类型的变量一样。下面的语句声明了类 Box 的两个对象：
+1Box Box1; // 声明 Box1，类型为 Box 2Box Box2; // 声明 Box2，类型为 Box 对象Box1 和 Box2 都有它们各自的数据成员。</description></item><item><title>二十三、Docker 部署 PHP 环境</title><link>https://www.shellio.cc/docs/cloud-native/docker/23/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/23/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>二十三、备忘录模式 ( Memento Pattern )</title><link>https://www.shellio.cc/docs/code-design/23_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/23_miss/</guid><description>备忘录模式（Memento Pattern）保存一个对象的某个状态，以便在适当的时候恢复对象
+备忘录模式属于行为型模式
+摘要 1、 意图：
+在不破坏封装性的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态
+2、 主要解决：
+所谓备忘录模式就是在不破坏封装的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态，这样可以在以后将对象恢复到原先保存的状态
+3、 何时使用：
+很多时候我们总是需要记录一个对象的内部状态，这样做的目的就是为了允许用户取消不确定或者错误的操作，能够恢复到他原先的状态，使得他有”后悔药”可吃
+4、 如何解决：
+通过一个备忘录类专门存储对象状态
+5、 关键代码：
+客户不与备忘录类耦合，与备忘录管理类耦合
+6、 应用实例：
+1、 后悔药；
+2、 打游戏时的存档；
+3、 Windows里的ctri+z；
+4、 IE中的后退；
+5、 数据库的事务管理；
+7、 优点：
+1、 给用户提供了一种可以恢复状态的机制，可以使用户能够比较方便地回到某个历史的状态；
+2、 实现了信息的封装，使得用户不需要关心状态的保存细节；
+8、 缺点：
+消耗资源
+如果类的成员变量过多，势必会占用比较大的资源，而且每一次保存都会消耗一定的内存
+9、 使用场景：
+1、 需要保存/恢复数据的相关状态场景；
+2、 提供一个可回滚的操作；
+10、 注意事项：
+1、 为了符合迪米特原则，还要增加一个管理备忘录的类；
+2、 为了节约内存，可使用原型模式+备忘录模式；
+实现 备忘录模式使用三个类 Memento 、 Originator 和 CareTaker
+1、 定义类Memento包含了要被恢复的对象的状态；
+2、 定义类Originator创建并在Memento对象中存储状态；
+3、 定义类Caretaker对象负责从Memento中恢复对象的状态；
+4、 最后使用MementoPatternDemo类使用CareTaker和Originator对象来显示对象的状态恢复；
+范例 1. 创建 Memento 类 Memento.</description></item><item><title>C++ 继承</title><link>https://www.shellio.cc/docs/programing/c++/default/24/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/24/</guid><description>C++ 继承 面向对象程序设计中最重要的一个概念是继承。继承允许我们依据另一个类来定义一个类，这使得创建和维护一个应用程序变得更容易。这样做，也达到了重用代码功能和提高执行时间的效果。
+当创建一个类时，您不需要重新编写新的数据成员和成员函数，只需指定新建的类继承了一个已有的类的成员即可。这个已有的类称为基类，新建的类称为派生类。
+继承代表了 is a 关系。例如，哺乳动物是动物，狗是哺乳动物，因此，狗是动物，等等。
+基类 &amp;amp; 派生类 一个类可以派生自多个类，这意味着，它可以从多个基类继承数据和函数。定义一个派生类，我们使用一个类派生列表来指定基类。类派生列表以一个或多个基类命名，形式如下：
+1class derived-class: access-specifier base-class 其中，访问修饰符 access-specifier 是 public、protected 或 private 其中的一个，base-class 是之前定义过的某个类的名称。如果未使用访问修饰符 access-specifier，则默认为 private。
+假设有一个基类 Shape，Rectangle 是它的派生类，如下所示：
+1#include &amp;lt;iostream&amp;gt; 2using namespace std; 3// 基类 4class Shape 5 public: 6 void setWidth(int w) 7 { 8 width = w; 9 } 10 void setHeight(int h) 11 { 12 height = h; 13 } 14 protected: 15 int width; 16 int height; 17}; 18// 派生类 19class Rectangle: public Shape 20 public: 21 int getArea() 22 { 23 return (width * height); 24 } 25}; 26int main(void) 27 Rectangle Rect; 28 Rect.</description></item><item><title>二十四、Docker 安装 MySQL</title><link>https://www.shellio.cc/docs/cloud-native/docker/24/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/24/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>二十四、观察者模式 ( Observer Pattern )</title><link>https://www.shellio.cc/docs/code-design/24_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/24_miss/</guid><description>观察者模式 ( Observer Pattern ) 常用于对象间存在一对多关系时，比如，当一个对象被修改时，需要自动通知它的依赖对象
+观察者模式属于行为型模式
+摘要 1、 意图：
+定义对象间的一种一对多的依赖关系，当一个对象的状态发生改变时，所有依赖于它的对象都得到通知并被自动更新。
+2、 主要解决：
+一个对象状态改变给其他对象通知的问题，而且要考虑到易用和低耦合，保证高度的协作
+3、 何时使用：
+一个对象（目标对象）的状态发生改变，所有的依赖对象（观察者对象）都将得到通知，进行广播通知
+4、 如何解决：
+使用面向对象技术，可以将这种依赖关系弱化
+5、 关键代码：
+在抽象类里有一个 ArrayList 存放观察者们
+6、 应用实例：
+1、 拍卖的时候，拍卖师观察最高标价，然后通知给其他竞价者竞价；
+2、 西游记里面悟空请求菩萨降服红孩儿，菩萨洒了一地水招来一个老乌龟，这个乌龟就是观察者，他观察菩萨洒水这个动作；
+7、 优点：
+1、 观察者和被观察者是抽象耦合的；
+2、 建立一套触发机制；
+8、 缺点：
+1、 如果一个被观察者对象有很多的直接和间接的观察者的话，将所有的观察者都通知到会花费很多时间；
+2、 如果在观察者和观察目标之间有循环依赖的话，观察目标会触发它们之间进行循环调用，可能导致系统崩溃；
+3、 观察者模式没有相应的机制让观察者知道所观察的目标对象是怎么发生变化的，而仅仅只是知道观察目标发生了变化；
+9、 使用场景：
+1、 有多个子类共有的方法，且逻辑相同；
+2、 重要的、复杂的方法，可以考虑作为模板方法；
+10、 注意事项：
+1、 JAVA中已经有了对观察者模式的支持类；
+2、 避免循环引用；
+3、 如果顺序执行，某一观察者错误会导致系统卡壳，一般采用异步方式；
+实现 观察者模式使用三个类 Subject、Observer 和 Client ：Subject 对象带有绑定观察者到 Client 对象和从 Client 对象解绑观察者的方法</description></item><item><title>C++ 重载运算符和重载函数</title><link>https://www.shellio.cc/docs/programing/c++/default/25/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/25/</guid><description>C++ 重载运算符和重载函数 C++允许在同一作用域中的某个函数和运算符指定多个定义，分别称为函数重载和运算符重载。
+重载声明是指一个与之前已经在该作用域内声明过的函数或方法具有相同名称的声明，但是它们的参数列表和定义（实现）不相同。
+当您调用一个重载函数或重载运算符时，编译器通过把您所使用的参数类型与定义中的参数类型进行比较，决定选用最合适的定义。选择最合适的重载函数或重载运算符的过程，称为重载决策。
+C++ 中的函数重载 在同一个作用域内，可以声明几个功能类似的同名函数，但是这些同名函数的形式参数（指参数的个数、类型或者顺序）必须不同。您不能仅通过返回类型的不同来重载函数。
+下面的实例中，同名函数 print() 被用于输出不同的数据类型：
+1#include &amp;lt;iostream&amp;gt; 2using namespace std; 3class printData 4 public: 5 void print(int i) { 6 cout &amp;lt;&amp;lt; &amp;#34;Printing int: &amp;#34; &amp;lt;&amp;lt; i &amp;lt;&amp;lt; endl; 7 } 8 void print(double f) { 9 cout &amp;lt;&amp;lt; &amp;#34;Printing float: &amp;#34; &amp;lt;&amp;lt; f &amp;lt;&amp;lt; endl; 10 } 11 void print(char* c) { 12 cout &amp;lt;&amp;lt; &amp;#34;Printing character: &amp;#34; &amp;lt;&amp;lt; c &amp;lt;&amp;lt; endl; 13 } 14}; 15int main(void) 16 printData pd; 17 // Call print to print integer 18 pd.</description></item><item><title>二十五、Docker 安装 Tomcat</title><link>https://www.shellio.cc/docs/cloud-native/docker/25/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/25/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>二十五、状态模式 ( State Pattern )</title><link>https://www.shellio.cc/docs/code-design/25_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/25_miss/</guid><description>状态模式（State Pattern）中类的行为是基于它的状态改变的
+在状态模式中，我们创建表示各种状态的对象和一个行为随着状态对象改变而改变的 context 对象
+状态模式属于行为型模式
+摘要 1、 意图：
+允许对象在内部状态发生改变时改变它的行为，对象看起来好像修改了它的类
+2、 主要解决：
+对象的行为依赖于它的状态（属性），并且可以根据它的状态改变而改变它的相关行为
+3、 何时使用：
+代码中包含大量与对象状态有关的条件语句
+4、 如何解决：
+将各种具体的状态类抽象出来
+5、 关键代码：
+通常命令模式的接口中只有一个方法。而状态模式的接口中有一个或者多个方法
+而且，状态模式的实现类的方法，一般返回值，或者是改变实例变量的值
+也就是说，状态模式一般和对象的状态有关。实现类的方法有不同的功能，覆盖接口中的方法
+状态模式和命令模式一样，也可以用于消除 if…else 等条件选择语句
+6、 应用实例：
+1、 打篮球的时候运动员可以有正常状态、不正常状态和超常状态；
+2、 曾侯乙编钟中，’钟是抽象接口’,’钟A’等是具体状态，’曾侯乙编钟’是具体环境（Context）；
+7、 优点：
+1、 封装了转换规则；
+2、 枚举可能的状态，在枚举状态之前需要确定状态种类；
+3、 将所有与某个状态有关的行为放到一个类中，并且可以方便地增加新的状态，只需要改变对象状态即可改变对象的行为；
+4、 允许状态转换逻辑与状态对象合成一体，而不是某一个巨大的条件语句块；
+5、 可以让多个环境对象共享一个状态对象，从而减少系统中对象的个数；
+8、 缺点：
+1、 状态模式的使用必然会增加系统类和对象的个数；
+2、 状态模式的结构与实现都较为复杂，如果使用不当将导致程序结构和代码的混乱；
+3、 状态模式对”开闭原则”的支持并不太好，对于可以切换状态的状态模式，增加新的状态类需要修改那些负责状态转换的源代码，否则无法切换到新增状态，而且修改某个状态类的行为也需修改对应类的源代码；
+9、 使用场景：
+1、 行为随状态改变而改变的场景；
+2、 条件、分支语句的代替者；
+10、 注意事项：
+在行为受状态约束的时候使用状态模式，而且状态不超过 5 个
+实现 我们将创建一个 State 接口和实现了 State 接口的实体状态类。</description></item><item><title>C++ 基本的输入输出</title><link>https://www.shellio.cc/docs/programing/c++/default/21/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/21/</guid><description>C++ 基本的输入输出 C++标准库提供了一组丰富的输入/输出功能，我们将在后续的章节进行介绍。本章将讨论 C++ 编程中最基本和最常见的 I/O 操作。
+C++的 I/O 发生在流中，流是字节序列。如果字节流是从设备（如键盘、磁盘驱动器、网络连接等）流向内存，这叫做输入操作。如果字节流是从内存流向设备（如显示屏、打印机、磁盘驱动器、网络连接等），这叫做输出操作。
+I/O 库头文件 下列的头文件在 C++ 编程中很重要。
+头文件 函数和描述 &amp;lt;iostream&amp;gt; 该文件定义了 cin、cout、cerr 和 clog 对象，分别对应于标准输入流、标准输出流、非缓冲标准错误流和缓冲标准错误流。 &amp;lt;iomanip&amp;gt; 该文件通过所谓的参数化的流操纵器（比如 setw 和 setprecision），来声明对执行标准化 I/O 有用的服务。 &amp;lt;fstream&amp;gt; 该文件为用户控制的文件处理声明服务。我们将在文件和流的相关章节讨论它的细节。 标准输出流（cout） 预定义的对象 cout 是 ostream 类的一个实例。cout 对象”连接”到标准输出设备，通常是显示屏。cout 是与流插入运算符 &amp;laquo; 结合使用的，如下所示：
+1#include &amp;lt;iostream&amp;gt; 2using namespace std; 3int main( ) 4 char str[] = &amp;#34;Hello C++&amp;#34;; 5 cout &amp;lt;&amp;lt; &amp;#34;Value of str is : &amp;#34; &amp;lt;&amp;lt; str &amp;lt;&amp;lt; endl; 6} 当上面的代码被编译和执行时，它会产生下列结果：</description></item><item><title>二十一、Docker 镜像打标签</title><link>https://www.shellio.cc/docs/cloud-native/docker/21/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/21/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>二十一、迭代器模式 ( Iterator Pattern )</title><link>https://www.shellio.cc/docs/code-design/21_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/21_miss/</guid><description>迭代器模式（Iterator Pattern）用于顺序访问集合对象的元素，不需要知道集合对象的底层表示
+迭代器模式是 Java 和 .Net 编程环境中非常常用的设计模式
+迭代器模式属于行为型模式
+介绍 1、 意图：
+提供一种方法顺序访问一个聚合对象中各个元素, 而又无须暴露该对象的内部表示
+2、 主要解决：
+不同的方式来遍历整个整合对象
+3、 何时使用：
+遍历一个聚合对象
+4、 如何解决：
+把在元素之间游走的责任交给迭代器，而不是聚合对象
+5、 关键代码：
+定义接口：hasNext, next
+6、 应用实例：
+JAVA 中的 iterator
+7、 优点：
+1、 它支持以不同的方式遍历一个聚合对象；
+2、 迭代器简化了聚合类；
+3、 在同一个聚合上可以有多个遍历；
+4、 在迭代器模式中，增加新的聚合类和迭代器类都很方便，无须修改原有代码；
+8、 缺点：
+由于迭代器模式将存储数据和遍历数据的职责分离，增加新的聚合类需要对应增加新的迭代器类，类的个数成对增加，这在一定程度上增加了系统的复杂性
+9、 使用场景：
+1、 访问一个聚合对象的内容而无须暴露它的内部表示；
+2、 需要为聚合对象提供多种遍历方式；
+3、 为遍历不同的聚合结构提供一个统一的接口；
+10、 注意事项：
+迭代器模式就是分离了集合对象的遍历行为，抽象出一个迭代器类来负责，这样既可以做到不暴露集合的内部结构，又可让外部代码透明地访问集合内部的数据
+实现 1、 定义一个叙述导航方法的Iterator接口和一个返回迭代器的Container接口；
+2、 实现了Container接口的实体类将负责实现Iterator接口；
+3、 IteratorPatternDemo使用实体类NamesRepository来打印NamesRepository中存储为集合的Names；
+范例 1. 创建接口 Iterator.java
+1// author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 2// Copyright © 2015-2065 ddkk.</description></item><item><title>C++ 修饰符类型</title><link>https://www.shellio.cc/docs/programing/c++/default/9/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/9/</guid><description>C++ 修饰符类型 C++允许在 char、int 和 double 数据类型前放置修饰符。修饰符用于改变基本类型的含义，所以它更能满足各种情境的需求。
+下面列出了数据类型修饰符：
+signed unsigned long short 修饰符signed、unsigned、long 和 short 可应用于整型，signed 和 unsigned 可应用于字符型，long 可应用于双精度型。
+修饰符signed 和 unsigned 也可以作为 long 或 short 修饰符的前缀。例如：unsigned long int。
+C++允许使用速记符号来声明无符号短整数或无符号长整数。您可以不写 int，只写单词 unsigned short 或 unsigned long，int 是隐含的。例如，下面的两个语句都声明了无符号整型变量。
+1unsigned x; 2unsigned int y; 为了理解 C++ 解释有符号整数和无符号整数修饰符之间的差别，我们来运行一下下面这个短程序：
+1#include &amp;lt;iostream&amp;gt; 2using namespace std; 3/* 4 * 这个程序演示了有符号整数和无符号整数之间的差别 5*/ 6int main() 7 short int i; // 有符号短整数 8 short unsigned int j; // 无符号短整数 9 j = 50000; 10 i = j; 11 cout &amp;lt;&amp;lt; i &amp;lt;&amp;lt; &amp;#34; &amp;#34; &amp;lt;&amp;lt; j; 12 return 0; 13} 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 当上面的程序运行时，会输出下列结果：</description></item><item><title>九、Docker inspect 容器元数据</title><link>https://www.shellio.cc/docs/cloud-native/docker/9/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/9/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>组合 Futures</title><link>https://www.shellio.cc/docs/java/concurrency/default/9/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/9/</guid><description>上一章节中我们讲解了 CompletableFuture 的一些基本用法，比如如何使用和如何处理异步计算结果。本章节我们继续，主要讲解如何使用 CompletableFuture 来组合异步计算的结果
+组合 Futures CompletableFuture API 最吸引人的部分，应该是能够在一系列链式计算步骤中组合 CompletableFuture 实例。这种链式的结果本身就是CompletableFuture，允许进一步链接和组合。
+这种方法在函数式语言中无处不在，通常被称为 「一元 ( monadic ) 设计模式 」。
+CompletableFuture 提供了方法 thenCompose() 用于按顺序链接两个 Futures。该方法的参数是一个能够返回 CompletableFuture 实例的函数或表达式。而该函数或表达式的参数则是先前计算步骤的结果，这允许我们在下一个 CompletableFuture 的 lambda 中使用这个值。
+例如下面这个示例
+1CompletableFuture&amp;lt;String&amp;gt; completableFuture 2 = CompletableFuture.supplyAsync(() -&amp;gt; DDKK.COM 弟弟快看) 3 .thenCompose(s -&amp;gt; CompletableFuture.supplyAsync(() -&amp;gt; s + 程序员编程资料站)); 4assertEquals(&amp;#34;DDKK.COM 弟弟快看，程序员编程资料站&amp;#34;, completableFuture.get()); thenCompose() 方法与 thenApply() 一起实现了一元设计模式的基本构建块，它们与Java 8 中提供的 Stream 和 Optional 类的 map 和flatMap 方法密切相关。
+两个方法都接收一个函数并将其应用于计算结果，但 thenCompose() （ flatMap() ）方法接收一个函数，该函数返回相同类型的另一个对象，这样，就允许将这些类的实例组合为构建块。
+如果要执行两个独立的 Futures 并对其结果执行某些操作，可以使用 Future 的 thenCombine() 并传递能够接收两个参数的函数或表达式来处理这两个结果。</description></item><item><title>九、原型模式 ( Prototype Pattern )</title><link>https://www.shellio.cc/docs/code-design/9_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/9_miss/</guid><description>原型模式（Prototype Pattern）是用于创建重复的对象，同时又能保证性能
+原型模式实现了一个原型接口，该接口用于创建当前对象的克隆
+当直接创建对象的代价比较大时，则采用这种模式
+例如，一个对象需要在一个高代价的数据库操作之后被创建
+我们可以缓存该对象，在下一个请求时返回它的克隆，在需要的时候更新数据库，以此来减少数据库调用
+原型模式属于创建型模式，它提供了一种创建对象的最佳方式
+摘要 1、 意图：
+用原型实例指定创建对象的种类，并且通过拷贝这些原型创建新的对象
+2、 主要解决：
+在运行期建立和删除原型
+3、 何时使用：
+1、 当一个系统应该独立于它的产品创建，构成和表示时；
+2、 当要实例化的类是在运行时刻指定时，例如，通过动态装载；
+3、 为了避免创建一个与产品类层次平行的工厂类层次时；
+4、 当一个类的实例只能有几个不同状态组合中的一种时建立相应数目的原型并克隆它们可能比每次用合适的状态手工实例化该类更方便一些；
+4、 如何解决：
+利用已有的一个原型对象，快速地生成和原型对象一样的实例
+5、 关键代码：
+1、 实现克隆操作，在JAVA继承Cloneable，重写clone()，在.NET中可以使用Object类的MemberwiseClone()方法来实现对象的浅拷贝或通过序列化的方式来实现深拷贝；
+2、 原型模式同样用于隔离类对象的使用者和具体类型（易变类）之间的耦合关系，它同样要求这些”易变类”拥有稳定的接口；
+6、 应用实例：
+1、 细胞分裂；
+2、 JAVA中的Objectclone()方法；
+7、 优点：
+1、 性能提高；
+2、 逃避构造函数的约束；
+8、 缺点：
+1、 配备克隆方法需要对类的功能进行通盘考虑，这对于全新的类不是很难，但对于已有的类不一定很容易，特别当一个类引用不支持串行化的间接对象，或者引用含有循环结构的时候；
+2、 必须实现Cloneable接口；
+3、 逃避构造函数的约束；
+9、 使用场景：
+1、 资源优化场景；
+2、 类初始化需要消化非常多的资源，这个资源包括数据、硬件资源等；
+3、 性能和安全要求的场景；
+4、 通过new产生一个对象需要非常繁琐的数据准备或访问权限，则可以使用原型模式；
+5、 一个对象多个修改者的场景；
+6、 一个对象需要提供给其他对象访问，而且各个调用者可能都需要修改其值时，可以考虑使用原型模式拷贝多个对象供调用者使用；
+7、 在实际项目中，原型模式很少单独出现，一般是和工厂方法模式一起出现，通过clone的方法创建一个对象，然后由工厂方法提供给调用者；
+原型模式已经与 Java 融为浑然一体，大家可以随手拿来使用</description></item><item><title>C++ 变量类型</title><link>https://www.shellio.cc/docs/programing/c++/default/6/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/6/</guid><description>C++ 变量类型 变量其实只不过是程序可操作的存储区的名称。C++ 中每个变量都有指定的类型，类型决定了变量存储的大小和布局，该范围内的值都可以存储在内存中，运算符可应用于变量上。
+变量的名称可以由字母、数字和下划线字符组成。它必须以字母或下划线开头。大写字母和小写字母是不同的，因为 C++ 是大小写敏感的。
+基于前一章讲解的基本类型，有以下几种基本的变量类型，将在下一章中进行讲解：
+类型 描述 bool 存储值 true 或 false。 char 通常是一个八位字节（一个字节）。这是一个整数类型。 int 对机器而言，整数的最自然的大小。 float 单精度浮点值。 double 双精度浮点值。 void 表示类型的缺失。 wchar_t 宽字符类型。 C++也允许定义各种其他类型的变量，比如枚举、指针、数组、引用、数据结构、类等等，这将会在后续的章节中进行讲解。
+下面我们将讲解如何定义、声明和使用各种类型的变量。
+C++ 中的变量定义 变量定义就是告诉编译器在何处创建变量的存储，以及如何创建变量的存储。变量定义指定一个数据类型，并包含了该类型的一个或多个变量的列表，如下所示：
+1type variable_list; 在这里，type 必须是一个有效的 C++ 数据类型，可以是 char、w_char、int、float、double、bool 或任何用户自定义的对象，variable_list 可以由一个或多个标识符名称组成，多个标识符之间用逗号分隔。下面列出几个有效的声明：
+1int i, j, k; 2char c, ch; 3float f, salary; 4double d; 行 int i, j, k; 声明并定义了变量 i、j 和 k，这指示编译器创建类型为 int 的名为 i、j、k 的变量。
+变量可以在声明的时候被初始化（指定一个初始值）。初始化器由一个等号，后跟一个常量表达式组成，如下所示：
+1type variable_name = value; 下面列举几个实例：</description></item><item><title>六、Docker run 运行镜像</title><link>https://www.shellio.cc/docs/cloud-native/docker/6/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/6/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title/><link>https://www.shellio.cc/docs/java/concurrency/default/6/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/6/</guid><description>ForkJoinPool 是Java 7 中引入的 fork/join 框架的核心之一。它解决了一个常见的问题： 如何在递归中生成多个任务。因为，即使是使用一个简单的 ThreadPoolExecutor ，也会在不断的递归中快速耗尽线程。因为每个任务或子任务都需要自己的线程来运行。
+在fork/join 框架中，任何任务都可以生成 ( fork ) 多个子任务并使用 join() 方法等待它们的完成。fork/join 框架的好处是它不会为每个任务或子任务创建新线程，而是实现了 工作窃取 ( Work Stealing ) 算法。关于 fork/join 框架的详细信息，你可以访问我们的 一文秒懂 Java Fork/Join。
+接下来，我们看一个使用 ForkJoinPool 遍历节点树并计算所有叶值之和的简单示例。在这个示例中，树是一个由节点，int 值和一组子节点组成。
+1static class TreeNode { 2 int value; 3 Set&amp;lt;TreeNode&amp;gt; children; 4 TreeNode(int value, TreeNode... children) { 5 this.value = value; 6 this.children = Sets.newHashSet(children); 7 } 创建了树 TreeNode 之后，如果我们想要并行地对树中的所有值求和，我们需要实现一个 RecursiveTask&amp;lt;Integer&amp;gt; 接口。每个任务都接收自己的节点，并将其值添加到其子节点的值之和上。
+要计算子节点值的总和，任务实现执行以下操作
+1、 将子节点集合转换为流(stream)；
+2、
+因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 映射前面操作中创建的流，为每个元素创建一个新的CountingTask；</description></item><item><title>六、抽象工厂模式 ( Abstract Factory Pattern )</title><link>https://www.shellio.cc/docs/code-design/6_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/6_miss/</guid><description>抽象工厂模式（Abstract Factory Pattern）是围绕一个超级工厂创建其他工厂
+该超级工厂又称为其他工厂的工厂
+在抽象工厂模式中，接口是负责创建一个相关对象的工厂，不需要显式指定它们的类
+每个生成的工厂都能按照工厂模式提供对象
+抽象工厂模式属于创建型模式，它提供了一种创建对象的最佳方式。
+摘要 1、 意图：
+提供一个创建一系列相关或相互依赖对象的接口，而无需指定它们具体的类
+2、 主要解决：
+主要解决接口选择的问题
+3、 何时使用：
+系统的产品有多于一个的产品族，而系统只消费其中某一族的产品
+4、 如何解决：
+在一个产品族里面，定义多个产品
+5、 关键代码：
+在一个工厂里聚合多个同类产品
+6、 应用实例：
+工作了，为了参加一些聚会，肯定有两套或多套衣服吧，比如说有商务装（成套，一系列具体产品）、时尚装（成套，一系列具体产品），甚至对于一个家庭来说，可能有商务女装、商务男装、时尚女装、时尚男装，这些也都是成套的，即一系列具体产品
+假设一种情况（现实中是不存在的，要不然，没法进入共产主义了，但有利于说明抽象工厂模式），在您的家中，某一个衣柜（具体工厂）只能存放某一种这样的衣服（成套，一系列具体产品），每次拿这种成套的衣服时也自然要从这个衣柜中取出了
+用OO 的思想去理解，所有的衣柜（具体工厂）都是衣柜类的（抽象工厂）某一个，而每一件成套的衣服又包括具体的上衣（某一具体产品），裤子（某一具体产品），这些具体的上衣其实也都是上衣（抽象产品），具体的裤子也都是裤子（另一个抽象产品）
+7、 优点：
+缺点：
+产品族扩展非常困难，要增加一个系列的某一产品，既要在抽象的 Creator 里加代码，又要在具体的里面加代码
+9、 使用场景：
+1、 QQ换皮肤，一整套一起换；
+2、 生成不同操作系统的程序；
+10、 注意事项：
+产品族难扩展，产品等级易扩展
+实现 1、 创建Shape和Color接口和实现这些接口的实体类；
+2、 创建抽象工厂类AbstractFactory；
+3、 定义工厂类ShapeFactory和ColorFactory，这两个工厂类都是扩展了AbstractFactory；
+4、 创建一个工厂创造器/生成器类FactoryProducer；
+5、 AbstractFactoryPatternDemo使用FactoryProducer来获取AbstractFactory对象；
+它将向AbstractFactory 传递形状信息 Shape （ CIRCLE / RECTANGLE / SQUARE ），以便获取它所需对象的类型
+同时它还向 AbstractFactory 传递颜色信息 Color （ RED / GREEN / BLUE ），以便获取它所需对象的类型</description></item><item><title>C++ 变量作用域</title><link>https://www.shellio.cc/docs/programing/c++/default/7/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/7/</guid><description>C++ 变量作用域 作用域是程序的一个区域，一般来说有三个地方可以声明变量：
+在函数或一个代码块内部声明的变量，称为局部变量。 在函数参数的定义中声明的变量，称为形式参数。 在所有函数外部声明的变量，称为全局变量。 我们将在后续的章节中学习什么是函数和参数。本章我们先来讲解声明是局部变量和全局变量。
+局部变量 在函数或一个代码块内部声明的变量，称为局部变量。它们只能被函数内部或者代码块内部的语句使用。下面的实例使用了局部变量：
+1#include &amp;lt;iostream&amp;gt; 2using namespace std; 3int main () 4 // 局部变量声明 5 int a, b; 6 int c; 7 // 实际初始化 8 a = 10; 9 b = 20; 10 c = a + b; 11 cout &amp;lt;&amp;lt; c; return 0; 12} 全局变量 在所有函数外部定义的变量（通常是在程序的头部），称为全局变量。全局变量的值在程序的整个生命周期内都是有效的。
+全局变量可以被任何函数访问。也就是说，全局变量一旦声明，在整个程序中都是可用的。下面的实例使用了全局变量和局部变量：
+1#include &amp;lt;iostream&amp;gt; 2using namespace std; 3// 全局变量声明 4int g; 5int main () 6 // 局部变量声明 7 int a, b; 8 // 实际初始化 9 a = 10; 10 b = 20; 11 g = a + b; 12 cout &amp;lt;&amp;lt; g; return 0; 13 } 在程序中，局部变量和全局变量的名称可以相同，但是在函数内，局部变量的值会覆盖全局变量的值。下面是一个实例：</description></item><item><title>七、Docker 容器</title><link>https://www.shellio.cc/docs/cloud-native/docker/7/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/7/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>给 Maven 添加 Guava 依赖</title><link>https://www.shellio.cc/docs/java/concurrency/default/7/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/7/</guid><description>Guava 是托管在 Github.com 上的流行的 Google 开源的 Java 线程池库。
+Guava 包含了许多有用的并发类，同时还包含了几个方便的 ExecutorService 实现，但这些实现类都无法通过直接实例化或子类化来创建实例。取而代之的是提供了 MoreExecutors 助手类来创建它们的实例。
+给 Maven 添加 Guava 依赖 为了将Google Guava 库包含进当前的项目中，需要将下面的依赖项添加到 Maven pom 文件中。
+1&amp;lt;dependency&amp;gt; 2 &amp;lt;groupId&amp;gt;com.google.guava&amp;lt;/groupId&amp;gt; 3 &amp;lt;artifactId&amp;gt;guava&amp;lt;/artifactId&amp;gt; 4 &amp;lt;version&amp;gt;26.0&amp;lt;/version&amp;gt; 5&amp;lt;/dependency&amp;gt; 你可以在 Maven 中央仓库 中找到最新版本的 Guava 库
+直接执行者和直接执行者服务 有时候，我们希望在当前线程或线程池中执行任务，具体在哪里取决于某些条件。这种情况下，你应该会更喜欢使用单个 Executor 接口，且只需切换实现即可。
+虽然将当前线程中的任务的 Executor 或 ExecutorService 的提取出来单独实现并不困难，但它仍然需要编写一些样板代码。
+值得庆幸的是，Guava 为我们提供了预定义的实例。
+下面的范例演示了如何在同一个线程中执行任务。简单起见，提交的任务会将当前线程休眠 500 毫秒并阻塞当前线程，并在执行的调用完成后让结果立即可用
+1 Executor executor = MoreExecutors.directExecutor(); 2AtomicBoolean executed = new AtomicBoolean(); 3executor.execute(() -&amp;gt; { 4 try { 5 Thread.</description></item><item><title>七、单例模式 ( Singleton Pattern )</title><link>https://www.shellio.cc/docs/code-design/7_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/7_miss/</guid><description>单例模式（Singleton Pattern）提供了一种创建对象的最佳方式
+单例模式涉及到一个单一的类，该类负责创建自己的对象，同时确保只有单个对象被创建，这个类提供了一种访问其唯一的对象的方式，可以直接访问，不需要实例化该类的对象
+单例模式设计要点 1、 单例类只能有一个实例；
+2、 单例类必须自己创建自己的唯一实例；
+3、 单例类必须给所有其他对象提供这一实例；
+单例模式属于创建型模式
+摘要 1、 意图：
+保证一个类仅有一个实例，并提供一个访问它的全局访问点
+2、 主要解决：
+一个全局使用的类频繁地创建与销毁
+3、 何时使用：
+当您想控制实例数目，节省系统资源的时候
+4、 如何解决：
+判断系统是否已经有这个单例，如果有则返回，如果没有则创建
+5、 关键代码：
+构造函数是私有的
+6、 应用实例：
+1、 一个党只能有一个主席；
+2、 Windows是多进程多线程的，在操作一个文件的时候，就不可避免地出现多个进程或线程同时操作一个文件的现象，所以所有文件的处理必须通过唯一的实例来进行；
+3、 一些设备管理器常常设计为单例模式，比如一个电脑有两台打印机，在输出的时候就要处理不能两台打印机打印同一个文件；
+7、 优点：
+1、 在内存里只有一个实例，减少了内存的开销，尤其是频繁的创建和销毁实例（比如管理学院首页页面缓存）；
+2、 避免对资源的多重占用（比如写文件操作）；
+8、 缺点：
+没有接口，不能继承，与单一职责原则冲突，一个类应该只关心内部逻辑，而不关心外面怎么样来实例化
+9、 使用场景：
+1、 要求生产唯一序列号；
+2、 WEB中的计数器，不用每次刷新都在数据库里加一次，用单例先缓存起来；
+3、 创建的一个对象需要消耗的资源过多，比如I/O与数据库的连接等；
+10、 注意事项：
+getInstance() 方法中需要使用同步锁 synchronized (Singleton.class) 防止多线程同时进入造成 instance 被多次实例化
+实现 1、 创建一个SingleObject类，SingleObject类有它的私有构造函数和本身的一个静态实例SingleObject类提供了一个静态方法，供外界获取它的静态实例；
+2、 SingletonPatternDemo使用SingleObject类来获取SingleObject对象；
+范例 1. 创建一个 Singleton 类 SingleObject.</description></item><item><title>C++ 基本语法</title><link>https://www.shellio.cc/docs/programing/c++/default/3/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/3/</guid><description>C++ 基本语法 C++程序可以定义为对象的集合，这些对象通过调用彼此的方法进行交互。现在让我们简要地看一下什么是类、对象，方法、即时变量。
+对象 – 对象具有状态和行为。例如：一只狗的状态 – 颜色、名称、品种，行为 – 摇动、叫唤、吃。对象是类的实例。 类 – 类可以定义为描述对象行为/状态的模板/蓝图。 方法 – 从基本上说，一个方法表示一种行为。一个类可以包含多个方法。可以在方法中写入逻辑、操作数据以及执行所有的动作。 即时变量 – 每个对象都有其独特的即时变量。对象的状态是由这些即时变量的值创建的。 C++ 程序结构 让我们看一段简单的代码，可以输出单词 Hello World。
+1#include &amp;lt;iostream&amp;gt; 2using namespace std; 3// main() 是程序开始执行的地方 4int main() 5 cout &amp;lt;&amp;lt; &amp;#34;Hello World&amp;#34;; // 输出 Hello World return 0; 6} 接下来我们讲解一下上面这段程序：
+C++ 语言定义了一些头文件，这些头文件包含了程序中必需的或有用的信息。上面这段程序中，包含了头文件 。 行 using namespace std; 告诉编译器使用 std 命名空间。命名空间是 C++ 中一个相对新的概念。 下一行 // main() 是程序开始执行的地方 是一个单行注释。单行注释以 // 开头，在行末结束。 下一行 int main() 是主函数，程序从这里开始执行。 下一行 cout &amp;laquo; “Hello World”; 会在屏幕上显示消息 “Hello World”。 下一行 return 0; 终止 main( )函数，并向调用进程返回值 0。 编译 &amp;amp; 执行 C++ 程序 接下来让我们看看如何把源代码保存在一个文件中，以及如何编译并运行它。下面是简单的步骤：</description></item><item><title>Java 中的线程池</title><link>https://www.shellio.cc/docs/java/concurrency/default/3/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/3/</guid><description>本文我们将讲解 Java 中的线程池 ( Thread Pool )，从 Java 标准库中的线程池的不同实现开始，到 Google 开发的 Guava 库的前世今生。
+本章节涉及到很多前几个章节中阐述的知识点。我们希望你是按照顺序阅读下来的，不然有些知识会一头雾水。
+Java 语言的实现中，把 Java 线程一一映射到操作系统级的线程，而后者是操作系统的资源，这意味着，如果开发者毫无节制地创建线程，那么线程资源就会被快速的耗尽。
+在Windows 操作系统上，每个线程要预留出 1m 的内存空间，意味着 2G 的内存理论上做多只能创建 2048 个线程。而在 Linux 上，最大线程数由常量 PTHREAD_THREADS_MAX 决定，一般为 1024。
+出于模拟并行性的目的，Java 线程之间的上下文切换也由操作系统完成。因为线程上下文切换需要消耗时间，所以，一个简单的观点是：产生的线程越多，每个线程花在实际工作上的时间就越少。
+为什么会有线程上下文切换？
+一台电脑，运行起来后，它的 CPU 是固定的，05 年之前，还是单核时代，也就是一次只能运行一个线程，虽然随着时间的推移，现在的 CPU 已经有很多个核心，比如 8 核 16 核之类的。但相比于一个应用程序能够创建的线程数，那真的是太少了。而每个核心一次只能运行一个线程，所以多个线程需要运行时就需要来回不停的在多个线程间切换，这就是线程之间的上下文切换。
+为了节制创建线程的数量，也为了节省创建线程的开销，因此提出了线程池的概念。线程池模式有助于节省多线程应用程序中的资源，还可以在某些预定义的限制内包含并行性。
+当我们使用线程池时，我们可以以并行任务的形式编写并发代码并将其提交到线程池的实例中执行。
+这个线程池实例控制了多个重用线程以执行这些任务。
+这种线程池模式，允许我们控制应用程序创建的线程数，生命周期，以及计划任务的执行并将传入的任务保留在队列中。
+Java 中的线程池 Executors、Executor 和 ExecutorService Executors 是一个帮助类，提供了创建几种预配置线程池实例的方法。如果你不需要应用任何自定义的微调，可以调用这些方法创建默认配置的线程池，因为它能节省很多时间和代码。
+Executor 和 ExecutorService 接口则用于与 Java 中不同线程池的实现协同工作。通常，你应该将代码与线程池的实际实现分离，并在整个应用程序中使用这些接口。
+Executor 接口提供了一个 execute() 方法将 Runnable 实例提交到线程池中执行。
+下面的代码是一个快速示例，演示了如何使用 Executors API 获取包含了单个线程池和无限队列支持的 Executor 实例，以便按顺序执行任务。</description></item><item><title>三、Ubuntu 安装 Docker</title><link>https://www.shellio.cc/docs/cloud-native/docker/3/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/3/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用 Linux 常用的命令；
+2、 知道大部分的 Linux 常识，比如终端、service、ip、用户、组等；
+3、 熟练使用 Ubuntu 或者 Centos 或者 MacOS 种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker 的应用场景 1、 Web 应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的 OpenShift 或 CloudFoundry 平台来搭建自己的 PaaS 环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；</description></item><item><title>三、设计模式 – 四大类型</title><link>https://www.shellio.cc/docs/code-design/3/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/3/</guid><description>设计模式（Design pattern）是重构解决方案
+根据书Design Patterns – Elements of Reusable Object-Oriented Software（中文译名：设计模式 – 可复用的面向对象软件元素） 中和 J2EE 所提到的，总共有 23 +8 种设计模式
+这些模式可以分为四大类：创建型模式（Creational Patterns）、结构型模式（Structural Patterns）、行为型模式（Behavioral Patterns）、J2EE 设计模式
+1、 创建型模式；
+这些设计模式提供了一种在创建对象的同时隐藏创建逻辑的方式，而不是使用 new 运算符直接实例化对象
+这使得程序在判断针对某个给定实例需要创建哪些对象时更加灵活
+包括
+1、 工厂模式（FactoryPattern）；
+2、 抽象工厂模式（AbstractFactoryPattern）；
+3、 单例模式（SingletonPattern）；
+4、 建造者模式（BuilderPattern；
+5、 原型模式（PrototypePattern）；
+2、 结构型模式；
+这些设计模式关注类和对象的组合
+继承的概念被用来组合接口和定义组合对象获得新功能的方式
+包括
+1、 适配器模式（AdapterPattern）；
+2、 桥接模式（BridgePattern）；
+3、 过滤器模式（Filter、CriteriaPattern）；
+4、 组合模式（CompositePattern）；
+5、 装饰器模式（DecoratorPattern）；
+6、 外观模式（FacadePattern）；
+7、 享元模式（FlyweightPattern）；
+8、 代理模式（ProxyPattern）；
+因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 3、 行为型模式；
+这些设计模式特别关注对象之间的通信
+包括
+1、 责任链模式（ChainofResponsibilityPattern）；
+2、 命令模式（CommandPattern）；</description></item><item><title>C++ 文件和流</title><link>https://www.shellio.cc/docs/programing/c++/default/30/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/30/</guid><description>C++ 文件和流 到目前为止，我们已经使用了 iostream 标准库，它提供了 cin 和 cout 方法分别用于从标准输入读取流和向标准输出写入流。
+本教程介绍如何从文件读取流和向文件写入流。这就需要用到 C++ 中另一个标准库 fstream，它定义了三个新的数据类型：
+数据类型 描述 ofstream 该数据类型表示输出文件流，用于创建文件并向文件写入信息。 ifstream 该数据类型表示输入文件流，用于从文件读取信息。 fstream 该数据类型通常表示文件流，且同时具有 ofstream 和 ifstream 两种功能，这意味着它可以创建文件，向文件写入信息，从文件读取信息。 要在C++ 中进行文件处理，必须在 C++ 源代码文件中包含头文件 和 。
+打开文件 在从文件读取信息或者向文件写入信息之前，必须先打开文件。ofstream 和 fstream 对象都可以用来打开文件进行写操作，如果只需要打开文件进行读操作，则使用 ifstream 对象。
+下面是open() 函数的标准语法，open() 函数是 fstream、ifstream 和 ofstream 对象的一个成员。
+1void open(const char *filename, ios::openmode mode); 在这里，open() 成员函数的第一参数指定要打开的文件的名称和位置，第二个参数定义文件被打开的模式。
+模式标志 描述 ios::app 追加模式。所有写入都追加到文件末尾。 ios::ate 文件打开后定位到文件末尾。 ios::in 打开文件用于读取。 ios::out 打开文件用于写入。 ios::trunc 如果该文件已经存在，其内容将在打开文件之前被截断，即把文件长度设为 0。 您可以把以上两种或两种以上的模式结合使用。例如，如果您想要以写入模式打开文件，并希望截断文件，以防文件已存在，那么您可以使用下面的语法：
+1ofstream outfile; 2outfile.open(&amp;#34;file.dat&amp;#34;, ios::out | ios::trunc ); 类似地，您如果想要打开一个文件用于读写，可以使用下面的语法：</description></item><item><title>三十、Docker 命令大全</title><link>https://www.shellio.cc/docs/cloud-native/docker/30/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/30/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>三十、MVC 模式</title><link>https://www.shellio.cc/docs/code-design/30_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/30_miss/</guid><description>MVC模式代表 Model-View-Controller（模型-视图-控制器） 模式
+MVC模式用于应用程序的分层开发
+Model（模型） - 模型代表一个存取数据的对象或 JAVA POJO 它也可以带有逻辑，在数据变化时更新控制器 View（视图） - 视图代表模型包含的数据的可视化 Controller（控制器） - 控制器作用于模型和视图上。它控制数据流向模型对象，并在数据变化时更新视图。它使视图与模型分离开 实现 1、 定义一个作为模型的Student对象；
+2、 StudentView是一个把学生详细信息输出到控制台的视图类；
+3、 StudentController是负责存储数据到Student对象中的控制器类，并相应地更新视图StudentView；
+4、 最后类MVCPatternDemo使用StudentController来演示MVC模式的用法；
+范例 1. 定义模型 Student.java
+1// author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 2// Copyright © 2015-2065 ddkk.com. All rights reserved. 3package com.ddkk.gof; 4public class Student { 5 private String rollNo; 6 private String name; 7 public String getRollNo() { 8 return rollNo; 9 } 10 public void setRollNo(String rollNo) { 11 this.</description></item><item><title>C++ Web 编程</title><link>https://www.shellio.cc/docs/programing/c++/default/38/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/38/</guid><description>C++ Web 编程 什么是 CGI？ 公共网关接口（CGI），是一套标准，定义了信息是如何在 Web 服务器和客户端脚本之间进行交换的。 CGI 规范目前是由 NCSA 维护的，NCSA 定义 CGI 如下： 公共网关接口（CGI），是一种用于外部网关程序与信息服务器（如 HTTP 服务器）对接的接口标准。 目前的版本是 CGI/1.1，CGI/1.2 版本正在推进中。 Web 浏览 为了更好地了解 CGI 的概念，让我们点击一个超链接，浏览一个特定的网页或 URL，看看会发生什么。
+您的浏览器联系上 HTTP Web 服务器，并请求 URL，即文件名。 Web 服务器将解析 URL，并查找文件名。如果找到请求的文件，Web 服务器会把文件发送回浏览器，否则发送一条错误消息，表明您请求了一个错误的文件。 Web 浏览器从 Web 服务器获取响应，并根据接收到的响应来显示文件或错误消息。 然而，以这种方式搭建起来的 HTTP 服务器，不管何时请求目录中的某个文件，HTTP 服务器发送回来的不是该文件，而是以程序形式执行，并把执行产生的输出发送回浏览器显示出来。
+公共网关接口（CGI），是使得应用程序（称为 CGI 程序或 CGI 脚本）能够与 Web 服务器以及客户端进行交互的标准协议。这些 CGI 程序可以用 Python、PERL、Shell、C 或 C++ 等进行编写。
+CGI 架构图 下图演示了 CGI 的架构：
+Web 服务器配置 在您进行 CGI 编程之前，请确保您的 Web 服务器支持 CGI，并已配置成可以处理 CGI 程序。所有由 HTTP 服务器执行的 CGI 程序，都必须在预配置的目录中。该目录称为 CGI 目录，按照惯例命名为 /var/www/cgi-bin。虽然 CGI 文件是 C++ 可执行文件，但是按照惯例它的扩展名是 .</description></item><item><title>三十八、设计模式资源</title><link>https://www.shellio.cc/docs/code-design/38/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/38/</guid><description>本章列出了设计模式相关的网站、书籍和文章
+设计模式相关的网站 Wiki Page for Design Patterns - 以一种非常通用的方式检查设计模式。 Java Programming/Design Patterns - 一篇关于设计模式的好文章。 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 The JavaTMTutorials - 该 Java 教程是为那些想用 Java 编程语言创建应用程序的编程人员提供的实用指南。 JavaTM2 SDK, Standard Edition - JavaTM2 SDK, Standard Edition 的官网。 Java DesignPatterns - 关于设计模式的短文。</description></item><item><title>C++ 动态内存</title><link>https://www.shellio.cc/docs/programing/c++/default/32/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/32/</guid><description>C++ 动态内存 了解动态内存在 C++ 中是如何工作的是成为一名合格的 C++ 程序员必不可少的。C++ 程序中的内存分为两个部分：
+**栈：**在函数内部声明的所有变量都将占用栈内存。 **堆：**这是程序中未使用的内存，在程序运行时可用于动态分配内存。 很多时候，您无法提前预知需要多少内存来存储某个定义变量中的特定信息，所需内存的大小需要在运行时才能确定。
+在C++ 中，您可以使用特殊的运算符为给定类型的变量在运行时分配堆内的内存，这会返回所分配的空间地址。这种运算符即 new 运算符。
+如果您不需要动态分配内存，可以使用 delete 运算符，删除之前由 new 运算符分配的内存。
+new 和 delete 运算符 下面是使用 new 运算符来为任意的数据类型动态分配内存的通用语法：
+1new data-type; 在这里，data-type 可以是包括数组在内的任意内置的数据类型，也可以是包括类或结构在内的用户自定义的任何数据类型。让我们先来看下内置的数据类型。例如，我们可以定义一个指向 double 类型的指针，然后请求内存，该内存在执行时被分配。我们可以按照下面的语句使用 new 运算符来完成这点：
+1double* pvalue = NULL; // 初始化为 null 的指针 2pvalue = new double; // 为变量请求内存 如果自由存储区已被用完，可能无法成功分配内存。所以建议检查 new 运算符是否返回 NULL 指针，并采取以下适当的操作：
+1double* pvalue = NULL; 2if( !(pvalue = new double )) 3 cout &amp;lt;&amp;lt; &amp;#34;Error: out of memory.</description></item><item><title>三十二、组合实体模式 (Composite Entity Pattern)</title><link>https://www.shellio.cc/docs/code-design/32_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/32_miss/</guid><description>组合实体模式（Composite Entity Pattern）用在 EJB 持久化机制中
+一个组合实体是一个 EJB 实体 bean，代表了对象的图解
+当更新一个组合实体时，内部依赖对象 beans 会自动更新，因为它们是由 EJB 实体 bean 管理的
+以下是组合实体 bean 的参与者:
+组合实体（Composite Entity） - 它是主要的实体 bean。它可以是粗粒的，或者可以包含一个粗粒度对象，用于持续生命周期 粗粒度对象（Coarse-Grained Object） - 该对象包含依赖对象。它有自己的生命周期，也能管理依赖对象的生命周期 依赖对象（Dependent Object） - 依赖对象是一个持续生命周期依赖于粗粒度对象的对象 策略（Strategies） - 策略表示如何实现组合实体 实现 1、 定义作为组合实体的CompositeEntity对象；
+2、 定义CoarseGrainedObject是一个包含依赖对象的类；
+3、 定义类CompositeEntityPatternDemo使用Client类来演示组合实体模式的用法；
+范例 1. 创建依赖对象 DependentObject1.java
+1// author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 2// Copyright © 2015-2065 ddkk.com. All rights reserved. 3package com.ddkk.gof; 4public class DependentObject1 { 5 private String data; 6 public void setData(String data){ 7 this.</description></item><item><title>C++ STL 教程</title><link>https://www.shellio.cc/docs/programing/c++/default/39/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/39/</guid><description>C++ STL 教程 在前面的章节中，我们已经学习了 C++ 模板的概念。C++ STL（标准模板库）是一套功能强大的 C++ 模板类，提供了通用的模板类和函数，这些模板类和函数可以实现多种流行和常用的算法和数据结构，如向量、链表、队列、栈。
+C++标准模板库的核心包括以下三个组件：
+组件 描述 容器（Containers） 容器是用来管理某一类对象的集合。C++ 提供了各种不同类型的容器，比如 deque、list、vector、map 等。 算法（Algorithms） 算法作用于容器。它们提供了执行各种操作的方式，包括对容器内容执行初始化、排序、搜索和转换等操作。 迭代器（terators） 迭代器用于遍历对象集合的元素。这些集合可能是容器，也可能是容器的子集。 这三个组件都带有丰富的预定义函数，帮助我们通过简单的方式处理复杂的任务。
+下面的程序演示了向量容器（一个 C++ 标准的模板），它与数组十分相似，唯一不同的是，向量在需要扩展大小的时候，会自动处理它自己的存储需求：
+1#include &amp;lt;iostream&amp;gt; 2#include &amp;lt;vector&amp;gt; 3using namespace std; 4int main() 5 // 创建一个向量存储 int 6 vector&amp;lt;int&amp;gt; vec; 7 int i; 8 // 显示 vec 的原始大小 9 cout &amp;lt;&amp;lt; &amp;#34;vector size = &amp;#34; &amp;lt;&amp;lt; vec.size() &amp;lt;&amp;lt; endl; 10 // 推入 5 个值到向量中 11 for(i = 0; i &amp;lt; 5; i++){ 12 vec.</description></item><item><title>C++ 信号处理</title><link>https://www.shellio.cc/docs/programing/c++/default/36/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/36/</guid><description>C++ 信号处理 信号是由操作系统传给进程的中断，会提早终止一个程序。在 UNIX、LINUX、Mac OS X 或 Windows 系统上，可以通过按 Ctrl+C 产生中断。
+有些信号不能被程序捕获，但是下表所列信号可以在程序中捕获，并可以基于信号采取适当的动作。这些信号是定义在 C++ 头文件 中。
+信号 描述 SIGABRT 程序的异常终止，如调用 abort。 SIGFPE 错误的算术运算，比如除以零或导致溢出的操作。 SIGILL 检测非法指令。 SIGINT 接收到交互注意信号。 SIGSEGV 非法访问内存。 SIGTERM 发送到程序的终止请求。 signal() 函数 C++信号处理库提供了 signal 函数，用来捕获突发事件。以下是 signal() 函数的语法：
+1void (*signal (int sig, void (*func)(int)))(int); 这个函数接收两个参数：第一个参数是一个整数，代表了信号的编号；第二个参数是一个指向信号处理函数的指针。
+让我们编写一个简单的 C++ 程序，使用 signal() 函数捕获 SIGINT 信号。不管您想在程序中捕获什么信号，您都必须使用 signal 函数来注册信号，并将其与信号处理程序相关联。看看下面的实例：
+1#include &amp;lt;iostream&amp;gt; 2#include &amp;lt;csignal&amp;gt; 3#include &amp;lt;unistd.h&amp;gt; 4using namespace std; 5void signalHandler( int signum ) 6 cout &amp;lt;&amp;lt; &amp;#34;Interrupt signal (&amp;#34; &amp;lt;&amp;lt; signum &amp;lt;&amp;lt; &amp;#34;) received.</description></item><item><title>三十六、服务定位器模式 (Service Locator Pattern)</title><link>https://www.shellio.cc/docs/code-design/36_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/36_miss/</guid><description>服务定位器模式（Service Locator Pattern）用于想使用 JNDI 查询定位各种服务的时候
+考虑到为某个服务查找 JNDI 的代价很高，服务定位器模式充分利用了缓存技术
+在首次请求某个服务时，服务定位器在 JNDI 中查找服务，并缓存该服务对象
+当再次请求相同的服务时，服务定位器会在它的缓存中查找，这样可以在很大程度上提高应用程序的性能
+以下是这种设计模式的实体
+服务（Service） - 实际处理请求的服务。对这种服务的引用可以在 JNDI 服务器中查找到 Context / 初始的 Context - JNDI Context 带有对要查找的服务的引用 服务定位器（Service Locator） - 服务定位器是通过 JNDI 查找和缓存服务来获取服务的单点接触 缓存（Cache） - 缓存存储服务的引用，以便复用它们 客户端（Client） - Client 是通过 ServiceLocator 调用服务的对象 实现 创建 ServiceLocator 、 InitialContext 、 Cache 、 Service 作为表示实体的各种对象
+Service1 和 Service2 表示实体服务
+ServiceLocatorPatternDemo ，我们的演示类在这里是作为一个客户端，将使用 ServiceLocator 来演示服务定位器设计模式
+范例 1. 创建服务接口 Service 1// author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 2// Copyright © 2015-2065 ddkk.</description></item><item><title>C++ 多线程</title><link>https://www.shellio.cc/docs/programing/c++/default/37/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/37/</guid><description>C++ 多线程 多线程是多任务处理的一种特殊形式，多任务处理允许让电脑同时运行两个或两个以上的程序。在一般情况下，有两种类型的多任务处理：基于进程和基于线程。
+基于进程的多任务处理处理的是程序的并发执行。基于线程的多任务处理的是同一程序的片段的并发执行。
+多线程程序包含可以同时运行的两个或多个部分。这样的程序中的每个部分称为一个线程，每个线程定义了一个单独的执行路径。
+C++不包含多线程应用程序的任何内置支持。相反，它完全依赖于操作系统来提供此功能。
+本教程假设您使用的是 Linux 操作系统，我们要使用 POSIX 编写多线程 C++ 程序。POSIX Threads 或 Pthreads 提供的 API 可在多种类 Unix POSIX 系统上可用，比如 FreeBSD、NetBSD、GNU/Linux、Mac OS X 和 Solaris。
+创建线程 有下面的例程，我们可以用它来创建一个 POSIX 线程：
+1#include &amp;lt;pthread.h&amp;gt; 2pthread_create (thread, attr, start_routine, arg) 在这里，pthread_create 创建一个新的线程，并让它可执行。这个例程可在代码内的任何地方被调用任意次数。下面是关于参数的说明：
+参数 描述 thread 一个不透明的、唯一的标识符，用来标识例程返回的新线程。 attr 一个不透明的属性对象，可以被用来设置线程属性。您可以指定线程属性对象，也可以使用默认值 NULL。 start_routine C++ 例程，一旦线程被创建就会执行。 arg 一个可能传递给 start_routine 的参数。它必须通过把引用作为指针强制转换为 void 类型进行传递。如果没有传递参数，则使用 NULL。 一个进程可以创建的最大线程数是依赖于实现的。线程一旦被创建，就是同等的，而且可以创建其他线程。线程之间没有隐含层次或依赖。
+终止线程 有下面的例程，我们可以用它来终止一个 POSIX 线程：
+1#include &amp;lt;pthread.h&amp;gt; 2pthread_exit (status) 在这里，pthread_exit 用于显式地退出一个线程。通常情况下，pthread_exit() 例程是在线程完成工作后无需继续存在时被调用。
+如果main() 是在它所创建的线程之前结束，并通过 pthread_exit() 退出，那么其他线程将继续执行。否则，它们将在 main() 结束时自动被终止。</description></item><item><title>三十七、传输对象模式 ( Transfer Object Pattern )</title><link>https://www.shellio.cc/docs/code-design/37_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/37_miss/</guid><description>传输对象模式（Transfer Object Pattern）用于从客户端向服务器一次性传递带有多个属性的数据
+传输对象也被称为数值对象，没有任何行为
+传输对象是一个具有 getter/setter 方法的简单的 POJO 类，它是可序列化的，所以它可以通过网络传输
+服务器端的业务类通常从数据库读取数据，然后填充 POJO，并把它发送到客户端或按值传递它
+对于客户端，传输对象是只读的
+客户端可以创建自己的传输对象，并把它传递给服务器，以便一次性更新数据库中的数值
+以下是这种设计模式的实体:
+业务对象（Business Object） - 为传输对象填充数据的业务服务 传输对象（Transfer Object） - 简单的 POJO，只有设置/获取属性的方法 客户端（Client） - 客户端可以发送请求或者发送传输对象到业务对象 实现 创建一个作为业务对象的 StudentBO 和作为传输对象的 StudentVO ，它们都代表了我们的实体
+TransferObjectPatternDemo ，我们的演示类在这里是作为一个客户端，将使用 StudentBO 和 Student 来演示传输对象设计模式
+范例 1. 创建传输对象 StudentVO 1// author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 2// Copyright © 2015-2065 ddkk.com. All rights reserved. 3package com.ddkk.gof; 4public class StudentVO 5 private String name; 6 private int rollNo; 7 StudentVO(String name, int rollNo){ 8 this.</description></item><item><title>C++ 命名空间</title><link>https://www.shellio.cc/docs/programing/c++/default/33/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/33/</guid><description>C++ 命名空间 假设这样一种情况，当一个班上有两个名叫 Zara 的学生时，为了明确区分它们，我们在使用名字之外，不得不使用一些额外的信息，比如他们的家庭住址，或者他们父母的名字等等。
+同样的情况也出现在 C++ 应用程序中。例如，您可能会写一个名为 xyz() 的函数，在另一个可用的库中也存在一个相同的函数 xyz()。这样，编译器就无法判断您所使用的是哪一个 xyz() 函数。
+因此，引入了命名空间这个概念，专门用于解决上面的问题，它可作为附加信息来区分不同库中相同名称的函数、类、变量等。使用了命名空间即定义了上下文。本质上，命名空间就是定义了一个范围。
+定义命名空间 命名空间的定义使用关键字 namespace，后跟命名空间的名称，如下所示：
+1namespace namespace_name { 2 // 代码声明 为了调用带有命名空间的函数或变量，需要在前面加上命名空间的名称，如下所示：
+1name::code; // code 可以是变量或函数 让我们来看看命名空间如何为变量或函数等实体定义范围：
+1#include &amp;lt;iostream&amp;gt; 2using namespace std; 3// 第一个命名空间 4namespace first_space{ 5 void func(){ 6 cout &amp;lt;&amp;lt; &amp;#34;Inside first_space&amp;#34; &amp;lt;&amp;lt; endl; 7 } 8// 第二个命名空间 9namespace second_space{ 10 void func(){ 11 cout &amp;lt;&amp;lt; &amp;#34;Inside second_space&amp;#34; &amp;lt;&amp;lt; endl; 12 } 13int main () 14 // 调用第一个命名空间中的函数 15 first_space::func(); 16 // 调用第二个命名空间中的函数 17 second_space::func(); 18 return 0; 当上面的代码被编译和执行时，它会产生下列结果：</description></item><item><title>三十三、数据访问对象模式 ( Data Access Object )</title><link>https://www.shellio.cc/docs/code-design/33_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/33_miss/</guid><description>数据访问对象模式（Data Access Object Pattern）或 DAO 模式用于把低级的数据访问 API 或操作从高级的业务服务中分离出来
+数据访问模式涉及到的参与者有：
+数据访问对象接口（Data Access Object Interface） - 该接口定义了在一个模型对象上要执行的标准操作 数据访问对象实体类（Data Access Object concrete class） - 该类实现了上述的接口。该类负责从数据源获取数据，数据源可以是数据库，也可以是 xml，或者是其他的存储机制 模型对象/数值对象（Model Object/Value Object） - 该对象是简单的 POJO，包含了 get/set 方法来存储通过使用 DAO 类检索到的数据 实现 1、 创建一个作为模型对象或数值对象的Student对象；
+2、 定义StudentDao作为数据访问对象接口；
+3、 定义StudentDaoImpl实现了数据访问对象接口的实体类；
+4、 定义DaoPatternDemo使用StudentDao来演示数据访问对象模式的用法；
+范例 1. 创建数值对象 Student.java
+1// author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 2// Copyright © 2015-2065 ddkk.com. All rights reserved. 3package com.ddkk.gof; 4public class Student { 5 private String name; 6 private int rollNo; 7 Student(String name, int rollNo){ 8 this.</description></item><item><title>C++ 模板</title><link>https://www.shellio.cc/docs/programing/c++/default/34/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/34/</guid><description>C++ 模板 模板是泛型编程的基础，泛型编程即以一种独立于任何特定类型的方式编写代码。
+模板是创建泛型类或函数的蓝图或公式。库容器，比如迭代器和算法，都是泛型编程的例子，它们都使用了模板的概念。
+每个容器都有一个单一的定义，比如 向量，我们可以定义许多不同类型的向量，比如 vector 或 vector 。
+您可以使用模板来定义函数和类，接下来让我们一起来看看如何使用。
+函数模板 模板函数定义的一般形式如下所示：
+1template &amp;lt;class type&amp;gt; ret-type func-name(parameter list) 2 // 函数的主体 3} 在这里，type 是函数所使用的数据类型的占位符名称。这个名称可以在函数定义中使用。
+下面是函数模板的实例，返回两个数中的最大值：
+1#include &amp;lt;iostream&amp;gt; 2#include &amp;lt;string&amp;gt; 3using namespace std; 4template &amp;lt;typename T&amp;gt; 5inline T const&amp;amp; Max (T const&amp;amp; a, T const&amp;amp; b) 6{ 7 return a &amp;lt; b ? b:a; 8} 9int main () 10 int i = 39; 11 int j = 20; 12 cout &amp;lt;&amp;lt; &amp;#34;Max(i, j): &amp;#34; &amp;lt;&amp;lt; Max(i, j) &amp;lt;&amp;lt; endl; 13 double f1 = 13.</description></item><item><title>三十四、前端控制器模式(Front Controller Pattern)</title><link>https://www.shellio.cc/docs/code-design/34_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/34_miss/</guid><description>前端控制器模式（Front Controller Pattern）是用来提供一个集中的请求处理机制，所有的请求都将由一个单一的处理程序处理
+该处理程序可以做认证/授权/记录日志，或者跟踪请求，然后把请求传给相应的处理程序
+前端控制器模式涉及以下实体
+前端控制器（Front Controller） - 处理应用程序所有类型请求的单个处理程序，应用程序可以是基于 web 的应用程序，也可以是基于桌面的应用程序。 调度器（Dispatcher） - 前端控制器可能使用一个调度器对象来调度请求到相应的具体处理程序。 视图（View） - 视图是为请求而创建的对象。 实现 1、 定义类FrontController、Dispatcher分别当作前端控制器和调度器；
+2、 定义类HomeView和StudentView表示作为前端控制器接收到的请求而创建的视图；
+3、 定义类FrontControllerPatternDemo使用FrontController演示前端控制器设计模式；
+范例 1. 创建视图 HomeView.java
+1// author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 2// Copyright © 2015-2065 ddkk.com. All rights reserved. 3package com.ddkk.gof; 4public class HomeView { 5 public void show(){ 6 System.out.println(&amp;#34;Displaying Home Page&amp;#34;); 7 } StudentView.java
+1// author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 2// Copyright © 2015-2065 ddkk.com. All rights reserved. 3package com.</description></item><item><title>C++ 预处理器</title><link>https://www.shellio.cc/docs/programing/c++/default/35/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/35/</guid><description>C++ 预处理器 预处理器是一些指令，指示编译器在实际编译之前所需完成的预处理。
+所有的预处理器指令都是以井号（#）开头，只有空格字符可以出现在预处理指令之前。预处理指令不是 C++ 语句，所以它们不会以分号（;）结尾。
+我们已经看到，之前所有的实例中都有 #include 指令。这个宏用于把头文件包含到源文件中。
+C++ 还支持很多预处理指令，比如 #include、#define、#if、#else、#line 等，让我们一起看看这些重要指令。
+#define 预处理 #define 预处理指令用于创建符号常量。该符号常量通常称为宏，指令的一般形式是：
+1#define macro-name replacement-text 当这一行代码出现在一个文件中时，在该文件中后续出现的所有宏都将会在程序编译之前被替换为 replacement-text。例如：
+1#include &amp;lt;iostream&amp;gt; 2using namespace std; 3#define PI 3.14159 4int main () 5 cout &amp;lt;&amp;lt; &amp;#34;Value of PI :&amp;#34; &amp;lt;&amp;lt; PI &amp;lt;&amp;lt; endl; 6 return 0; 现在，让我们测试这段代码，看看预处理的结果。假设源代码文件已经存在，接下来使用 -E 选项进行编译，并把结果重定向到 test.p。现在，如果您查看 test.p 文件，将会看到它已经包含大量的信息，而且在文件底部的值被改为如下：
+1$gcc -E test.cpp &amp;gt; test.p 2... 3int main () 4 cout &amp;lt;&amp;lt; &amp;#34;Value of PI :&amp;#34; &amp;lt;&amp;lt; 3.</description></item><item><title>三十五、拦截过滤器模式 ( Intercepting Filter )</title><link>https://www.shellio.cc/docs/code-design/35_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/35_miss/</guid><description>拦截过滤器模式（Intercepting Filter Pattern）用于对应用程序的请求或响应做一些预处理/后处理
+定义过滤器，并在把请求传给实际目标应用程序之前应用在请求上
+过滤器可以做认证/授权/记录日志，或者跟踪请求，然后把请求传给相应的处理程序
+拦截过滤器模式涉及以下实体：
+过滤器（Filter） - 过滤器在请求处理程序执行请求之前或之后，执行某些任务。 过滤器链（Filter Chain） - 过滤器链带有多个过滤器，并在 Target 上按照定义的顺序执行这些过滤器。 Target - Target 对象是请求处理程序。 过滤管理器（Filter Manager） - 过滤管理器管理过滤器和过滤器链。 客户端（Client） - Client 是向 Target 对象发送请求的对象。 实现 1、 定义类FilterChain、FilterManager、Target、Client作为表示实体的各种对象；
+2、 定义类AuthenticationFilter和DebugFilter表示实体过滤器；
+3、 定义类InterceptingFilterDemo使用Client来演示拦截过滤器设计模式；
+范例 1. 创建过滤器接口 Filter Filter.java
+1// author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 2// Copyright © 2015-2065 ddkk.com. All rights reserved. 3package com.ddkk.gof; 4public interface Filter { 5 public void execute(String request); 2. 创建实体过滤器 AuthenticationFilter.java
+1// author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.</description></item><item><title>C++ 异常处理</title><link>https://www.shellio.cc/docs/programing/c++/default/31_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/31_miss/</guid><description>C++ 异常处理 异常是程序在执行期间产生的问题。C++ 异常是指在程序运行时发生的特殊情况，比如尝试除以零的操作。
+异常提供了一种转移程序控制权的方式。C++ 异常处理涉及到三个关键字：try、catch、throw。
+throw: 当问题出现时，程序会抛出一个异常。这是通过使用 throw 关键字来完成的。 catch: 在您想要处理问题的地方，通过异常处理程序捕获异常。catch 关键字用于捕获异常。 try: try 块中的代码标识将被激活的特定异常。它后面通常跟着一个或多个 catch 块。 如果有一个块抛出一个异常，捕获异常的方法会使用 try 和 catch 关键字。try 块中放置可能抛出异常的代码，try 块中的代码被称为保护代码。使用 try/catch 语句的语法如下所示：
+1try 2 // 保护代码 3}catch( ExceptionName e1 ) 4 // catch 块 5}catch( ExceptionName e2 ) 6 // catch 块 7}catch( ExceptionName eN ) 8 // catch 块 如果 try 块在不同的情境下会抛出不同的异常，这个时候可以尝试罗列多个 catch 语句，用于捕获不同类型的异常。
+抛出异常 您可以使用 throw 语句在代码块中的任何地方抛出异常。throw 语句的操作数可以是任意的表达式，表达式的结果的类型决定了抛出的异常的类型。
+以下是尝试除以零时抛出异常的实例：
+1double division(int a, int b) 2 if( b == 0 ) 3 { 4 throw &amp;#34;Division by zero condition!</description></item><item><title>三十一、业务代表模式(Business Delegate Pattern)</title><link>https://www.shellio.cc/docs/code-design/31_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/31_miss/</guid><description>业务代表模式（Business Delegate Pattern）用于对表示层和业务层解耦
+业务代表模式用来减少通信或对表示层代码中的业务层代码的远程查询功能
+在业务层中我们有以下实体:
+客户端（Client） - 表示层代码可以是 JSP、servlet 或 UI java 代码 业务代表（Business Delegate） - 一个为客户端实体提供的入口类，它提供了对业务服务方法的访问 查询服务（LookUp Service） - 查找服务对象负责获取相关的业务实现，并提供业务对象对业务代表对象的访问 业务服务（Business Service） - 业务服务接口。实现了该业务服务的实体类，提供了实际的业务实现逻辑 实现 1、 创建Client、BusinessDelegate、BusinessService、LookUpService、JMSService和EJBService来表示业务代表模式中的各种实体；
+2、 定义类BusinessDelegatePatternDemo使用BusinessDelegate和Client来演示业务代表模式的用法；
+范例 1. 创建 BusinessService 接口 BusinessService.java
+1// author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 2// Copyright © 2015-2065 ddkk.com. All rights reserved. 3package com.ddkk.gof; 4public interface BusinessService { 5 public void doProcessing(); 2. 创建实体服务类 EJBService.java
+1// author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 2// Copyright © 2015-2065 ddkk.com. All rights reserved.</description></item><item><title>C++ 存储类</title><link>https://www.shellio.cc/docs/programing/c++/default/10/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/10/</guid><description>C++ 存储类 存储类定义 C++ 程序中变量/函数的范围（可见性）和生命周期。这些说明符放置在它们所修饰的类型之前。下面列出 C++ 程序中可用的存储类：
+auto register static extern mutable auto 存储类 auto 存储类是所有局部变量默认的存储类。
+1{ 2 int mount; 3 auto int month; 上面的实例定义了两个带有相同存储类的变量，auto 只能用在函数内，即 auto 只能修饰局部变量。
+register 存储类 register 存储类用于定义存储在寄存器中而不是 RAM 中的局部变量。这意味着变量的最大尺寸等于寄存器的大小（通常是一个词），且不能对它应用一元的 ‘&amp;amp;’ 运算符（因为它没有内存位置）。
+1{ 2 register int miles; 寄存器只用于需要快速访问的变量，比如计数器。还应注意的是，定义 ‘register’ 并不意味着变量将被存储在寄存器中，它意味着变量可能存储在寄存器中，这取决于硬件和实现的限制。
+static 存储类 static 存储类指示编译器在程序的生命周期内保持局部变量的存在，而不需要在每次它进入和离开作用域时进行创建和销毁。因此，使用 static 修饰局部变量可以在函数调用之间保持局部变量的值。
+static 修饰符也可以应用于全局变量。当 static 修饰全局变量时，会使变量的作用域限制在声明它的文件内。
+在C++ 中，当 static 用在类数据成员上时，会导致仅有一个该成员的副本被类的所有对象共享。
+1#include &amp;lt;iostream&amp;gt; 2// 函数声明 3void func(void); 4static int count = 10; /* 全局变量 */ 5int main() 6 while(count--) 7 { 8 func(); 9 } 10 return 0; 11// 函数定义 12void func( void ) 13 static int i = 5; // 局部静态变量 14 i++; 15 std::cout &amp;lt;&amp;lt; &amp;#34;变量 i 为 &amp;#34; &amp;lt;&amp;lt; i ; 16 std::cout &amp;lt;&amp;lt; &amp;#34; , 变量 count 为 &amp;#34; &amp;lt;&amp;lt; count &amp;lt;&amp;lt; std::endl; 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 当上面的代码被编译和执行时，它会产生下列结果：</description></item><item><title>十、Docker start 启动容器</title><link>https://www.shellio.cc/docs/cloud-native/docker/10/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/10/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用 Linux 常用的命令；
+2、 知道大部分的 Linux 常识，比如终端、service、ip、用户、组等；
+3、 熟练使用 Ubuntu 或者 Centos 或者 MacOS 种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker 的应用场景 1、 Web 应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的 OpenShift 或 CloudFoundry 平台来搭建自己的 PaaS 环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；</description></item><item><title>Java 并发编程面试题</title><link>https://www.shellio.cc/docs/java/concurrency/default/10/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/10/</guid><description>应聘Java 岗，总是免不了几个 Java 并发编程的面试题，不过大多数都局限在 java.util.concurrent 包下的知识和实现问题。本文针对 Java 并发相关的常见的面试题做一些解释。
+Q1: 进程和线程的区别？ 这是一个非常基础的面试题，如果这道题没有回答的比较满意，一般情况下，面试官会认为应聘者在并发方面的基础只是不牢固，就不会继续深入询问其它并发问题了。
+1、 进程和线程都是并发单元，但它们有一个根本区别：进程不共享公共内存，而线程则共享；
+2、 从操作系统的角度来看，进程是一个独立的软件，在其自己的虚拟内存空间中运行任何一个多任务操作系统（这几乎意味着任何现代操作系统）都必须将内存中的进程分开，这样一个失败的进程就不会通过加扰公共内存来拖累所有其它进程因此，进程通常是隔离的，它们通过进程间通信进行协作，进程间通信由操作系统定义为一种中间API；
+3、 相反，线程是应用程序的一部分，它与同一应用程序的其他线程共享公共内存使用公共内存可以减少大量开销，因此使用线程可以更快的交换数据和进行线程间协作；
+关于进程间通讯那一块可以不用回答，如果你不懂的话，不必然会导致接下来的某个问题是 进程间通讯的的原理.
+Q2: 如何创建一个线程实例并且运行它？ 这道题考察的是对 Runnable 的理解。
+创建一个线程的实例，有两种方法可供选择:
+1、 把Runnable的实例传递给Thread的构造函数并调用start()方法；
+1Thread thread1 = new Thread(() -&amp;gt; 2 System.out.println(&amp;#34;Hello World from Runnable!&amp;#34;)); 3thread1.start(); Runnable是一个函数接口，因此可以作为 lambda 表达式传递
+2、 因为线程本身也实现了Runnable接口，所以另一种创建线程的方法是创建一个匿名子类，覆写它的run()方法，然后调用start()；
+1Thread thread2 = new Thread() { 2 @Override 3 public void run() { 4 System.out.println(&amp;#34;Hello World from subclass!&amp;#34;); 5 } 6}; 7thread2.start(); Q3: 描述线程的不同状态以及何时发生状态转换 ？ 这道题考察的是对线程生命周期的理解。</description></item><item><title>十、适配器模式 ( Adapter Pattern )</title><link>https://www.shellio.cc/docs/code-design/10_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/10_miss/</guid><description>适配器模式（Adapter Pattern）是作为两个不兼容的接口之间的桥梁
+适配器模式涉及到一个单一的类，该类负责加入独立的或不兼容的接口功能
+举个真实的例子，读卡器是作为内存卡和笔记本之间的适配器。您将内存卡插入读卡器，再将读卡器插入笔记本，这样就可以通过笔记本来读取内存卡
+适配器模式属于结构型模式，它结合了两个独立接口的功能
+摘要 1、 意图：
+将一个类的接口转换成客户希望的另外一个接口。适配器模式使得原本由于接口不兼容而不能一起工作的那些类可以一起工作
+2、 主要解决：
+主要解决在软件系统中，常常要将一些”现存的对象”放到新的环境中，而新环境要求的接口是现对象不能满足的
+3、 何时使用：
+1、 系统需要使用现有的类，而此类的接口不符合系统的需要；
+2、 想要建立一个可以重复使用的类，用于与一些彼此之间没有太大关联的一些类，包括一些可能在将来引进的类一起工作，这些源类不一定有一致的接口；
+3、 通过接口转换，将一个类插入另一个类系中（比如老虎和飞禽，现在多了一个飞虎，在不增加实体的需求下，增加一个适配器，在里面包容一个虎对象，实现飞的接口）；
+4、 如何解决：
+继承或依赖（推荐）
+5、 关键代码：
+适配器继承或依赖已有的对象，实现想要的目标接口
+6、 应用实例：
+1、 美国电器110V，中国220V，就要有一个适配器将110V转化为220V；
+2、 JAVAJDK1.1提供了Enumeration接口，而在1.2中提供了Iterator接口，想要使用1.2的JDK，则要将以前系统的Enumeration接口转化为Iterator接口，这时就需要适配器模式；
+3、 在LINUX上运行WINDOWS程序；
+4、 JAVA中的jdbc；
+7、 优点：
+1、 可以让任何两个没有关联的类一起运行；
+2、 提高了类的复用；
+3、 增加了类的透明度；
+4、 灵活性好；
+8、 缺点：
+1、 过多地使用适配器，会让系统非常零乱，不易整体进行把握；
+比如，明明看到调用的是 A 接口，其实内部被适配成了 B 接口的实现，一个系统如果太多出现这种情况，无异于一场灾难
+因此如果不是很有必要，可以不使用适配器，而是直接对系统进行重构
+2、 由于JAVA至多继承一个类，所以至多只能适配一个适配者类，而且目标类必须是抽象类；
+9、 使用场景：
+有动机地修改一个正常运行的系统的接口，这时应该考虑使用适配器模式。
+10、 注意事项：
+适配器不是在详细设计时添加的，而是解决正在服役的项目的问题
+实现 1、 MediaPlayer接口和一个实现了MediaPlayer接口的实体类AudioPlayer默认情况下，AudioPlayer可以播放mp3格式的音频文件；
+2、 接口AdvancedMediaPlayer和实现了AdvancedMediaPlayer接口的实体类该类可以播放vlc和mp4格式的文件；
+3、 让AudioPlayer播放其他格式的音频文件为了实现这个功能，我们需要创建一个实现了MediaPlayer接口的适配器类MediaAdapter，并使用AdvancedMediaPlayer对象来播放所需的格式；</description></item><item><title>C++ 指针</title><link>https://www.shellio.cc/docs/programing/c++/default/18/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/18/</guid><description>C++ 指针 学习C++ 的指针既简单又有趣。通过指针，可以简化一些 C++ 编程任务的执行，还有一些任务，如动态内存分配，没有指针是无法执行的。所以，想要成为一名优秀的 C++ 程序员，学习指针是很有必要的。
+正如您所知道的，每一个变量都有一个内存位置，每一个内存位置都定义了可使用连字号（&amp;amp;）运算符访问的地址，它表示了在内存中的一个地址。请看下面的实例，它将输出定义的变量地址：
+1#include &amp;lt;iostream&amp;gt; 2using namespace std; 3int main () 4 int var1; 5 char var2[10]; 6 cout &amp;lt;&amp;lt; &amp;#34;var1 变量的地址： &amp;#34;; 7 cout &amp;lt;&amp;lt; &amp;amp;var1 &amp;lt;&amp;lt; endl; 8 cout &amp;lt;&amp;lt; &amp;#34;var2 变量的地址： &amp;#34;; 9 cout &amp;lt;&amp;lt; &amp;amp;var2 &amp;lt;&amp;lt; endl; 10 return 0; 当上面的代码被编译和执行时，它会产生下列结果：
+1var1 变量的地址： 0xbfebd5c0 2var2 变量的地址： 0xbfebd5b6 通过上面的实例，我们了解了什么是内存地址以及如何访问它。接下来让我们看看什么是指针。
+什么是指针？ 指针是一个变量，其值为另一个变量的地址，即，内存位置的直接地址。就像其他变量或常量一样，您必须在使用指针存储其他变量地址之前，对其进行声明。指针变量声明的一般形式为：
+1type *var-name; 在这里，type 是指针的基类型，它必须是一个有效的 C++ 数据类型，var-name 是指针变量的名称。用来声明指针的星号 * 与乘法中使用的星号是相同的。但是，在这个语句中，星号是用来指定一个变量是指针。以下是有效的指针声明：
+1int *ip; /* 一个整型的指针 */ 2double *dp; /* 一个 double 型的指针 */ 3float *fp; /* 一个浮点型的指针 */ 4char *ch /* 一个字符型的指针 */ 所有指针的值的实际数据类型，不管是整型、浮点型、字符型，还是其他的数据类型，都是一样的，都是一个代表内存地址的长的十六进制数。不同数据类型的指针之间唯一的不同是，指针所指向的变量或常量的数据类型不同。</description></item><item><title>十八、Docker commit 更新镜像</title><link>https://www.shellio.cc/docs/cloud-native/docker/18/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/18/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>扩展一个线程 （ Thread 类 )</title><link>https://www.shellio.cc/docs/java/concurrency/default/18/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/18/</guid><description>写Java 代码的时候，我们经常会有这样的疑问：我到底是实现一个 Runnable 呢，还是扩展一个 Thread 类？
+你的答案是什么呢？ 那有没有标准答案呢？
+答案是什么呢？
+我们先来分析下，看看哪种方法在实践中更有意义以及为什么？
+扩展一个线程 （ Thread 类 ) 简单起见，我们就来定义一个扩展自 Thread 的 SimpleThread 类
+1public class SimpleThread extends Thread { 2 private String message; 3 // standard logger, constructor 4 @Override 5 public void run() { 6 log.info(message); 7 } 代码也真是简单了，然后我们看看如何运行这个 SimpleThread 类
+1@Test 2public void givenAThread_whenRunIt_thenResult() 3 throws Exception { 4 Thread thread = new SimpleThread( 5 &amp;#34;SimpleThread executed using Thread&amp;#34;); 6 thread.start(); 7 thread.</description></item><item><title>十八、责任链模式 ( Chain of Responsibility)</title><link>https://www.shellio.cc/docs/code-design/18_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/18_miss/</guid><description>责任链模式（Chain of Responsibility Pattern）为请求创建了一个接收者对象的链
+责任链模式给予请求的类型，对请求的发送者和接收者进行解耦
+责任链模式中通常每个接收者都包含对另一个接收者的引用，如果一个对象不能处理该请求，那么它会把相同的请求传给下一个接收者，依此类推
+责任链模式属于行为型模式
+摘要 1、 意图：
+避免请求发送者与接收者耦合在一起，让多个对象都有可能接收请求，将这些对象连接成一条链，并且沿着这条链传递请求，直到有对象处理它为止
+2、 主要解决：
+职责链上的处理者负责处理请求，客户只需要将请求发送到职责链上即可，无须关心请求的处理细节和请求的传递，所以职责链将请求的发送者和请求的处理者解耦了
+3、 何时使用：
+在处理消息的时候以过滤很多道
+4、 如何解决：
+拦截的类都实现统一接口
+5、 关键代码：
+Handler 里面聚合它自己，在 HanleRequest 里判断是否合适，如果没达到条件则向下传递，向谁传递之前 set 进去
+6、 应用实例：
+1、 红楼梦中的”击鼓传花”；
+2、 JS中的事件冒泡；
+3、 JAVAWEB中ApacheTomcat对Encoding的处理，Struts2的拦截器，jspservlet的Filter；
+7、 优点：
+1、 降低耦合度它将请求的发送者和接收者解耦；
+2、 简化了对象使得对象不需要知道链的结构；
+3、 增强给对象指派职责的灵活性通过改变链内的成员或者调动它们的次序，允许动态地新增或者删除责任；
+4、 增加新的请求处理类很方便；
+8、 缺点：
+1、 不能保证请求一定被接收；
+2、 系统性能将受到一定影响，而且在进行代码调试时不太方便，可能会造成循环调用；
+3、 可能不容易观察运行时的特征，有碍于除错；
+9、 使用场景：
+1、 有多个对象可以处理同一个请求，具体哪个对象处理该请求由运行时刻自动确定；
+2、 在不明确指定接收者的情况下，向多个对象中的一个提交一个请求；
+3、 可动态指定一组对象处理请求；
+10、 注意事项：
+在JAVA WEB 中遇到很多应用
+实现 1、 定义抽象类AbstractLogger，带有详细的日志记录级别；</description></item><item><title>C++ 循环</title><link>https://www.shellio.cc/docs/programing/c++/default/12_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/12_miss/</guid><description>C++ 循环 有的时候，可能需要多次执行同一块代码。一般情况下，语句是顺序执行的：函数中的第一个语句先执行，接着是第二个语句，依此类推。
+编程语言提供了允许更为复杂的执行路径的多种控制结构。
+循环语句允许我们多次执行一个语句或语句组，下面是大多数编程语言中循环语句的一般形式：
+##
+##
+##
+##
+##
+##
+##
+##
+##
+循环类型 C++编程语言提供了以下几种循环类型。点击链接查看每个类型的细节。
+循环类型 描述 while 循环 当给定条件为真时，重复语句或语句组。它会在执行循环主体之前测试条件。 for 循环 多次执行一个语句序列，简化管理循环变量的代码。 do…while 循环 除了它是在循环主体结尾测试条件外，其他与 while 语句类似。 嵌套循环 您可以在 while、for 或 do..while 循环内使用一个或多个循环。 循环控制语句 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 循环控制语句更改执行的正常序列。当执行离开一个范围时，所有在该范围中创建的自动对象都会被销毁。
+C++提供了下列的控制语句。点击链接查看每个语句的细节。
+控制语句 描述 break 语句 终止 loop 或 switch 语句，程序流将继续执行紧接着 loop 或 switch 的下一条语句。 continue 语句 引起循环跳过主体的剩余部分，立即重新开始测试条件。 goto 语句 将控制转移到被标记的语句。但是不建议在程序中使用 goto 语句。 无限循环 如果条件永远不为假，则循环将变成无限循环。for 循环在传统意义上可用于实现无限循环。由于构成循环的三个表达式中任何一个都不是必需的，您可以将某些条件表达式留空来构成一个无限循环。
+1#include &amp;lt;iostream&amp;gt; 2using namespace std; 3int main () 4 for( ; ; ) 5 { 6 printf(&amp;#34;This loop will run forever.</description></item><item><title>十二、Docker rm 删除已停止的容器</title><link>https://www.shellio.cc/docs/cloud-native/docker/12/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/12/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>BlockingQueue 的队列类型</title><link>https://www.shellio.cc/docs/java/concurrency/default/12/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/12/</guid><description>本文中，我们将介绍一个 java.util.concurrent 包提供的用于解决并发生产者 – 消费者问题的最有用的类 – BlockQueue。我们将介绍BlockingQueue 接口的 API 以及如何使用该接口的方法使编写并发程序更容易。
+在本文的后面，我们将展示一个具有多个生产者线程和多个消费者线程的简单程序的示例。
+BlockingQueue 的队列类型 java.util.concurrent 提供了两种类型的 BlockingQueue：
+1、 无限队列（unboundedqueue）–几乎可以无限增长；
+2、 有限队列（boundedqueue）–定义了最大容量；
+无限队列 创建一个无限队列的方法很简单
+1BlockingQueue&amp;lt;String&amp;gt; blockingQueue = new LinkedBlockingDeque&amp;lt;&amp;gt;(); 上面这段代码中，blockingQueue 的容量将设置为 Integer.MAX_VALUE 。
+向无限队列添加元素的所有操作都将永远不会阻塞，因此它可以增长到非常大的容量。
+使用无限 BlockingQueue 设计生产者 – 消费者模型时最重要的是 消费者应该能够像生产者向队列添加消息一样快地消费消息 。否则，内存可能会填满，然后就会得到一个 OutOfMemory 异常。
+有限队列 第二种类型的队列是有限队列。我们可以通过将容量作为参数传递给构造函数来创建这样的队列
+1BlockingQueue&amp;lt;String&amp;gt; blockingQueue = new LinkedBlockingDeque&amp;lt;&amp;gt;(10); 上面这句代码中，我们设置了 blockingQueue 的容量为 10 。这意味着当消费者尝试将元素添加到已经满了的队列时，结果取决于添加元素的方法（ offer() 、add() 、put() ) ，它将阻塞，直到有足够的空间可以插入元素。否则，添加操作将会失败。
+使用有限队列是设计并发程序的好方法，因为当我们将元素插入到已经满了的队列时，这些操作需要等到消费者赶上并在队列中提供一些空间。这种机制可以让那个我们不做任何其它更改就可以实现节流。
+BlockingQueue API BlockingQueue 接口的所有方法可以分为两大类：负责向队列添加元素的方法和检索这些元素的方法。
+在队列满/空的情况下，来自这两个组的每个方法的行为都不同。
+添加元素 BlockingQueue 提供了以下方法用于添加元素
+方法 说明 add() 如果插入成功则返回 true，否则抛出 IllegalStateException 异常 put() 将指定的元素插入队列，如果队列满了，那么会阻塞直到有空间插入 offer() 如果插入成功则返回 true，否则返回 false offer(E e, long timeout, TimeUnit unit) 尝试将元素插入队列，如果队列已满，那么会阻塞直到有空间插入 检索元素 BlockingQueue 提供了以下方法用于检索元素</description></item><item><title>十二、过滤器模式 ( Filter Pattern )</title><link>https://www.shellio.cc/docs/code-design/12_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/12_miss/</guid><description>过滤器模式（Filter Pattern）或允许开发人员使用不同的标准来过滤一组对象，通过逻辑运算以解耦的方式把它们连接起来
+过滤器模式（Filter Pattern） 又称 标准模式（Criteria Pattern）
+过滤器模式属于结构型模式，它结合多个标准来获得单一标准
+实现 1、 创建一个Person对象、Criteria接口和实现了该接口的实体类，来过滤Person对象的列表；
+2、 CriteriaPatternDemo使用Criteria对象，基于各种标准和它们的结合来过滤Person对象的列表；
+范例 1. 创建一个类，在该类上应用标准 Person.java
+1// author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 2// Copyright © 2015-2065 ddkk.com. All rights reserved. 3package com.ddkk.gof; 4public class Person { 5 private String name; 6 private String gender; 7 private String maritalStatus; 8 public Person(String name,String gender,String maritalStatus){ 9 this.name = name; 10 this.gender = gender; 11 this.maritalStatus = maritalStatus; 12 } 13 public String getName() { 14 return name; 15 } 16 public String getGender() { 17 return gender; 18 } 19 public String getMaritalStatus() { 20 return maritalStatus; 21 } 2.</description></item><item><title>C++ 引用</title><link>https://www.shellio.cc/docs/programing/c++/default/19/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/19/</guid><description>C++ 引用 引用变量是一个别名，也就是说，它是某个已存在变量的另一个名字。一旦把引用初始化为某个变量，就可以使用该引用名称或变量名称来指向变量。
+C++ 引用 vs 指针 引用很容易与指针混淆，它们之间有三个主要的不同：
+不存在空引用。引用必须连接到一块合法的内存。 一旦引用被初始化为一个对象，就不能被指向到另一个对象。指针可以在任何时候指向到另一个对象。 引用必须在创建时被初始化。指针可以在任何时间被初始化。 C++ 中创建引用 试想变量名称是变量附属在内存位置中的标签，您可以把引用当成是变量附属在内存位置中的第二个标签。因此，您可以通过原始变量名称或引用来访问变量的内容。例如：
+1int i = 17; 我们可以为 i 声明引用变量，如下所示：
+1int&amp;amp; r = i; 在这些声明中，&amp;amp; 读作引用。因此，第一个声明可以读作 “r 是一个初始化为 i 的整型引用”，第二个声明可以读作 “s 是一个初始化为 d 的 double 型引用”。下面的实例使用了 int 和 double 引用：
+1#include &amp;lt;iostream&amp;gt; 2using namespace std; 3int main () 4 // 声明简单的变量 5 int i; 6 double d; 7 // 声明引用变量 8 int&amp;amp; r = i; 9 double&amp;amp; s = d; 10 i = 5; 11 cout &amp;lt;&amp;lt; &amp;#34;Value of i : &amp;#34; &amp;lt;&amp;lt; i &amp;lt;&amp;lt; endl; 12 cout &amp;lt;&amp;lt; &amp;#34;Value of i reference : &amp;#34; &amp;lt;&amp;lt; r &amp;lt;&amp;lt; endl; 13 d = 11.</description></item><item><title>十九、Docker Dockerfile 创建镜像</title><link>https://www.shellio.cc/docs/cloud-native/docker/19/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/19/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>Java 中的线程同步 ( Thread Synchronization )</title><link>https://www.shellio.cc/docs/java/concurrency/default/19_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/19_miss/</guid><description>大家有没有发现，其实 「 一文秒懂 」 系列讲述的都是多线程并发开发的问题。这个话题太大了，估计没有上百篇文章都解释不清楚。
+本文，我们来讲解下 Java 并发中的基础的基础，核心的核心，Java 并发编程中的最基本的机制之一 – 「 线程同步 」
+为了方便你理解并发编程中的各种概念和术语，我们首先会来一阵扫盲，讨论一些基本的并发相关术语和方法。接着，我们将开发一个简单的应用程序，并在合格应用程序里处理并发问题，以方便大家理解和巩固 wait() 和 notify()。
+Java 中的线程同步 ( Thread Synchronization ) 在并发编程中，在多线程环境下，多个线程可能会尝试修改同一资源。如果线程管理不当，这显然会导致一致性问题。
+Java 中的哨兵块 ( guarded block ) Java 中，可以用来协调多个线程操作的一个工具是 「 哨兵块 」。这个哨兵块会在恢复执行前检查特定条件。
+基于这种哨兵检查的思想，Java 在所有类的基类 Object 中提供了两个方法
+方法 说明 Object.wait() 暂停一个线程 Object.notify() 唤醒一个线程 是不是有点难以理解，别担心，看下面这个图，这个图描绘了线程的的生命周期。
+虽然从上图中可以看出，有多个方法可以控制一个线程的生命周期，但本章节，我们只讨论 notify() 方法和 wait() 方法
+wait() 方法 对照上图，简单的说，当我们调用 wait() 时会强制当前线程等待，直到某个其它线程在同一个对象上调用 notify() 或 notifyAll() 方法。
+因此，当前线程必须拥有对象的监视器。根据 Java docs 的说法，这可能发生在
+我们已经为给定对象执行了同步实例方法 我们已经在给定对象上执行了 synchronized 块的主体 通过为 Class 类型的对象执行同步静态方法 请注意，一次只有一个活动线程可以拥有对象的监视器。</description></item><item><title>十九、命令模式 ( Command Pattern )</title><link>https://www.shellio.cc/docs/code-design/19_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/19_miss/</guid><description>命令模式（Command Pattern）中请求以命令的形式包裹在对象中，并传给调用对象
+调用对象寻找可以处理该命令的合适的对象，并把该命令传给相应的对象，该对象执行命令
+命令模式是行为型模式，一种数据驱动的设计模式
+摘要 1、 意图：
+将一个请求封装成一个对象，从而使您可以用不同的请求对客户进行参数化
+2、 主要解决：
+在软件系统中，行为请求者与行为实现者通常是一种紧耦合的关系，但某些场合，比如需要对行为进行记录、撤销或重做、事务等处理时，这种无法抵御变化的紧耦合的设计就不太合适
+3、 何时使用：
+在某些场合，比如要对行为进行”记录、撤销/重做、事务”等处理，这种无法抵御变化的紧耦合是不合适的。在这种情况下，如何将”行为请求者”与”行为实现者”解耦？将一组行为抽象为对象，可以实现二者之间的松耦合
+4、 如何解决：
+通过调用者调用接受者执行命令，顺序：调用者→接受者→命令
+5、 关键代码：
+定义三个角色：
+1、 received真正的命令执行对象；
+2、 Command；
+3、 invoker使用命令对象的入口；
+6、 应用实例：
+struts 1 中的 action 核心控制器 ActionServlet 只有一个，相当于 Invoker，而模型层的类会随着不同的应用有不同的模型类，相当于具体的 Command
+7、 优点：
+1、 降低了系统耦合度；
+2、 新的命令可以很容易添加到系统中去；
+8、 缺点：
+使用命令模式可能会导致某些系统有过多的具体命令类
+9、 使用场景：
+几乎所有是命令的地方都可以使用命令模式
+1、 GUI中每一个按钮都是一条命令；
+2、 模拟CMD；
+10、 注意事项：
+系统需要支持命令的撤销(Undo)操作和恢复(Redo)操作，也可以考虑使用命令模式，见命令模式的扩展
+实现 1、 定义一个命令的接口Order；
+2、 定义作为请求的Stock类；
+3、 定义实体命令类BuyStock和SellStock，实现了Order接口，执行实际的命令处理；
+4、 定义作为调用对象的类Broker，它接受订单并能下订单，Broker对象使用命令模式，基于命令的类型确定哪个对象执行哪个命令；
+5、 定义类CommandPatternDemo使用Broker类来演示命令模式；
+范例 1. 创建一个命令接口 Order.</description></item><item><title>C++ 数组</title><link>https://www.shellio.cc/docs/programing/c++/default/16_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/16_miss/</guid><description>C++ 数组 C++支持数组数据结构，它可以存储一个固定大小的相同类型元素的顺序集合。数组是用来存储一系列数据，但它往往被认为是一系列相同类型的变量。
+数组的声明并不是声明一个个单独的变量，比如 number0、number1、…、number99，而是声明一个数组变量，比如 numbers，然后使用 numbers[0]、numbers[1]、…、numbers[99] 来代表一个个单独的变量。数组中的特定元素可以通过索引访问。
+所有的数组都是由连续的内存位置组成。最低的地址对应第一个元素，最高的地址对应最后一个元素。
+声明数组 在C++ 中要声明一个数组，需要指定元素的类型和元素的数量，如下所示：
+1type arrayName [ arraySize ]; 这叫做一维数组。arraySize 必须是一个大于零的整数常量，type 可以是任意有效的 C++ 数据类型。例如，要声明一个类型为 double 的包含 10 个元素的数组 balance，声明语句如下：
+1double balance[10]; 现在 balance 是一个可用的数组，可以容纳 10 个类型为 double 的数字。
+初始化数组 在C++ 中，您可以逐个初始化数组，也可以使用一个初始化语句，如下所示：
+1double balance[5] = {1000.0, 2.0, 3.4, 17.0, 50.0}; 大括号{ } 之间的值的数目不能大于我们在数组声明时在方括号 [ ] 中指定的元素数目。
+如果您省略掉了数组的大小，数组的大小则为初始化时元素的个数。因此，如果：
+1double balance[] = {1000.0, 2.0, 3.4, 17.0, 50.0}; 您将创建一个数组，它与前一个实例中所创建的数组是完全相同的。下面是一个为数组中某个元素赋值的实例：
+1balance[4] = 50.0; 上述的语句把数组中第五个元素的值赋为 50.0。所有的数组都是以 0 作为它们第一个元素的索引，也被称为基索引，数组的最后一个索引是数组的总大小减去 1。以下是上面所讨论的数组的的图形表示：</description></item><item><title>十六、Docker images 本地镜像列表</title><link>https://www.shellio.cc/docs/cloud-native/docker/16/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/16/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>ThreadLocalRandom Via Random</title><link>https://www.shellio.cc/docs/java/concurrency/default/16/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/16/</guid><description>随机数生成是一个非常常见的操作，而且 Java 也提供了 java.util.Random 类用于生成随机数，而且呢，这个类也是线程安全的，就是有一点不好，在多线程下，它的性能不佳。
+为什么多线程下，Random 的性能不佳？
+因为，它采用了多个线程共享一个 Random 实例。这样就会导致多个线程争用。
+为了解决这个问题，Java 7 引入了 java.util.concurrent.ThreadLocalRandom 类，用于在多线程环境中生成随机数。
+本文接下来的部分，就来看看如何 ThreadLocalRandom 如何执行以及如何在实际应用程序中使用它。
+ThreadLocalRandom Via Random ThreadLocalRandom 是 ThreadLocal 类和 Random 类的组合，它与当前线程隔离，通过简单地避免对 Random 对象的任何并发访问，在多线程环境中实现了更好的性能。
+也就是说，相比于 java.util.Random 类全局的提供随机数生成， 使用 ThreadLocalRandom，一个线程获得的随机数不受另一个线程的影响。
+另一个与 Random 类不同的是，ThreadLocalRandom 不支持显式设置种子。因为它重写了从 Random 继承的 setSeed(long seed) 方法，会在调用时始终抛出 UnsupportedOperationException。
+接下来我们看看如何使用 ThreadLocalRandom 生成随机 int、long 和 double 值。
+使用 ThreadLocalRandom 生成随机数 根据Oracle 文档，我们只需要调用 ThreadLocalRandom.current() 方法，就能返回当前线程的 ThreadLocalRandom 实例。然后，我们可以通过实例的相关方法来生成随机值。
+比如下面的代码，生成一个没有任何边界的随机 int 值
+1int unboundedRandomValue = ThreadLocalRandom.current().nextInt()); 其实是有边界的，它的边界就是 int 的边界。</description></item><item><title>十六、享元模式 ( Flyweight Pattern )</title><link>https://www.shellio.cc/docs/code-design/16_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/16_miss/</guid><description>享元模式（Flyweight Pattern）主要用于减少创建对象的数量，以减少内存占用和提高性能
+享元模式尝试重用现有的同类对象，如果未找到匹配的对象，则创建新对象
+这种类型的设计模式属于结构型模式，它提供了减少对象数量从而改善应用所需的对象结构的方式
+摘要 1、 意图：
+运用共享技术有效地支持大量细粒度的对象
+2、 主要解决：
+在有大量对象时，有可能会造成内存溢出，我们把其中共同的部分抽象出来，如果有相同的业务请求，直接返回在内存中已有的对象，避免重新创建
+3、 何时使用：
+1、 系统中有大量对象；
+2、 这些对象消耗大量内存；
+3、 这些对象的状态大部分可以外部化；
+4、 这些对象可以按照内蕴状态分为很多组，当把外蕴对象从对象中剔除出来时，每一组对象都可以用一个对象来代替；
+5、 系统不依赖于这些对象身份，这些对象是不可分辨的；
+4、 如何解决：
+用唯一标识码判断，如果在内存中有，则返回这个唯一标识码所标识的对象
+5、 关键代码：
+用HashMap 存储这些对象
+6、 应用实例：
+1、 JAVA中的String，如果有则返回，如果没有则创建一个字符串保存在字符串缓存池里面；
+2、 数据库的数据池；
+7、 优点：
+大大减少对象的创建，降低系统的内存，使效率提高
+8、 缺点：
+提高了系统的复杂度，需要分离出外部状态和内部状态，而且外部状态具有固有化的性质，不应该随着内部状态的变化而变化，否则会造成系统的混乱
+9、 使用场景：
+1、 系统有大量相似对象；
+2、 需要缓冲池的场景；
+10、 注意事项：
+1、 注意划分外部状态和内部状态，否则可能会引起线程安全问题；
+2、 这些类必须有一个工厂对象加以控制；
+实现 1、 定义一个Shape接口和实现了Shape接口的实体类Circle；
+2、 定义工厂类ShapeFactory；
+1*ShapeFactory* 有一个 *Circle* 的 *HashMap* ，其中键名为 *Circle* 对象的颜色 2无论何时接收到请求，都会创建一个特定颜色的圆 3*ShapeFactory* 检查它的 *HashMap* 中的 circle 对象，如果找到 *Circle* 对象，则返回该对象，否则将创建一个存储在 hashmap 中以备后续使用的新对象，并把该对象返回到客户端 3、 定义类FlyWeightPatternDemo使用ShapeFactory来获取Shape对象；</description></item><item><title>C++ 字符串</title><link>https://www.shellio.cc/docs/programing/c++/default/17/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/17/</guid><description>C++ 字符串 C++提供了以下两种类型的字符串表示形式：
+C 风格字符串 C++ 引入的 string 类类型 C 风格字符串 C风格的字符串起源于 C 语言，并在 C++ 中继续得到支持。字符串实际上是使用 null 字符 ” 终止的一维字符数组。因此，一个以 null 结尾的字符串，包含了组成字符串的字符。
+下面的声明和初始化创建了一个 “Hello” 字符串。由于在数组的末尾存储了空字符，所以字符数组的大小比单词 “Hello” 的字符数多一个。char greeting[6] = {’H’, ‘e’, ‘l’, ‘l’, ‘o’, ”};
+依据数组初始化规则，您可以把上面的语句写成以下语句：
+1char greeting[] = &amp;#34;Hello&amp;#34;; 以下是C/C++ 中定义的字符串的内存表示：
+其实，您不需要把 null 字符放在字符串常量的末尾。C++ 编译器会在初始化数组时，自动把 ” 放在字符串的末尾。让我们尝试输出上面的字符串
+1#include &amp;lt;iostream&amp;gt; 2using namespace std; 3int main () 4 char greeting[6] = {&amp;#39;H&amp;#39;, &amp;#39;e&amp;#39;, &amp;#39;l&amp;#39;, &amp;#39;l&amp;#39;, &amp;#39;o&amp;#39;, &amp;#39;\0&amp;#39;}; 5 cout &amp;lt;&amp;lt; &amp;#34;Greeting message: &amp;#34;; 6 cout &amp;lt;&amp;lt; greeting &amp;lt;&amp;lt; endl; 7 return 0; 8} 当上面的代码被编译和执行时，它会产生下列结果：</description></item><item><title>十七、Docker 查找镜像</title><link>https://www.shellio.cc/docs/cloud-native/docker/17/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/17/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>Java 中的多线程</title><link>https://www.shellio.cc/docs/java/concurrency/default/17_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/17_miss/</guid><description>本文中，我想详细的讨论下 Java 中的核心概念 – 线程的生命周期。我会使用一张我自制的图片加上实用的代码片段，一步一步的详细剖析线程的各个状态和各个状态之间如何转换。
+Java 中的多线程 Java 语言中， 多线程是由 Thread 的核心概念驱动的。因为多线程中的每一个线程都相互独立，有着自己的生命周期和状态转换。
+我们先来看一张草图，这图描述了 Java 线程的各种状态和转换过程。
+是不是很杂乱无章？ 看不懂没关系，我们接下来会详细介绍各个状态。
+Java 线程中的生命周期 Java 中，每一个线程都是 java.lang.Thread 类的实例。而且，Java 个线程生命周期中的各个状态都定义在 Thread 类的一个静态的 State 枚举中。
+State 枚举定义了线程的所有潜在状态。总共有 6 个，分别对应者上图中的 6 个绿色背景的矩形和椭圆型。
+NEW : 新创建的，且未调用 start() 方法开始执行的线程。 RUNNABLE : 已经在运行中的线程或正在等待资源分配的准备运行的线程。 BLOCKED : 等待获取进入或重新进入同步块或方法的监视器锁的线程。 WAITING : 等待其他一些线程执行特定操作，没有任何时间限制。 TIMED_WAITING: 等待某个其他线程在指定时间段内执行特定操作 TERMINATED : 线程完成了它的任务。 需要注意的是： 在任何给定的时间点，线程只能处于这些状态之一。
+NEW 状态，应该很好理解，比如，车，厂家生产出来，只要还没被卖出过，那么它就是新的 ( NEW ) RUNNABLE 只要线程不出于其它状态，它就是 RUNNABLE 状态。怎么理解呢？ 车买来了，只要它没坏没出什么毛病没借给别人，那么它就出于可开状态，不管是呆在家里吃灰还是已经在上路运行。 WAITING : 无时间显示的等待其它线程完成任务时就处于这个状态，怎么理解呢？比如长假告诉公路大堵车，要等待别人前进了几个蜗牛步我们才能往前几个蜗牛步，有时候一等就是昏天暗地，可能长达几天，也可能，一辈子吧。 TIMED_WAITING : 一直处于 WAITING 总不是办法，所以可能会设置一个超时时间，如果过了时间，就不等待了。同样的，如果可以后退，那么我们在堵车的时候可能会等待那么十几分钟，发现确实走不了，就等了呗。 TERMINATED : 当一个线程结束了它的任务（可能完成了，也可能没完成）就会处于这个状态。如果拿车做比喻，那么当车彻底报废，已经再也不能上路了，就处于这个状态。 其实拿车作比喻感觉有点怪，我觉得拿追女朋友来做比喻比较恰当些。</description></item><item><title>十七、代理模式 ( Proxy Pattern )</title><link>https://www.shellio.cc/docs/code-design/17_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/17_miss/</guid><description>代理模式（Proxy Pattern）使用一个类代表另一个类的功能
+代理模式创建具有现有对象的对象，以便向外界提供功能接口
+代理模式属于结构型模式
+摘要 1、 意图：
+为其他对象提供一种代理以控制对这个对象的访问
+2、 主要解决：
+在直接访问对象时带来的问题，比如说：要访问的对象在远程的机器上
+在面向对象系统中，有些对象由于某些原因（比如对象创建开销很大，或者某些操作需要安全控制，或者需要进程外的访问），直接访问会给使用者或者系统结构带来很多麻烦，我们可以在访问此对象时加上一个对此对象的访问层
+3、 何时使用：
+想在访问一个类时做一些控制
+4、 **如何解决：**增加中间层；
+5、 **关键代码：**实现与被代理类组合；
+6、 应用实例：
+1、 买火车票不一定在火车站买，也可以去代售点；
+2、 一张支票或银行存单是账户中资金的代理，支票在市场交易中用来代替现金，并提供对签发人账号上资金的控制；
+3、 springaop；
+7、 优点：
+1、 职责清晰；
+2、 高扩展性；
+3、 智能化；
+8、 缺点：
+1、 由于在客户端和真实主题之间增加了代理对象，因此有些类型的代理模式可能会造成请求的处理速度变慢；
+2、 实现代理模式需要额外的工作，有些代理模式的实现非常复杂；
+9、 使用场景：
+1、 远程代理；
+2、 虚拟代理；
+3、 Copy-on-Write代理；
+4、 保护（ProtectorAccess）代理；
+5、 Cache代理；
+6、 防火墙（Firewall）代理；
+7、 同步化（Synchronization）代理；
+8、 智能引用（SmartReference）代理；
+10、 注意事项：
+1、 和适配器模式的区别：适配器模式主要改变所考虑对象的接口，而代理模式不能改变所代理类的接口；
+2、 和装饰器模式的区别：装饰器模式为了增强功能，而代理模式是为了加以控制；
+实现 1、 定义一个Image接口和实现了Image接口的实体类；
+2、 定义代理类ProxyImage，减少RealImage对象加载的内存占用；</description></item><item><title>C++ 判断</title><link>https://www.shellio.cc/docs/programing/c++/default/13_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/13_miss/</guid><description>C++ 判断 判断结构要求程序员指定一个或多个要评估或测试的条件，以及条件为真时要执行的语句（必需的）和条件为假时要执行的语句（可选的）。
+下面是大多数编程语言中典型的判断结构的一般形式：
+##
+##
+##
+##
+##
+##
+##
+##
+##
+判断语句 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 C++编程语言提供了以下类型的判断语句。点击链接查看每个语句的细节。
+语句 描述 if 语句 一个 if 语句 由一个布尔表达式后跟一个或多个语句组成。 if…else 语句 一个 if 语句 后可跟一个可选的 else 语句，else 语句在布尔表达式为假时执行。 嵌套 if 语句 您可以在一个 if 或 else if 语句内使用另一个 if 或 else if 语句。 switch 语句 一个 switch 语句允许测试一个变量等于多个值时的情况。 嵌套 switch 语句 您可以在一个 switch 语句内使用另一个 switch 语句。 ? : 运算符 我们已经在前面的章节中讲解了 条件运算符 ? :，可以用来替代 if…else 语句。它的一般形式如下：</description></item><item><title>十三、Docker 命名容器</title><link>https://www.shellio.cc/docs/cloud-native/docker/13/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/13/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>锁 ( lock ) 和同步块 ( synchronized block ) 之间的差异</title><link>https://www.shellio.cc/docs/java/concurrency/default/13/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/13/</guid><description>对于Java 来讲，锁 （ Lock ) 是一种比标准同步块 （ synchronized block ） 更灵活，更复杂的线程同步机制。
+其实，Java 1.5 就已经存在 Lock 接口了。这个 Lock 接口在 java.util.concurrent.lock 包中定义，提供了大量的锁操作。
+本文中，我们将讲解 Lock 接口的不同实现并介绍如何在应用程序中使用锁。
+锁 ( lock ) 和同步块 ( synchronized block ) 之间的差异 使用synchronized 块和使用 Lock API 之间几乎没有区别：
+同步块完全包含在方法中 : 在独立的方法中，我们可以使用 Lock 提供的 lock() 和 unlock() 实现锁和解锁操作。 同步块不支持公平竞争，任何线程都可以获取释放的锁定，且不能指定优先级。但锁 ( Lock ) 就不一样了，可以通过指定公平属性来实现 Lock 中的公平性。这可以确保最长的等待线程被授予锁定权限。 如果线程无法访问同步块，则会阻塞该线程。Lock 则提供了 tryLock() 方法。线程只有在可用且不被任何其他线程保持时才获取锁定。这减少了线程等待锁定的阻塞时间。 处于 「 等待 」 状态以获取对同步块的访问的线程不能被中断。Lock 提供了一个 lockInterruptibly() 方法，可用于在等待锁定时中断线程。 从上面的对比来看，同步块的所有机制，锁 ( Lock ) 都有相应的 API 对应。</description></item><item><title>十三、组合模式 ( Composite Pattern )</title><link>https://www.shellio.cc/docs/code-design/13_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/13_miss/</guid><description>组合模式（Composite Pattern），又叫部分整体模式，是用于把一组相似的对象当作一个单一的对象
+组合模式依据树形结构来组合对象，用来表示部分以及整体层次
+组合模式创建了一个包含自己对象组的类，该类提供了修改相同对象组的方式。
+组合模式属于结构型模式，它创建了对象组的树形结构
+摘要 1、 意图：
+将对象组合成树形结构以表示”部分-整体”的层次结构。组合模式使得用户对单个对象和组合对象的使用具有一致性
+2、 主要解决：
+它在我们树型结构的问题中，模糊了简单元素和复杂元素的概念，客户程序可以向处理简单元素一样来处理复杂元素，从而使得客户程序与复杂元素的内部结构解耦
+3、 何时使用：
+1、 您想表示对象的部分-整体层次结构（树形结构）；
+2、 希望用户忽略组合对象与单个对象的不同，用户将统一地使用组合结构中的所有对象；
+4、 如何解决：
+树枝和叶子实现统一接口，树枝内部组合该接口
+5、 关键代码：
+树枝内部组合该接口，并且含有内部属性 List，里面放 Component
+6、 应用实例：
+1、 算术表达式包括操作数、操作符和另一个操作数，其中，另一个操作符也可以是操作树、操作符和另一个操作数；
+2、 在JAVAAWT和SWING中，对于Button和Checkbox是树叶，Container是树枝；
+7、 优点：
+1、 高层模块调用简单；
+2、 节点自由增加；
+8、 缺点：
+在使用组合模式时，其叶子和树枝的声明都是实现类，而不是接口，违反了依赖倒置原则
+9、 使用场景：
+部分、整体场景，如树形菜单，文件、文件夹的管理
+10、 注意事项：
+定义时为具体类
+实现 1、 类Employee，该类被当作组合模型类；
+2、 CompositePatternDemo类使用Employee类来添加部门层次结构，并打印所有员工；
+范例 1. 创建 Employee 类，该类带有 Employee 对象的列表 Employee.java
+1// author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 2// Copyright © 2015-2065 ddkk.com. All rights reserved.</description></item><item><title>C++ 函数</title><link>https://www.shellio.cc/docs/programing/c++/default/14/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/14/</guid><description>C++ 函数 函数是一组一起执行一个任务的语句。每个 C++ 程序都至少有一个函数，即主函数 main() ，所有简单的程序都可以定义其他额外的函数。
+您可以把代码划分到不同的函数中。如何划分代码到不同的函数中是由您来决定的，但在逻辑上，划分通常是根据每个函数执行一个特定的任务来进行的。
+函数声明告诉编译器函数的名称、返回类型和参数。函数定义提供了函数的实际主体。
+C++标准库提供了大量的程序可以调用的内置函数。例如，函数 strcat() 用来连接两个字符串，函数 memcpy() 用来复制内存到另一个位置。
+函数还有很多叫法，比如方法、子例程或程序，等等。
+定义函数 C++中的函数定义的一般形式如下：
+1return_type function_name( parameter list ) 2 body of the function 在C++ 中，函数由一个函数头和一个函数主体组成。下面列出一个函数的所有组成部分：
+**返回类型：**一个函数可以返回一个值。return_type 是函数返回的值的数据类型。有些函数执行所需的操作而不返回值，在这种情况下，return_type 是关键字 void。 **函数名称：**这是函数的实际名称。函数名和参数列表一起构成了函数签名。 **参数：**参数就像是占位符。当函数被调用时，您向参数传递一个值，这个值被称为实际参数。参数列表包括函数参数的类型、顺序、数量。参数是可选的，也就是说，函数可能不包含参数。 **函数主体：**函数主体包含一组定义函数执行任务的语句。 实例 以下是max() 函数的源代码。该函数有两个参数 num1 和 num2，会返回这两个数中较大的那个数：
+1// 函数返回两个数中较大的那个数 2int max(int num1, int num2) 3 // 局部变量声明 4 int result; 5 if (num1 &amp;gt; num2) 6 result = num1; 7 else 8 result = num2; 9 return result; 函数声明 函数声明会告诉编译器函数名称及如何调用函数。函数的实际主体可以单独定义。</description></item><item><title>十四、Docker 容器运行 Web 应用</title><link>https://www.shellio.cc/docs/cloud-native/docker/14/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/14/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>守护线程和用户线程的区别</title><link>https://www.shellio.cc/docs/java/concurrency/default/14/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/14/</guid><description>在这篇简短的文章中，我们将讲解下 Java 中的守护线程，看看它们可以做什么。我们还将解释守护线程和用户线程之间的区别。
+守护线程和用户线程的区别 Java 提供了两种类型的线程：守护线程 和 用户线程
+用户线程 是高优先级线程。JVM 会在终止之前等待任何用户线程完成其任务。 用户线程 是低优先级线程。其唯一作用是为用户线程提供服务。 由于守护线程的作用是为用户线程提供服务，并且仅在用户线程运行时才需要，因此一旦所有用户线程完成执行，JVM 就会终止。也就是说 守护线程不会阻止 JVM 退出。
+这也是为什么通常存在于守护线程中的无限循环不会导致问题，因为任何代码（包括 finally 块 ）都不会在所有用户线程完成执行后执行。
+这也是为什么我们并不推荐 在守护线程中执行 I/O 任务 。因为可能导致无法正确关闭资源。
+但是，守护线程并不是 100% 不能阻止 JVM 退出的。守护线程中设计不良的代码可能会阻止 JVM 退出。例如，在正在运行的守护线程上调用Thread.join() 可以阻止应用程序的关闭。
+守护线程能用来做什么？ 常见的做法，就是将守护线程用于后台支持任务，比如垃圾回收、释放未使用对象的内存、从缓存中删除不需要的条目。
+咦，按照这个解释，那么大多数 JVM 线程都是守护线程。
+如何创建守护线程 ？ 守护线程也是一个线程，因此它的创建和启动其实和普通线程没什么区别？
+要将普通线程设置为守护线程，方法很简单，只需要调用 Thread.setDaemon() 方法即可。
+例如下面这段代码，假设我们继承 Thread 类创建了一个新类 NewThread 。那么我们就可以创建这个类的实例并设置为守护线程
+1NewThread daemonThread = new NewThread(); 2daemonThread.setDaemon(true); 3daemonThread.start(); 在Java 语言中，线程的状态是自动继承的。任
+因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 何线程都会继承创建它的线程的守护程序状态。怎么理解呢？
+1、 如果一个线程是普通线程（用户线程），那么它创建的子线程默认也是普通线程（用户线程）；
+2、 如果一个线程是守护线程，那么它创建的子线程默认也是守护线程；
+因此，我们可以推演出： 由于主线程是用户线程，因此在 main() 方法内创建的任何线程默认为用户线程。</description></item><item><title>十四、装饰器模式 ( Decorator Pattern )</title><link>https://www.shellio.cc/docs/code-design/14_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/14_miss/</guid><description>装饰器模式（Decorator Pattern）允许向一个现有的对象添加新的功能，同时又不改变其结构
+装饰器模式创建了一个装饰类，用来包装原有的类，并在保持类方法签名完整性的前提下，提供了额外的功能
+装饰器模式属于结构型模式，它是作为现有的类的一个包装
+摘要 1、 意图：
+动态地给一个对象添加一些额外的职责。就增加功能来说，装饰器模式相比生成子类更为灵活
+2、 主要解决：
+一般的，我们为了扩展一个类经常使用继承方式实现，由于继承为类引入静态特征，并且随着扩展功能的增多，子类会很膨胀
+3、 何时使用：
+在不想增加很多子类的情况下扩展类
+4、 如何解决：
+将具体功能职责划分，同时继承装饰者模式
+5、 关键代码：
+1、 Component类充当抽象角色，不应该具体实现；
+2、 修饰类引用和继承Component类，具体扩展类重写父类方法；
+6、 应用实例：
+1、 孙悟空有72变，当他变成”庙宇”后，他的根本还是一只猴子，但是他又有了庙宇的功能；
+2、 不论一幅画有没有画框都可以挂在墙上，但是通常都是有画框的，并且实际上是画框被挂在墙上在挂在墙上之前，画可以被蒙上玻璃，装到框子里；这时画、玻璃和画框形成了一个物体；
+7、 优点：
+装饰类和被装饰类可以独立发展，不会相互耦合，装饰模式是继承的一个替代模式，装饰模式可以动态扩展一个实现类的功能
+8、 缺点：
+多层装饰比较复杂
+9、 使用场景：
+1、 扩展一个类的功能；
+2、 动态增加功能，动态撤销；
+10、 注意事项：
+1可代替继承 实现 1、 创建一个Shape接口和实现了Shape接口的实体类；
+2、 创建一个实现了Shape接口的抽象装饰类ShapeDecorator，并把Shape对象作为它的实例变量；
+3、 创建类RedShapeDecorator实现了ShapeDecorator实体类；
+4、 创建类DecoratorPatternDemo使用RedShapeDecorator来装饰Shape对象；
+范例 我们通过下面的范例来演示装饰器模式的用法，其中，我们将把一个形状装饰上不同的颜色，同时又不改变形状类
+1. 创建一个接口 Shape.java
+1// author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 2// Copyright © 2015-2065 ddkk.com. All rights reserved. 3package com.</description></item><item><title>C++ 数字</title><link>https://www.shellio.cc/docs/programing/c++/default/15/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/15/</guid><description>C++ 数字 通常，当我们需要用到数字时，我们会使用原始的数据类型，如 int、short、long、float 和 double 等等。这些用于数字的数据类型，其可能的值和数值范围，我们已经在 C++ 数据类型一章中讨论过。
+C++ 定义数字 我们已经在之前章节的各种实例中定义过数字。下面是一个 C++ 中定义各种类型数字的综合实例：
+1#include &amp;lt;iostream&amp;gt; 2using namespace std; 3int main () 4 // 数字定义 5 short s; 6 int i; 7 long l; 8 float f; 9 double d; 10 // 数字赋值 11 s = 10; 12 i = 1000; 13 l = 1000000; 14 f = 230.47; 15 d = 30949.374; 16 // 数字输出 17 cout &amp;lt;&amp;lt; &amp;#34;short s :&amp;#34; &amp;lt;&amp;lt; s &amp;lt;&amp;lt; endl; 18 cout &amp;lt;&amp;lt; &amp;#34;int i :&amp;#34; &amp;lt;&amp;lt; i &amp;lt;&amp;lt; endl; 19 cout &amp;lt;&amp;lt; &amp;#34;long l :&amp;#34; &amp;lt;&amp;lt; l &amp;lt;&amp;lt; endl; 20 cout &amp;lt;&amp;lt; &amp;#34;float f :&amp;#34; &amp;lt;&amp;lt; f &amp;lt;&amp;lt; endl; 21 cout &amp;lt;&amp;lt; &amp;#34;double d :&amp;#34; &amp;lt;&amp;lt; d &amp;lt;&amp;lt; endl; 22 return 0; 当上面的代码被编译和执行时，它会产生下列结果：</description></item><item><title>十五、Docker 端口映射</title><link>https://www.shellio.cc/docs/cloud-native/docker/15/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/15/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>创建 Future</title><link>https://www.shellio.cc/docs/java/concurrency/default/15/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/15/</guid><description>写了几篇 Java 一文秒懂 XXX 系列的文章后，对 Java 并发编程的设计思想真的是竖然起敬。
+Future 定义在 java.util.concurrent 包中，这是一个接口，自 Java 1.5 以来一直存在的接口，用于处理异步调用和处理并发编程。
+创建 Future 简单地说，Future 类表示异步计算的未来结果 – 在处理完成后最终将出现在 Future 中的结果。
+是不是又很难理解，文字越少，内容越多。上面这句话的意思，就是主线程会创建一个 Future 接口的对象，然后启动并发线程，并告诉并发线程，一旦你执行完毕，就把结果存储在这个 Future 对象里。
+因此，理解 Future 的第一步，就是要知道如何创建和返回 Future 实例。
+一般情况下，我们会把长时间运行的逻辑放在异步线程中进行处理，这是使用 Future 接口最理想的场景。主线程只要简单的将异步任务封装在 Future 里，然后开始等待 Future 的完成，在这段等待的时间内，可以处理一些其它逻辑，一旦 Future 执行完毕，就可以从中获取执行的结果并进一步处理。
+针对上面这种表述，我们来看看具体哪些场景可以使用 Future :
+计算密集型（ 数学和科学计算 ） 操纵大数据结构（ 大数据 ） 远程方法调用（下载文件，HTML 爬取，Web 服务） 实现了 Future 的 FutureTask 我们先来看一段代码:
+1public class SquareCalculator { 2 private ExecutorService executor 3 = Executors.newSingleThreadExecutor(); 4 public Future&amp;lt;Integer&amp;gt; calculate(Integer input) { 5 return executor.</description></item><item><title>十五、外观模式 ( Facade Pattern )</title><link>https://www.shellio.cc/docs/code-design/15_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/15_miss/</guid><description>外观模式（Facade Pattern）隐藏系统的复杂性，并向客户端提供了一个客户端可以访问系统的接口
+外观模式涉及到一个单一的类，该类提供了客户端请求的简化方法和对现有系统类方法的委托调用
+外观模式属于结构型模式，它向现有的系统添加一个接口，来隐藏系统的复杂性
+摘要 1、 意图：
+为子系统中的一组接口提供一个一致的界面，外观模式定义了一个高层接口，这个接口使得这一子系统更加容易使用
+2、 主要解决：
+降低访问复杂系统的内部子系统时的复杂度，简化客户端与之的接口
+3、 何时使用：
+1、 客户端不需要知道系统内部的复杂联系，整个系统只需提供一个”接待员”即可；
+2、 定义系统的入口；
+4、 如何解决：
+客户端不与系统耦合，外观类与系统耦合
+5、 关键代码：
+在客户端和复杂系统之间再加一层，这一层将调用顺序、依赖关系等处理好
+6、 应用实例：
+1、 去医院看病，可能要去挂号、门诊、划价、取药，让患者或患者家属觉得很复杂，如果有提供接待人员，只让接待人员来处理，就很方便；
+2、 JAVA的三层开发模式；
+7、 优点：
+1、 减少系统相互依赖；
+2、 提高灵活性；
+3、 提高了安全性；
+8、 缺点：
+不符合开闭原则，如果要改东西很麻烦，继承重写都不合适
+9、 使用场景：
+1、 为复杂的模块或子系统提供外界访问的模块；
+2、 子系统相对独立；
+3、 预防低水平人员带来的风险；
+10、 注意事项：
+在层次化结构中，可以使用外观模式定义系统中每一层的入口
+实现 1、 创建一个Shape接口和实现了Shape接口的实体类；
+2、 定义一个外观类ShapeMaker；
+3、 定义类ShapeMaker使用实体类来代表用户对这些类的调用；
+4、 定义类FacadePatternDemo使用ShapeMaker类来显示结果；
+范例 1. 创建一个接口 Shape.java
+1// author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 2// Copyright © 2015-2065 ddkk.</description></item><item><title>C++ 运算符</title><link>https://www.shellio.cc/docs/programing/c++/default/11/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/11/</guid><description>C++ 运算符 运算符是一种告诉编译器执行特定的数学或逻辑操作的符号。C++ 内置了丰富的运算符，并提供了以下类型的运算符：
+算术运算符 关系运算符 逻辑运算符 位运算符 赋值运算符 杂项运算符 本章将逐一介绍算术运算符、关系运算符、逻辑运算符、位运算符、赋值运算符和其他运算符。
+算术运算符 下表显示了 C++ 支持的所有算术运算符。
+假设变量 A 的值为 10，变量 B 的值为 20，则：
+运算符 描述 实例 + 把两个操作数相加 A + B 将得到 30 – 从第一个操作数中减去第二个操作数 A – B 将得到 -10 * 把两个操作数相乘 A * B 将得到 200 / 分子除以分母 B / A 将得到 2 % 取模运算符，整除后的余数 B % A 将得到 0 ++ 自增运算符，整数值增加 1 A++ 将得到 11 — 自减运算符，整数值减少 1 A– 将得到 9 实例 请看下面的实例，了解 C++ 中所有可用的算术运算符。</description></item><item><title>十一、Docker restart 重启容器</title><link>https://www.shellio.cc/docs/cloud-native/docker/11/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/11/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>并发编程中使用 CountDownLatch</title><link>https://www.shellio.cc/docs/java/concurrency/default/11/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/11/</guid><description>本章节我们来讨论下 java.util.concurrent.CountDownLatch 这个类，顺带演示下如何在一些实际例子中使用它。
+CountDownLatch 类的作用呢？ 怎么说呢？ 简单来说，我们可以使用它来阻塞线程，直到其他线程完成给定任务。
+并发编程中使用 CountDownLatch 简而言之，CountDownLatch 有一个计数器字段，我们可以根据需要减少它，因此，我们可以使用它来阻止调用线程，直到它被计数到零。
+如果我们正在进行一些并行处理，我们可以使用与计数器相同的值来实例化 CountDownLatch，因为我们想要处理多个线程。然后，我们可以在每个线程完成后调用 countdown()，保证调用 await() 的依赖线程将阻塞，直到工作线程完成。
+使用 CountDownLatch 等待线程池完成 我们通过创建一个 Worker 来尝试这个模式，并使用 CountDownLatch 字段来指示它何时完成
+1public class Worker implements Runnable { 2 private List&amp;lt;String&amp;gt; outputScraper; 3 private CountDownLatch countDownLatch; 4 public Worker(List&amp;lt;String&amp;gt; outputScraper, CountDownLatch countDownLatch) { 5 this.outputScraper = outputScraper; 6 this.countDownLatch = countDownLatch; 7 } 8 @Override 9 public void run() { 10 doSomeWork(); 11 outputScraper.add(&amp;#34;Counted down&amp;#34;); 12 countDownLatch.countDown(); 13 } 然后，我们创建一个测试，以证明我们可以让 CountDownLatch 等待 Worker 实例完成</description></item><item><title>十一、桥接模式 ( Bridge Pattern )</title><link>https://www.shellio.cc/docs/code-design/11_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/11_miss/</guid><description>桥接模式（Bridge Pattern）是用于把抽象化与实现化解耦，使得二者可以独立变化
+桥接模式涉及到一个作为桥接的接口，使得实体类的功能独立于接口实现类，这两种类型的类可被结构化改变而互不影响
+桥接模式属于结构型模式，它通过提供抽象化和实现化之间的桥接结构，来实现二者的解耦
+摘要 1、 意图：
+将抽象部分与实现部分分离，使它们都可以独立的变化
+2、 主要解决：
+在有多种可能会变化的情况下，用继承会造成类爆炸问题，扩展起来不灵活
+3、 何时使用：
+实现系统可能有多个角度分类，每一种角度都可能变化
+4、 如何解决：
+把这种多角度分类分离出来，让它们独立变化，减少它们之间耦合
+5、 关键代码：
+抽象类依赖实现类
+6、 应用实例：
+1、 猪八戒从天蓬元帅转世投胎到猪，转世投胎的机制将尘世划分为两个等级，即：灵魂和肉体，前者相当于抽象化，后者相当于实现化；
+生灵通过功能的委派，调用肉体对象的功能，使得生灵可以动态地选择
+2、 墙上的开关，可以看到的开关是抽象的，不用管里面具体怎么实现的；
+7、 优点：
+1、 抽象和实现的分离；
+2、 优秀的扩展能力；
+3、 实现细节对客户透明；
+8、 缺点：
+桥接模式的引入会增加系统的理解与设计难度，由于聚合关联关系建立在抽象层，要求开发者针对抽象进行设计与编程
+9、 使用场景：
+1、 如果一个系统需要在构件的抽象化角色和具体化角色之间增加更多的灵活性，避免在两个层次之间建立静态的继承联系，通过桥接模式可以使它们在抽象层建立一个关联关系；
+2、 对于那些不希望使用继承或因为多层次继承导致系统类的个数急剧增加的系统，桥接模式尤为适用；
+3、 一个类存在两个独立变化的维度，且这两个维度都需要进行扩展；
+10、 注意事项：
+对于两个独立变化的维度，使用桥接模式再适合不过了
+实现 1、 创建一个作为桥接实现的DrawAPI接口和实现了DrawAPI接口的实体类RedCircle、GreenCircle；
+2、 Shape是一个抽象类，将使用DrawAPI的对象；
+3、 BridgePatternDemo使用Shape类来画出不同颜色的圆；
+范例 我们通过下面的实例来演示桥接模式（Bridge Pattern）的用法: 可以使用相同的抽象类方法但是不同的桥接实现类，来画出不同颜色的圆
+1. 创建桥接实现接口 DrawAPI.java
+1// author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 2// Copyright © 2015-2065 ddkk.</description></item><item><title>C++ 注释</title><link>https://www.shellio.cc/docs/programing/c++/default/4/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/4/</guid><description>C++ 注释 程序的注释是解释性语句，您可以在 C++ 代码中包含注释，这将提高源代码的可读性。所有的编程语言都允许某种形式的注释。
+C++支持单行注释和多行注释。注释中的所有字符会被 C++ 编译器忽略。
+C++注释以 /* 开始，以 */ 终止。例如：
+1/* 这是注释 */ 2/* C++ 注释也可以 3 * 跨行 4 */ 注释也能以 // 开始，直到行末为止。例如：
+因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 1#include 2using namespace std; 3main() 4 cout &amp;lt;&amp;lt; &amp;#34;Hello World&amp;#34;; // 输出 Hello World return 0; 5} 当上面的代码被编译时，编译器会忽略 // prints Hello World，最后会产生以下结果：
+1Hello World 在/* 和 */ 注释内部，// 字符没有特殊的含义。在 // 注释内，/* 和 */ 字符也没有特殊的含义。因此，您可以在一种注释内嵌套另一种注释。例如：
+1/* 用于输出 Hello World 的注释 2cout &amp;lt;&amp;lt; &amp;#34;Hello World&amp;#34;; // 输出 Hello World */</description></item><item><title>四、CentOS Docker 安装</title><link>https://www.shellio.cc/docs/cloud-native/docker/4/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/4/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用 Linux 常用的命令；
+2、 知道大部分的 Linux 常识，比如终端、service、ip、用户、组等；
+3、 熟练使用 Ubuntu 或者 Centos 或者 MacOS 种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker 的应用场景 1、 Web 应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的 OpenShift 或 CloudFoundry 平台来搭建自己的 PaaS 环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；</description></item><item><title>ThreadPoolExecutor</title><link>https://www.shellio.cc/docs/java/concurrency/default/4/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/4/</guid><description>因为上一章节篇幅有限，所以我决定把 一文秒懂 Java 线程池 拆分为三篇文章单独介绍。本章节，我们就来看看 ThreadPoolExecutor 。
+ThreadPoolExecutor ThreadPoolExecutor 是一个可被继承 ( extends ) 的线程池实现，包含了用于微调的许多参数和钩子。
+我们并不会讨论 ThreadPoolExecutor 类中的所有的参数和钩子，只会讨论几个主要的配置参数：
+1、 corePoolSize；
+2、 maximumPoolSize；
+3、 keepAliveTime；
+ThreadPoolExecutor 创建的线程池由固定数量的核心线程组成，这些线程在 ThreadPoolExecutor 生命周期内始终存在，除此之外还有一些额外的线程可能会被创建，并会在不需要时主动销毁。corePoolSize 参数用于指定在线程池中实例化并保留的核心线程数。如果所有核心线程都忙，并且提交了更多任务，则允许线程池增长到 maximumPoolSize 。
+keepAliveTime 参数是额外的线程（ 即，实例化超过 corePoolSize 的线程 ）在空闲状态下的存活时间。
+这三个参数涵盖了广泛的使用场景，但最典型的配置是在 Executors 静态方法中预定义的。
+Executors.newFixedThreadPool() 例如，Executors.newFixedThreadPool() 静态方法创建了一个 ThreadPoolExecutor ，它的参数 corePoolSize 和 maximumPoolSize 都是相等的，且参数 keepAliveTime 始终为 0 ，也就意味着此线程池中的线程数始终相同。
+1ThreadPoolExecutor executor = 2 (ThreadPoolExecutor) Executors.newFixedThreadPool(2); 3executor.submit(() -&amp;gt; { 4 Thread.sleep(1000); 5 return null; 6}); 7executor.submit(() -&amp;gt; { 8 Thread.</description></item><item><title>四、设计模式 – 六大原则</title><link>https://www.shellio.cc/docs/code-design/4/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/4/</guid><description>在23 +8 中设计模式中，我们提炼出了 六大面向对象设计原则
+我们可以不知道那数量繁多的设计模式，但一定要记住这 六大设计原则
+1. 开闭原则（Open Close Principle） 开闭原则的意思是： 对扩展开放，对修改关闭
+在程序需要进行拓展的时候，不能去修改原有的代码，实现一个热插拔的效果
+简言之，是为了使程序的扩展性好，易于维护和升级
+想要达到这样的效果，我们需要使用接口和抽象类，后面的具体设计中我们会提到这点
+2. 里氏代换原则（Liskov Substitution Principle） 里氏代换原则是面向对象设计的基本原则之一
+里氏代换原则中说，任何基类可以出现的地方，子类一定可以出现
+因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 LSP是继承复用的基石，只有当派生类可以替换掉基类，且软件单位的功能不受到影响时，基类才能真正被复用，而派生类也能够在基类的基础上增加新的行为
+里氏代换原则是对开闭原则的补充
+实现开闭原则的关键步骤就是抽象化，而基类与子类的继承关系就是抽象化的具体实现，所以里氏代换原则是对实现抽象化的具体步骤的规范
+3. 依赖倒转原则（Dependence Inversion Principle） 这个原则是开闭原则的基础，具体内容：针对接口编程，依赖于抽象而不依赖于具体
+4. 接口隔离原则（Interface Segregation Principle） 这个原则的意思是：使用多个隔离的接口，比使用单个接口要好
+它还有另外一个意思是：降低类之间的耦合度
+由此可见，其实设计模式就是从大型软件架构出发、便于升级和维护的软件设计思想，它强调降低依赖，降低耦合
+5. 迪米特法则，又称最少知道原则（Demeter Principle） 最少知道原则是指：一个实体应当尽量少地与其他实体之间发生相互作用，使得系统功能模块相对独立。
+6. 合成复用原则（Composite Reuse Principle） 合成复用原则是指：尽量使用合成/聚合的方式，而不是使用继承</description></item><item><title>C++ 标准库</title><link>https://www.shellio.cc/docs/programing/c++/default/40/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/40/</guid><description>C++ 标准库 C++标准库可以分为两部分：
+标准函数库： 这个库是由通用的、独立的、不属于任何类的函数组成的。函数库继承自 C 语言。 面向对象类库： 这个库是类及其相关函数的集合。 C++标准库包含了所有的 C 标准库，为了支持类型安全，做了一定的添加和修改。
+标准函数库 标准函数库分为以下几类：
+输入/输出 I/O 字符串和字符处理 数学 时间、日期和本地化 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 动态分配 其他 宽字符函数 面向对象类库 标准的C++ 面向对象类库定义了大量支持一些常见操作的类，比如输入/输出 I/O、字符串处理、数值处理。面向对象类库包含以下内容：
+标准的 C++ I/O 类 String 类 数值类 STL 容器类 STL 算法 STL 函数对象 STL 迭代器 STL 分配器 本地化库 异常处理类 杂项支持库</description></item><item><title>C++ 简介</title><link>https://www.shellio.cc/docs/programing/c++/default/42/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/42/</guid><description>在面试C++方面的工作时，经常会遇到各种面试题，这对应聘人员的知识掌握能力要求较高。本文将为大家带来的就是20道必须掌握的C++面试题，不要错过哦！
+想要快速轻松掌握C++知识，请点击C++微课边学习边实践
+问1：请用简单的语言告诉我C++ 是什么？
+答：C++是在C语言的基础上开发的一种面向对象编程语言，应用广泛。C++支持多种编程范式 －－面向对象编程、泛型编程和过程化编程。 其编程领域众广，常用于系统开发，引擎开发等应用领域，是最受广大程序员受用的最强大编程语言之一,支持类：类、封装、重载等特性!
+问2：C和C++的区别？
+答：c++在c的基础上增添类，C是一个结构化语言，它的重点在于算法和数据结构。C程序的设计首要考虑的是如何通过一个过程，对输入（或环境条件）进行运算处理得到输出（或实现过程（事务）控制），而对于C++，首要考虑的是如何构造一个对象模型，让这个模型能够契合与之对应的问题域，这样就可以通过获取对象的状态信息得到输出或实现过程（事务）控制。
+问3：什么是面向对象（OOP）？
+答：面向对象是一种对现实世界理解和抽象的方法、思想，通过将需求要素转化为对象进行问题处理的一种思想。
+问4：什么是多态？
+答：多态是指相同的操作或函数、过程可作用于多种类型的对象上并获得不同的结果。不同的对象，收到同一消息可以产生不同的结果，这种现象称为多态。
+问5：设计模式懂嘛，简单举个例子？
+答：
+设计模式（Design pattern）是一套被反复使用、多数人知晓的、经过分类编目的、代码设计经验的总结。
+比如单例模式，保证一个类仅有一个实例，并提供一个访问它的全局访问点。
+适用于：当类只能有一个实例而且客户可以从一个众所周知的访问点访问它时；当这个唯一实例应该是通过子类化可扩展的，并且客户应该无需更改代码就能使用一个扩展的实例时。
+比如工厂模式，定义一个用于创建对象的接口，让子类决定实例化哪一个类。Factory Method 使一个类的实例化延迟到其子类。
+适用于：当一个类不知道它所必须创建的对象的类的时候；当一个类希望由它的子类来指定它所创建的对象的时候；当类将创建对象的职责委托给多个帮助子类中的某一个，并且你希望将哪一个帮助子类是代理者这一信息局部化的时候。
+问6：STL库用过吗？常见的STL容器有哪些？算法用过哪几个？
+答：
+STL包括两部分内容：容器和算法。（重要的还有融合这二者的迭代器）
+容器，即存放数据的地方。比如array等。
+在STL中，容器分为两类：序列式容器和关联式容器。
+序列式容器，其中的元素不一定有序，但都可以被排序。如：vector、list、deque、stack、queue、heap、priority_queue、slist；
+关联式容器，内部结构基本上是一颗平衡二叉树。所谓关联，指每个元素都有一个键值和一个实值，元素按照一定的规则存放。如：RB-tree、set、map、multiset、multimap、hashtable、hash_set、hash_map、hash_multiset、hash_multimap。
+下面各选取一个作为说明。
+vector：它是一个动态分配存储空间的容器。区别于c++中的array，array分配的空间是静态的，分配之后不能被改变，而vector会自动重分配（扩展）空间。
+set：其内部元素会根据元素的键值自动被排序。区别于map，它的键值就是实值，而map可以同时拥有不同的键值和实值。
+算法，如排序，复制……以及个容器特定的算法。这点不用过多介绍，主要看下面迭代器的内容。
+迭代器是STL的精髓，我们这样描述它：迭代器提供了一种方法，使它能够按照顺序访问某个容器所含的各个元素，但无需暴露该容器的内部结构。它将容器和算法分开，好让这二者独立设计。
+问7：数据结构会吗？项目开发过程中主要用到那些？
+答：数据结构中主要会用到数组，链表，树（较少），也会用到栈和队列的思想。
+问8：const知道吗？解释其作用。
+答：
+1、 const修饰类的成员变量，表示成员常量，不能被修改；
+2、 const修饰函数承诺在本函数内部不会修改类内的数据成员，不会调用其它非const成员函数；
+3、 如果const构成函数重载，const对象只能调用const函数，非const对象优先调用非const函数；
+4、 const函数只能调用const函数非const函数可以调用const函数；
+5、 类体外定义的const成员函数，在定义和声明处都需要const修饰符；
+问9：类的static变量在什么时候初始化？函数的static变量在什么时候初始化？
+答：类的静态成员变量在类实例化之前就已经存在了，并且分配了内存。函数的static变量在执行此函数时进行初始化。
+问10：堆和栈的区别？堆和栈的生命周期？
+答：
+一、堆栈空间分配区别：
+1、 栈（操作系统）：由操作系统自动分配释放，存放函数的参数值，局部变量的值等其操作方式类似于数据结构中的栈；
+2、 堆（操作系统）：一般由程序员分配释放，若程序员不释放，程序结束时可能由OS回收，分配方式倒是类似于链表；
+二、堆栈缓存方式区别：
+1、 栈使用的是一级缓存，他们通常都是被调用时处于存储空间中，调用完毕立即释放；
+2、 堆是存放在二级缓存中，生命周期由虚拟机的垃圾回收算法来决定（并不是一旦成为孤儿对象就能被回收）所以调用这些对象的速度要相对来得低一些；
+三、堆栈数据结构区别：
+堆（数据结构）：堆可以被看成是一棵树，如：堆排序；
+栈（数据结构）：一种先进后出的数据结构。
+问11：C和C++的区别？
+答：
+C++在C的基础上增添类
+C是一个结构化语言，它的重点在于算法和数据结构。</description></item><item><title>C++ 简介</title><link>https://www.shellio.cc/docs/programing/c++/default/43/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/43/</guid><description>map是C++中的一个标准容器，她提供了很好一对一的关系，在一些程序中建立一个map可以起到事半功倍的效果，本文为大家总结了map的一些基本简单的操作！
+1、map最基本的构造函数；
+map mapstring; map mapint;
+map&amp;lt;sring, char&amp;gt;mapstring; map&amp;lt; char ,string&amp;gt;mapchar;
+map mapchar; map mapint；
+2、map添加数据；
+1 map&amp;lt;int ,string&amp;gt; maplive; 2 1.maplive.insert(pair&amp;lt;int,string&amp;gt;(102,&amp;#34;aclive&amp;#34;)); 3 2.maplive.insert(map&amp;lt;int,string&amp;gt;::value_type(321,&amp;#34;hai&amp;#34;)); 4 3, maplive[112]=&amp;#34;April&amp;#34;;//map中最简单最常用的插入添加！ 3、map中元素的查找：
+find()函数返回一个迭代器指向键值为key的元素，如果没找到就返回指向map尾部的迭代器。
+1 map&amp;lt;int ,string &amp;gt;::iterator l_it;; 2 l_it=maplive.find(112); 3 if(l_it==maplive.end()) 4 cout&amp;lt;&amp;lt;&amp;#34;we do not find 112&amp;#34;&amp;lt;&amp;lt;endl; 5 else cout&amp;lt;&amp;lt;&amp;#34;wo find 112&amp;#34;&amp;lt;&amp;lt;endl; 4、map中元素的删除：
+如果删除112；
+1 map&amp;lt;int ,string &amp;gt;::iterator l_it;; 2 l_it=maplive.find(112); 3 if(l_it==maplive.end()) 4 cout&amp;lt;&amp;lt;&amp;#34;we do not find 112&amp;#34;&amp;lt;&amp;lt;endl; 5 else maplive.erase(l_it); //delete 112; 5、map中 swap的用法：</description></item><item><title>C++ 简介</title><link>https://www.shellio.cc/docs/programing/c++/default/44/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/44/</guid><description>在c++中，vector是一个十分有用的容器。它能够像容器一样存放各种类型的对象，简单地说，vector是一个能够存放任意类型的动态数组，能够增加和压缩数据。
+使用vector注意事项：
+1、 如果你要表示的向量长度较长（需要为向量内部保存很多数），容易导致内存泄漏，而且效率会很低；
+2、 Vector作为函数的参数或者返回值时，需要注意它的写法：；
+1double Distance(vector&amp;lt;int&amp;gt;&amp;amp;a, vector&amp;lt;int&amp;gt;&amp;amp;b) 其中的“&amp;amp;”绝对不能少！！！
+实例：
+vector test;//建立一个vector，int为数组元素的数据类型，test为动态数组名
+简单的使用方法如下：
+1vector&amp;lt;int&amp;gt;test;//建立一个vector 2test.push_back(1); 3test.push_back(2);//把1和2压入vector，这样test[0]就是1,test[1]就是2 自己见到的实例：
+1vector&amp;lt;vector&amp;lt;Point2f&amp;gt; &amp;gt; points; //定义一个二维数组 2points[0].size(); //指第一行的列数 1、基本操作
+(1)头文件#include .
+(2)创建vector对象，vector vec;
+(3)尾部插入数字：vec.push_back(a);
+(4)使用下标访问元素，cout&amp;laquo;vec[0]&amp;laquo;endl;记住下标是从0开始的。
+(5)使用迭代器访问元素.
+1vector&amp;lt;int&amp;gt;::iterator it; 2for(it=vec.begin();it!=vec.end();it++) 3 cout&amp;lt;&amp;lt;*it&amp;lt;&amp;lt;endl; (6)插入元素：vec.insert(vec.begin()+i,a);在第i+1个元素前面插入a;
+(7)删除元素：vec.erase(vec.begin()+2);删除第3个元素
+vec.erase(vec.begin()+i,vec.end()+j);删除区间[i,j-1];区间从0开始
+(8)向量大小:vec.size();
+(9)清空:vec.clear();
+特别提示：这里有begin()与end()函数、front()与back()的差别
+2、重要说明
+vector的元素不仅仅可以是int,double,string,还可以是结构体，但是要注意：结构体要定义为全局的，否则会出错。
+1#include&amp;lt;stdio.h&amp;gt; 2#include&amp;lt;algorithm&amp;gt; 3#include&amp;lt;vector&amp;gt; 4#include&amp;lt;iostream&amp;gt; 5using namespace std; 6typedef struct rect 7{ 8 int id; 9 int length; 10 int width; 11　//对于向量元素是结构体的，可在结构体内部定义比较函数，下面按照id,length,width升序排序。 12　bool operator&amp;lt; (const rect &amp;amp;a) const 13 { 14 if(id!</description></item><item><title>C++ 简介</title><link>https://www.shellio.cc/docs/programing/c++/default/45/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/45/</guid><description>本文将为大家带来的是几款简单实用的C++编译器（非IDE），希望大家喜欢。
+GCC（GNU Compiler Collection）
+官方网站: https://gcc.gnu.org/ GCC有Windows移植版本，比较出名的就是MinGW和TDM-GCC
+GNU编译器套件（GNU Compiler Collection）包括C、C++、Objective-C、Fortran、Java、Ada和Go语言的前端，也包括了这些语言的库（如libstdc++、libgcj等等）。GCC的初衷是为GNU操作系统专门编写的一款编译器。GNU系统是彻底的自由软件。此处，“自由”的含义是它尊重用户的自由。
+llvm+Clang
+LLVM官方网站：http://llvm.org/
+Clang官方网站：http://clang.llvm.org/get_started.html
+LLVM是构架编译器(compiler)的框架系统，以C++编写而成，用于优化以任意程序语言编写的程序的编译时间(compile-time)、链接时间(link-time)、运行时间(run-time)以及空闲时间(idle-time)，对开发者保持开放，并兼容已有脚本。LLVM计划启动于2000年，最初由University of Illinois at Urbana-Champaign的Chris Lattner主持开展。2006年Chris Lattner加盟Apple Inc.并致力于LLVM在Apple开发体系中的应用。Apple也是LLVM计划的主要资助者.
+LowLevel Virtual Machine (LLVM) 是一个开源的编译器架构，它已经被成功应用到多个应用领域。Clang ( 发音为 /kl??/) 是 LLVM 的一个编译器前端，它目前支持 C, C++, Objective-C 以及 Objective-C++ 等编程语言。Clang 对源程序进行词法分析和语义分析，并将分析结果转换为 Abstract Syntax Tree ( 抽象语法树 ) ，最后使用 LLVM 作为后端代码的生成器。
+Clang 的开发目标是提供一个可以替代 GCC 的前端编译器。与 GCC 相比，Clang 是一个重新设计的编译器前端，具有一系列优点，例如模块化，代码简单易懂，占用内存小以及容易扩展和重用等。由于 Clang 在设计上的优异性，使得 Clang 非常适合用于设计源代码级别的分析和转化工具。Clang 也已经被应用到一些重要的开发领域，如 Static Analysis 是一个基于 Clang 的静态代码分析工具。
+Watcom C/C++
+官方网站：http://www.openwatcom.org/index.php/Download
+在DOS开发环境中，Watcom C/C++ 编译器 以编译后的exe运行高速而著称，且首个支持Intel 80386 “保护模式”的编译器。于90年代中期，大批的雄心技术游戏(例如 Doom、Descent、Duke Nukem 3D 都以 Watcom C 写成）</description></item><item><title>C++ 有用的资源</title><link>https://www.shellio.cc/docs/programing/c++/default/41/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/41/</guid><description>C++ 有用的资源 以下资源包含了 C++ 有关的网站、书籍和文章。请使用它们来进一步学习 C++ 的知识。
+C++ 有用的网站 C++ Programming Language Tutorials − C++ 编程语言教程。 C++ Programming − 这本书涵盖了 C++ 语言编程、软件交互设计、C++ 语言的现实生活应用。 C++ FAQ − C++ 常见问题 Free Country − Free Country 提供了免费的 C++ 源代码和 C++ 库，这些源代码和库涵盖了压缩、存档、游戏编程、标准模板库和 GUI 编程等 C++ 编程领域。 C and C++ Users Group − C 和 C++ 的用户团体提供了免费的涵盖各种编程领域 C++ 项目的源代码，包括 AI、动画、编译器、数据库、调试、加密、游戏、图形、GUI、语言工具、系统编程等。 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 C++ 有用的书籍</description></item><item><title>C++ 数据类型</title><link>https://www.shellio.cc/docs/programing/c++/default/5/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/5/</guid><description>C++ 数据类型 使用编程语言进行编程时，需要用到各种变量来存储各种信息。变量保留的是它所存储的值的内存位置。这意味着，当您创建一个变量时，就会在内存中保留一些空间。
+您可能需要存储各种数据类型（比如字符型、宽字符型、整型、浮点型、双浮点型、布尔型等）的信息，操作系统会根据变量的数据类型，来分配内存和决定在保留内存中存储什么。
+基本的内置类型 C++为程序员提供了种类丰富的内置数据类型和用户自定义的数据类型。下表列出了七种基本的 C++ 数据类型：
+类型 关键字 布尔型 bool 字符型 char 整型 int 浮点型 float 双浮点型 double 无类型 void 宽字符型 wchar_t 一些基本类型可以使用一个或多个类型修饰符进行修饰：
+signed unsigned short long 下表显示了各种变量类型在内存中存储值时需要占用的内存，以及该类型的变量所能存储的最大值和最小值。
+**注意：**不同系统会有所差异。
+类型 位 范围 char 1 个字节 -128 到 127 或者 0 到 255 unsigned char 1 个字节 0 到 255 signed char 1 个字节 -128 到 127 int 4 个字节 -2147483648 到 2147483647 unsigned int 4 个字节 0 到 4294967295 signed int 4 个字节 -2147483648 到 2147483647 short int 2 个字节 -32768 到 32767 unsigned short int 2 个字节 0 到 65,535 signed short int 2 个字节 -32768 到 32767 long int 8 个字节 -9,223,372,036,854,775,808 到 9,223,372,036,854,775,807 signed long int 8 个字节 -9,223,372,036,854,775,808 到 9,223,372,036,854,775,807 unsigned long int 8 个字节 0 to 18,446,744,073,709,551,615 float 4 个字节 +/- 3.</description></item><item><title>范例 2</title><link>https://www.shellio.cc/docs/java/concurrency/default/5/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/5/</guid><description>ScheduledThreadPoolExecutor 扩展自 一文秒懂 Java 线程池之 ThreadPoolExecutor 讲解的 了ThreadPoolExecutor 类，并且添加了其它方法实现了 ScheduledExecutorService 接口。
+schedule() 方法允许在指定的延迟后执行一次任务 scheduleAtFixedRate() 方法允许在指定的初始延迟后执行任务，然后以一定的周期重复执行，其中 period 参数用于指定两个任务的开始时间之间的间隔时间，因此任务执行的频率是固定的。 scheduleWithFixedDelay() 方法类似于 scheduleAtFixedRate() ，它也重复执行给定的任务，但period 参数用于指定前一个任务的结束和下一个任务的开始之间的间隔时间。也就是指定下一个任务延时多久后才执行。执行频率可能会有所不同，具体取决于执行任何给定任务所需的时间。 静态方法 Executors.newScheduledThreadPool() 方法用于创建包含了指定 corePoolSize，无上限 maximumPoolSize 和 0 存活时间 keepAliveTime 的 ScheduledThreadPoolExecutor 实例。
+例如下面的示例创建了一个包含了 5 个核心线程的 `S
+因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 cheduledThreadPoolExecutor实例，且每隔 500 毫秒运行一个输出Hello World` 的任务
+1ScheduledExecutorService executor = Executors.newScheduledThreadPool(5); 2executor.schedule(() -&amp;gt; { 3 System.out.println(&amp;#34;Hello World&amp;#34;); 4}, 500, TimeUnit.MILLISECONDS); 范例 2 下面的代码则演示了如何在 500 毫秒延迟后执行任务，然后每 100 毫秒重复执行一次。
+1CountDownLatch lock = new CountDownLatch(3); 2ScheduledExecutorService executor = Executors.</description></item><item><title>五、Windows 安装 Docker</title><link>https://www.shellio.cc/docs/cloud-native/docker/5/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/5/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+1、 会使用Linux常用的命令；
+2、 知道大部分的Linux常识，比如终端、service、ip、用户、组等；
+3、 熟练使用Ubuntu或者Centos或者MacOS种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker的应用场景 1、 Web应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的OpenShift或CloudFoundry平台来搭建自己的PaaS环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；
+1在没有 Docker 之前，每一台机器，每一个要用到的依赖，几乎都要重新配置一遍 2比如新增一台 MySQL 数据库，就要从头开始配置所有环境 3有了 Docker 之后，只需要从仓库里把之前的 MySQL 镜像拉出来，直接使用 3、 节省开支；</description></item><item><title>五、工厂模式 ( Factory Pattern )</title><link>https://www.shellio.cc/docs/code-design/5_miss/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/5_miss/</guid><description>工厂模式（Factory Pattern）提供了一种创建对象的最佳方式
+工厂模式在创建对象时不会对客户端暴露创建逻辑，并且是通过使用一个共同的接口来指向新创建的对象
+工厂模式属于创建型模式
+摘要 1、 意图：
+定义一个创建对象的接口，让其子类自己决定实例化哪一个工厂类，工厂模式使其创建过程延迟到子类进行
+2、 主要解决：
+主要解决接口选择的问题
+3、 何时使用：
+我们明确地计划不同条件下创建不同实例时
+4、 如何解决：
+让其子类实现工厂接口，返回的也是一个抽象的产品
+5、 关键代码：
+创建过程在其子类执行
+6、 应用实例：
+1、 您需要一辆汽车，可以直接从工厂里面提货，而不用去管这辆汽车是怎么做出来的，以及这个汽车里面的具体实现；
+2、 Hibernate换数据库只需换方言和驱动就可以；
+7、 优点：
+1、 一个调用者想创建一个对象，只要知道其名称就可以了；
+2、 扩展性高，如果想增加一个产品，只要扩展一个工厂类就可以；
+3、 屏蔽产品的具体实现，调用者只关心产品的接口；
+8、 缺点：
+每次增加一个产品时，都需要增加一个具体类和对象实现工厂，使得系统中类的个数成倍增加，在一定程度上增加了系统的复杂度，同时也增加了系统具体类的依赖
+这并不是什么好事
+9、 使用场景：
+1、 日志记录器：记录可能记录到本地硬盘、系统事件、远程服务器等，用户可以选择记录日志到什么地方；
+2、 数据库访问，当用户不知道最后系统采用哪一类数据库，以及数据库可能有变化时；
+3、 设计一个连接服务器的框架，需要三个协议，”POP3″、”IMAP”、”HTTP”，可以把这三个作为产品类，共同实现一个接口；
+10、 注意事项：
+作为一种创建类模式，在任何需要生成复杂对象的地方，都可以使用工厂方法模式
+有一点需要注意的地方就是复杂对象适合使用工厂模式，而简单对象，特别是只需要通过 new 就可以完成创建的对象，无需使用工厂模式。如果使用工厂模式，就需要引入一个工厂类，会增加系统的复杂度
+实现 1、 创建一个Shape接口和实现Shape接口的实体类；
+2、 下一步是定义工厂类ShapeFactory；
+3、 FactoryPatternDemo使用ShapeFactory来获取Shape对象；
+它将向ShapeFactory 传递信息（ CIRCLE / RECTANGLE / SQUARE ），以便获取它所需对象的类型
+范例 1. 创建一个接口 Shape.</description></item><item><title>C++ 简介</title><link>https://www.shellio.cc/docs/programing/c++/default/1/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/c++/default/1/</guid><description>C++ 简介 C++是一种静态类型的、编译式的、通用的、大小写敏感的、不规则的编程语言，支持过程化编程、面向对象编程和泛型编程。
+C++被认为是一种中级语言，它综合了高级语言和低级语言的特点。
+C++是由 Bjarne Stroustrup 于 1979 年在新泽西州美利山贝尔实验室开始设计开发的。C++ 进一步扩充和完善了 C 语言，最初命名为带类的C，后来在 1983 年更名为 C++。
+C++是 C 的一个超集，事实上，任何合法的 C 程序都是合法的 C++ 程序。
+**注意：**使用静态类型的编程语言是在编译时执行类型检查，而不是在运行时执行类型检查。
+面向对象程序设计 C++完全支持面向对象的程序设计，包括面向对象开发的四大特性：
+封装 数据隐藏 继承 多态 标准库 标准的C++ 由三个重要部分组成：
+核心语言，提供了所有构件块，包括变量、数据类型和常量，等等。 C++ 标准库，提供了大量的函数，用于操作文件、字符串等。 标准模板库（STL），提供了大量的方法，用于操作数据结构等。 ANSI 标准 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 ANSI 标准是为了确保 C++ 的便携性 —— 您所编写的代码在 Mac、UNIX、Windows、Alpha 计算机上都能通过编译。
+由于ANSI 标准已稳定使用了很长的时间，所有主要的 C++ 编译器的制造商都支持 ANSI 标准。
+学习 C++ 学习C++，关键是要理解概念，而不应过于深究语言的技术细节。
+学习程序设计语言的目的是为了成为一个更好的程序员，也就是说，是为了能更有效率地设计和实现新系统，以及维护旧系统。
+C++支持多种编程风格。您可以使用 Fortran、C、Smalltalk 等任意一种语言的编程风格来编写代码。每种风格都能有效地保证运行时间效率和空间效率。
+C++ 的使用 基本上每个应用程序领域的程序员都有使用 C++。
+C++通常用于编写设备驱动程序和其他要求实时性的直接操作硬件的软件。
+C++广泛用于教学和研究。
+任何一个使用苹果电脑或 Windows PC 机的用户都在间接地使用 C++，因为这些系统的主要用户接口是使用 C++ 编写的。</description></item><item><title>一、Docker 基础教程</title><link>https://www.shellio.cc/docs/cloud-native/docker/1/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/cloud-native/docker/1/</guid><description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源
+Docker 可以让开发者打包它们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+Docker 使用完全使用沙箱机制，两个容器之间不会有任何接口 (这个有点像 iPhone 的 app ) ,更重要的是容器性能开销极低
+学习前提 在继续阅读之前，我们希望你对 Linux 有一些基本的了解，包括
+因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 1、 会使用 Linux 常用的命令；
+2、 知道大部分的 Linux 常识，比如终端、service、ip、用户、组等；
+3、 熟练使用 Ubuntu 或者 Centos 或者 MacOS 种的一种昂；
+如果你对这些知识还是一知半解，可以访问我们的 Linux 基础教程 先进行一些简单的了解
+Docker 的应用场景 1、 Web 应用的自动化打包和发布；
+2、 自动化测试和持续集成、发布；
+3、 在服务型环境中部署和调整数据库或其他的后台应用；
+4、 从头编译或者扩展现有的 OpenShift 或 CloudFoundry 平台来搭建自己的 PaaS 环境；
+Docker 的优点 1、 简化程序；
+1Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化 2Docker 改变了虚拟化的方式，使开发者可以直接将自己的成果放入 Docker 中进行管理 3方便快捷已经是 Docker 的最大优势，过去需要用数天乃至数周的 任务，在Docker容器的处理下，只需要数秒就能完成 2、 解决运维配置噩梦；</description></item><item><title>实例化 ExecutorService</title><link>https://www.shellio.cc/docs/java/concurrency/default/1/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/java/concurrency/default/1/</guid><description>ExecutorService 是 Java java.util.concurrent 包的重要组成部分，是 Java JDK 提供的框架，用于简化异步模式下任务的执行。
+一般来说，ExecutorService 会自动提供一个线程池和相关 API，用于为其分配任务。
+实例化 ExecutorService 实例化ExecutorService 的方式有两种：一种是工厂方法，另一种是直接创建。
+Executors.newFixedThreadPool() 工厂方法创建 ExecutorService 实例 创建ExecutorService 实例的最简单方法是使用 Executors 类的提供的工厂方法。比如
+1ExecutorService executor = Executors.newFixedThreadPool(10); 当然还有其它很多工厂方法，每种工厂方法都可以创建满足特定用例的预定义 ExecutorService 实例。你所需要做的就是找到自己想要的合适的方法。这些方法都在 Oracle 的 JDK 官方文档中有列出
+直接创建 ExecutorService 的实例 因为ExecutorService 是只是一个接口，因此可以使用其任何实现类的实例。Java java.util.concurrent 包已经预定义了几种实现可供我们选择，或者你也可以创建自己的实现。
+例如，ThreadPoolExecutor 类实现了 ExecutorService 接口并提供了一些构造函数用于配置执行程序服务及其内部池。
+1ExecutorService executorService = 2 new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, 3 new LinkedBlockingQueue&amp;lt;Runnable&amp;gt;() 4); 你可能会注意到，上面的代码与工厂方法 newSingleThreadExecutor() 的 源代码 非常相似。对于大多数情况，不需要详细的手动配置。
+将任务分配给 ExecutorService ExecutorService 可以执行 Runnable 和 Callable 任务。为了使本文简单易懂。我们将使用两个两个原始任务，如下面的代码所示。</description></item><item><title>设计模式</title><link>https://www.shellio.cc/docs/code-design/1/</link><pubDate>Thu, 06 Oct 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/code-design/1/</guid><description>设计模式（Design pattern）是重构解决方案
+这点很重要，尤其是现在 B/S 一统天下的局面，过早考虑设计模式，得不偿失
+设计模式（Design pattern）代表了最佳的实践，通常被面向对象的软件开发人员所采用
+很多教程都说设计模式是被有经验的人使用，其实只要定义了一个类，或多或少都在使用它们，而不是有没有经验 只是有经验的人知道自己在使用设计模式，而且知道怎么做的更好
+设计模式是软件开发人员在软件开发过程中面临复杂度问题的一般问题的解决方案
+这些解决方案是众多软件开发人员经过相当长的一段时间的试验和错误总结出来的
+因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 设计模式是复杂度解决方案，不是小程序的解决方案(就一两个类文件，用设计模式那是增加复杂度)
+记住 设计模式（Design pattern）是重构解决方案不是开发的解决方案
+设计模式的 6 大原则才是开发的解决方案
+关于范例 因为我用的是包机制来开发，所以引入了 com.ddkk.gof 包，运行起来就有点复杂了 所以我们希望你使用 IDE 来测试范例，这样点击运行可以直接查看结果
+如果是手动编译运行，比如工厂模式中的范例，则需要如下
+1$ javac -d . src/main/com.ddkk/gof/FactoryPatternDemo.java 2$ java com.ddkk.gof.FactoryPatternDemo 在范例中的 编译运行以上 Java 范例 指的就是这两条命令
+本教程将通过 Java 范例，一步一步讲解学习设计模式的概念
+谁适合阅读本教程？ 无论您是新手，还是老手，本教程都值得一读
+1、 对于那些具有丰富的开发经验的开发人员，学习设计模式有助于了解在软件开发过程中所面临的问题的最佳解决方案；
+2、 对于那些经验不足的开发人员，学习设计模式有助于通过一种简单快捷的方式来学习软件设计；
+总的来说，不推荐刚入门的开发者学习，哪怕把代码搞的一塌糊涂，也要先将功能完成，初学者，迈过坑是必然的，只有对自己编写的代码不满意，你才会体会到设计模式的重要性，也才能更加理解
+阅读本教程前，我们希望需要了解的知识： 因为本教程的范例都是基于 Java 语言，所以我们希望你有一定的 Java 基础知识
+如果你还不了解 Java 可以通过我们的 Java 基础教程 学习</description></item><item><title>简介</title><link>https://www.shellio.cc/docs/introduction/</link><pubDate>Sun, 06 Mar 2022 22:42:23 +0800</pubDate><guid>https://www.shellio.cc/docs/introduction/</guid><description>一个技术人必备的教程系列，涵盖了从基础到进阶的各种技术教程。
+Greeting 1echo &amp;#34;Hi there&amp;#34;</description></item></channel></rss>
