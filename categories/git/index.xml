@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Git on 程序员安仔</title><link>https://www.shellio.cc/categories/git/</link><description>Recent content in Git on 程序员安仔</description><generator>Hugo -- gohugo.io</generator><language>zh-hans</language><copyright>个人技术博客</copyright><lastBuildDate>Sat, 21 Oct 2023 12:22:54 +0800</lastBuildDate><atom:link href="https://www.shellio.cc/categories/git/index.xml" rel="self" type="application/rss+xml"/><item><title>八、Git 创建仓库 – git init</title><link>https://www.shellio.cc/docs/git/8/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/git/8/</guid><description>Git使用 git init 命令初始化一个 Git 仓库
+我们可以使用一个已经存在的目录作为 Git 仓库
+git init 命令 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 Git使用 git init 命令来初始化一个 Git 仓库
+Git的很多命令都需要在 Git 的仓库中运行，所以 git init 是使用 Git 的第一个命令
+在执行完成 git init 命令后
+Git仓库会生成一个 .git 目录，该目录包含了资源的所有元数据，其它的项目目录保持不变
+语法 下面的命令在当前目录下创建一个 Git 仓库
+1$ git init 2Initialized empty Git repository in /tmp/git/.git/ 该命令执行完后会在当前目录生成一个 .git 目录
+1$ ls -al 2total 0 3drwxr-xr-x 4 penglei staff 128 11 4 17:33 . 4drwxrwxrwx 52 penglei staff 1664 11 4 17:33 .</description></item><item><title>二、Git 安装 – Linux</title><link>https://www.shellio.cc/docs/git/2/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/git/2/</guid><description>Git不是系统内置的软件，需要安装才能使用
+Git是垮平台的，支持的系统有 Linux/Unix、Solaris、Mac和 Windows
+Git各个平台的安装包下载地址为 http://git-scm.com/downloads
+下面我们就来介绍如何在 Linux 平台安装 Git
+Linux 平台上安装 Git 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 Git需要依赖 curl，zlib，openssl，expat，libiconv 等第三方库，因此在安装之前我们先要安装这些依赖
+各个系统都有包管理工具，我们可以很容易使用这些包管理工具协助安装
+安装完依赖后我们就能安装 Git 了，各个 Linux 平台安装 Git 步骤如下
+Debian/Ubuntu 1、 安装依赖；
+1 $ apt-get install libcurl4-gnutls-dev libexpat1-dev gettext libz-dev libssl-dev 2、 安装Git；
+1 $ apt-get install git-core 3、 查看Git版本；
+1 $ git --version 2 git version 1.8.3.1 Centos/RedHat 1、 安装依赖；
+1 $ yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel 2、 安装Git；
+1 $ yum -y install git-core 3、 查看安装的Git版本；</description></item><item><title>二十、Git 快速参考手册</title><link>https://www.shellio.cc/docs/git/20/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/git/20/</guid><description>我们制作了一份 Git 快速参考手册供随时预览
+Gitcheat sheet 让你不用再去记所有的 git 命令
+配置 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 列出当前配置 1$ git config --list 列出 repository 配置 1$ git config --local --list 列出全局配置 1$ git config --global --list 列出系统配置 1$ git config --system --list 设置用户名 1$ git config --global user.name “[firstname lastname]” 设置用户邮箱 1$ git config --global user.email “[valid-email]” 设置 git 命令输出为彩色 1$ git config --global color.ui auto 设置 git 使用的文本编辑器 1$ git config --global core.editor vi 配置文件 Repository 配置对应的配置文件路径[–local] 1&amp;lt;repo&amp;gt;/.</description></item><item><title>二十二、Git Flow</title><link>https://www.shellio.cc/docs/git/22/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/git/22/</guid><description>GitFlow 是一种使用 Git 开展项目的工作流程
+安装 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 你需要有一个可以工作的 git 作为前提。 Git flow 可以工作在 OSX, Linux 和 Windows之下 OSX Homebrew: 1$ brew install git-flow OSX Macports: 1$ port install git-flow Linux: 1$ apt-get install git-flow Windows (Cygwin): 安装git-flow, 你需要 wget 和 util-linux。
+1$ wget -q -O - --no-check-certificate https://github.com/nvie/gitflow/raw/develop/contrib/gitflow-installer.sh | bash 开始 为了自定义你的项目，Git flow 需要初始化过程。 使用 git-flow，从初始化一个现有的 git 库内开始。 初始化，你必须回答几个关于分支的命名约定的问题。建议使用默认值。 1git flow init 特性 为即将发布的版本开发新功能特性 这通常只存在开发者的库中 创建一个新特性: 下面操作创建了一个新的 feature 分支，并切换到该分支
+1git flow feature start MYFEATURE 完成新特性的开发: 完成开发新特性。这个动作执行下面的操作： 1.</description></item><item><title>二十一、Git 基本操作</title><link>https://www.shellio.cc/docs/git/21/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/git/21/</guid><description>Git的工作就是创建和保存项目的快照及与之后的快照进行对比
+本章我们对之前所学的 Git 知识做一个简单的梳理
+获取与创建项目命令 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 git init 用git init 在目录中创建新的 Git 仓库。 你可以在任何时候、任何目录中这么做，完全是本地化的。
+在目录中执行 git init，就可以创建一个 Git 仓库了。比如我们创建 souyunku 项目：
+1$ mkdir souyunku 2$ cd souyunku/ 3$ git init 4Initialized empty Git repository in /Users/tianqixin/www/souyunku/.git/ 5# 在 /www/souyunku/.git/ 目录初始化空 Git 仓库完毕。 现在你可以看到在你的项目中生成了 .git 这个子目录。 这就是你的 Git 仓库了，所有有关你的此项目的快照数据都存放在这里。
+1ls -a 2. .. .git git clone 使用git clone 拷贝一个 Git 仓库到本地，让自己能够查看该项目，或者进行修改。
+如果你需要与他人合作一个项目，或者想要复制一个项目，看看代码，你就可以克隆那个项目。 执行命令：
+1git clone [url] [url] 为你想要复制的项目，就可以了。
+例如我们克隆 Github 上的项目：</description></item><item><title>九、Git 添加文件到暂存区- git add</title><link>https://www.shellio.cc/docs/git/9/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/git/9/</guid><description>前面我们已经初始化了一个 Git 仓库
+假设我们已经创建了几个文件，如下
+1$ tree . 2├── README 3└── main.c 40 directories, 2 files 现在我们想让这几个文件提交到暂存区，则需要使用 git add 命令
+语法 gitadd 语法格式如下
+1$ git add &amp;lt;file&amp;gt; 范例 比如下面的命令就是把当前目录下的 README 和 main.c 提交到暂存区
+1$ git add *.c 2$ git add README 我们可以使用 git status 查看暂存区的状态
+1$ git status 2On branch master 3No commits yet 4Changes to be committed: 5 (use &amp;#34;git rm --cached &amp;lt;file&amp;gt;...&amp;#34; to unstage) 6 new file: README 7 new file: main.</description></item><item><title>六、Git 工作流程</title><link>https://www.shellio.cc/docs/git/6/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/git/6/</guid><description>配置好了 Git，我们就可以来学习如何使用 Git 进行日常的开发
+使用Git 日常开发的流程一般如下
+1、 创建或克隆Git资源作为工作目录；
+2、 在克隆的资源上添加或修改文件；
+3、 如果其他人修改了，我们可以更新资源；
+4、 在提交前查看修改；
+5、 提交修改到本地；
+6、 提交修改到远程；
+7、 在修改完成后，如果发现错误，可以撤回提交并再次修改并提交；
+下图展示了这种工作的流程</description></item><item><title>七、Git 工作区、暂存区和版本库</title><link>https://www.shellio.cc/docs/git/7/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/git/7/</guid><description>我们已经了解了使用 Git 进行日常开发的基本流程，现在我们来学习 Git 三大基本概念
+Git日常开发几乎都是与 工作区、暂存区和版本库打交道
+工作区、暂存区和版本库 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 1、 **工作区：**我们在电脑上能看到的目录；
+2、 **暂存区：**英文stage,或index；
+1暂存区一般存放在 &amp;#34;.git目录下&amp;#34; 下的 index 文件 ( .git/index )中 2有些地方把暂存区有时也叫作索引 ( index ) 3、 **版本库：**工作区有一个隐藏目录.git，这个不算工作区，而是Git的版本库；
+工作区、暂存区和版本库在目录中的位置如下 工作区、暂存区和版本库关系图示 下图展示了工作区、版本库中的暂存区和版本库之间的关系
+图中
+左侧为工作区 右侧为版本库 在版本库中标记为 “index” 的区域是暂存区（stage, index） 标记为 “master” 的是 master 分支所代表的目录树。 图中我们可以看出此时 “HEAD” 实际是指向 master 分支的一个”游标” 所以图示的命令中出现 HEAD 的地方可以用 master 来替换
+图中的 objects 标识的区域为 Git 的对象库，实际位于 “.git/objects” 目录下，里面包含了创建的各种对象及内容 git 命令的效果 1、 当对工作区修改（或新增）的文件执行gitadd命令时，暂存区的目录树被更新，同时工作区修改（或新增）的文件内容被写入到对象库中的一个新的对象中，而该对象的ID被记录在暂存区的文件索引中；
+2、 当执行提交操作gitcommit-m&amp;lt;message&amp;gt;时，暂存区的目录树写到版本库（对象库）中，master分支会做相应的更新；
+1即 master 指向的目录树就是提交时暂存区的目录树 3、 当执行gitresetHEAD命令时，暂存区的目录树会被重写，被master分支指向的目录树所替换，但是工作区不受影响；</description></item><item><title>三、Git 安装 – Window</title><link>https://www.shellio.cc/docs/git/3/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/git/3/</guid><description>Git不是系统内置的软件，需要安装才能使用
+Git是垮平台的，支持的系统有 Linux/Unix、Solaris、Mac和 Windows
+Git各个平台的安装包下载地址为 http://git-scm.com/downloads
+Windows 平台上安装 Git 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 Windows 上可以使用 msysgit 项目提供的安装包
+msysgit 的官方地址为 http://msysgit.github.io/
+很悲剧的一点，似乎受到某些不可抗击的原因，下载速度简直慢如蜗牛
+我们可以选择合适的 CPU 版本，现在的 Window 电脑一般都是 64 位的
+下载完成可以双击 Git-2.15.0-64-bit.exe 进行安装
+msysgit 除了提供终端(命令行) 的 git 命令外，还提供了操作简单的 Git 图形界面
+安装完成后可以在开始菜单里找到”Git”-&amp;gt;”Git Bash”，会弹出 Git 命令窗口
+接下来我们就可以在该窗口进行 Git 操作</description></item><item><title>十、Git 提交文件到版本库 – git commit</title><link>https://www.shellio.cc/docs/git/10/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/git/10/</guid><description>前面章节我们已经把 README 和 main.c 文件从工作区添加到了暂存区
+假设我们已经完成了开发任务，需要把暂存区的文件提交到版本库
+使用git commit 命令可以把当前暂存区的文件提交到版本库
+语法 gitcommit 命令语法格式如下
+1$ git commit -m &amp;#34;&amp;lt;本次提交说明信息&amp;gt;&amp;#34; 范例 使用以下的命令可以把 README 和 main.c 文件提交到版本库
+1$ git commit -m &amp;#34;初始化项目&amp;#34; 输出结果如下
+因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 1$ git commit -m &amp;#34;初始化项目&amp;#34; 2[master (root-commit) b8af03d] 初始化项目 3 2 files changed, 0 insertions(+), 0 deletions(-) 4 create mode 100644 README 5 create mode 100644 main.c 使用git status 查看当前项目状态，显示如下
+1$ git status 2On branch master 3nothing to commit, working tree clean 使用git log --pretty=oneline 可以查看我们刚刚的提交</description></item><item><title>十八、Git 远程仓库 ( Github )</title><link>https://www.shellio.cc/docs/git/18/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/git/18/</guid><description>之前我们使用到的 Git 命令都是在本地执行，如果你想通过 Git 分享代码或者与其它开发人员合作
+那么就需要将数据放到一台其他开发人员能够连接的服务器上
+本章节，我们将使用 GitHub 作为远程仓库，演示如何操作远程仓库
+如果你还没有 Github 账号，可以在官网 https://github.com/ 注册
+配置 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 由于我们的本地 Git 仓库和 GitHub 仓库之间的传输是通过 SSH 加密的，所以我们需要配置验证信息
+1、 使用以下命令生成SSHKey；
+1 ssh-keygen -t rsa -C &amp;#34;your_email@youremail.com&amp;#34; 1后面的 **your\_email@youremail.com** 改为你在 github 上注册的邮箱 2、 然后会出现下面的提示要求确认路径；
+1 Enter file in which to save the key (~/.ssh/id_rsa): 1我们建议将路径改成 ~/.ssh/github 2也就是最后会保存为 github 而不是 id_rsa 3&amp;gt; 这样可以避免主要的 SSH 被覆盖 3、 按回车之后，会出现下面的提示要求输入密码，我们这使用默认的一路回车就行；
+1 Enter passphrase (empty for no passphrase): 2 Enter same passphrase again: 1&amp;gt; 为什么不设置呢？ 因为有些 Git 客户端软件没有设置密码的地方，省的以后每次输入密码麻烦 4、 成功的话会在~/.</description></item><item><title>十二、Git 删除文件 – git rm</title><link>https://www.shellio.cc/docs/git/12/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/git/12/</guid><description>如果只是简单地从工作目录中手工删除文件，运行 git status 时就显示 Changes not staged for commit的提示
+要从Git 中移除某个文件，就必须要从已跟踪文件清单中移除，然后提交。可以用以下命令完成此项工作
+1git rm &amp;lt;file&amp;gt; 如果删除之前修改过并且已经放到暂存区域的话，则必须要用强制删除选项-f
+1git rm -f &amp;lt;file&amp;gt; 如果把文件从暂存区域移除，但仍然希望保留在当前工作目录中，换句话说，仅是从跟踪清单中删除，使用–cached选项即可
+1git rm --cached &amp;lt;file&amp;gt; 如我们删除 hello.php文件：
+因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 1$ git rm hello.php 2rm &amp;#39;hello.php&amp;#39; 3$ ls 4README 不从工作区中删除文件：
+1$ git rm --cached README 2rm &amp;#39;README&amp;#39; 3$ ls 4README 可以递归删除，即如果后面跟的是一个目录做为参数，则会递归删除整个目录中的所有子目录和文件：
+1git rm –r * 进入某个目录中，执行此语句，会删除该目录下的所有文件和子目录。</description></item><item><title>十九、Git 远程服务搭建</title><link>https://www.shellio.cc/docs/git/19/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/git/19/</guid><description>我们可能需要与别人共享代码，协作开发
+这时候我们就需要一台 Git 服务器作为远程 Git 仓库
+下面我们就以在 Centos7 上安装 Git 服务器为例学习如何配置远程 Git 仓库
+1. 安装 Git 依赖 1[root@ddkk.com ~]# yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel perl-devel 2. 安装 Git 1[root@ddkk.com ~]# yum install git 3. 创建 git 用户和用户组 创建一个git用户组和用户，用来运行 Git 服务
+1[root@ddkk.com ~]# groupadd git 2[root@ddkk.com ~]# adduser git -g git 4. 创建 ssh 登录证书 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 收集所有需要登录的用户的公钥，公钥位于 ~/.ssh/id_rsa.pub 文件中
+把每个开发者的公钥导入到 /home/git/.ssh/authorized_keys 文件里，一行一个
+如果没有 /home/git/.ssh/authorized_keys 文件则使用下面的命令创建
+1[root@ddkk.com ~]# cd /home/git/ 2[root@ddkk.</description></item><item><title>十六、Git 查看提交历史 – git log</title><link>https://www.shellio.cc/docs/git/16/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/git/16/</guid><description>在使用Git 提交了若干更新之后，又或者克隆了某个项目，想回顾下提交历史，我们可以使用 git log 命令查看。
+针对我们前一章节的操作，使用 git log 命令列出历史提交记录如下：
+1$ git log 2commit 88afe0e02adcdfea6844bb627de97da21eb10af1 3Merge: 14b4dca d7e7346 4Author: penglei penglei@souyunku.cn 5Date: Sun Mar 1 15:03:42 2015 +0800 6 Merge branch &amp;#39;change_site&amp;#39; 7 Conflicts: 8 test.txt 9commit 14b4dcadbdc847207651d5a9fae0d315057f346e 10Author: penglei penglei@souyunku.cn 11Date: Sun Mar 1 14:53:15 2015 +0800 12 新增加一行 13commit d7e734640da06055e107eaf29cf350b3f1de1c2c 14Author: penglei penglei@souyunku.cn 15Date: Sun Mar 1 14:48:57 2015 +0800 16 changed the site 17commit 556f0a0637978097b82287ac665a717623b21f3f 18Author: penglei penglei@souyunku.cn 19Date: Sun Mar 1 14:40:34 2015 +0800 20 removed test2.</description></item><item><title>十七、Git 标签 – git tag</title><link>https://www.shellio.cc/docs/git/17/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/git/17/</guid><description>如果你达到一个重要的阶段，并希望永远记住那个特别的提交快照，你可以使用 git tag 给它打上标签。
+比如说，我们想为我们的 git-demo 项目发布一个 “1.0” 版本
+我们可以用 git tag -a v1.0 命令给最新一次提交打上（HEAD）”v1.0″的标签。
+-a选项意为”创建一个带注解的标签”。 不用 -a 选项也可以执行的，但它不会记录这标签是啥时候打的，谁打的，也不会让你添加个标签的注解。 我推荐一直创建带注解的标签。
+1$ git tag -a v1.0 当你执行 git tag -a 命令时，Git 会打开你的编辑器，让你写一句标签注解，就像你给提交写注解一样。
+现在，注意当我们执行 git log –decorate 时，我们可以看到我们的标签了：
+1$ git log --oneline --decorate --graph 2* 88afe0e (HEAD, tag: v1.0, master) Merge branch &amp;#39;change_site&amp;#39; 3|\ 4| * d7e7346 (change_site) changed the site 5* | 14b4dca 新增加一行 6|/ 7* 556f0a0 removed test2.txt 8* 2e082b7 add test2.</description></item><item><title>十三、Git 重命名文件 – git mv</title><link>https://www.shellio.cc/docs/git/13/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/git/13/</guid><description>gitmv 命令用于移动或重命名一个文件、目录、软连接
+语法 gitmv 命令语法格式如下
+1git mv &amp;lt;old_file&amp;gt; &amp;lt;new_file&amp;gt; 范例 假如当前项目版本库中有如下文件
+1$ ls 2README main.c 现在我们想把 README 文件重命名为 README.md 则可以使用下面的命令
+因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 1$ git mv README README.md 2$ ls 3README.md main.c 4$ git status 5On branch master 6Changes to be committed: 7 (use &amp;#34;git reset HEAD &amp;lt;file&amp;gt;...&amp;#34; to unstage) 8 renamed: README -&amp;gt; README.md 9(spider) 我们可以看到，重命名后文件会放入暂存区，需要使用 git commit 命令提交到仓库</description></item><item><title>十四、Git 取消已缓存 – git reset HEAD</title><link>https://www.shellio.cc/docs/git/14/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/git/14/</guid><description>gitreset HEAD 命令用于取消已缓存的内容
+我们先将 README 文件内容修改如下
+1DDKK.COM 弟弟快看，程序员编程资料站 (ddkk.com) 2DDKK.COM 弟弟快看，程序员编程资料站，教程 hello.php 文件修改为：
+1&amp;lt;?php 2echo &amp;#39;教程 ：ddkk.com&amp;#39;; 3echo &amp;#39;教程 ：ddkk.com&amp;#39;; 4echo &amp;#39;教程 ：ddkk.com&amp;#39;; 然后将两个修改的文件都提交到了缓存区，我们现在要取消其中一个的缓存，操作如下：
+因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 1$ git status -s 2 M README 3 M hello.php 4$ git add . 5$ git status -s 6M README 7M hello.php 8$ git reset HEAD -- hello.php 9Unstaged changes after reset: 10M hello.php 11$ git status -s 12M README 13 M hello.php 现在我们执行 git commit，只会将 README 文件的改动提交，而 hello.</description></item><item><title>十五、Git 分支管理 – git branch</title><link>https://www.shellio.cc/docs/git/15/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/git/15/</guid><description>几乎每一种版本控制系统都以某种形式支持分支
+使用分支意味着你可以从开发主线上分离开来，然后在不影响主线的同时继续工作
+有人把Git 的分支模型称为”必杀技特性”，而正是因为它，将 Git 从版本控制系统家族里区分出来
+创建分支命令： 1git branch (branchname) 切换分支命令: 1git checkout (branchname) 当我们切换分支的时候，Git 会用该分支的最后提交的快照替换你的工作目录的内容， 所以多个分支不需要多个目录。
+合并分支命令 1git merge 我们可以多次合并到统一分支， 也可以选择在合并之后直接删除被并入的分支。
+列出分支 列出分支基本命令：
+因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 1git branch 没有参数时，git branch 会列出你在本地的分支。
+1$ git branch 2* master 此例的意思就是，我们有一个叫做”master”的分支，并且该分支是当前分支。
+当你执行 git init 的时候，缺省情况下 Git 就会为你创建”master”分支。
+如果我们要手动创建一个分支。执行 git branch (branchname) 即可。
+1$ git branch testing 2$ git branch 3* master 4 testing 现在我们可以看到，有了一个新分支 testing。
+当你以此方式在上次提交更新之后创建了新分支，如果后来又有更新提交， 然后又切换到了”testing”分支，Git 将还原你的工作目录到你创建分支时候的样子
+接下来我们将演示如何切换分支，我们用 git checkout (branch) 切换到我们要修改的分支。
+1$ ls 2README 3$ echo &amp;#39;souyunku.</description></item><item><title>十一、Git 克隆仓库 – git clone</title><link>https://www.shellio.cc/docs/git/11/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/git/11/</guid><description>Git除了可以使用 git init 初始化一个仓库外，还可以使用 git clone 从现有 Git 仓库中拷贝项目
+语法 gitclone 命令克隆仓库的语法格式如下
+1git clone &amp;lt;repo&amp;gt; 如果我们需要克隆到指定的目录，可以使用以下命令格式：
+1git clone &amp;lt;repo&amp;gt; &amp;lt;directory&amp;gt; 参数说明 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 参数 说明 repo Git 仓库 directory 本地目录 范例 比如，要克隆 Ruby 语言的 Git 代码仓库 Grit，可以用下面的命令：
+1$ git clone git://github.com/schacon/grit.git 执行该命令后，会在当前目录下创建一个名为 grit 的目录，其中包含一个 .git 的目录，用于保存下载下来的所有版本记录
+如果要自己定义要新建的项目目录名称，可以在上面的命令末尾指定新的名字：
+1$ git clone git://github.com/schacon/grit.git mygrit</description></item><item><title>四、Git 安装 – Mac OS</title><link>https://www.shellio.cc/docs/git/4/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/git/4/</guid><description>Git不是系统内置的软件，需要安装才能使用
+Git是垮平台的，支持的系统有 Linux/Unix、Solaris、Mac和 Windows
+Git各个平台的安装包下载地址为 http://git-scm.com/downloads
+Mac 平台上安装 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 Mac平台上有两种安装 Git 的方法
+1、 官方安装包；
+在官方下载界面下载 Git https://git-scm.com/download/mac
+这个网址会跳转到以下地址 https://sourceforge.net/projects/git-osx-installer/?source=typ_redirect
+1、 下载完然后双击安装；
+1、 然后右键点击git-2.14.1-intel-universal-mavericks.pkg；
+1、 一路向下点击Next直至安装完成；
+2、 使用brew包管理工具安装；
+1$ brew install git 查看 Git 版本 1$ git --version 2git version 2.14.2</description></item><item><title>五、Git 配置 – git config</title><link>https://www.shellio.cc/docs/git/5/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/git/5/</guid><description>经过上一章的紧张安装，我们终于可以使用 Git 了，但在这之前我们先做一些简单的配置
+Git提供了 git config 命令来配置 Git
+Git 环境变量 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 gitconfig 命令专门用来配置或读取相应的工作环境变量
+Git有三种级别的环境变量，它们分别是： 系统 Git 配置、当前用户 Git 配置 和 当前项目 Git 配置
+这些环境变量，决定了 Git 在各个环节的具体工作方式和行为
+三种级别的 Git 环境变量存储在 三个 不同的配置文件中
+1、 系统Git配置：/etc/gitconfig文件；
+1/etc/gitconfig 是对所有用户都普遍适用的配置 2可以使用以下命令来读写 /etc/gitconfig 文件 1 $ git config --system 2、 当前用户Git配置：~/.gitconfig文件；
+1~/.gitconfig 这个当前用户目录下的配置文件只适用于当前用户 2可以使用以下命令来读写 ~/.gitconfig 文件 1 $ git config --global 3、 当前项目的Git配置：.git/config文件；
+1.git/config 是当前项目下的配置文件，只适用于当前项目有效 2可以使用以下命令来读写 .git/config 文件 1 $ git config 每一个级别的配置都会覆盖上层的相同配置，所以 .git/config 里的配置会覆盖 /etc/gitconfig中的同名变量</description></item><item><title>一、Git 基础教程</title><link>https://www.shellio.cc/docs/git/1/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/git/1/</guid><description>一、Git 基础教程 Git是一个开源的分布式版本控制系统，用于敏捷高效地处理任何或小或大的项目
+Git是 Linus Torvalds 为了帮助管理 Linux 内核开发而开发的一个开放源码的版本控制软件
+Git采用了分布式版本库的方式，不必服务器端软件支持
+Git 与 SVN 区别 GIT不仅仅是个版本控制系统，它也是个内容管理系统(CMS),工作管理系统等
+如果你是一个具有使用 SVN 背景的人，你需要做一定的思想转换，来适应 GIT 提供的一些概念和特征
+1、 Git是分布式的，SVN不是；
+1这是 Git 和其它非分布式的版本控制系统，例如 SVN，CVS 等，最核心的区别 2、 Git把内容按元数据方式存储，而SVN是按文件；
+1所有的资源控制系统都是把文件的元信息隐藏在一个类似 .svn,.cvs 等的文件夹里 3、 Git分支和SVN的分支不同；
+1SVN 中的分支可以说是版本库的另一个目录 4、 Git没有一个全局的版本号，而SVN有；
+5、 Git的内容完整性要优于SVN；
+1Git 的内容存储使用的是 SHA-1 哈希算法 2这能确保代码内容的完整性，确保在遇到磁盘故障和网络问题时降低对版本库的破坏</description></item></channel></rss>

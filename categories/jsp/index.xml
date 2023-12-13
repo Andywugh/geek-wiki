@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>JSP on 程序员安仔</title><link>https://www.shellio.cc/categories/jsp/</link><description>Recent content in JSP on 程序员安仔</description><generator>Hugo -- gohugo.io</generator><language>zh-hans</language><copyright>个人技术博客</copyright><lastBuildDate>Sat, 21 Oct 2023 12:22:54 +0800</lastBuildDate><atom:link href="https://www.shellio.cc/categories/jsp/index.xml" rel="self" type="application/rss+xml"/><item><title>八、JSP 动作元素</title><link>https://www.shellio.cc/docs/java/jsp/8/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/jsp/8/</guid><description>JSP 动作元素 与JSP指令元素不同的是，JSP动作元素在请求处理阶段起作用。JSP动作元素是用XML语法写成的。
+利用JSP动作可以动态地插入文件、重用JavaBean组件、把用户重定向到另外的页面、为Java插件生成HTML代码。
+动作元素只有一种语法，它符合XML标准：
+1&amp;lt;jsp:action_name attribute=&amp;#34;value&amp;#34; /&amp;gt; 动作元素基本上都是预定义的函数，JSP规范定义了一系列的标准动作，它用JSP作为前缀，可用的标准动作元素如下：
+语法 描述 jsp:include 在页面被请求的时候引入一个文件。 jsp:useBean 寻找或者实例化一个JavaBean。 jsp:setProperty 设置JavaBean的属性。 jsp:getProperty 输出某个JavaBean的属性。 jsp:forward 把请求转到一个新的页面。 jsp:plugin 根据浏览器类型为Java插件生成OBJECT或EMBED标记。 jsp:element 定义动态XML元素 jsp:attribute 设置动态定义的XML元素属性。 jsp:body 设置动态定义的XML元素内容。 jsp:text 在JSP页面和文档中使用写入文本的模板 常见的属性 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 所有的动作要素都有两个属性：id属性和scope属性。
+id属性： id属性是动作元素的唯一标识，可以在JSP页面中引用。动作元素创建的id值可以通过PageContext来调用。
+scope属性： 该属性用于识别动作元素的生命周期。 id属性和scope属性有直接关系，scope属性定义了相关联id对象的寿命。 scope属性有四个可能的值： (a) page, (b)request, (c)session, 和 (d) application。
+动作元素 动作元素用来包含静态和动态的文件。该动作把指定文件插入正在生成的页面。语法格式如下：
+1&amp;lt;jsp:include page=&amp;#34;relative URL&amp;#34; flush=&amp;#34;true&amp;#34; /&amp;gt; 前面已经介绍过include指令，它是在JSP文件被转换成Servlet的时候引入文件，而这里的jsp:include动作不同，插入文件的时间是在页面被请求的时候。
+以下是include动作相关的属性列表。
+属性 描述 page 包含在页面中的相对URL地址。 flush 布尔属性，定义在包含资源前是否刷新缓存区。 实例 以下我们定义了两个文件date.jsp和main.jsp，代码如下所示：
+date.jsp文件代码：
+1&amp;lt;p&amp;gt; 2 Today&amp;#39;s date: &amp;lt;%= (new java.</description></item><item><title>二、JSP 开发环境搭建</title><link>https://www.shellio.cc/docs/java/jsp/2/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/jsp/2/</guid><description>JSP 开发环境搭建 JSP开发环境是您用来开发、测试和运行JSP程序的地方。
+本节将会带您搭建JSP开发环境，具体包括以下几个步骤。
+配置Java开发工具（JDK） 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 这一步涉及Java SDK的下载和PATH环境变量的配置。
+您可以从Oracle公司的Java页面中下载SDK：Java SE Downloads
+Java SDK下载完后，请按照给定的指示来安装和配置SDK。最后，通过设置PATH和JAVA_HOME环境变量来指明包括java和javac的文件夹路径，通常是java_install_dir/bin和java_install_dir。
+假如您用的是Windows系统并且SDK的安装目录为C::\jdk1.5.0_20，那么您就需要在 C:\autoexec.bat 文件中添加以下两行：
+1set PATH=C:\jdk1.5.0_20\bin;%PATH% 2set JAVA_HOME=C:\jdk1.5.0_20 或者，在Windows NT/2000/XP下，您可以直接右击我的电脑图标，选择属性，然后高级，然后环境变量，接下来您就可以很方便地设置PATH变量并且确定退出就行了。
+在Linux/Unix系统下，如果SDK的安装目录为/usr/local/jdk1.5.0_20并且使用的是C shell，那么您就需要在.cshrc文件中添加以下两行：
+1setenv PATH /usr/local/jdk1.5.0_20/bin:$PATH 2setenv JAVA_HOME /usr/local/jdk1.5.0_20 或者，假如您正在使用类似于Borland JBuilder、Eclipse、IntelliJ IDEA和Sun ONE Studio这样的集成开发环境，可以试着编译并运行一个简单的程序来确定IDE（集成开发环境）是否已经知道 SDK的安装目录。
+本步骤你也可以参考本站Java开发环境配置章节的教程。
+设置Web服务器：Tomcat 目前，市场上有很多支持JSP和Servlets开发的Web服务器。他们中的一些可以免费下载和使用，Tomcat就是其中之一。
+Apache Tomcat是一个开源软件，可作为独立的服务器来运行JSP和Servlets，也可以集成在 Apache Web Server中。以下是Tomcat的配置方法：
+下载最新版本的Tomcat：http://tomcat.apache.org/。 下载完安装文件后，将压缩文件解压到一个方便的地方，比如Windows下的C:\apache-tomcat-5.5.29目录或者Linux/Unix下的/usr/local/apache-tomcat-5.5.29目录，然后创建CATALINA_HOME环境变量指向这些目录。 在Windows机器下，Tomcat可以通过执行以下命令来启动：
+1%CATALINA_HOME%\bin\startup.bat 2或者 3C:\apache-tomcat-5.5.29\bin\startup.bat 在Linux/Unix机器下，Tomcat可以通过执行以下命令来启动：
+1$CATALINA_HOME/bin/startup.sh 2或者 3/usr/local/apache-tomcat-5.5.29/bin/startup.sh 成功启动Tomcat后，通过访问http://localhost:8080/便可以使用Tomcat自带的一些web应用了。假如一切顺利的话，您应该能够看到以下的页面：
+更多关于配置和运行Tomcat的信息可以在Tomcat提供的文档中找到，或者去Tomcat官网查阅：http://tomcat.apache.org。
+在Windows机器下，Tomcat可以通过执行以下命令来停止：
+1%CATALINA_HOME%\bin\shutdown 2或者 3C:\apache-tomcat-5.5.29\bin\shutdown 在Linux/Unix机器下，Tomcat可以通过执行以下命令来停止：
+1$CATALINA_HOME/bin/shutdown.sh 2或者 3/usr/local/apache-tomcat-5.5.29/bin/shutdown.sh 设置CLASSPATH环境变量 由于servlets不是Java SE的一部分，所以您必须标示出servlet类的编译器。
+假如您用的是Windows机器，您需要在C:\autoexec.bat文件中添加以下两行：
+1set CATALINA=C:\apache-tomcat-5.</description></item><item><title>二十、JSP 点击量统计</title><link>https://www.shellio.cc/docs/java/jsp/20/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/jsp/20/</guid><description>JSP 点击量统计 有时候我们需要知道某个页面被访问的次数，这时我们就需要在页面上添加页面统计器，页面访问的统计一般在用户第一次载入时累加该页面的访问数上。
+要实现一个计数器，您可以利用应用程序隐式对象和相关方法getAttribute()和setAttribute()来实现。
+这个对象表示JSP页面的整个生命周期中。当JSP页面初始化时创建此对象，当JSP页面调用jspDestroy()时删除该对象。
+以下是在应用中创建变量的语法：
+1application.setAttribute(String Key, Object Value); 您可以使用上述方法来设置一个计数器变量及更新该变量的值。读取该变量的方法如下：
+1application.getAttribute(String Key); 在页面每次被访问时，你可以读取计数器的当前值，并递增1，然后重新设置，在下一个用户访问时就将新的值显示在页面上。
+实例演示 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 该实例将介绍如何使用JSP来计算特定页面访问的总人数。如果你要计算你网站使用页面的总点击量，那么你就必须将该代码放在所有的JSP页面上。
+1&amp;lt;%@ page import=&amp;#34;java.io.*,java.util.*&amp;#34; %&amp;gt; 2&amp;lt;html&amp;gt; 3&amp;lt;head&amp;gt; 4&amp;lt;title&amp;gt;Applcation object in JSP&amp;lt;/title&amp;gt; 5&amp;lt;/head&amp;gt; 6&amp;lt;body&amp;gt; 7&amp;lt;% 8Integer hitsCount = (Integer)application.getAttribute(&amp;#34;hitCounter&amp;#34;); 9if( hitsCount ==null || hitsCount == 0 ){ 10 /* 第一次访问 */ 11 out.println(&amp;#34;Welcome to my website!&amp;#34;); 12 hitsCount = 1; 13}else{ 14 /* 返回访问值 */ 15 out.println(&amp;#34;Welcome back to my website!&amp;#34;); 16 hitsCount += 1; 17} 18 application.</description></item><item><title>二十八、JSP 表达式语言</title><link>https://www.shellio.cc/docs/java/jsp/28/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/jsp/28/</guid><description>JSP 表达式语言 JSP表达式语言（EL）使得访问存储在JavaBean中的数据变得非常简单。JSP EL既可以用来创建算术表达式也可以用来创建逻辑表达式。在JSP EL表达式内可以使用整型数，浮点数，字符串，常量true、false，还有null。
+一个简单的语法 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 典型的，当您需要在JSP标签中指定一个属性值时，只需要简单地使用字符串即可：
+1&amp;lt;jsp:setProperty name=&amp;#34;box&amp;#34; property=&amp;#34;perimeter&amp;#34; value=&amp;#34;100&amp;#34;/&amp;gt; JSPEL允许您指定一个表达式来表示属性值。一个简单的表达式语法如下：
+1${expr} 其中，expr指的是表达式。在JSP EL中通用的操作符是”.”和”[]”。这两个操作符允许您通过内嵌的JSP对象访问各种各样的JavaBean属性。
+举例来说，上面的 标签可以使用表达式语言改写成如下形式：
+1&amp;lt;jsp:setProperty name=&amp;#34;box&amp;#34; property=&amp;#34;perimeter&amp;#34; value=&amp;#34;${2*box.width+2*box.height}&amp;#34;/&amp;gt; 当JSP编译器在属性中见到”${}”格式后，它会产生代码来计算这个表达式，并且产生一个替代品来代替表达式的值。
+您也可以在标签的模板文本中使用表达式语言。比如 标签简单地将其主体中的文本插入到JSP输出中：
+1&amp;lt;jsp:text&amp;gt; 2&amp;lt;h1&amp;gt;Hello JSP!&amp;lt;/h1&amp;gt; 3&amp;lt;/jsp:text&amp;gt; 现在，在 标签主体中使用表达式，就像这样：
+1&amp;lt;jsp:text&amp;gt; 2Box Perimeter is: ${2*box.width + 2*box.height} 3&amp;lt;/jsp:text&amp;gt; 在EL表达式中可以使用圆括号来组织子表达式。比如${(1 + 2) * 3}等于9，但是${1 + (2 * 3)} 等于7。
+想要停用对EL表达式的评估的话，需要使用page指令将isELIgnored属性值设为true：
+1&amp;lt;%@ page isELIgnored =&amp;#34;true|false&amp;#34; %&amp;gt; 这样，EL表达式就会被忽略。若设为false，则容器将会计算EL表达式。
+EL中的基础操作符 EL表达式支持大部分Java所提供的算术和逻辑操作符：
+操作符 描述 . 访问一个Bean属性或者一个映射条目 [] 访问一个数组或者链表的元素 ( ) 组织一个子表达式以改变优先级 + 加 – 减或负 * 乘 / or div 除 % or mod 取模 == or eq 测试是否相等 !</description></item><item><title>二十二、JSP 发送邮件</title><link>https://www.shellio.cc/docs/java/jsp/22/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/jsp/22/</guid><description>JSP 发送邮件 虽然使用JSP实现邮件发送功能很简单，但是需要有JavaMail API，并且需要安装JavaBean Activation Framework。
+在这里下载最新版本的 JavaMail。 在这里下载最新版本的 JavaBeans Activation Framework(JAF)。 下载并解压这些文件，在根目录下，您将会看到一系列jar包。将mail.jar包和activation.jar包加入CLASSPATH变量中。
+发送一封简单的邮件 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 这个例子展示了如何从您的机器发送一封简单的邮件。它假定localhost已经连接至网络并且有能力发送一封邮件。与此同时，请再一次确认mail.jar包和activation.jar包已经添加进CLASSPATH变量中。
+1&amp;lt;%@ page import=&amp;#34;java.io.*,java.util.*,javax.mail.*&amp;#34;%&amp;gt; 2&amp;lt;%@ page import=&amp;#34;javax.mail.internet.*,javax.activation.*&amp;#34;%&amp;gt; 3&amp;lt;%@ page import=&amp;#34;javax.servlet.http.*,javax.servlet.*&amp;#34; %&amp;gt; 4&amp;lt;% 5String result; 6// 收件人的电子邮件 7String to = &amp;#34;abcd@gmail.com&amp;#34;; 8// 发件人的电子邮件 9String from = &amp;#34;mcmohd@gmail.com&amp;#34;; 10// 假设你是从本地主机发送电子邮件 11String host = &amp;#34;localhost&amp;#34;; 12// 获取系统属性对象 13Properties properties = System.getProperties(); 14// 设置邮件服务器 15properties.setProperty(&amp;#34;mail.smtp.host&amp;#34;, host); 16// 获取默认的Session对象。 17Session mailSession = Session.getDefaultInstance(properties); 18try{ 19// 创建一个默认的MimeMessage对象。 20MimeMessage message = new MimeMessage(mailSession); 21// 设置 From: 头部的header字段 22message.</description></item><item><title>二十九、JSP 异常处理</title><link>https://www.shellio.cc/docs/java/jsp/29/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/jsp/29/</guid><description>JSP 异常处理 当编写JSP程序的时候，程序员可能会遗漏一些BUG，这些BUG可能会出现在程序的任何地方。JSP代码中通常有以下几类异常:
+检查型异常:检查型异常就是一个典型的用户错误或者一个程序员无法预见的错误。举例来说，如果一个文件将要被打开，但是无法找到这个文件，则一个异常被抛出。这些异常不能再编译期被简单地忽略。 运行时异常:一个运行时异常可能已经被程序员避免，这种异常在编译期将会被忽略。 错误:这里没有异常，但问题是它超出了用户或者程序员的控制范围。错误通常会在代码中被忽略，您几乎不能拿它怎么样。举例来或，栈溢出错误。这些错误都会在编译期被忽略。 本节将会给出几个简单而优雅的方式来处理运行时异常和错误。
+使用Exception对象 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 exception对象是Throwable子类的一个实例，只在错误页面中可用。下表列出了Throwable类中一些重要的方法:
+序号 方法&amp;amp;描述 1 public String getMessage()
+返回异常的信息。这个信息在Throwable构造函数中被初始化
+2 public ThrowablegetCause()
+返回引起异常的原因，类型为Throwable对象
+3 public String toString()
+返回类名
+4 public void printStackTrace()
+将异常栈轨迹输出至System.err
+5 public StackTraceElement [] getStackTrace()
+以栈轨迹元素数组的形式返回异常栈轨迹
+6 public ThrowablefillInStackTrace()
+使用当前栈轨迹填充Throwable对象
+JSP提供了可选项来为每个JSP页面指定错误页面。无论何时页面抛出了异常，JSP容器都会自动地调用错误页面。
+接下来的例子为main.jsp指定了一个错误页面。使用&amp;lt;%@page errorPage=&amp;ldquo;XXXXX&amp;rdquo;%&amp;gt;指令指定一个错误页面。
+1&amp;lt;%@ page errorPage=&amp;#34;ShowError.jsp&amp;#34; %&amp;gt; 2&amp;lt;html&amp;gt; 3&amp;lt;head&amp;gt; 4 &amp;lt;title&amp;gt;Error Handling Example&amp;lt;/title&amp;gt; 5&amp;lt;/head&amp;gt; 6&amp;lt;body&amp;gt; 7&amp;lt;% // Throw an exception to invoke the error page int x = 1; if (x == 1) { throw new RuntimeException(&amp;#34;Error condition!</description></item><item><title>二十六、JSP JavaBean</title><link>https://www.shellio.cc/docs/java/jsp/26/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/jsp/26/</guid><description>JSP JavaBean JavaBean是特殊的Java类，是用Java语言写成的可重用组件，并且遵守JavaBeans API规范。
+接下来给出的是JavaBean与其它Java类相比而言独一无二的特征：
+提供一个默认的无参构造函数。 需要被序列化并且实现了Serializable接口。 可能有一系列可读写属性。 可能有一系列的”getter”或”setter”方法。 JavaBeans属性 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 一个JavaBean对象的属性应该是可访问的。这个属性可以是任意合法的Java数据类型，包括自定义Java类。
+一个JavaBean对象的属性可以是可读写，或只读，或只写。JavaBean对象的属性通过JavaBean实现类中提供的两个方法来访问：
+方法 描述 getPropertyName() 举例来说，如果属性的名称为myName，那么这个方法的名字就要写成getMyName()来读取这个属性。这个方法也称为访问器。 setPropertyName() 举例来说，如果属性的名称为myName，那么这个方法的名字就要写成setMyName()来写入这个属性。这个方法也称为写入器。 一个只读的属性只提供getPropertyName()方法，一个只写的属性只提供setPropertyName()方法。
+JavaBeans程序示例 这是StudentBean.java文件：
+1package com.tutorialspoint; 2public class StudentsBean implements java.io.Serializable 3 private String firstName = null; 4 private String lastName = null; 5 private int age = 0; 6 public StudentsBean() { 7 } 8 public String getFirstName(){ 9 return firstName; 10 } 11 public String getLastName(){ 12 return lastName; 13 } 14 public int getAge(){ 15 return age; 16 } 17 public void setFirstName(String firstName){ 18 this.</description></item><item><title>二十七、JSP 自定义标签</title><link>https://www.shellio.cc/docs/java/jsp/27/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/jsp/27/</guid><description>JSP 自定义标签 自定义标签是用户定义的JSP语言元素。当JSP页面包含一个自定义标签时将被转化为servlet，标签转化为对被 称为tag handler的对象的操作，即当servlet执行时Web container调用那些操作。
+JSP标签扩展可以让你创建新的标签并且可以直接插入到一个JSP页面。 JSP 2.0规范中引入Simple Tag Handlers来编写这些自定义标记。
+你可以继承SimpleTagSupport类并重写的doTag()方法来开发一个最简单的自定义标签。
+创建”Hello”标签 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 接下来，我们想创建一个自定义标签叫作 ，标签格式为：
+1&amp;lt;ex:Hello /&amp;gt; 要创建自定义的JSP标签，你首先必须创建处理标签的Java类。所以，让我们创建一个HelloTag类，如下所示：
+1package com.tutorialspoint; 2import javax.servlet.jsp.tagext.*; 3import javax.servlet.jsp.*; 4import java.io.*; 5public class HelloTag extends SimpleTagSupport { 6 public void doTag() throws JspException, IOException { 7 JspWriter out = getJspContext().getOut(); 8 out.println(&amp;#34;Hello Custom Tag!&amp;#34;); 9 } 以下代码重写了doTag()方法，方法中使用了getJspContext()方法来获取当前的JspContext对象，并将”Hello Custom Tag!”传递给JspWriter对象。
+编译以上类，并将其复制到环境变量CLASSPATH目录中。最后创建如下标签库：&amp;lt;Tomcat安装目录&amp;gt;webapps\ROOT\WEB-INF\custom.tld。
+1&amp;lt;taglib&amp;gt; 2 &amp;lt;tlib-version&amp;gt;1.0&amp;lt;/tlib-version&amp;gt; 3 &amp;lt;jsp-version&amp;gt;2.0&amp;lt;/jsp-version&amp;gt; 4 &amp;lt;short-name&amp;gt;Example TLD&amp;lt;/short-name&amp;gt; 5 &amp;lt;tag&amp;gt; 6 &amp;lt;name&amp;gt;Hello&amp;lt;/name&amp;gt; 7 &amp;lt;tag-class&amp;gt;com.</description></item><item><title>二十三、JSP 标准标签库（JSTL）</title><link>https://www.shellio.cc/docs/java/jsp/23/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/jsp/23/</guid><description>JSP 标准标签库（JSTL） JSP标准标签库（JSTL）是一个JSP标签集合，它封装了JSP应用的通用核心功能。
+JSTL支持通用的、结构化的任务，比如迭代，条件判断，XML文档操作，国际化标签，SQL标签。 除了这些，它还提供了一个框架来使用集成JSTL的自定义标签。
+根据JSTL标签所提供的功能，可以将其分为5个类别。
+核心标签 格式化标签 SQL 标签 XML 标签 JSTL 函数 JSTL 库安装 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 Apache Tomcat安装JSTL 库步骤如下：
+从Apache的标准标签库中下载的二进包(jakarta-taglibs-standard-current.zip)。下载地址：http://archive.apache.org/dist/jakarta/taglibs/standard/binaries/ 下载jakarta-taglibs-standard-1.1.1.zip 包并解压，将jakarta-taglibs-standard-1.1.1/lib/下的两个jar文件：standard.jar和jstl.jar文件拷贝到/WEB-INF/lib/下。 接下来我们在 web.xml 文件中添加以下配置： 1 …… 2 &amp;lt;jsp-config&amp;gt; 3 &amp;lt;taglib&amp;gt; 4 &amp;lt;taglib-uri&amp;gt;http://java.sun.com/jstl/fmt&amp;lt;/taglib-uri&amp;gt; 5 &amp;lt;taglib-location&amp;gt;/WEB-INF/fmt.tld&amp;lt;/taglib-location&amp;gt; 6 &amp;lt;/taglib&amp;gt; 7 &amp;lt;taglib&amp;gt; 8 &amp;lt;taglib-uri&amp;gt;http://java.sun.com/jstl/fmt-rt&amp;lt;/taglib-uri&amp;gt; 9 &amp;lt;taglib-location&amp;gt;/WEB-INF/fmt-rt.tld&amp;lt;/taglib-location&amp;gt; 10 &amp;lt;/taglib&amp;gt; 11 &amp;lt;taglib&amp;gt; 12 &amp;lt;taglib-uri&amp;gt;http://java.sun.com/jstl/core&amp;lt;/taglib-uri&amp;gt; 13 &amp;lt;taglib-location&amp;gt;/WEB-INF/c.tld&amp;lt;/taglib-location&amp;gt; 14 &amp;lt;/taglib&amp;gt; 15 &amp;lt;taglib&amp;gt; 16 &amp;lt;taglib-uri&amp;gt;http://java.sun.com/jstl/core-rt&amp;lt;/taglib-uri&amp;gt; 17 &amp;lt;taglib-location&amp;gt;/WEB-INF/c-rt.tld&amp;lt;/taglib-location&amp;gt; 18 &amp;lt;/taglib&amp;gt; 19 &amp;lt;taglib&amp;gt; 20 &amp;lt;taglib-uri&amp;gt;http://java.sun.com/jstl/sql&amp;lt;/taglib-uri&amp;gt; 21 &amp;lt;taglib-location&amp;gt;/WEB-INF/sql.tld&amp;lt;/taglib-location&amp;gt; 22 &amp;lt;/taglib&amp;gt; 23 &amp;lt;taglib&amp;gt; 24 &amp;lt;taglib-uri&amp;gt;http://java.</description></item><item><title>二十四、JSP 连接数据库</title><link>https://www.shellio.cc/docs/java/jsp/24/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/jsp/24/</guid><description>JSP 连接数据库 本章节假设您已经对JDBC有一定的了解。在开始学习JSP数据库访问前，请确保JDBC环境已经正确配置。
+首先，让我们按照下面的步骤来创建一个简单的表并插入几条简单的记录：
+创建表 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 在数据库中创建一个Employees表，步骤如下：
+步骤1： 打开CMD，然后进入数据库安装目录：
+1C:\&amp;gt; 2C:\&amp;gt;cd Program Files\MySQL\bin 3C:\Program Files\MySQL\bin&amp;gt; 步骤2： 1C:\Program Files\MySQL\bin&amp;gt;mysql -u root -p 2Enter password: ******** 3mysql&amp;gt; 步骤3： 用create database语句建立一个新的数据库TEST：
+1mysql&amp;gt; create database TEST 步骤4： 在TEST数据库中创建Employee表：
+1mysql&amp;gt; use TEST; 2mysql&amp;gt; create table Employees 3 ( 4 id int not null, 5 age int not null, 6 first varchar (255), 7 last varchar (255) 8 ); 9Query OK, 0 rows affected (0.08 sec) 10mysql&amp;gt; 插入数据记录 创建好Employee表后，往表中插入几条记录：</description></item><item><title>二十五、JSP XML 数据处理</title><link>https://www.shellio.cc/docs/java/jsp/25/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/jsp/25/</guid><description>JSP XML 数据处理 当通过HTTP发送XML数据时，就有必要使用JSP来处理传入和流出的XML文档了，比如RSS文档。作为一个XML文档，它仅仅只是一堆文本而已，使用JSP创建XML文档并不比创建一个HTML文档难。
+使用JSP发送XML 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 使用JSP发送XML内容就和发送HTML内容一样。唯一的不同就是您需要把页面的context属性设置为text/xml。要设置context属性，使用&amp;lt;%@page % &amp;gt;命令，就像这样：
+1&amp;lt;%@ page contentType=&amp;#34;text/xml&amp;#34; %&amp;gt; 接下来这个例子向浏览器发送XML内容：
+1&amp;lt;%@ page contentType=&amp;#34;text/xml&amp;#34; %&amp;gt; 2&amp;lt;books&amp;gt; 3 &amp;lt;book&amp;gt; 4 &amp;lt;name&amp;gt;Padam History&amp;lt;/name&amp;gt; 5 &amp;lt;author&amp;gt;ZARA&amp;lt;/author&amp;gt; 6 &amp;lt;price&amp;gt;100&amp;lt;/price&amp;gt; 7 &amp;lt;/book&amp;gt; 8&amp;lt;/books&amp;gt; 使用不同的浏览器来访问这个例子，看看这个例子所呈现的文档树。
+在JSP中处理XML 在使用JSP处理XML之前，您需要将与XML 和XPath相关的两个库文件放在 \lib目录下：
+XercesImpl.jar：在这下载http://www.apache.org/dist/xerces/j/ xalan.jar：在这下载http://xml.apache.org/xalan-j/index.html books.xml文件:
+1&amp;lt;books&amp;gt; 2&amp;lt;book&amp;gt; 3 &amp;lt;name&amp;gt;Padam History&amp;lt;/name&amp;gt; 4 &amp;lt;author&amp;gt;ZARA&amp;lt;/author&amp;gt; 5 &amp;lt;price&amp;gt;100&amp;lt;/price&amp;gt; 6&amp;lt;/book&amp;gt; 7&amp;lt;book&amp;gt; 8 &amp;lt;name&amp;gt;Great Mistry&amp;lt;/name&amp;gt; 9 &amp;lt;author&amp;gt;NUHA&amp;lt;/author&amp;gt; 10 &amp;lt;price&amp;gt;2000&amp;lt;/price&amp;gt; 11&amp;lt;/book&amp;gt; 12&amp;lt;/books&amp;gt; main.jsp文件：
+1&amp;lt;%@ page language=&amp;#34;java&amp;#34; contentType=&amp;#34;text/html; charset=UTF-8&amp;#34; 2 pageEncoding=&amp;#34;UTF-8&amp;#34;%&amp;gt; 3&amp;lt;%@ taglib prefix=&amp;#34;c&amp;#34; uri=&amp;#34;http://java.</description></item><item><title>二十一、JSP 自动刷新</title><link>https://www.shellio.cc/docs/java/jsp/21/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/jsp/21/</guid><description>JSP 自动刷新 想象一下，如果要直播比赛的比分，或股票市场的实时状态，或当前的外汇配给，该怎么实现呢？显然，要实现这种实时功能，您就不得不规律性地刷新页面。
+JSP提供了一种机制来使这种工作变得简单，它能够定时地自动刷新页面。
+刷新一个页面最简单的方式就是使用response对象的setIntHeader()方法。这个方法的签名如下：
+1public void setIntHeader(String header, int headerValue) 这个方法通知浏览器在给定的时间后刷新，时间以秒为单位。
+页面自动刷新程序示例 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 这个例子使用了setIntHeader()方法来设置刷新头，模拟一个数字时钟：
+1&amp;lt;%@ page import=&amp;#34;java.io.*,java.util.*&amp;#34; %&amp;gt; 2&amp;lt;html&amp;gt; 3&amp;lt;head&amp;gt; 4&amp;lt;title&amp;gt;Auto Refresh Header Example&amp;lt;/title&amp;gt; 5&amp;lt;/head&amp;gt; 6&amp;lt;body&amp;gt; 7&amp;lt;center&amp;gt; 8&amp;lt;h2&amp;gt;Auto Refresh Header Example&amp;lt;/h2&amp;gt; 9&amp;lt;% 10// Set refresh, autoload time as 5 seconds 11response.setIntHeader(&amp;#34;Refresh&amp;#34;, 5); 12// Get current time 13Calendar calendar = new GregorianCalendar(); 14String am_pm; 15int hour = calendar.get(Calendar.HOUR); 16int minute = calendar.get(Calendar.MINUTE); 17int second = calendar.get(Calendar.SECOND); 18if(calendar.get(Calendar.AM_PM) == 0) 19am_pm = &amp;#34;AM&amp;#34;; 20else 21am_pm = &amp;#34;PM&amp;#34;; 22String CT = hour+&amp;#34;:&amp;#34;+ minute +&amp;#34;:&amp;#34;+ second +&amp;#34; &amp;#34;+ am_pm; 23out.</description></item><item><title>九、JSP 隐式对象</title><link>https://www.shellio.cc/docs/java/jsp/9/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/jsp/9/</guid><description>JSP 隐式对象 JSP隐式对象是JSP容器为每个页面提供的Java对象，开发者可以直接使用它们而不用显式声明。JSP隐式对象也被称为预定义变量。
+JSP所支持的九大隐式对象：
+对象 描述 request HttpServletRequest类的实例 response HttpServletResponse类的实例 out PrintWriter类的实例，用于把结果输出至网页上 session HttpSession类的实例 application ServletContext类的实例，与应用上下文有关 config ServletConfig类的实例 pageContext PageContext类的实例，提供对JSP页面所有对象以及命名空间的访问 page 类似于Java类中的this关键字 Exception Exception类的对象，代表发生错误的JSP页面中对应的异常对象 request对象 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 request对象是javax.servlet.http.HttpServletRequest 类的实例。每当客户端请求一个JSP页面时，JSP引擎就会制造一个新的request对象来代表这个请求。
+request对象提供了一系列方法来获取HTTP头信息，cookies，HTTP方法等等。
+response对象 response对象是javax.servlet.http.HttpServletResponse类的实例。当服务器创建request对象时会同时创建用于响应这个客户端的response对象。
+response对象也定义了处理HTTP头模块的接口。通过这个对象，开发者们可以添加新的cookies，时间戳，HTTP状态码等等。
+out对象 out对象是 javax.servlet.jsp.JspWriter 类的实例，用来在response对象中写入内容。
+最初的JspWriter类对象根据页面是否有缓存来进行不同的实例化操作。可以在page指令中使用buffered=’false’属性来轻松关闭缓存。
+JspWriter类包含了大部分java.io.PrintWriter类中的方法。不过，JspWriter新增了一些专为处理缓存而设计的方法。还有就是，JspWriter类会抛出IOExceptions异常，而PrintWriter不会。
+下表列出了我们将会用来输出boolean，char，int，double，Srtring，object等类型数据的重要方法：
+方法 描述 out.print(dataType dt) 输出Type类型的值 out.println(dataType dt) 输出Type类型的值然后换行 out.flush() 刷新输出流 session对象 session对象是 javax.servlet.http.HttpSession 类的实例。和Java Servlets中的session对象有一样的行为。
+session对象用来跟踪在各个客户端请求间的会话。
+application对象 application对象直接包装了servlet的ServletContext类的对象，是javax.servlet.ServletContext 类的实例。
+这个对象在JSP页面的整个生命周期中都代表着这个JSP页面。这个对象在JSP页面初始化时被创建，随着jspDestroy()方法的调用而被移除。
+通过向application中添加属性，则所有组成您web应用的JSP文件都能访问到这些属性。
+config对象 config对象是 javax.servlet.ServletConfig 类的实例，直接包装了servlet的ServletConfig类的对象。
+这个对象允许开发者访问Servlet或者JSP引擎的初始化参数，比如文件路径等。
+以下是config对象的使用方法，不是很重要，所以不常用：
+1config.getServletName(); 它返回包含在 元素中的servlet名字，注意， 元素在 WEB-INF\web.</description></item><item><title>六、JSP 语法</title><link>https://www.shellio.cc/docs/java/jsp/6/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/jsp/6/</guid><description>JSP 语法 本小节将会简单地介绍一下JSP开发中的基础语法。
+脚本程序 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 脚本程序可以包含任意量的Java语句、变量、方法或表达式，只要它们在脚本语言中是有效的。
+脚本程序的语法格式：
+1&amp;lt;% 代码片段 %&amp;gt; 或者，您也可以编写与其等价的XML语句，就像下面这样：
+1&amp;lt;jsp:scriptlet&amp;gt; 2 代码片段 3&amp;lt;/jsp:scriptlet&amp;gt; 任何文本、HTML标签、JSP元素必须写在脚本程序的外面。
+下面给出一个示例，同时也是本教程的第一个JSP示例：
+1&amp;lt;html&amp;gt; 2&amp;lt;head&amp;gt; 3&amp;lt;title&amp;gt;Hello World&amp;lt;/title&amp;gt; 4&amp;lt;/head&amp;gt; 5&amp;lt;body&amp;gt; 6Hello World!&amp;lt;br/&amp;gt; 7&amp;lt;% 8out.println(&amp;#34;Your IP address is &amp;#34; + request.getRemoteAddr()); 9%&amp;gt; 10&amp;lt;/body&amp;gt; 11&amp;lt;/html&amp;gt; **注意：**请确保Apache Tomcat已经安装在C:\apache-tomcat-7.0.2目录下并且运行环境已经正确设置。
+将以上代码保存在hello.jsp中，然后将它放置在 C:\apache-tomcat-7.0.2\webapps\ROOT目录下，打开浏览器并在地址栏中输入http://localhost:8080/hello.jsp。运行后得到以下结果：
+JSP声明 一个声明语句可以声明一个或多个变量、方法，供后面的Java代码使用。在JSP文件中，您必须先声明这些变量和方法然后才能使用它们。
+JSP声明的语法格式：
+1&amp;lt;%! declaration; [ declaration; ]+ ... %&amp;gt; 或者，您也可以编写与其等价的XML语句，就像下面这样：
+1&amp;lt;jsp:declaration&amp;gt; 2 代码片段 3&amp;lt;/jsp:declaration&amp;gt; 程序示例：
+1&amp;lt;%! int i = 0; %&amp;gt; 2&amp;lt;%! int a, b, c; %&amp;gt; 3&amp;lt;%! Circle a = new Circle(2.</description></item><item><title>七、JSP 指令</title><link>https://www.shellio.cc/docs/java/jsp/7/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/jsp/7/</guid><description>JSP 指令 JSP指令用来设置整个JSP页面相关的属性，如网页的编码方式和脚本语言。
+语法格式如下：
+1&amp;lt;%@ directive attribute=&amp;#34;value&amp;#34; %&amp;gt; 指令可以有很多个属性，它们以键值对的形式存在，并用逗号隔开。
+JSP中的三种指令标签：
+指令 描述 &amp;lt;%@ page … %&amp;gt; 定义网页依赖属性，比如脚本语言、error页面、缓存需求等等 &amp;lt;%@ include … %&amp;gt; 包含其他文件 &amp;lt;%@ taglib … %&amp;gt; 引入标签库的定义 Page指令 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 Page指令为容器提供当前页面的使用说明。一个JSP页面可以包含多个page指令。
+Page指令的语法格式：
+1&amp;lt;%@ page attribute=&amp;#34;value&amp;#34; %&amp;gt; 等价的XML格式：
+1&amp;lt;jsp:directive.page attribute=&amp;#34;value&amp;#34; /&amp;gt; 属性 下表列出与Page指令相关的属性：
+属性 描述 buffer 指定out对象使用缓冲区的大小 autoFlush 控制out对象的&amp;nbsp;缓存区 contentType 指定当前JSP页面的MIME类型和字符编码 errorPage 指定当JSP页面发生异常时需要转向的错误处理页面 isErrorPage 指定当前页面是否可以作为另一个JSP页面的错误处理页面 extends 指定servlet从哪一个类继承 import 导入要使用的Java类 info 定义JSP页面的描述信息 isThreadSafe 指定对JSP页面的访问是否为线程安全 language 定义JSP页面所用的脚本语言，默认是Java session 指定JSP页面是否使用session isELIgnored 指定是否执行EL表达式 isScriptingEnabled 确定脚本元素能否被使用 Include指令 JSP可以通过include指令来包含其他文件。被包含的文件可以是JSP文件、HTML文件或文本文件。包含的文件就好像是该JSP文件的一部分，会被同时编译执行。</description></item><item><title>三、Eclipse JSP-Servlet 环境搭建</title><link>https://www.shellio.cc/docs/java/jsp/3/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/jsp/3/</guid><description>Eclipse JSP/Servlet 环境搭建 本文假定你已安装了 JDK 环境，如未安装，可参阅 Java 开发环境配置 。
+我们可以使用 Eclipse 来搭建 JSP 开发环境，首先我们分别下载一下软件包：
+Eclipse J2EE：http://www.eclipse.org/downloads/ Tomcat：http://tomcat.apache.org/download-70.cgi Tomcat 下载安装 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 你可以根据你的系统下载对应的包(以下以Window系统为例)：
+下载之后，将压缩包解压到D盘（你可以自己选择）：
+注意目录名不能有中文和空格。目录介绍如下：
+bin：二进制执行文件。里面最常用的文件是startup.bat，如果是 Linux 或 Mac 系统启动文件为 startup.sh。 conf:配置目录。里面最核心的文件是server.xml。可以在里面改端口号等。默认端口号是8080，也就是说，此端口号不能被其他应用程序占用。 lib：库文件。tomcat运行时需要的jar包所在的目录 logs：日志 temp：临时产生的文件，即缓存 webapps：web的应用程序。web应用放置到此目录下浏览器可以直接访问 work：编译以后的class文件。 接着我们可以双击 startup.bat 启动 Tomcat，弹出如下界面：
+这个时候，本地的服务器就已经搭建起来了。如果想关闭服务器，可以直接关闭上面的窗口，或者在里面输入Ctrl+C禁止服务。
+接着我们在浏览器中输入 http://localhost:8080/，如果弹出如下界面，表示tomcat安装成功并且启动起来了：
+我们现在在浏览器上测试一下它吧：
+首先在D:\apache-tomcat-8.0.14\webapps\ROOT目录中新建一个jsp文件：
+test.jsp 文件代码如下：
+1&amp;lt;%@ page contentType=&amp;#34;text/html;charset=UTF-8&amp;#34; %&amp;gt; 2&amp;lt;% 3out.print(&amp;#34;w3cschool教程 : http://www.w3cschool.cn&amp;#34;); 4%&amp;gt; 接着在浏览器中访问地址 http://localhost:8080/test.jsp, 输出结果如下：
+将 Tomcat 和 Eclipse 相关联 Eclipse J2EE下载后，解压即可使用，我们打开Java EE ，选择菜单栏Windows–&amp;gt;preferences（Mac 系统为 Eclipse–&amp;gt;偏好设置），弹出如下界面：</description></item><item><title>三十、JSP 调试</title><link>https://www.shellio.cc/docs/java/jsp/30/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/jsp/30/</guid><description>JSP 调试 要测试/调试一个JSP或servlet程序总是那么的难。JSP和Servlets程序趋向于牵涉到大量客户端/服务器之间的交互，这很有可能会产生错误，并且很难重现出错的环境。
+接下来将会给出一些小技巧和小建议，来帮助您调试程序。
+使用System.out.println() 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 System.out.println()可以很方便地标记一段代码是否被执行。当然，我们也可以打印出各种各样的值。此外：
+自从System对象成为Java核心对象后，它便可以使用在任何地方而不用引入额外的类。使用范围包括Servlets，JSP，RMI，EJB’s，Beans，类和独立应用。 与在断点处停止运行相比，用System.out进行输出不会对应用程序的运行流程造成重大的影响，这个特点在定时机制非常重要的应用程序中就显得非常有用了。 接下来给出了使用System.out.println()的语法：
+1System.out.println(&amp;#34;Debugging message&amp;#34;); 这是一个使用System.out.print()的简单例子：
+1&amp;lt;%@taglib prefix=&amp;#34;c&amp;#34; uri=&amp;#34;http://java.sun.com/jsp/jstl/core&amp;#34; %&amp;gt; 2&amp;lt;html&amp;gt; 3&amp;lt;head&amp;gt;&amp;lt;title&amp;gt;System.out.println&amp;lt;/title&amp;gt;&amp;lt;/head&amp;gt; 4&amp;lt;body&amp;gt; 5&amp;lt;c:forEach var=&amp;#34;counter&amp;#34; begin=&amp;#34;1&amp;#34; end=&amp;#34;10&amp;#34; step=&amp;#34;1&amp;#34; &amp;gt; 6 &amp;lt;c:out value=&amp;#34;${counter-5}&amp;#34;/&amp;gt;&amp;lt;/br&amp;gt; 7 &amp;lt;% System.out.println( &amp;#34;counter= &amp;#34; + pageContext.findAttribute(&amp;#34;counter&amp;#34;) ); %&amp;gt; 8&amp;lt;/c:forEach&amp;gt; 9&amp;lt;/body&amp;gt; 10&amp;lt;/html&amp;gt; 现在，如果运行上面的例子的话，它将会产生如下的结果：
+1-4 2-3 3-2 4-1 如果使用的是Tomcat服务器，您就能够在logs目录下的stdout.log文件中发现多出了如下内容：
+1counter=1 2counter=2 3counter=3 4counter=4 5counter=5 6counter=6 7counter=7 8counter=8 9counter=9 10counter=10 使用这种方法可以将变量和其它的信息输出至系统日志中，用来分析并找出造成问题的深层次原因。
+使用JDB Logger J2SE日志框架可为任何运行在JVM中的类提供日志记录服务。因此我们可以利用这个框架来记录任何信息。
+让我们来重写以上代码，使用JDK中的 logger API：
+1&amp;lt;%@taglib prefix=&amp;#34;c&amp;#34; uri=&amp;#34;http://java.sun.com/jsp/jstl/core&amp;#34; %&amp;gt; 2&amp;lt;%@page import=&amp;#34;java.</description></item><item><title>三十一、JSP 国际化</title><link>https://www.shellio.cc/docs/java/jsp/31/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/jsp/31/</guid><description>JSP 国际化 在开始前，需要解释几个重要的概念：
+国际化（i18n）：表明一个页面根据访问者的语言或国家来呈现不同的翻译版本。 本地化（l10n）：向网站添加资源，以使它适应不同的地区和文化。比如网站的印度语版本。 区域：这是一个特定的区域或文化，通常认为是一个语言标志和国家标志通过下划线连接起来。比如”en_US”代表美国英语地区。 如果想要建立一个全球化的网站，就需要关心一系列项目。本章将会详细告诉您如何处理国际化问题，并给出了一些例子来加深理解。
+JSP容器能够根据request的locale属性来提供正确地页面版本。接下来给出了如何通过request对象来获得Locale对象的语法：
+1java.util.Locale request.getLocale() 检测Locale 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 下表列举出了Locale对象中比较重要的方法，用于检测request对象的地区，语言，和区域。所有这些方法都会在浏览器中显示国家名称和语言名称：
+序号 方法 &amp;amp; 描述 1 String getCountry()
+返回国家/地区码的英文大写，或 ISO 3166 2-letter 格式的区域
+2 String getDisplayCountry()
+返回要显示给用户的国家名称
+3 String getLanguage()
+返回语言码的英文小写，或ISO 639 格式的区域
+4 String getDisplayLanguage()
+返回要给用户看的语言名称
+5 String getISO3Country()
+返回国家名称的3字母缩写
+6 String getISO3Language()
+返回语言名称的3字母缩写
+实例演示 这个例子告诉我们如何在JSP中显示语言和国家：
+1&amp;lt;%@ page import=&amp;#34;java.io.*,java.util.Locale&amp;#34; %&amp;gt; 2&amp;lt;%@ page import=&amp;#34;javax.servlet.*,javax.servlet.http.* &amp;#34;%&amp;gt; 3&amp;lt;% //获取客户端本地化信息 Locale locale = request.getLocale(); String language = locale.getLanguage(); String country = locale.</description></item><item><title>十、JSP 客户端请求</title><link>https://www.shellio.cc/docs/java/jsp/10/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/jsp/10/</guid><description>JSP 客户端请求 当浏览器请求一个网页时，它会向网络服务器发送一系列不能被直接读取的信息，因为这些信息是作为HTTP信息头的一部分来传送的。您可以查阅HTTP协议来获得更多的信息。
+下表列出了浏览器端信息头的一些重要内容，在以后的网络编程中将会经常见到这些信息：
+信息 描述 Accept 指定浏览器或其他客户端可以处理的MIME类型。它的值通常为&amp;nbsp;image/png&amp;nbsp;或&amp;nbsp;image/jpeg Accept-Charset 指定浏览器要使用的字符集。比如 ISO-8859-1 Accept-Encoding 指定编码类型。它的值通常为&amp;nbsp;gzip&amp;nbsp;或compress Accept-Language 指定客户端首选语言，servlet会优先返回以当前语言构成的结果集，如果servlet支持这种语言的话。比如 en，en-us，ru等等 Authorization 在访问受密码保护的网页时识别不同的用户 Connection 表明客户端是否可以处理HTTP持久连接。持久连接允许客户端或浏览器在一个请求中获取多个文件。Keep-Alive&amp;nbsp;表示启用持久连接 Content-Length 仅适用于POST请求，表示 POST 数据的字节数 Cookie 返回先前发送给浏览器的cookies至服务器 Host 指出原始URL中的主机名和端口号 If-Modified-Since 表明只有当网页在指定的日期被修改后客户端才需要这个网页。 服务器发送304码给客户端，表示没有更新的资源 If-Unmodified-Since 与If-Modified-Since相反， 只有文档在指定日期后仍未被修改过，操作才会成功 Referer 标志着所引用页面的URL。比如，如果你在页面1，然后点了个链接至页面2，那么页面1的URL就会包含在浏览器请求页面2的信息头中 User-Agent 用来区分不同浏览器或客户端发送的请求，并对不同类型的浏览器返回不同的内容 HttpServletRequest类 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 request对象是javax.servlet.http.HttpServletRequest类的实例。每当客户端请求一个页面时，JSP引擎就会产生一个新的对象来代表这个请求。
+request对象提供了一系列方法来获取HTTP信息头，包括表单数据，cookies，HTTP方法等等。
+接下来将会介绍一些在JSP编程中常用的获取HTTP信息头的方法。详细内容请见下表：
+序号 方法&amp;amp; 描述 1 Cookie[] getCookies() 返回客户端所有的Cookie的数组
+2 Enumeration getAttributeNames() 返回request对象的所有属性名称的集合
+3 Enumeration getHeaderNames() 返回所有HTTP头的名称集合
+4 Enumeration getParameterNames() 返回请求中所有参数的集合
+5 HttpSession getSession() 返回request对应的session对象，如果没有，则创建一个
+6 HttpSession getSession(boolean create) 返回request对应的session对象，如果没有并且参数create为true，则返回一个新的session对象</description></item><item><title>十八、JSP 日期处理</title><link>https://www.shellio.cc/docs/java/jsp/18/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/jsp/18/</guid><description>JSP 日期处理 使用JSP最重要的优势之一，就是可以使用所有Java API。本章将会详细地讲述Java中的Date类，它在java.util包下，封装了当前日期和时间。
+Date类有两个构造函数。第一个构造函数使用当前日期和时间来初始化对象。
+1Date( ) 第二个构造函数接受一个参数，这个参数表示从1970年1月1日凌晨至所要表示时间的毫秒数。
+1Date(long millisec) 获取Date对象后，您就能够使用下表列出的所有方法：
+序号 方法 &amp;amp; 描述 1 boolean after(Date date)
+如果比给定的日期晚，则返回true，否则返回false
+2 boolean before(Date date)
+如果比给定的日期早，则返回true，否则返回false
+3 Object clone( )
+获取当前对象的一个副本
+4 int compareTo(Date date)
+如果与给定日期相等，则返回0，如果比给定日期早，则返回一个负数，如果比给定日期晚，则返回一个正数
+5 int compareTo(Object obj)
+与 compareTo(Date) 方法相同，如果 obj 不是Date类或其子类的对象，抛出ClassCastException异常
+6 boolean equals(Object date)
+如果与给定日期相同，则返回true，否则返回false
+7 long getTime( )
+返回从1970年1月1日凌晨至此对象所表示时间的毫秒数
+8 int hashCode( )
+返回此对象的哈希码
+9 void setTime(long time)
+使用给定参数设置时间和日期，参数time表示从1970年1月1日凌晨至time所经过的毫秒数
+10 String toString( )
+将此对象转换为字符串并返回这个字符串
+获取当前日期和时间 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 使用JSP编程可以很容易的获取当前日期和时间，只要使用Date对象的toString()方法就行了，就像下面这样：</description></item><item><title>十二、JSP HTTP 状态码</title><link>https://www.shellio.cc/docs/java/jsp/12/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/jsp/12/</guid><description>JSP HTTP 状态码 HTTP请求与HTTP响应的格式相近，都有着如下结构：
+以状态行+CRLF（回车换行）开始 零行或多行头模块+CRLF 一个空行，比如CRLF 可选的消息体比如文件，查询数据，查询输出 举例来说，一个服务器响应头看起来就像下面这样：
+1HTTP/1.1 200 OK 2Content-Type: text/html 3Header2: ... 4... 5HeaderN: ... 6 (Blank Line) 7&amp;lt;!doctype ...&amp;gt; 8&amp;lt;html&amp;gt; 9&amp;lt;head&amp;gt;...&amp;lt;/head&amp;gt; 10&amp;lt;body&amp;gt; 11... 12&amp;lt;/body&amp;gt; 13&amp;lt;/html&amp;gt; 状态行包含HTTP版本，一个状态码，和状态码相对应的短消息。
+下表列出了可能会从服务器返回的HTTP状态码和与之关联的消息：
+状态码 消息 描述 100 Continue 只有一部分请求被服务器接收，但只要没被服务器拒绝，客户端就会延续这个请求 101 Switching Protocols 服务器交换机协议 200 OK 请求被确认 201 Created 请求已完成，新的资源被创建 202 Accepted 请求被接受，但未处理完 203 Non-authoritative Information &amp;nbsp; 204 No Content &amp;nbsp; 205 Reset Content &amp;nbsp; 206 Partial Content &amp;nbsp; 300 Multiple Choices 一个超链接表，用户可以选择一个超链接并访问，最大支持5个超链接 301 Moved Permanently 被请求的页面已经移动到了新的URL下 302 Found 被请求的页面暂时性地移动到了新的URL下 303 See Other 被请求的页面可以在一个不同的URL下找到 304 Not Modified &amp;nbsp; 305 Use Proxy &amp;nbsp; 306 Unused 已经不再使用此状态码，但状态码被保留 307 Temporary Redirect 被请求的页面暂时性地移动到了新的URL下 400 Bad Request 服务器无法识别请求 401 Unauthorized 被请求的页面需要用户名和密码 402 Payment Required 目前还不能使用此状态码 403 Forbidden 禁止访问所请求的页面 404 Not Found 服务器无法找到所请求的页面 405 Method Not Allowed 请求中所指定的方法不被允许 406 Not Acceptable 服务器只能创建一个客户端无法接受的响应 407 Proxy Authentication Required 在请求被服务前必须认证一个代理服务器 408 Request Timeout 请求时间超过了服务器所能等待的时间，连接被断开 409 Conflict 请求有矛盾的地方 410 Gone 被请求的页面不再可用 411 Length Required “Content-Length”没有被定义，服务器拒绝接受请求 412 Precondition Failed 请求的前提条件被服务器评估为false 413 Request Entity Too Large 因为请求的实体太大，服务器拒绝接受请求 414 Request-url Too Long 服务器拒绝接受请求，因为URL太长。多出现在把”POST”请求转换为”GET”请求时所附带的大量查询信息 415 Unsupported Media Type 服务器拒绝接受请求，因为媒体类型不被支持 417 Expectation Failed &amp;nbsp; 500 Internal Server Error 请求不完整，服务器遇见了出乎意料的状况 501 Not Implemented 请求不完整，服务器不提供所需要的功能 502 Bad Gateway 请求不完整，服务器从上游服务器接受了一个无效的响应 503 Service Unavailable 请求不完整，服务器暂时重启或关闭 504 Gateway Timeout 网关超时 505 HTTP Version Not Supported 服务器不支持所指定的HTTP版本 设置HTTP状态码的方法 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 下表列出了HttpServletResponse 类中用来设置状态码的方法：</description></item><item><title>十九、JSP 页面重定向</title><link>https://www.shellio.cc/docs/java/jsp/19/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/jsp/19/</guid><description>JSP 页面重定向 当需要将文档移动到一个新的位置时，就需要使用JSP重定向了。
+最简单的重定向方式就是使用response对象的sendRedirect()方法。这个方法的签名如下：
+1public void response.sendRedirect(String location) 2throws IOException 这个方法将状态码和新的页面位置作为响应发回给浏览器。您也可以使用setStatus()和setHeader()方法来得到同样的效果：
+1.... 2String site = &amp;#34;http://www.w3cschool.cn&amp;#34; ; 3response.setStatus(response.SC_MOVED_TEMPORARILY); 4response.setHeader(&amp;#34;Location&amp;#34;, site); 5.... 实例演示 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 这个例子表明了JSP如何进行页面重定向：
+1&amp;lt;%@ page import=&amp;#34;java.io.*,java.util.*&amp;#34; %&amp;gt; 2&amp;lt;html&amp;gt; 3&amp;lt;head&amp;gt; 4&amp;lt;title&amp;gt;Page Redirection&amp;lt;/title&amp;gt; 5&amp;lt;/head&amp;gt; 6&amp;lt;body&amp;gt; 7&amp;lt;center&amp;gt; 8&amp;lt;h1&amp;gt;Page Redirection&amp;lt;/h1&amp;gt; 9&amp;lt;/center&amp;gt; 10&amp;lt;% 11// 重定向到新地址 12String site = new String(&amp;#34;http://www.w3cschool.cn&amp;#34;); 13response.setStatus(response.SC_MOVED_TEMPORARILY); 14response.setHeader(&amp;#34;Location&amp;#34;, site); %&amp;gt; 15&amp;lt;/body&amp;gt; 16&amp;lt;/html&amp;gt; 将以上代码保存在PageRedirecting.jsp文件中，然后访问http://localhost:8080/PageRedirect.jsp，它将会把您带至//www.w3cschool.cn/。</description></item><item><title>十六、JSP Session</title><link>https://www.shellio.cc/docs/java/jsp/16/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/jsp/16/</guid><description>JSP Session HTTP是无状态协议，这意味着每次客户端检索网页时，都要单独打开一个服务器连接，因此服务器不会记录下先前客户端请求的任何信息。
+有三种方法来维持客户端与服务器的会话：
+Cookies 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 网络服务器可以指定一个唯一的session ID作为cookie来代表每个客户端，用来识别这个客户端接下来的请求。
+这可能不是一种有效的方式，因为很多时候浏览器并不一定支持cookie，所以我们不建议使用这种方法来维持会话。
+隐藏表单域 一个网络服务器可以发送一个隐藏的HTML表单域和一个唯一的session ID，就像下面这样：
+1&amp;lt;input type=&amp;#34;hidden&amp;#34; name=&amp;#34;sessionid&amp;#34; value=&amp;#34;12345&amp;#34;&amp;gt; 这个条目意味着，当表单被提交时，指定的名称和值将会自动包含在GET或POST数据中。每当浏览器发送一个请求，session_id的值就可以用来保存不同浏览器的轨迹。
+这种方式可能是一种有效的方式，但点击标签中的超链接时不会产生表单提交事件，因此隐藏表单域也不支持通用会话跟踪。
+重写URL 您可以在每个URL后面添加一些额外的数据来区分会话，服务器能够根据这些数据来关联session标识符。
+举例来说，http://w3cschool.cn/file.htm;sessionid=12345， session标识符为sessionid=12345，服务器可以用这个数据来识别客户端。
+相比而言，重写URL是更好的方式来，就算浏览器不支持cookies也能工作，但缺点是您必须为每个URL动态指定session ID，就算这是个简单的HTML页面。
+session对象 除了以上几种方法外，JSP利用servlet提供的HttpSession接口来识别一个用户，存储这个用户的所有访问信息。
+默认情况下，JSP允许会话跟踪，一个新的HttpSession对象将会自动地为新的客户端实例化。禁止会话跟踪需要显式地关掉它，通过将page指令中session属性值设为false来实现，就像下面这样：
+1&amp;lt;%@ page session=&amp;#34;false&amp;#34; %&amp;gt; JSP引擎将隐含的session对象暴露给开发者。由于提供了session对象，开发者就可以方便地存储或检索数据。
+下表列出了session对象的一些重要方法：
+S.N. 方法 &amp;amp; 描述 1 public Object getAttribute(String name)
+返回session对象中与指定名称绑定的对象，如果不存在则返回null
+2 public Enumeration getAttributeNames()
+返回session对象中所有的对象名称
+3 public long getCreationTime()
+返回session对象被创建的时间， 以毫秒为单位，从1970年1月1号凌晨开始算起
+4 public String getId()
+返回session对象的ID
+5 public long getLastAccessedTime()
+返回客户端最后访问的时间，以毫秒为单位，从1970年1月1号凌晨开始算起
+6 public int getMaxInactiveInterval()
+返回最大时间间隔，以秒为单位，servlet 容器将会在这段时间内保持会话打开</description></item><item><title>十七、JSP 文件上传</title><link>https://www.shellio.cc/docs/java/jsp/17/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/jsp/17/</guid><description>JSP可以通过HTML的form表单上传文件到服务器。 文件类型可以是文本文件、二进制文件、图像文件等其他任何文档。 创建文件上传表单 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 接下来我们使用HTML标签来创建文件上传表单，以下为要注意的点：
+form表单 method 属性必须设置为 POST 方法 ，不能使用 GET 方法。 form表单 enctype 属性需要设置为 multipart/form-data。 form表单 action 属性需要设置为提交到后台处理文件上传的jsp文件地址。例如 uploadFile.jsp 程序文件用来处理上传的文件。 上传文件元素需要使用 标签，属性设置为 type=”file”。如果需要上传多个文件，可以在 标签中设置不同的名称。 以下是一个上传文件的表单，实例如下：
+1&amp;lt;html&amp;gt; 2&amp;lt;head&amp;gt; 3&amp;lt;title&amp;gt;File Uploading Form&amp;lt;/title&amp;gt; 4&amp;lt;/head&amp;gt; 5&amp;lt;body&amp;gt; 6&amp;lt;h3&amp;gt;File Upload:&amp;lt;/h3&amp;gt; 7Select a file to upload: &amp;lt;br /&amp;gt; 8&amp;lt;form action=&amp;#34;UploadServlet&amp;#34; method=&amp;#34;post&amp;#34; 9 enctype=&amp;#34;multipart/form-data&amp;#34;&amp;gt; 10&amp;lt;input type=&amp;#34;file&amp;#34; name=&amp;#34;file&amp;#34; size=&amp;#34;50&amp;#34; /&amp;gt; 11&amp;lt;br /&amp;gt; 12&amp;lt;input type=&amp;#34;submit&amp;#34; value=&amp;#34;Upload File&amp;#34; /&amp;gt; 13&amp;lt;/form&amp;gt; 14&amp;lt;/body&amp;gt; 15&amp;lt;/html&amp;gt; 在你本地浏览器访问该文件，显示界面如下所示，在你点击”Upload File”会弹出一个窗口让你选择要上传的文件：
+后台JSP处理脚本 首先我们先定义文件上传后存储在服务上的位置，你可以将路径写在你的程序当中，或者我们可以在web.xml配置文件中通过设置 context-param 元素来设置文件存储的目录，如下所示：</description></item><item><title>十三、JSP 表单处理</title><link>https://www.shellio.cc/docs/java/jsp/13/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/jsp/13/</guid><description>JSP 表单处理 我们在浏览网页的时候，经常需要向服务器提交信息，并让后台程序处理。浏览器中使用 GET 和 POST 方法向服务器提交数据。
+GET 方法 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 GET方法将请求的编码信息添加在网址后面，网址与编码信息通过”?”号分隔。如下所示：
+1//www.w3cschool.cn/hello?key1=value1&amp;amp;key2=value2 GET方法是浏览器默认传递参数的方法，一些敏感信息，如密码等建议不使用GET方法。
+用get时，传输数据的大小有限制 （注意不是参数的个数有限制），最大为1024字节。
+POST 方法 一些敏感信息，如密码等我们可以同过POST方法传递，post提交数据是隐式的。
+POST提交数据是不可见的，GET是通过在url里面传递的（可以看一下你浏览器的地址栏）。
+JSP使用getParameter()来获得传递的参数，getInputStream()方法用来处理客户端的二进制数据流的请求。
+JSP 读取表单数据 getParameter(): 使用 request.getParameter() 方法来获取表单参数的值。 getParameterValues(): 获得如checkbox类（名字相同，但值有多个）的数据。 接收数组变量 ，如checkobx类型 **getParameterNames():**该方法可以取得所有变量的名称，该方法返回一个Emumeration。 **getInputStream():**调用此方法来读取来自客户端的二进制数据流。 使用URL的 GET 方法实例 以下是一个简单的URL,并使用GET方法来传递URL中的参数：
+1http://localhost:8080/main.jsp?first_name=ZARA&amp;amp;last_name=ALI 以下是main.jsp文件的JSP程序用于处理客户端提交的表单数据，我们使用getParameter()方法来获取提交的数据：
+1&amp;lt;html&amp;gt; 2&amp;lt;head&amp;gt; 3&amp;lt;title&amp;gt;Using GET Method to Read Form Data&amp;lt;/title&amp;gt; 4&amp;lt;/head&amp;gt; 5&amp;lt;body&amp;gt; 6&amp;lt;center&amp;gt; 7&amp;lt;h1&amp;gt;Using GET Method to Read Form Data&amp;lt;/h1&amp;gt; 8&amp;lt;ul&amp;gt; 9&amp;lt;li&amp;gt;&amp;lt;p&amp;gt;&amp;lt;b&amp;gt;First Name:&amp;lt;/b&amp;gt; 10 &amp;lt;%= request.getParameter(&amp;#34;first_name&amp;#34;)%&amp;gt; 11&amp;lt;/p&amp;gt;&amp;lt;/li&amp;gt; 12&amp;lt;li&amp;gt;&amp;lt;p&amp;gt;&amp;lt;b&amp;gt;Last Name:&amp;lt;/b&amp;gt; 13 &amp;lt;%= request.getParameter(&amp;#34;last_name&amp;#34;)%&amp;gt; 14&amp;lt;/p&amp;gt;&amp;lt;/li&amp;gt; 15&amp;lt;/ul&amp;gt; 16&amp;lt;/body&amp;gt; 17&amp;lt;/html&amp;gt; 接下来我们通过浏览器访问http://localhost:8080/main.</description></item><item><title>十四、JSP 过滤器</title><link>https://www.shellio.cc/docs/java/jsp/14/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/jsp/14/</guid><description>JSP 过滤器 Servlet和JSP中的过滤器都是Java类，它们存在的目的如下：
+在请求访问后端资源时拦截它 管理从服务器返回给客户端的响应 下面列出了多种常用的过滤器类型：
+认证过滤器 数据压缩过滤器 加密过滤器 触发资源访问事件的过滤器 图像转换过滤器 登录和验证过滤器 MIME类型链过滤器 令牌过滤器 转换XML内容的XSL/T过滤器 过滤器将会被插入进web.xml文件中，然后映射servlet、JSP文件的名字，或URL模式。部署描述文件web.xml可以在 \conf 目录下找到。
+当JSP容器启动网络应用程序时，它会创建每一个过滤器的实例，这些过滤器必须在部署描述文件web.xml中声明，并且按声明的顺序执行。
+Servlet过滤器方法 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 一个过滤器就是一个Java类，它实现了javax.servlet.Filter 接口。javax.servlet.Filter接口定义了三个方法：
+序号 方法 &amp;amp;描述 1 public void doFilter (ServletRequest, ServletResponse, FilterChain)
+每当 request/response要通过过滤链时容器会调用这个方法，因为客户端请求链尾的资源
+2 public void init(FilterConfig filterConfig)
+容器调用这个方法来表明一个过滤器被安置在服务中
+3 public void destroy()
+容器调用这个方法来表明一个过滤器正在从服务中移除
+JSP过滤器示例 这个例子将会打印IP地址和每次访问JSP文件的日期时间。当然，这只是个简单的例子，让您了解一些简单的过滤器用法，但是可以使用这些概念来自行构造更复杂的程序。
+1// 引入Java包 2import java.io.*; 3import javax.servlet.*; 4import javax.servlet.http.*; 5import java.util.*; 6// 实现 Filter 类 7public class LogFilter implements Filter { 8 public void init(FilterConfig config) 9 throws ServletException{ 10 // 获取初始化参数 11 String testParam = config.</description></item><item><title>十五、JSP Cookies 处理</title><link>https://www.shellio.cc/docs/java/jsp/15/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/jsp/15/</guid><description>JSP Cookies 处理 Cookies是存储在客户机的文本文件，它们保存了大量轨迹信息。在servlet技术基础上，JSP显然能够提供对HTTP cookies的支持。
+通常有三个步骤来识别回头客：
+服务器脚本发送一系列cookies至浏览器。比如名字，年龄，ID号码等等。 浏览器在本地机中存储这些信息，以备不时之需。 当下一次浏览器发送任何请求至服务器时，它会同时将这些cookies信息发送给服务器，然后服务器使用这些信息来识别用户或者干些其它事情。 本章节将会传授您如何去设置或重设cookie的方法，还有如何访问它们及如何删除它们。
+Cookie剖析 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 Cookies通常在HTTP信息头中设置（虽然JavaScript能够直接在浏览器中设置cookies）。在JSP中，设置一个cookie需要发送如下的信息头给服务器：
+1HTTP/1.1 200 OK 2Date: Fri, 04 Feb 2000 21:03:38 GMT 3Server: Apache/1.3.9 (UNIX) PHP/4.0b3 4Set-Cookie: name=xyz; expires=Friday, 04-Feb-07 22:03:38 GMT; 5 path=/; domain=tutorialspoint.com 6Connection: close 7Content-Type: text/html 正如您所见，Set-Cookie信息头包含一个键值对，一个GMT（格林尼治标准）时间，一个路径，一个域名。键值对会被编码为URL。有效期域是个指令，告诉浏览器在什么时候之后就可以清除这个cookie。
+如果浏览器被配置成可存储cookies，那么它将会保存这些信息直到过期。如果用户访问的任何页面匹配了cookie中的路径和域名，那么浏览器将会重新将这个cookie发回给服务器。浏览器端的信息头长得就像下面这样：
+1GET / HTTP/1.0 2Connection: Keep-Alive 3User-Agent: Mozilla/4.6 (X11; I; Linux 2.2.6-15apmac ppc) 4Host: zink.demon.co.uk:1126 5Accept: image/gif, */* 6Accept-Encoding: gzip 7Accept-Language: en 8Accept-Charset: iso-8859-1,*,utf-8 9Cookie: name=xyz JSP脚本通过request对象中的getCookies()方法来访问这些cookies，这个方法会返回一个Cookie对象的数组。
+Servlet Cookies 方法 下表列出了Cookie对象中常用的方法：</description></item><item><title>十一、JSP 服务器响应</title><link>https://www.shellio.cc/docs/java/jsp/11/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/jsp/11/</guid><description>JSP 服务器响应 Response响应对象主要将JSP容器处理后的结果传回到客户端。可以通过response变量设置HTTP的状态和向客户端发送数据，如Cookie、HTTP文件头信息等。
+一个典型的响应看起来就像下面这样：
+1HTTP/1.1 200 OK 2Content-Type: text/html 3Header2: ... 4... 5HeaderN: ... 6 (Blank Line) 7&amp;lt;!doctype ...&amp;gt; 8&amp;lt;html&amp;gt; 9&amp;lt;head&amp;gt;...&amp;lt;/head&amp;gt; 10&amp;lt;body&amp;gt; 11... 12&amp;lt;/body&amp;gt; 13&amp;lt;/html&amp;gt; 状态行包含HTTP版本信息，比如HTTP/1.1，一个状态码，比如200，还有一个非常短的信息对应着状态码，比如OK。
+下表摘要出了HTTP1.1响应头中最有用的部分，在网络编程中您将会经常见到它们：
+响应头 描述 Allow 指定服务器支持的request方法（GET，POST等等） Cache-Control 指定响应文档能够被安全缓存的情况。通常取值为&amp;nbsp;public，private&amp;nbsp;或no-cache&amp;nbsp;等等。 Public意味着文档可缓存，Private意味着文档只为单用户服务并且只能使用私有缓存。No-cache 意味着文档不被缓存。 Connection 命令浏览器是否要使用持久的HTTP连接。close值&amp;nbsp;命令浏览器不使用持久HTTP连接，而keep-alive 意味着使用持久化连接。 Content-Disposition 让浏览器要求用户将响应以给定的名称存储在磁盘中 Content-Encoding 指定传输时页面的编码规则 Content-Language 表述文档所使用的语言，比如en， en-us,，ru等等 Content-Length 表明响应的字节数。只有在浏览器使用持久化 (keep-alive) HTTP 连接时才有用 Content-Type 表明文档使用的MIME类型 Expires 指明啥时候过期并从缓存中移除 Last-Modified 指明文档最后修改时间。客户端可以 缓存文档并且在后续的请求中提供一个&amp;nbsp;If-Modified-Since请求头 Location 在300秒内，包含所有的有一个状态码的响应地址，浏览器会自动重连然后检索新文档 Refresh 指明浏览器每隔多久请求更新一次页面。 Retry-After 与503 (Service Unavailable)一起使用来告诉用户多久后请求将会得到响应 Set-Cookie 指明当前页面对应的cookie HttpServletResponse类 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 response对象是javax.</description></item><item><title>四、JSP 结构</title><link>https://www.shellio.cc/docs/java/jsp/4/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/jsp/4/</guid><description>JSP 结构 网络服务器需要一个JSP引擎，也就是一个容器来处理JSP页面。容器负责截获对JSP页面的请求。本教程使用内嵌JSP容器的Apache来支持JSP开发。
+JSP容器与Web服务器协同合作，为JSP的正常运行提供必要的运行环境和其他服务，并且能够正确识别专属于JSP网页的特殊元素。
+下图显示了JSP容器和JSP文件在Web应用中所处的位置。
+JSP处理 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 以下步骤表明了Web服务器是如何使用JSP来创建网页的：
+就像其他普通的网页一样，您的浏览器发送一个HTTP请求给服务器。 Web服务器识别出这是一个对JSP网页的请求，并且将该请求传递给JSP引擎。通过使用URL或者.jsp文件来完成。 JSP引擎从磁盘中载入JSP文件，然后将它们转化为servlet。这种转化只是简单地将所有模板文本改用println()语句，并且将所有的JSP元素转化成Java代码。 JSP引擎将servlet编译成可执行类，并且将原始请求传递给servlet引擎。 Web服务器的某组件将会调用servlet引擎，然后载入并执行servlet类。在执行过程中，servlet产生HTML格式的输出并将其内嵌于HTTP response中上交给Web服务器。 Web服务器以静态HTML网页的形式将HTTP response返回到您的浏览器中。 最终，Web浏览器处理HTTP response中动态产生的HTML网页，就好像在处理静态网页一样。 以上提及到的步骤可以用下图来表示：
+一般情况下，JSP引擎会检查JSP文件对应的servlet是否已经存在，并且检查JSP文件的修改日期是否早于servlet。如果JSP文件的修改日期早于对应的servlet，那么容器就可以确定JSP文件没有被修改过并且servlet有效。这使得整个流程与其他脚本语言（比如PHP）相比要高效快捷一些。
+总的来说，JSP网页就是用另一种方式来编写servlet而不用成为Java编程高手。除了解释阶段外，JSP网页几乎可以被当成一个普通的servlet来对待。</description></item><item><title>五、JSP 生命周期</title><link>https://www.shellio.cc/docs/java/jsp/5/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/jsp/5/</guid><description>JSP 生命周期 理解JSP底层功能的关键就是去理解它们所遵守的生命周期。
+JSP生命周期就是从创建到销毁的整个过程，类似于servlet生命周期，区别在于JSP生命周期还包括将JSP文件编译成servlet。
+以下是JSP生命周期中所走过的几个阶段：
+编译阶段： servlet容器编译servlet源文件，生成servlet类
+初始化阶段： 加载与JSP对应的servlet类，创建其实例，并调用它的初始化方法
+执行阶段： 调用与JSP对应的servlet实例的服务方法
+销毁阶段： 调用与JSP对应的servlet实例的销毁方法，然后销毁servlet实例
+很明显，JSP生命周期的四个主要阶段和servlet生命周期非常相似，下面给出图示：
+JSP编译 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 当浏览器请求JSP页面时，JSP引擎会首先去检查是否需要编译这个文件。如果这个文件没有被编译过，或者在上次编译后被更改过，则编译这个JSP文件。
+编译的过程包括三个步骤：
+解析JSP文件。 将JSP文件转为servlet。 编译servlet。 JSP初始化 容器载入JSP文件后，它会在为请求提供任何服务前调用jspInit()方法。如果您需要执行自定义的JSP初始化任务，复写jspInit()方法就行了，就像下面这样：
+1public void jspInit(){ 2 // 初始化代码 一般来讲程序只初始化一次，servlet也是如此。通常情况下您可以在jspInit()方法中初始化数据库连接、打开文件和创建查询表。
+JSP执行 这一阶段描述了JSP生命周期中一切与请求相关的交互行为，直到被销毁。
+当JSP网页完成初始化后，JSP引擎将会调用_jspService()方法。
+_jspService()方法需要一个HttpServletRequest对象和一个HttpServletResponse对象作为它的参数，就像下面这样：
+1void _jspService(HttpServletRequest request,HttpServletResponse response) 2 // 服务端处理代码 _jspService()方法在每个request中被调用一次并且负责产生与之相对应的response，并且它还负责产生所有7个HTTP方法的回应，比如GET、POST、DELETE等等。
+JSP清理 JSP生命周期的销毁阶段描述了当一个JSP网页从容器中被移除时所发生的一切。
+jspDestroy()方法在JSP中等价于servlet中的销毁方法。当您需要执行任何清理工作时复写jspDestroy()方法，比如释放数据库连接或者关闭文件夹等等。
+jspDestroy()方法的格式如下：
+1public void jspDestroy() 2 // 清理代码 实例 JSP生命周期代码实例如下所示：
+1&amp;lt;%@ page language=&amp;#34;java&amp;#34; contentType=&amp;#34;text/html; charset=UTF-8&amp;#34; 2 pageEncoding=&amp;#34;UTF-8&amp;#34;%&amp;gt; 3&amp;lt;html&amp;gt; 4&amp;lt;head&amp;gt; 5&amp;lt;title&amp;gt;life.jsp&amp;lt;/title&amp;gt; 6&amp;lt;/head&amp;gt; 7&amp;lt;body&amp;gt; 8&amp;lt;%! 9 private int initVar=0; 10 private int serviceVar=0; 11 private int destroyVar=0; 12%&amp;gt; 13&amp;lt;%!</description></item><item><title>一、JSP 简介</title><link>https://www.shellio.cc/docs/java/jsp/1/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/jsp/1/</guid><description>JSP 简介 什么是Java Server Pages? JSP全称Java Server Pages，是一种动态网页开发技术。它使用JSP标签在HTML网页中插入Java代码。标签通常以&amp;lt;%开头以%&amp;gt;结束。
+JSP是一种Java servlet，主要用于实现Java web应用程序的用户界面部分。网页开发者们通过结合HTML代码、XHTML代码、XML元素以及嵌入JSP操作和命令来编写JSP。
+JSP通过网页表单获取用户输入数据、访问数据库及其他数据源，然后动态地创建网页。
+JSP标签有多种功能，比如访问数据库、记录用户选择信息、访问JavaBeans组件等，还可以在不同的网页中传递控制信息和共享信息。
+为什么使用JSP？ JSP程序与CGI程序有着相似的功能，但和CGI程序相比，JSP程序有如下优势：
+性能更加优越，因为JSP可以直接在HTML网页中动态嵌入元素而不需要单独引用CGI文件。 服务器调用的是已经编译好的JSP文件，而不像CGI/Perl那样必须先载入解释器和目标脚本。 JSP基于Java Servlets API，因此，JSP拥有各种强大的企业级Java API，包括JDBC，JNDI，EJB，JAXP等等。 JSP页面可以与处理业务逻辑的servlets一起使用，这种模式被Java servlet 模板引擎所支持。 最后，JSP是Java EE不可或缺的一部分，是一个完整的企业级应用平台。这意味着JSP可以用最简单的方式来实现最复杂的应用。
+JSP的优势 以下列出了使用JSP带来的其他好处：
+与ASP相比：JSP有两大优势。首先，动态部分用Java编写，而不是VB或其他MS专用语言，所以更加强大与易用。第二点就是JSP易于移植到非MS平台上。 与纯 Servlets相比：JSP可以很方便的编写或者修改HTML网页而不用去面对大量的println语句。 与SSI相比：SSI无法使用表单数据、无法进行数据库链接。 与JavaScript相比：虽然JavaScript可以在客户端动态生成HTML，但是很难与服务器交互，因此不能提供复杂的服务，比如访问数据库和图像处理等等。 与静态HTML相比：静态HTML不包含动态信息。 接下来呢？ 我们将会带您一步一步地来搭建JSP运行环境，这需要有一定的Java基础。
+如果您还未学过Java，可以先学习我们为您提供的Java教程。</description></item></channel></rss>

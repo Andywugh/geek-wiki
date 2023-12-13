@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>MongoDB on 程序员安仔</title><link>https://www.shellio.cc/series/mongodb/</link><description>Recent content in MongoDB on 程序员安仔</description><generator>Hugo -- gohugo.io</generator><language>zh-hans</language><copyright>个人技术博客</copyright><lastBuildDate>Sat, 21 Oct 2023 12:22:54 +0800</lastBuildDate><atom:link href="https://www.shellio.cc/series/mongodb/index.xml" rel="self" type="application/rss+xml"/><item><title>八、MongoDB -连接</title><link>https://www.shellio.cc/docs/database/mongodb/8/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/8/</guid><description>启动 MongoDB 服务 经过前面的几章学习，我们知道如何 如何启动 MongoDB 服务
+1只需要在 MongoDB 安装目录的 bin 目录下执行 mongod 即可 执行启动操作后，mongodb 会输出一些必要信息后，然后等待客户端连接的建立，当连接被建立后，就会开始打印日志信息
+MongoDB 客户端 我们可以使用 MongoDB 自带的 shell 客户端 mongo 连接 MongoDB 服务
+我们也可以使用使用 PHP 来连接 MongoDB
+本教程我们会使用 mongo 来连接 Mongodb 服务
+标准 URI 连接语法 1mongodb://[username:password@]host1[:port1][,host2[:port2],...[,hostN[:portN]]][/[database][?options]] 选项说明 选项 说明 mongodb:// 这是固定的格式，必须要指定 username:password@ 可选项，如果设置，在连接数据库服务器之后，驱动都会尝试登陆这个数据库 host1 必须的指定至少一个host
+host1 是这个URI唯一要填写的，它指定了要连接服务器的地址
+如果要连接集群，请指定多个主机地址 portX 可选的指定端口，如果不填，默认为27017 /database 如果指定username:password@，连接并验证登陆指定数据库。若不指定，默认打开 test 数据库 ?options 是连接选项。如果不使用/database，则前面需要加上/
+所有连接选项都是键值对name=value，键值对之间通过&amp;amp;或;（分号）隔开 options 可以包括以下选项 选项 描述 replicaSet=name 验证replica set的名称，Impliesconnect=replicaSet. slaveOk=true|false true:在connect=direct模式下，驱动会连接第一台机器，即使这台服务器不是主。在connect=replicaSet模式下，驱动会发送所有的写请求到主并且把读取操作分布在其他从服务器</description></item><item><title>二、NoSQL 简介</title><link>https://www.shellio.cc/docs/database/mongodb/2/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/2/</guid><description>在现代的计算系统上每天网络上都会产生庞大的数据量
+这些数据有很大一部分是由关系数据库管理系统（RDMBSs）来处理
+1970年 E.F.Codd’s提出的关系模型的论文 “A relational model of data for large shared data banks”，这使得数据建模和应用程序编程更加简单
+通过应用实践证明，关系模型是非常适合于客户服务器编程，远远超出预期的利益，今天它是结构化数据存储在网络和商务应用的主导技术。
+NoSQL 是一项全新的数据库革命性运动，早期就有人提出，发展至2009年趋势越发高涨。NoSQL的拥护者们提倡运用非关系型的数据存储，相对于铺天盖地的关系型数据库运用，这一概念无疑是一种全新的思维的注入。
+关系型数据库遵循 ACID 规则 1、 A(Atomicity)原子性；
+1原子性很容易理解，也就是说事务里的所有操作要么全部做完，要么都不做，事务成功的条件是事务里的所有操作都成功，只要有一个操作失败，整个事务就失败，需要回滚 2比如银行转账，从 A 账户转100元至B账户，分为两个步骤： 31. 从 A 账户取100元 42. 存入100元至B账户 5这两步要么一起完成，要么一起不完成，如果只完成第一步，第二步失败，钱会莫名其妙少了100元 2、 C(Consistency)一致性；
+1一致性也比较容易理解，也就是说数据库要一直处于一致的状态，事务的运行不会改变数据库原本的一致性约束 2例如现有完整性约束 a+b =10，如果一个事务改变了a，那么必须得改变b，使得事务结束后依然满足a+b=10，否则事务失败 3、 I(Isolation)独立性；
+1所谓的独立性是指并发的事务之间不会互相影响，如果一个事务要访问的数据正在被另外一个事务修改，只要另外一个事务未提交，它所访问的数据就不受未提交事务的影响 2比如现有有个交易是从A账户转100元至B账户，在这个交易还未完成的情况下，如果此时B查询自己的账户，是看不到新增加的100元的 4、 D(Durability)持久性；
+1持久性是指一旦事务提交后，它所做的修改将会永久的保存在数据库上，即使出现宕机也不会丢失 分布式系统 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 分布式系统（distributed system）由多台计算机和通信的软件组件通过计算机网络连接（本地网络或广域网）组成
+分布式系统是建立在网络之上的软件系统
+分布式系统具有高度的内聚性和透明性
+网络和分布式系统之间的区别更多的在于高层软件（特别是操作系统），而不是硬件
+分布式系统可以应用在不同的平台上如：PC、工作站、局域网和广域网上等
+分布式计算的优点 可靠性（容错） ：
+分布式计算系统中的一个重要的优点是可靠性
+一台服务器的系统崩溃并不影响到其余的服务器
+可扩展性：
+在分布式计算系统可以根据需要增加更多的机器
+资源共享：
+共享数据是必不可少的应用，如银行，预订系统
+灵活性：
+由于该系统是非常灵活的，它很容易安装，实施和调试新的服务
+更快的速度：
+分布式计算系统可以有多台计算机的计算能力，比其它系统有更快的处理速度
+开放系统：
+由于它是开放的系统，本地或者远程都可以访问到该服务。</description></item><item><title>二十、MongoDB 限制条数 (limit 方法)</title><link>https://www.shellio.cc/docs/database/mongodb/20/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/20/</guid><description>limit() 方法接受一个数字参数，该参数指定从MongoDB中读取的记录条数
+语法 limit() 方法语法如下：
+1&amp;gt; db.COLLECTION_NAME.find().limit(NUMBER) 范例 使用以下命令添加范例所需要的数据
+1&amp;gt; db.lession.remove({}); 2WriteResult({ &amp;#34;nRemoved&amp;#34; : 0 }) 1&amp;gt; db.lession.insert({ 2 title: &amp;#39;MongoDB 基础教程&amp;#39;, 3 by_user: &amp;#39;penglei&amp;#39;, 4 tags: [&amp;#39;MongoDB&amp;#39;, &amp;#39;database&amp;#39;, &amp;#39;NoSQL&amp;#39;], 5 favorite: 100 6}); 7WriteResult({ &amp;#34;nInserted&amp;#34; : 1 }) 1&amp;gt; db.lession.insert({ 2 title: &amp;#39;NoSQL 基础教程&amp;#39;, 3 by_user: &amp;#39;penglei&amp;#39;, 4 tags: [&amp;#39;MongoDB&amp;#39;, &amp;#39;database&amp;#39;, &amp;#39;NoSQL&amp;#39;], 5 favorite: 10 6}); 7WriteResult({ &amp;#34;nInserted&amp;#34; : 1 }) 1&amp;gt; db.lession.insert({ 2 title: &amp;#39;Neo4j 基础教程&amp;#39;, 3 by_user: &amp;#39;Neo4j&amp;#39;, 4 tags: [&amp;#39;Neo4j&amp;#39;, &amp;#39;database&amp;#39;, &amp;#39;NoSQL&amp;#39;], 5 favorite: 750 6}); 7WriteResult({ &amp;#34;nInserted&amp;#34; : 1 }) 现在，我们使用以下命令从文档中读取两条记录 1&amp;gt; db.</description></item><item><title>二十八、MongoDB 备份数据( mongodump )</title><link>https://www.shellio.cc/docs/database/mongodb/28/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/28/</guid><description>MongoDB mongodump 脚本命令可以导出所有数据到指定目录中
+语法 MongoDB mongodump 脚本命令语法如下：
+1mongodump -h dbhost -d dbname -o dbdirectory 参数说明 -h： 需要导出 MongDB 数据所在的服务器地址
+例如 127.0.0.1 ，当然也可以同时指定端口号：127.0.0.1:27017 -d： 需要备份的数据库，例 test -o： 备份的数据存放位置，例如：/mnt/data/backup/mongodb/
+该目录需要提前建立，在备份完成后，系统自动在 mongodb 目录下建立一个 test 目录，这个目录里面存放该数据库实例的备份数据 mongodump 命令可选参数 1、 mongodump–hostHOST_NAME–portPORT_NUMBER；
+1该命令将备份所有 MongoDB 数据 1 mongodump --host db1.souyunku.cn --port 27017 2、 mongodump–dbpathDB_PATH–outBACKUP_DIRECTORY；
+1该命令备份指定的 DB\_PATH 数据库到 BACKUP\_DIRECTORY 目录 1 mongodump --dbpath /data/db/ --out /data/backup/ 3、 mongodump–collectionCOLLECTION–dbDB_NAME；
+1该命令将备份指定数据库 DB\_NAME 的 COLLECTION 集合 1 mongodump --collection lession --db test 范例 1、 首先使用–port27017启动MongoDB服务；</description></item><item><title>二十二、MongoDB 排序</title><link>https://www.shellio.cc/docs/database/mongodb/22/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/22/</guid><description>MongoDB sort() 方法可以通过参数指定排序的字段，并使用 1 和 -1 来指定排序的方式，其中 1 为升序排列，而-1是用于降序排列
+语法 sort() 方法语法如下
+1&amp;gt; db.COLLECTION_NAME.find().sort({KEY:1}) 范例 使用以下命令添加范例所需要的数据
+1&amp;gt; db.lession.remove({}); 2WriteResult({ &amp;#34;nRemoved&amp;#34; : 0 }) 1&amp;gt; db.lession.insert({ 2 title: &amp;#39;MongoDB 基础教程&amp;#39;, 3 by_user: &amp;#39;penglei&amp;#39;, 4 tags: [&amp;#39;MongoDB&amp;#39;, &amp;#39;database&amp;#39;, &amp;#39;NoSQL&amp;#39;], 5 favorite: 100 6}); 7WriteResult({ &amp;#34;nInserted&amp;#34; : 1 }) 1&amp;gt; db.lession.insert({ 2 title: &amp;#39;NoSQL 基础教程&amp;#39;, 3 by_user: &amp;#39;penglei&amp;#39;, 4 tags: [&amp;#39;MongoDB&amp;#39;, &amp;#39;database&amp;#39;, &amp;#39;NoSQL&amp;#39;], 5 favorite: 10 6}); 7WriteResult({ &amp;#34;nInserted&amp;#34; : 1 }) 1&amp;gt; db.</description></item><item><title>二十九、MongoDB 恢复数据( mongorestore )</title><link>https://www.shellio.cc/docs/database/mongodb/29/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/29/</guid><description>语法 MongoDB mongorestore 命令脚本语法如下
+1$ mongorestore -h &amp;lt;hostname&amp;gt;&amp;lt;:port&amp;gt; -d dbname &amp;lt;path&amp;gt; 参数说明 -h &amp;lt;:port&amp;gt;, -h&amp;lt;:port&amp;gt; MongoDB 所在服务器地址，默认为 localhost:27017
+–db, -d 需要恢复的数据库实例
+例如：test，这个名称也可以和备份时候的不一样，比如 test2
+--drop 设置恢复的时候，先删除当前数据，然后恢复备份的数据 就是说，恢复后，备份后添加修改的数据都会被删除
+慎用
+mongorestore 最后的一个参数，设置备份数据所在位置，例如：/mnt/data/backup/mongodb 不能同时指定 和 –dir 选项
+–dir 指定备份的目录
+不能同时指定 和 –dir 选项
+范例 现在，我们使用刚刚备份的数据来恢复 MongoDB 数据库
+1&amp;gt;mongorestore 执行以上命令输出结果如下
+1$ mongorestore 22017-10-24T07:28:58.400+0800 using default &amp;#39;dump&amp;#39; directory 32017-10-24T07:28:58.401+0800 preparing collections to restore from 42017-10-24T07:28:58.407+0800 reading metadata for gridfs.fs.chunks from dump/gridfs/fs.chunks.metadata.json 52017-10-24T07:28:58.407+0800 reading metadata for rbtj.rb_visit_log from dump/rbtj/rb_visit_log.</description></item><item><title>二十六、MongoDB 副本集群复制</title><link>https://www.shellio.cc/docs/database/mongodb/26/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/26/</guid><description>MongoDB 副本集群在多个服务器上存储数据副本，提供了数据的冗余备份，提高了数据的可用性，可以保证数据的安全性
+MongoDB 副本集群技术允许我们从硬件故障和服务中断中恢复数据
+副本集群的优势 ？ 1、 保障数据的安全性；
+2、 数据高可用性(24*7)；
+3、 灾难恢复；
+4、 无需停机维护（如备份，重建索引，压缩）；
+5、 分布式读取数据；
+MongoDB 副本集群原理 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 MongoDB 副本集群技术至少需要两个节点：一个是主节点，负责处理客户端请求，其余的都是从节点，负责复制主节点上的数据
+主节点记录在其上的所有操作 oplog 从节点定期轮询主节点获取这些操作，然后对自己的数据副本执行这些操作，从而保证从节点的数据与主节点一致 MongoDB 副本集群各个节点常见的搭配方式为：一主一从 和 一主多从
+MongoDB 副本集群结构图 客户端从主节点读取数据，在客户端写入数据到主节点时， 主节点与从节点进行数据交互保障数据的一致性
+副本集群特征 1、 N个节点的集群；
+2、 任何节点可作为主节点；
+3、 所有写入操作都在主节点上；
+4、 自动故障转移；
+5、 自动恢复；
+MongoDB 副本集群配置 接下来我们将搭建 一主一从 副本集群
+搭建步骤如下
+1、 关闭正在运行的MongoDB服务；
+1先关闭正在运行的 MongoDB 服务，然后通过指定 --replSet 选项来启动 mongoDB 2**--replSet** 语法格式如下 1 mongod --port &amp;#34;PORT&amp;#34; --dbpath &amp;#34;YOUR_DB_DATA_PATH&amp;#34; --replSet &amp;#34;REPLICA_SET_INSTANCE_NAME&amp;#34; 1**范例** 1 mongod --port 27017 --dbpath &amp;#34;D:\set up\mongodb\data&amp;#34; --replSet rs0 1上面的命令会启动一个名为 rs0 的 MongoDB 实例，其端口号为 27017 2、 启动后新打开命令提示框并连接上mongoDB服务；</description></item><item><title>二十七、MongoDB 分片集群技术</title><link>https://www.shellio.cc/docs/database/mongodb/27/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/27/</guid><description>海量的数据使得单台 MongoDB 存储显得吃力且难以满足提供可接受的读写吞吐量
+通过将数据分割到多台服务器就变得越来越重要，使得 MongoDB 数据库系统能存储和处理更多的数据
+为什么使用分片 1、 复制所有的写入操作到主节点；
+2、 延迟的敏感数据会在主节点查询；
+3、 单个副本集限制在12个节点；
+4、 当请求量巨大时会出现内存不足；
+5、 本地磁盘不足；
+6、 垂直扩展价格昂贵；
+MongoDB分片 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 下图展示了 MongoDB 分片集群结构分布
+MongoDB 分片集群技术主要有三个组件
+1、 ShardServer；
+1用于存储实际的数据块 2一个 shard server 角色可由几台机器组一个负载均衡承担，防止主机单点故障 2、 ConfigServer；
+1mongod 实例，存储了整个 Cluster Metadata，包括 chunk 信息 3、 QueryRouters；
+1前端路由 2客户端由此接入，且让整个集群看上去像单一数据库 MongoDB 分片技术搭建范例 假设 MongoDB 分片集群结构组件如下所示 Shard Server 1Shard Server 1：localhost:27020 2Shard Server 2：localhost:27021 3Shard Server 3：localhost:27022 4Shard Server 4：localhost:27023 Config Server 1Config Server ：localhost:27100 Query Routers Server 1Route Process：localhost:40000 MongoDB 分片集群搭建步骤 1、 启动ShardServer；</description></item><item><title>二十三、MongoDB 索引</title><link>https://www.shellio.cc/docs/database/mongodb/23/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/23/</guid><description>索引通常可以提高查询的效率，如果没有索引，MongoDB 在读取数据时必须扫描集合中的每个文件并选取那些符合查询条件的记录
+这种扫描全集合的查询效率是非常低的，特别在处理大量的数据时，查询可以要花费几十秒甚至几分钟，这对网站的性能是非常致命的
+索引是特殊的数据结构，索引存储在一个易于遍历读取的数据集合中，索引是对数据库表中一列或多列的值进行排序的一种结构
+ensureIndex() 方法 MongoDB ensureIndex() 方法可以用来来创建索引
+语法 ensureIndex() 方法语法格式如下
+1&amp;gt; db.COLLECTION_NAME.ensureIndex({KEY:1}) Key ： 要创建的索引字段
+1 按升序创建索引
+-1 按降序来创建索引
+范例 下面的代码在 lession 集合上创建了 title 字段升序的索引
+1&amp;gt; db.lession.ensureIndex({&amp;#34;title&amp;#34;:1}) 多字段索引 ( 复合索引 ) MongoDB ensureIndex() 方法可以用来创建多个字段创建索引 ( 复合索引 )
+1&amp;gt;db.lession.ensureIndex({&amp;#34;title&amp;#34;:1,&amp;#34;description&amp;#34;:-1}) 2&amp;gt; ensureIndex() 方法可以接收可选参数 参数名 类型 描述 background Boolean 建索引过程会阻塞其它数据库操作，background可指定以后台方式创建索引，即增加 “background” 可选参数。 “background” 默认值为false unique Boolean 建立的索引是否唯一。指定为true创建唯一索引。默认值为 false name string 索引的名称。如果未指定，MongoDB的通过连接索引的字段名和排序顺序生成一个索引名称 dropDups Boolean 在建立唯一索引时是否删除重复记录,指定 true 创建唯一索引。默认值为false sparse Boolean 对文档中不存在的字段数据不启用索引；这个参数需要特别注意，如果设置为true的话，在索引字段中不会查询出不包含对应字段的文档.。默认值为 false expireAfterSeconds integer 指定一个以秒为单位的数值，完成 TTL设定，设定集合的生存时间。 v index version 索引的版本号。默认的索引版本取决于mongod创建索引时运行的版本。 weights document 索引权重值，数值在 1 到 99,999 之间，表示该索引相对于其他索引字段的得分权重 default_language string 对于文本索引，该参数决定了停用词及词干和词器的规则的列表。 默认为英语 language_override string 对于文本索引，该参数指定了包含在文档中的字段名，语言覆盖默认的 language，默认值为 language 范例 在后台创建索引</description></item><item><title>二十四、MongoDB 聚合运算( aggregate )</title><link>https://www.shellio.cc/docs/database/mongodb/24/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/24/</guid><description>MongoDB 聚合有点类似 SQL 语句中的 COUNT( * )
+aggregate() 方法 MongoDB aggregate() 为 MongoDB 数据库提供了聚合运算
+语法 aggregate() 方法的语法如下
+1&amp;gt; db.COLLECTION_NAME.aggregate(AGGREGATE_OPERATION) 范例 使用以下命令添加范例所需要的数据
+1&amp;gt; db.lession.remove({}); 2WriteResult({ &amp;#34;nRemoved&amp;#34; : 0 }) 1&amp;gt; db.lession.insert({ 2 title: &amp;#39;MongoDB 基础教程&amp;#39;, 3 by_user: &amp;#39;penglei&amp;#39;, 4 tags: [&amp;#39;MongoDB&amp;#39;, &amp;#39;database&amp;#39;, &amp;#39;NoSQL&amp;#39;], 5 favorite: 100 6}); 7WriteResult({ &amp;#34;nInserted&amp;#34; : 1 }) 1&amp;gt; db.lession.insert({ 2 title: &amp;#39;NoSQL 基础教程&amp;#39;, 3 by_user: &amp;#39;penglei&amp;#39;, 4 tags: [&amp;#39;MongoDB&amp;#39;, &amp;#39;database&amp;#39;, &amp;#39;NoSQL&amp;#39;], 5 favorite: 10 6}); 7WriteResult({ &amp;#34;nInserted&amp;#34; : 1 }) 1&amp;gt; db.</description></item><item><title>二十五、MongoDB 聚合运算 – 管道</title><link>https://www.shellio.cc/docs/database/mongodb/25/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/25/</guid><description>MongoDB 管道操作是可以重复的
+管道在Linux 中一般用于将当前命令的输出结果作为下一个命令的参数
+表达式 MongoDB 表达式用于处理输入文档并输出
+表达式是无状态的，只能用于计算当前聚合管道的文档，不能处理其它的文档
+MongoDB 聚合运算中常用的操作 1、 $project；
+1修改输入文档的结构 2可以用来重命名、增加或删除域，也可以用于创建计算结果以及嵌套文档 2、 $match；
+1用于过滤数据，只输出符合条件的文档 2$match 使用 MongoDB 的标准查询操作 3、 $limit；
+1用来限制 MongoDB 聚合管道返回的文档数 4、 $skip；
+1在聚合管道中跳过指定数量的文档，并返回余下的文档 5、 $unwind；
+1将文档中的某一个数组类型字段拆分成多条，每条包含数组中的一个值 6、 $group；
+1将集合中的文档分组，可用于统计结果 7、 $sort；
+1将输入文档排序后输出 8、 $geoNear；
+1输出接近某一地理位置的有序文档 管道聚合运算操作范例 1、 $project；
+1 &amp;gt; db.article.aggregate({ $project : {title : 1 ,author : 1 ,}}); 1上面聚合操作输出的结果中只有 *\_id* , *tilte* 和 *author* 三个字段 2默认情况下 \_id 字段是被包含的，如果要想不包含 \_id 话可以这样 1 &amp;gt; db.</description></item><item><title>二十一、MongoDB 跳过 (skip 方法)</title><link>https://www.shellio.cc/docs/database/mongodb/21/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/21/</guid><description>skip() 方法接受一个数字参数作为跳过的记录条数
+语法 skip() 方法语法格式如下
+1&amp;gt; db.COLLECTION_NAME.find().limit(NUMBER).skip(NUMBER) skip() 方法默认参数为 0 表示不跳过任何行
+范例 使用以下命令添加范例所需要的数据
+1&amp;gt; db.lession.remove({}); 2WriteResult({ &amp;#34;nRemoved&amp;#34; : 0 }) 1&amp;gt; db.lession.insert({ 2 title: &amp;#39;MongoDB 基础教程&amp;#39;, 3 by_user: &amp;#39;penglei&amp;#39;, 4 tags: [&amp;#39;MongoDB&amp;#39;, &amp;#39;database&amp;#39;, &amp;#39;NoSQL&amp;#39;], 5 favorite: 100 6}); 7WriteResult({ &amp;#34;nInserted&amp;#34; : 1 }) 1&amp;gt; db.lession.insert({ 2 title: &amp;#39;NoSQL 基础教程&amp;#39;, 3 by_user: &amp;#39;penglei&amp;#39;, 4 tags: [&amp;#39;MongoDB&amp;#39;, &amp;#39;database&amp;#39;, &amp;#39;NoSQL&amp;#39;], 5 favorite: 10 6}); 7WriteResult({ &amp;#34;nInserted&amp;#34; : 1 }) 1&amp;gt; db.lession.insert({ 2 title: &amp;#39;Neo4j 基础教程&amp;#39;, 3 by_user: &amp;#39;Neo4j&amp;#39;, 4 tags: [&amp;#39;Neo4j&amp;#39;, &amp;#39;database&amp;#39;, &amp;#39;NoSQL&amp;#39;], 5 favorite: 750 6}); 7WriteResult({ &amp;#34;nInserted&amp;#34; : 1 }) 现在我们使用下面的命令显示第二条文档数据</description></item><item><title>九、MongoDB 创建数据库</title><link>https://www.shellio.cc/docs/database/mongodb/9/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/9/</guid><description>语法 MongoDB 创建数据库的语法格式如下：
+1use DATABASE_NAME 如果数据库不存在，则创建数据库，否则切换到指定数据库
+范例 以下实例我们创建了数据库 souyunku:
+1&amp;gt; use souyunku 2switched to db souyunku 3&amp;gt; db 4souyunku 5&amp;gt; 如果想查看所有数据库，可以使用 show dbs 命令
+1&amp;gt; show dbs 2local 0.078GB 3test 0.078GB 4&amp;gt; 咦，没创建成功 ？刚创建的数据库 souyunku 并不在数据库的列表中啊
+MongoDB 默认不会显示没有数据的数据库，要显示 souyunku 数据库
+需要向souyunku 数据库插入一些数据
+1&amp;gt; db.souyunku.insert({&amp;#34;name&amp;#34;:&amp;#34;教程 &amp;#34;,&amp;#34;site&amp;#34;:&amp;#34;https://ddkk.com/&amp;#34;}) 2WriteResult({ &amp;#34;nInserted&amp;#34; : 1 }) 3&amp;gt; show dbs 4local 0.078GB 5souyunku 0.078GB 6test 0.078GB 7&amp;gt; MongoDB 中默认的数据库为 test，如果你没有创建新的数据库，集合将存放在 test 数据库中</description></item><item><title>六、Mac OSX 平台安装 MongoDB</title><link>https://www.shellio.cc/docs/database/mongodb/6/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/6/</guid><description>下载安装 MongoDB 提供了 OSX 平台上 64 位的安装包，可以在官网下载安装包
+下载地址 : https://www.mongodb.com/download-center#community
+从MongoDB 3.0 版本开始只支持 OS X 10.7 (Lion) 版本及更新版本的系统
+接下来我们使用 curl 命令来下载安装
+1$ cd /usr/local 进入 /usr/local 2$ sudo curl -O https://fastdl.mongodb.org/osx/mongodb-osx-x86_64-3.4.9.tgz 3$ sudo tar -zxvf mongodb-osx-x86_64-3.4.9.tgz 解压 4$ sudo mv mongodb-osx-x86_64-3.4.9 mongodb 重命名为 mongodb 目录 安装完成后，我们可以把 MongoDB 的二进制命令文件目录（/usr/local/mongodb/bin）添加到 PATH 路径中
+使用以下命令编辑 .bashrc
+1$ vi ~/.bashrc 然后添加以下信息到文件末尾
+1export PATH=/usr/local/mongodb/bin:$PATH 使用 brew 安装 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 通过brew 安装 MongoDB 非常方便快捷的
+1$ brew install mongodb 如果要安装支持 TLS/SSL 版本则使用如下命令</description></item><item><title>七、MongoDB 术语</title><link>https://www.shellio.cc/docs/database/mongodb/7/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/7/</guid><description>MongoDB 涉及到的有关术语是：文档、集合、数据库
+下表列出了 MongoDB 中的一些术语
+SQL 术语 MongoDB 术语 解释 database database 数据库 table collection 数据库表/集合 row document 数据记录行/文档 column field 数据字段/域 index index 索引 table joins 表连接,MongoDB不支持 primary key primary key 主键,MongoDB自动将_id字段设置为主键 图示 通过下面的图例，我们能更直观的了解 MongoDB 中 术语
+数据库 一个MongoDB 中可以建立多个数据库
+MongoDB 默认的数据库是 “test”，该数据库存储在 data 目录中
+MongoDB 每个实例可以容纳多个独立的数据库，每一个都有自己的集合和权限，不同的数据库也放置在不同的文件中
+“show dbs” 命令可以显示所有数据的列表
+1$ mongo 2MongoDB shell version v3.4.9 3connecting to: mongodb://127.0.0.1:27017 4MongoDB server version: 3.4.9 5&amp;gt; show dbs; 6admin 0.078GB 7test 0.</description></item><item><title>三、什么是 MongoDB ?</title><link>https://www.shellio.cc/docs/database/mongodb/3/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/3/</guid><description>在高负载的情况下，添加更多的节点，可以保证服务器性能。
+MongoDB 旨在为 WEB 应用提供可扩展的高性能数据存储解决方案。
+MongoDB 将数据存储为一个文档，数据结构由键值(key=&amp;gt;value)对组成。MongoDB 文档类似于 JSON 对象。字段值可以包含其他文档，数组及文档数组
+主要特点 MongoDB的提供了一个面向文档存储，操作起来比较简单和容易。 你可以在MongoDB记录中设置任何属性的索引 (如：FirstName=”Sameer”,Address=”8 Gandhi Road”)来实现更快的排序。 你可以通过本地或者网络创建数据镜像，这使得MongoDB有更强的扩展性。 如果负载的增加（需要更多的存储空间和更强的处理能力） ，它可以分布在计算机网络中的其他节点上这就是所谓的分片。 Mongo支持丰富的查询表达式。查询指令使用JSON形式的标记，可轻易查询文档中内嵌的对象及数组。 MongoDb 使用update()命令可以实现替换完成的文档（数据）或者一些指定的数据字段 。 Mongodb中的Map/reduce主要是用来对数据进行批量处理和聚合操作。 Map和Reduce。Map函数调用emit(key,value)遍历集合中所有的记录，将key与value传给Reduce函数进行处理。 Map函数和Reduce函数是使用Javascript编写的，并可以通过db.runCommand或mapreduce命令来执行MapReduce操作。 GridFS是MongoDB中的一个内置功能，可以用于存放大量小文件。 MongoDB允许在服务端执行脚本，可以用Javascript编写某个函数，直接在服务端执行，也可以把函数的定义存储在服务端，下次直接调用即可。 MongoDB支持各种编程语言:RUBY，PYTHON，JAVA，C++，PHP，C#等多种语言。 MongoDB安装简单。 MongoDB 下载 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 你可以在mongodb官网下载该安装包，下载地址为：
+https://www.mongodb.com/download-center#community
+MonggoDB 支持以下平台 OS X 32-bit OS X 64-bit Linux 32-bit Linux 64-bit Windows 32-bit Windows 64-bit Solaris i86pc Solaris 64 语言支持 MongoDB 官方支持的驱动
+C [C++][C 1] [C# / .NET][C_ _ .NET] Erlang Haskell Java JavaScript Lisp node.</description></item><item><title>三十、MongoDB 性能跟踪 ( mongotop )</title><link>https://www.shellio.cc/docs/database/mongodb/30/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/30/</guid><description>mongotop MongoDB 下的一个内置工具
+mongotop 提供了一个方法，用来跟踪一个 MongoDB的实例，查看哪些大量的时间花费在读取和写入数据
+mongotop 提供每个集合的水平的统计数据
+默认情况下，mongotop 每秒输出一次数据
+语法 MongoDB mongotop 脚本命令语法如下
+1$ mongotop &amp;lt;sleeptime&amp;gt; --locks 参数解析 指定多久输出一次数据
+默认为 1 秒 --locks 输出锁使用的情况
+范例 默认参数范例 1$ mongotop 输出结果如下
+1$ mongotop 22017-10-24T07:39:50.970+0800 connected to: 127.0.0.1 3 ns total read write 2017-10-24T07:39:51+08:00 4 admin.system.indexes 0ms 0ms 0ms 5 admin.system.namespaces 0ms 0ms 0ms 6 admin.system.roles 0ms 0ms 0ms 7 admin.system.users 0ms 0ms 0ms 8 admin.system.version 0ms 0ms 0ms 9 gridfs.fs.chunks 0ms 0ms 0ms 10 gridfs.</description></item><item><title>三十八、MongoDB 覆盖索引查询</title><link>https://www.shellio.cc/docs/database/mongodb/38/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/38/</guid><description>因为所有出现在查询中的字段是索引的一部分， MongoDB 无需在整个数据文档中检索匹配查询条件和返回使用相同索引的查询结果
+因为索引存在于 RAM 中，从索引中获取数据比通过扫描文档读取数据要快得多
+使用覆盖索引查询 为了测试盖索引查询，假设我们有以下 users 集合
+1{ 2 &amp;#34;_id&amp;#34; : ObjectId(&amp;#34;59ee8a8ba0f7c7d445f864af&amp;#34;), 3 &amp;#34;tel&amp;#34; : &amp;#34;13888886666&amp;#34;, 4 &amp;#34;birthday&amp;#34; : &amp;#34;11-11&amp;#34;, 5 &amp;#34;sex&amp;#34; : &amp;#34;M&amp;#34;, 6 &amp;#34;name&amp;#34; : &amp;#34;Ro penglei&amp;#34;, 7 &amp;#34;user_name&amp;#34; : &amp;#34;penglei&amp;#34; 我们在users 集合中创建联合索引，字段为 sex 和 user_name
+1&amp;gt; db.users.ensureIndex({sex:1,user_name:1}) 2 &amp;#34;createdCollectionAutomatically&amp;#34; : false, 3 &amp;#34;numIndexesBefore&amp;#34; : 1, 4 &amp;#34;numIndexesAfter&amp;#34; : 2, 5 &amp;#34;ok&amp;#34; : 1 现在，该索引会覆盖以下查询
+1&amp;gt; db.users.find({sex:&amp;#34;M&amp;#34;},{user_name:1,_id:0}) 2{ &amp;#34;user_name&amp;#34; : &amp;#34;penglei&amp;#34; } 也就是说，对于上述查询，MongoDB 不会去数据库文件中查找
+相反，它会从索引中提取数据，这是非常快速的数据查询</description></item><item><title>三十二、MongoDB Java</title><link>https://www.shellio.cc/docs/database/mongodb/32/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/32/</guid><description>本章教程使用 mongodb-driver 3.5.0 版本，其它版本也类似
+MongoDB Java Driver 环境配置 JAVA 程序中如果访问 MongoDB，需要安装了 JAVA 环境及 MongoDB Java 驱动
+如果你还未安装 JAVA 环境，可以移步 JAVA 基础教程
+现在，我们来安装配置 JAVA MongoDB 驱动
+1、 首先下载mongodb-driver-3.5.0.jarhttp://mongodb.github.io/mongo-java-driver/；
+1![img\_1.png][img_1.png] 2、 然后将mongo-java-driver-3.5.0.jar（或其它版本）放到CLASSPATH中；
+你也可以从地址下载 mongodb-driver jar：http://central.maven.org/maven2/org/mongodb/mongo-java-driver/
+Gradle 构建 JAVA MongoDB 运行环境 因为我实在不想把 jar 添加到 CLASSPATH 中，又不想用 MAVEN 这种 XML 配置方式，所以就使用了 Gradle 构建工具
+配置步骤如下
+1$ mkdir hello 2$ cd hello 3$ mkdir -p src/main/java/com.ddkk 4$ touch src/main/java/com.ddkk/HelloWorld.java 5$ touch build.gradle 然后把以下内容复制到 build.gradle 文件中
+1apply plugin: &amp;#39;java&amp;#39; 2apply plugin: &amp;#39;application&amp;#39; 3mainClassName = &amp;#39;com.</description></item><item><title>三十九、MongoDB 查询分析</title><link>https://www.shellio.cc/docs/database/mongodb/39/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/39/</guid><description>MongoDB 查询分析常用方法有：explain() 和 hint()
+使用 explain() 分析性能 MongoDB explain() 方法提供了查询信息，使用索引及查询统计等
+MongoDB explain() 有利于我们对索引的优化
+explain() 语法格式 MongoDB explain() 语法格式如下
+1db.collection.explain().&amp;lt;method(...)&amp;gt; 可以是以下几个方法
+aggregate() count() distinct() find() group() remove() update() 范例数据 使用以下命令向数据库 souyunku 中的 users 集合添加数据
+1&amp;gt; use souyunku; 2&amp;gt; db.users.remove({}) 3&amp;gt; db.users.insert({&amp;#34;tel&amp;#34; : &amp;#34;13888886666&amp;#34;, &amp;#34;birthday&amp;#34; : &amp;#34;11-11&amp;#34;, &amp;#34;sex&amp;#34; : &amp;#34;M&amp;#34;, &amp;#34;name&amp;#34; : &amp;#34;Ro penglei&amp;#34;, &amp;#34;user_name&amp;#34; : &amp;#34;penglei&amp;#34; }) 现在我们在 users 集合中创建 sex 和 user_name 的索引
+1&amp;gt; db.users.ensureIndex({sex:1,user_name:1}) 2 &amp;#34;createdCollectionAutomatically&amp;#34; : false, 3 &amp;#34;numIndexesBefore&amp;#34; : 1, 4 &amp;#34;numIndexesAfter&amp;#34; : 2, 5 &amp;#34;ok&amp;#34; : 1 然后在查询语句中使用 explain() 方法</description></item><item><title>三十六、MongoDB 关系</title><link>https://www.shellio.cc/docs/database/mongodb/36/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/36/</guid><description>MongoDB 文档间可以通过嵌入和引用来建立联系
+MongoDB 中的关系可以是 1、 1:1(1对1)；
+2、 1:N(1对多)；
+3、 N:1(多对1)；
+4、 N:N(多对多)；
+我们使用购物时 用户 ( users ) 和 收货地址 ( address ) 之间的关系来理解
+1一个用户可以有多个收货地址，所以是一对多的关系 下面是users 文档的结构
+1{ 2 &amp;#34;_id&amp;#34; : ObjectId(&amp;#34;59ee8457a0f7c7d445f864aa&amp;#34;), 3 &amp;#34;name&amp;#34; : &amp;#34;penglei&amp;#34;, 4 &amp;#34;tel&amp;#34; : &amp;#34;13866668888&amp;#34;, 5 &amp;#34;birthday&amp;#34; : &amp;#34;11-11&amp;#34; 下面是address 文档的结构
+1{ 2 &amp;#34;_id&amp;#34; : ObjectId(&amp;#34;59ee861ba0f7c7d445f864ac&amp;#34;), 3 &amp;#34;pincode&amp;#34; : 100007, 4 &amp;#34;user&amp;#34; : &amp;#34;penglei&amp;#34;, 5 &amp;#34;city&amp;#34; : &amp;#34;Pek&amp;#34;, 6 &amp;#34;state&amp;#34; : &amp;#34;China&amp;#34;, 7 &amp;#34;building&amp;#34; : &amp;#34;东城区东四君临天下大酒店 220220&amp;#34; 8 &amp;#34;_id&amp;#34; : ObjectId(&amp;#34;59ee862aa0f7c7d445f864ad&amp;#34;), 9 &amp;#34;pincode&amp;#34; : 100007, 10 &amp;#34;city&amp;#34; : &amp;#34;Pek&amp;#34;, 11 &amp;#34;user&amp;#34; : &amp;#34;penglei&amp;#34;, 12 &amp;#34;state&amp;#34; : &amp;#34;China&amp;#34;, 13 &amp;#34;building&amp;#34; : &amp;#34;东城区雍和家园 1 号楼 4 单元 2303&amp;#34; 嵌入式关系 使用嵌入式方法，我们可以把用户地址嵌入到用户的文档中：</description></item><item><title>三十七、MongoDB 数据库引用</title><link>https://www.shellio.cc/docs/database/mongodb/37/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/37/</guid><description>MongoDB 引用有两种 1、 手动引用(ManualReferences)；
+2、 DBRefs；
+DBRefs vs 手动引用 假如有这样一个场景，在不同的集合中 ( address_home, address_office, address_mailing, 等) 存储不同的地址 ( 住址，办公室地址，邮件地址等 )
+这样，我们在调用不同地址时，也需要指定集合，一个文档从多个集合引用文档，我们应该使用 DBRefs
+DBRefs 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 MongoDB DBRef 格式
+1{ $ref : , $id : , $db : } 三个字段表示的意义为：
+$ref ： 集合名称 $id ： 引用的id $db : 数据库名称，可选参数 下面的范例中用户数据文档使用了 DBRef, 字段 address
+1{ 2 &amp;#34;_id&amp;#34; : ObjectId(&amp;#34;59ee8457a0f7c7d445f864aa&amp;#34;), 3 &amp;#34;name&amp;#34; : &amp;#34;penglei&amp;#34;, 4 &amp;#34;tel&amp;#34; : &amp;#34;13866668888&amp;#34;, 5 &amp;#34;birthday&amp;#34; : &amp;#34;11-11&amp;#34; 6 &amp;#34;address&amp;#34;: { 7 &amp;#34;$ref&amp;#34;: &amp;#34;address_home&amp;#34;, 8 &amp;#34;$id&amp;#34;: ObjectId(&amp;#34;59ee861ba0f7c7d445f864ac&amp;#34;), 9 &amp;#34;$db&amp;#34;: &amp;#34;souyunku&amp;#34; 10 } address DBRef 字段指定了引用的地址文档是在 address_home 集合下的 souyunku 数据库，id 为 59ee861ba0f7c7d445f864ac</description></item><item><title>三十三、MongoDB PHP 扩展</title><link>https://www.shellio.cc/docs/database/mongodb/33/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/33/</guid><description>mongo 扩展不是 PHP 官方内置的扩展，需要开发者自己手动安装和配置
+本章我们将学习如何在 Linux、Window、Mac 平台上安装 mongo 扩展
+Linux 上安装 PHP MongoDB 扩展 通过 pecl 来安装 在Linux 系统上可以通过执行以下命令来来安装 MongoDB 的 PHP 扩展驱动
+1$ pecl install mongodb 编译源码安装 如果想通过源码来编译扩展驱动，必须手动编译源码包，这样做的好处是可以使用最新的版本
+我们可以在 Github 上下载 MongoDB PHP 驱动包
+PHPMongoDB Github 地址为：https://github.com/mongodb/mongo-php-driver
+下载好源码包后，执行以下命令来安装
+1$ tar zxvf mongodb-mongodb-php-driver-&amp;lt;commit_id&amp;gt;.tar.gz 2$ cd mongodb-mongodb-php-driver-&amp;lt;commit_id&amp;gt; 3$ phpize 4$ ./configure 5$ sudo make install 如果你的 PHP 也是自己从源码编译安装的，则安装方法如下：
+假设PHP 编译安装在 /usr/local/php 目录中
+1$ tar zxvf mongodb-mongodb-php-driver-&amp;lt;commit_id&amp;gt;.tar.gz 2$ cd mongodb-mongodb-php-driver-&amp;lt;commit_id&amp;gt; 3$ /usr/local/php/bin/phpize 4$ .</description></item><item><title>三十四、MongoDB PHP</title><link>https://www.shellio.cc/docs/database/mongodb/34/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/34/</guid><description>MongoDB PHP 在各平台上的安装及驱动包下载请查看: PHP 安装 MongoDB 扩展驱动
+如果你使用的是 PHP7，请移步： PHP7 MongoDB 安装与使用
+PHP 连接 MongoDB 和 选择一个数据库 为了确保正确连接，我们需要指定数据库名，如果数据库在 mongoDB 中不存在， mongoDB 会自动创建
+1&amp;lt;?php 2/* 3 * filename: main.php 4 * author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 5 * Copyright © 2015-2065 ddkk.com. All rights reserved. 6*/ 7$m = new MongoClient(); // 连接默认主机和端口为：mongodb://localhost:27017 8$db = $m-&amp;gt;souyunku; // 切换到 &amp;#34;souyunku&amp;#34; 数据库 PHP MongoDB 创建集合 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 PHPMongoDB 创建创建集合可以使用下面的代码
+1&amp;lt;?php 2/* 3 * filename: main.php 4 * author: DDKK.</description></item><item><title>三十五、PHP7 MongDB 扩展安装与使用</title><link>https://www.shellio.cc/docs/database/mongodb/35/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/35/</guid><description>PHP7 Mongdb 扩展安装 假设我们的 PHP7 安装在 /usr/local/php7 目录
+我们可以使用 pecl 命令来安装 PHP MongoDB 扩展
+1$ /usr/local/php7/bin/pecl install mongodb 执行成功后，会输出以下信息
+1... 2Build process completed successfully 3Installing &amp;#39;/usr/local/php7/lib/php/extensions/no-debug-non-zts-20151012/mongodb.so&amp;#39; 4install ok: channel://pecl.php.net/mongodb-1.1.7 5configuration option &amp;#34;php_ini&amp;#34; is not set to php.ini location 6You should add &amp;#34;extension=mongodb.so&amp;#34; to php.ini 然后打开 php.ini 文件添加 extension=mongodb.so 配置
+或者可以直接执行以下命令来添加
+1$ echo &amp;#34;extension=mongodb.so&amp;#34; &amp;gt;&amp;gt;` /usr/local/php7/bin/php --ini | grep &amp;#34;Loaded Configuration&amp;#34; | sed -e &amp;#34;s|.*:\s*||&amp;#34; 注意： 以上执行的命令中 php7 的安装目录为 /usr/local/php7/，如果你安装在其他目录，需要相应修改 pecl 与 php 命令的路径</description></item><item><title>三十一、MongoDB 状态检测 ( mongostat )</title><link>https://www.shellio.cc/docs/database/mongodb/31/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/31/</guid><description>我们安装部署并启动 MongoDB 服务后，必须要了解 MongoDB 的运行情况，并查看 MongoDB 的性能
+这样在流量比较大的是可以很好的应对并保证 MongoDB 持续正常运作
+MongoDB 中提供了 mongostat 和 mongotop 两个命令来监控 MongoDB 的运行情况
+mongostat 命令 mongostat 是 MongoDB 自带的状态检测工具，在命令行下使用
+mogostat 命令会间隔固定时间获取 MongoDB 的当前运行状态，并输出
+如果你发现数据库突然变慢或者有其他问题的话，首先要做的操作就考虑采用 mongostat 来查看 mongo 的状态
+语法 MongoDB mongostat 脚本命令语法格式如下
+1$ mongostat &amp;lt;options&amp;gt; &amp;lt;polling interval in seconds&amp;gt; 范例 1$ mongostat 输出结果如下
+1$ mongostat 2insert query update delete getmore command flushes mapped vsize res faults qrw arw net_in net_out conn time 3 *0 *0 *0 *0 0 2|0 0 6.</description></item><item><title>十、MongoDB 切换数据库</title><link>https://www.shellio.cc/docs/database/mongodb/10/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/10/</guid><description>语法 MongoDB 切换数据库的语法格式如下：
+1use DATABASE_NAME 切换到指定数据库，如果数据库不存在，则创建数据库
+范例 这个范例我们从 test 数据库切换到 souyunku 数据库
+1&amp;gt; db 2test 3&amp;gt; use souyunku 4switched to db souyunku 5&amp;gt; db 6souyunku 7&amp;gt; MongoDB 中默认的数据库为 test，如果没有创建新的数据库，集合将存放在 test 数据库中</description></item><item><title>十八、MongoDB 条件操作符</title><link>https://www.shellio.cc/docs/database/mongodb/18/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/18/</guid><description>MongoDB中条件操作符有 操作符 描述 MongoDB 表示方法 &amp;gt; 大于 $gt &amp;lt; 小于 $lt &amp;gt;= 大于等于 $gte &amp;lt;= 小于等于 $lte 范例数据 使用以下命令向 数据库 souyunku 中的 lession 集合中插入数据
+1&amp;gt; db.lession.remove({}); 1&amp;gt; db.lession.insert({ 2 title: &amp;#39;PHP 基础教程&amp;#39;, 3 description: &amp;#39;PHP 是一种创建动态交互性站点的强有力的服务器端脚本语言&amp;#39;, 4 by: &amp;#39;penglei&amp;#39;, 5 url: &amp;#39;https://ddkk.com/l/penglei/php/php-basic-index.html&amp;#39;, 6 tags: [&amp;#39;php&amp;#39;,&amp;#39;php7&amp;#39;], 7 favorite: 2000 8}) 1&amp;gt; db.lession.insert({title: &amp;#39;Java 基础教程&amp;#39;, 2 description: &amp;#39;Java 可以用来开发 JAVA WEB 和 AndRoid APP 运用程序&amp;#39;, 3 by: &amp;#39;penglei&amp;#39;, 4 url: &amp;#39;https://ddkk.com/l/penglei/java/java-basic-index.html&amp;#39;, 5 tags: [&amp;#39;java&amp;#39;,&amp;#39;android&amp;#39;], 6 favorite: 3000 7}) 1&amp;gt; db.</description></item><item><title>十二、MongoDB 备份数据( mongodump )</title><link>https://www.shellio.cc/docs/database/mongodb/12/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/12/</guid><description>MongoDB mongodump 脚本命令可以导出所有数据到指定目录中
+语法 MongoDB mongodump 脚本命令语法如下：
+1mongodump -h dbhost -d dbname -o dbdirectory 参数说明 -h： 需要导出 MongDB 数据所在的服务器地址
+例如 127.0.0.1 ，当然也可以同时指定端口号：127.0.0.1:27017 -d： 需要备份的数据库，例 test -o： 备份的数据存放位置，例如：/mnt/data/backup/mongodb/
+该目录需要提前建立，在备份完成后，系统自动在 mongodb 目录下建立一个 test 目录，这个目录里面存放该数据库实例的备份数据 mongodump 命令可选参数 1、 mongodump–hostHOST_NAME–portPORT_NUMBER；
+1该命令将备份所有 MongoDB 数据 1 mongodump --host db1.souyunku.cn --port 27017 2、 mongodump–dbpathDB_PATH–outBACKUP_DIRECTORY；
+1该命令备份指定的 DB\_PATH 数据库到 BACKUP\_DIRECTORY 目录 1 mongodump --dbpath /data/db/ --out /data/backup/ 3、 mongodump–collectionCOLLECTION–dbDB_NAME；
+1该命令将备份指定数据库 DB\_NAME 的 COLLECTION 集合 1 mongodump --collection lession --db test 范例 1、 首先使用–port27017启动MongoDB服务；</description></item><item><title>十九、MongoDB $type操作符</title><link>https://www.shellio.cc/docs/database/mongodb/19/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/19/</guid><description>下表是 MongoDB 中的数据类型 类型 数字 Double 1 String 2 Object 3 Array 4 Binary data 5 Undefined已废弃 6 Object id 7 Boolean 8 Date 9 Null 10 Regular Expression 11 JavaScript 13 Symbol 14 JavaScript (with scope) 15 32-bit integer 16 Timestamp 17 64-bit integer 18 Min key 255 Max key 127 范例数据 使用以下命令向 数据库 souyunku 中的 lession 集合中插入数据
+1&amp;gt; db.lession.remove({}); 1&amp;gt; db.lession.insert({ 2 title: &amp;#39;PHP 基础教程&amp;#39;, 3 description: &amp;#39;PHP 是一种创建动态交互性站点的强有力的服务器端脚本语言&amp;#39;, 4 by: &amp;#39;penglei&amp;#39;, 5 url: &amp;#39;https://ddkk.</description></item><item><title>十六、MongoDB 删除集合</title><link>https://www.shellio.cc/docs/database/mongodb/16/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/16/</guid><description>1db.collection_name.drop() 范例 下面的命令演示了如何删除 souyunku 数据库中的集合 site
+1&amp;gt; use souyunku 2switched to db souyunku 3&amp;gt; show tables 4site 5&amp;gt; db.site.drop() 6true 7&amp;gt; show tables 8&amp;gt;</description></item><item><title>十七、MongoDB 查询文档</title><link>https://www.shellio.cc/docs/database/mongodb/17/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/17/</guid><description>find() 方法以非结构化的方式来显示所有文档
+除了find() 方法之外，还有一个 findOne() 方法，它只返回一个文档
+语法 find() 方法语法格式如下
+1&amp;gt; db.COLLECTION_NAME.find(query, projection) 参数说明 参数 说明 query 可选，使用查询操作符指定查询条件 projection 可选，使用投影操作符指定返回的键。查询时返回文档中所有键值， 只需省略该参数即可（默认省略） pretty() 方法 MongoDB pretty() 方法以易读的方式来显示数据
+pretty() 语法格式如下 1&amp;gt; db.COLLECTION_NAME.find().pretty() 范例数据 使用以下命令向 数据库 souyunku 中的 lession 集合中插入数据
+1&amp;gt; db.lession.remove({}); 1&amp;gt; db.lession.insert({ 2 title: &amp;#39;PHP 基础教程&amp;#39;, 3 description: &amp;#39;PHP 是一种创建动态交互性站点的强有力的服务器端脚本语言&amp;#39;, 4 by: &amp;#39;penglei&amp;#39;, 5 url: &amp;#39;https://ddkk.com/l/penglei/php/php-basic-index.html&amp;#39;, 6 tags: [&amp;#39;php&amp;#39;,&amp;#39;php7&amp;#39;], 7 favorite: 2000 8}) 1&amp;gt; db.lession.insert({title: &amp;#39;Java 基础教程&amp;#39;, 2 description: &amp;#39;Java 可以用来开发 JAVA WEB 和 AndRoid APP 运用程序&amp;#39;, 3 by: &amp;#39;penglei&amp;#39;, 4 url: &amp;#39;https://ddkk.</description></item><item><title>十三、MongoDB 插入文档</title><link>https://www.shellio.cc/docs/database/mongodb/13/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/13/</guid><description>MongoDB 文档的数据结构和 JSON 基本一样
+存储在MongoDB 集合中的数据都是 BSON 格式
+BSON 是一种类 json 的一种二进制形式的存储格式,简称 Binary JSON
+insert() 方法 MongoDB 使用 insert() 或 save() 方法向集合中插入文档
+insert() 方法语法格式如下 1db.COLLECTION_NAME.insert(document) 范例 这个范例使用 insert() 方法将文档存储到 souyunku 数据库的 lession 集合中
+1&amp;gt; db.lession.insert({title: &amp;#39;MongoDB 基础教程&amp;#39;, 2 description: &amp;#39;MongoDB 是最流行的 Nosql 数据库&amp;#39;, 3 by: &amp;#39;penglei&amp;#39;, 4 url: &amp;#39;https://ddkk.com&amp;#39;, 5 tags: [&amp;#39;mongodb&amp;#39;, &amp;#39;database&amp;#39;, &amp;#39;NoSQL&amp;#39;], 6 favorite: 1000000 7}) 8WriteResult({ &amp;#34;nInserted&amp;#34; : 1 }) 如果lession 集合不在数据库 souyunku 中， MongoDB 会自动创建该集合并插入文档
+查看已插入文档 1&amp;gt; db.</description></item><item><title>十四、MongoDB 更新文档</title><link>https://www.shellio.cc/docs/database/mongodb/14/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/14/</guid><description>update() 方法 MongoDB update() 方法用于更新已存在的文档
+语法 1&amp;gt; db.collection.update( 2 &amp;lt;query&amp;gt;, 3 &amp;lt;update&amp;gt;, 4 { 5 upsert: &amp;lt;boolean&amp;gt;, 6 multi: &amp;lt;boolean&amp;gt;, 7 writeConcern: &amp;lt;document&amp;gt; 8 } 参数说明 参数 说明 query update 方法的查询条件，类似 sql update 查询内 where 语句 update update的数据和一些更新的操作符（如$,$inc…）等
+可以理解为 sql update 语句中的 set 子句 upsert 可选。如果数据不存在集合中，是否插入数据
+true 插入 ， 默认是 false，不插入 multi 可选。是否只更新找到的第一条记录。如果为 true，就把按条件查出来多条记录全部更新，默认是 false 只更新第一条 writeConcern 可选，设置抛出异常的级别 实例 上一章节中学习 insert() 方法的插入了三条数据
+pretty() 用于美化输出结果
+1&amp;gt; db.lession.find().pretty() 2 &amp;#34;_id&amp;#34; : ObjectId(&amp;#34;59ed9d2dc3ba87608db0fe4b&amp;#34;), 3 &amp;#34;title&amp;#34; : &amp;#34;MongoDB 基础教程&amp;#34;, 4 &amp;#34;description&amp;#34; : &amp;#34;MongoDB 是最流行的 Nosql 数据库&amp;#34;, 5 &amp;#34;by&amp;#34; : &amp;#34;penglei&amp;#34;, 6 &amp;#34;url&amp;#34; : &amp;#34;https://ddkk.</description></item><item><title>十五、MongoDB 删除文档</title><link>https://www.shellio.cc/docs/database/mongodb/15/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/15/</guid><description>在前面一章节中我们学习了如何向文档中插入数据，现在我们来学习如何在删除 MongoDB 集合
+remove() 方法 MongoDB remove() 方法是用来删除集合中的数据
+语法 remove() 方法语法格式如下
+1&amp;gt; db.collection.remove( 2 &amp;lt;query&amp;gt;, 3 &amp;lt;justOne&amp;gt; 在运行 remove() 函数前先执行 find() 命令来判断执行的条件是否正确，这是一个良好的习惯
+参数说明 参数 说明 query 必选。删除的文档的条件 justOne 可选。如果设为 true 或 1，则只删除一个文档 如果MongoDB 是 2.6 版本以后的，语法格式如下
+1&amp;gt; db.collection.remove( 2 &amp;lt;query&amp;gt;, 3 { 4 justOne: &amp;lt;boolean&amp;gt;, 5 writeConcern: &amp;lt;document&amp;gt; 6 } 参数说明 参数 说明 query 可选。删除的文档的条件 justOne 可选。如果设为 true 或 1，则只删除一个文档 writeConcern 可选。抛出异常的级别 范例 首先我们执行 insert() 方法 3 次插入 3 条数据</description></item><item><title>十一、MongoDB 删除数据库</title><link>https://www.shellio.cc/docs/database/mongodb/11/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/11/</guid><description>1db.dropDatabase() 默认数据库为 test，可以使用 db 命令查看当前数据库名
+范例 接下来我们将演示如何删除 souyunku 数据库
+1、 首先查看所有数据库；
+1 &amp;gt; show dbs 2 local 0.000GB 3 souyunku 0.000GB 4 test 0.000GB 2、 接下来切换到数据库souyunku；
+1 &amp;gt; use souyunku 2 switched to db souyunku 3 &amp;gt; 3、 执行删除命令；
+1 &amp;gt; db.dropDatabase() 2 { &amp;#34;dropped&amp;#34; : &amp;#34;souyunku&amp;#34;, &amp;#34;ok&amp;#34; : 1 } 4、 最后通过showdbs命令数据库是否删除成功；
+1 &amp;gt; show dbs 2 local 0.000GB 3 test 0.000GB 4 &amp;gt;</description></item><item><title>四、Windows 平台安装 MongoDB</title><link>https://www.shellio.cc/docs/database/mongodb/4/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/4/</guid><description>我们可以从 MongoDB 官网下载安装
+MongoDB 预编译二进制包下载地址：https://www.mongodb.com/download-center#community
+在MongoDB 2.2 版本后已经不再支持 Windows XP 系统 最新版本也已经没有了 32 位系统的安装文件
+MongoDB for Windows 64-bit 适合 64 位的 Windows Server 2008 R2, Windows 7 , 及最新版本的 Window 系统。 MongoDB for Windows 32-bit 适合 32 位的 Window 系统及最新的 Windows Vista。 32 位系统上 MongoDB 的数据库最大为 2GB MongoDB for Windows 64-bit Legacy 适合 64 位的 Windows Vista, Windows Server 2003, 及 Windows Server 2008 下载64 位的 .msi 文件，下载后双击该文件，按操作提示安装即可
+安装过程中，你可以通过点击 “Custom(自定义)” 按钮来设置你的安装目录。</description></item><item><title>四十、MongoDB 原子操作</title><link>https://www.shellio.cc/docs/database/mongodb/40/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/40/</guid><description>MongoDB 数据库不支持事务，所以，在我们的项目中，无论什么设计，都不能要求 MongoDB 保证数据的完整性
+但MongoDB 提供了许多原子操作，比如文档的保存，修改，删除等，都是原子操作
+原子操作就是
+1要么文档保存到 MongoDB，要么没有保存到 MongoDB，不会出现查询到的文档没有保存完整的情况 原子操作方法 MongoDB findAndy.. 方法提供了原子操作机制
+MongoDB 支持原子操作方法如下
+1、 db.collection.findAndModify()；
+2、 db.collection.findOneAndDelete()；
+3、 db.collection.findOneAndReplace()；
+4、 db.collection.findOneAndUpdate()；
+原子操作数据模型 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 假设我们遇到了下面这种需求：书店的书籍及结账信息
+这个范例说明了在一个相同的文档中如何确保嵌入字段关联原子操作（update：更新）的字段是同步的
+souyunku.bookstore 1book = { 2 id: 88888888 3 title: &amp;#34;MongoDB: 最终指南&amp;#34;, 4 author: [ &amp;#34;Kristina Chodorow&amp;#34;, &amp;#34;Mike Dirolf&amp;#34; ], 5 published_date: ISODate(&amp;#34;2010-09-24&amp;#34;), 6 pages: 216, 7 language: &amp;#34;English&amp;#34;, 8 publisher_id: &amp;#34;oreilly&amp;#34;, 9 available: 3, 10 checkout: [ { by: &amp;#34;penglei&amp;#34;, date: ISODate(&amp;#34;2017-10-15&amp;#34;) } ] 11 } 我们可以使用 db.</description></item><item><title>四十八、MongoDB GridFS</title><link>https://www.shellio.cc/docs/database/mongodb/48/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/48/</guid><description>GridFS 也是文件存储的一种方式，但是它是存储在 MonoDB 的集合中
+GridFS 会将大文件对象分割成多个小的 chunk(文件片段),一般为 256k / 个,每个 chunk 将作为 MongoDB 的一个文档 (document) 被存储在 chunks 集合中
+GridFS 用两个集合来存储一个文件：fs.files 与 fs.chunks
+每个文件的实际内容被存在chunks(二进制数据)中,和文件有关的 meta 数据 (filename,content_type,还有用户自定义的属性)将会被存在files集合中
+这是一个简单的 fs.files 集合文档
+1{ 2 &amp;#34;_id&amp;#34; : ObjectId(&amp;#34;59ed5f4c2a2f951ba5353165&amp;#34;), 3 &amp;#34;chunkSize&amp;#34; : 261120, 4 &amp;#34;uploadDate&amp;#34; : ISODate(&amp;#34;2017-10-23T03:17:32.209Z&amp;#34;), 5 &amp;#34;length&amp;#34; : 4904740, 6 &amp;#34;md5&amp;#34; : &amp;#34;4da09a6750c7bbcc49f916d940fde4f2&amp;#34;, 7 &amp;#34;filename&amp;#34; : &amp;#34;20171023.mp3&amp;#34; 这是一个简单的 fs.chunks 集合文档
+1{ 2 &amp;#34;files_id&amp;#34;: ObjectId(&amp;#34;534a75d19f54bfec8a2fe44b&amp;#34;), 3 &amp;#34;n&amp;#34;: NumberInt(0), 4 &amp;#34;data&amp;#34;: &amp;#34;Mongo Binary Data&amp;#34; GridFS 添加文件 GridFS 的 put 命令可以用来添加文件</description></item><item><title>四十二、MongoDB 索引限制</title><link>https://www.shellio.cc/docs/database/mongodb/42/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/42/</guid><description>MongoDB 对索引是有限制的，具体包括以下几个方面
+1. 额外开销 每个索引占据一定的存储空间，在进行插入，更新和删除操作时也需要对索引进行操作
+所以，如果很少对集合进行读取操作，建议不使用索引
+2. 内存 ( RAM ) 使用 由于索引是存储在内存( RAM )中，所以应该确保该索引的大小不超过内存的限制
+如果索引的大小大于内存的限制，MongoDB 会删除一些索引，这将导致性能下降
+3. 查询限制 索引不能被以下的查询使用：
+正则表达式及非操作符，如 $nin, $not, 等 算术运算符，如 $mod, 等 $where 子句 所以，实时确保我们的 MongoDB 的语句是否使用索引是一个好的习惯，可以用 explain() 方法 来查看
+4. 索引键限制 从2、6 版本开始，如果现有的索引字段的值超过索引键的限制，MongoDB 中不会创建索引
+5. 插入文档超过索引键限制 如果文档的索引字段值超过了索引键的限制，MongoDB 不会将任何文档转换成索引的集合
+与mongorestore 和 mongoimport 工具类似
+MongoDB 最大范围 1、 集合中索引不能超过64个；
+2、 索引名的长度不能超过128个字符；
+3、 一个复合索引最多可以有31个字段；</description></item><item><title>四十九、MongoDB 固定集合（Capped Collections）</title><link>https://www.shellio.cc/docs/database/mongodb/49/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/49/</guid><description>因为大小固定，我们可以想象其就像一个环形队列，当集合空间用完后，再插入的元素就会覆盖最初始的头部的元素
+Capped collections 有很高的性能以及队列过期的特性(过期按照插入的顺序)，这个有点和 “RRD” 概念类似
+Capped collections 它非常适合类似记录日志的功能
+创建固定集合 使用createCollection 可以创建一个固定集合，但要设置 capped 属性设置为 true
+1&amp;gt; db.createCollection(&amp;#34;mycapped_log&amp;#34;,{capped:true,size:10000}) 2{ &amp;#34;ok&amp;#34; : 1 } 还可以指定文档个数,加上 max:1000 属性
+1&amp;gt; db.createCollection(&amp;#34;mycapped_log&amp;#34;,{capped:true,size:10000,max:1000}) 2{ &amp;#34;ok&amp;#34; : 1 } 判断集合是否为固定集合:
+1&amp;gt; db.mycapped_log.isCapped() 2true 可以使用以下命令将已存在的集合转换为固定集合
+1&amp;gt; db.runCommand({&amp;#34;convertToCapped&amp;#34;:&amp;#34;language&amp;#34;,size:10000}) 2{ &amp;#34;ok&amp;#34; : 1 } 上面的命令将已存在的 language 集合转换为固定集合
+固定集合查询 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 因为固定集合文档按照插入顺序储存的，所以默认情况下查询就是按照插入顺序返回的
+但我们也可以使用 $natural 调整返回顺序
+1&amp;gt; db.capped_Log.find().sort({$natural:-1}) 固定集合的特点 固定集合可以插入及更新,但更新不能超出 collection 的大小,否则更新失败
+固定集合不允许删除,但是可以调用 drop() 删除集合中的所有行,但是 drop 后需要显式地重建集合
+在32 位机子上一个 cappped collection 的最大值约为 482.</description></item><item><title>四十六、MongoDB 正则表达式</title><link>https://www.shellio.cc/docs/database/mongodb/46/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/46/</guid><description>正则表达式是使用单个字符串来描述、匹配一系列符合某个句法规则的字符串。
+许多程序设计语言都支持利用正则表达式进行字符串操作。
+MongoDB 使用 PCRE (Perl Compatible Regular Expression) 作为正则表达式语言
+不同于全文检索，我们使用正则表达式不需要做任何配置。
+假设有以下 posts 集合的文档结构，该文档包含了文章内容和标签：
+1{ 2 &amp;#34;post_text&amp;#34;: &amp;#34;enjoy the mongodb articles on souyunku&amp;#34;, 3 &amp;#34;tags&amp;#34;: [ 4 &amp;#34;mongodb&amp;#34;, 5 &amp;#34;souyunku&amp;#34; 6 ] 使用正则表达式 以下命令使用正则表达式查找包含 souyunku 字符串的文章：
+1&amp;gt;db.posts.find({post_text:{$regex:&amp;#34;souyunku&amp;#34;}}) 以上查询也可以写为：
+1&amp;gt;db.posts.find({post_text:/souyunku/}) 不区分大小写的正则表达式 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 如果检索需要不区分大小写，我们可以设置 $options 为 $i。
+以下命令将查找不区分大小写的字符串 souyunku：
+1&amp;gt;db.posts.find({post_text:{$regex:&amp;#34;souyunku&amp;#34;,$options:&amp;#34;$i&amp;#34;}}) 集合中会返回所有包含字符串 souyunku 的数据，且不区分大小写：
+1{ 2 &amp;#34;_id&amp;#34; : ObjectId(&amp;#34;53493d37d852429c10000004&amp;#34;), 3 &amp;#34;post_text&amp;#34; : &amp;#34;hey! this is my post on souyunku&amp;#34;, 4 &amp;#34;tags&amp;#34; : [ &amp;#34;souyunku&amp;#34; ] 数组元素使用正则表达式 我们还可以在数组字段中使用正则表达式来查找内容。 这在标签的实现上非常有用，如果你需要查找包含以 run 开头的标签数据(ru 或 run 或 souyunku)， 你可以使用以下代码：</description></item><item><title>四十七、MongoDB 管理工具-Rockmongo</title><link>https://www.shellio.cc/docs/database/mongodb/47/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/47/</guid><description>通过Rockmongo 我们可以管理 MongoDB 服务，数据库，集合，文档，索引等等
+Rockmongo 提供了非常人性化的操作，类似 phpMyAdmin（ PHP开发的 MySql 管理工具）
+Rockmongo 下载地址： http://rockmongo.com/downloads
+Rockmongo 主要特征 使用宽松的 New BSD License 协议
+速度快，安装简单
+支持多语言（目前提供中文、英文、日文、巴西葡萄牙语、法语、德语、俄语、意大利语）
+系统
+可以配置多个主机，每个主机可以有多个管理员
+需要管理员密码才能登入操作，确保数据库的安全性
+服务器
+服务器信息 (WEB服务器, PHP, PHP.ini相关指令 …)
+状态
+数据库信息
+数据库
+查询，创建和删除
+执行命令和Javascript代码
+统计信息
+集合（相当于表）
+强大的查询工具
+读数据，写数据，更改数据，复制数据，删除数据
+查询、创建和删除索引
+清空数据
+批量删除和更改数据
+统计信息
+GridFS
+查看分块
+下载文件
+安装 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 安装需求 1、 一个能运行PHP的Web服务器，比如ApacheHttpd,Nginx；
+2、 PHP需要PHPv5.1.6或更高版本，需要支持SESSION为了能连接MongoDB，需要安装php_mongo扩展；
+快速安装 1、 下载安装包；
+2、 解压到网站目录下；
+3、 用编辑器打开config.php，修改host,port,admins等参数；
+4、 在浏览器中访问index.php，例如http://localhost/rockmongo/index.php；
+5、 使用用户名和密码登录，默认为“admin”和“admin”；
+6、 开始玩转MongoDB；
+参考文档 1、 http://rockmongo.</description></item><item><title>四十三、MongoDB ObjectId</title><link>https://www.shellio.cc/docs/database/mongodb/43/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/43/</guid><description>其实在前面几个章节中我们已经使用了 MongoDB ObjectId
+本章节，我们将学习 ObjectId 的结构
+ObjectId 是一个 12 字节 BSON 类型数据，由以下几部分组成
+1、 前4个字节表示时间戳；
+2、 接下来的3个字节是机器标识码；
+3、 紧接的两个字节由进程id组成（PID）；
+4、 最后三个字节是随机数；
+MongoDB中存储的文档必须有一个 _id 键 这个键的值可以是任何类型的，默认是 ObjectId 对象
+在一个集合里面，每个文档都有唯一的 _id 值，来确保集合里面每个文档都能被唯一标识
+MongoDB 采用 ObjectId，而不是其他比较常规的做法（比如自动增加的主键）的主要原因，因为在多个 服务器上同步自动增加主键值既费力还费时
+MongoDB 创建新的 ObjectId 下面的代码可以生成新的 ObjectId
+1&amp;gt; newid = ObjectId() 2ObjectId(&amp;#34;59ef2598a0f7c7d445f864b3&amp;#34;) 可以使用生成的 id 来取代 MongoDB 自动生成的 ObjectId
+创建文档的时间戳 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 由于ObjectId 中存储了 4 个字节的时间戳
+所以我们不需要再为文档保存时间戳字段，因为可以通过 getTimestamp 函数来获取文档的创建时间
+1&amp;gt; ObjectId(&amp;#34;59ef2598a0f7c7d445f864b3&amp;#34;).getTimestamp() 2ISODate(&amp;#34;2017-10-24T11:35:52Z&amp;#34;) ObjectId 转换为字符串 str 属性可以返回 ObjectId 的字符串格式
+1&amp;gt; ObjectId(&amp;#34;59ef2598a0f7c7d445f864b3&amp;#34;).str 259ef2598a0f7c7d445f864b3</description></item><item><title>四十四、MongoDB Map Reduce</title><link>https://www.shellio.cc/docs/database/mongodb/44/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/44/</guid><description>Map-Reduce 是一种计算模型，简单的说就是将大批量的工作（数据）分解（MAP）执行，然后再将结果合并成最终结果 ( REDUCE )
+mapReduce 方法 语法 MongoDB mapReduce() 方法语法格式如下
+1&amp;gt;db.collection.mapReduce( 2 function() {emit(key,value);}, // map 函数 3 function(key,values) {return reduceFunction}, // reduce 函数 4 { 5 out: collection, 6 query: document, 7 sort: document, 8 limit: number 9 } 使用mapReduce 方法实现两个函数 Map 函数和 Reduce 函数
+Map函数调用 emit(key, value), 遍历 collection 中所有的记录, 将 key 与 value 传递给 Reduce 函数进行处理
+Map函数必须调用 emit(key, value) 返回键值对
+参数说明 map ：映射函数，生成键值对序列，作为 reduce 函数参数 reduce 统计函数，reduce 函数的任务就是将key-values变成key-value，也就是把values数组变成一个单一的值value out 统计结果存放集合 (不指定则使用临时集合,在客户端断开后自动删除)。 query 一个筛选条件，只有满足条件的文档才会调用map函数 ( query、limit，sort可以随意组合 ) sort 和limit结合的sort排序参数（也是在发往map函数前给文档排序），可以优化分组机制 limit 发往map函数的文档数量的上限（要是没有limit，单独使用sort的用处不大） Map-Reduce 计算模型图示 在这张图中，在集合 orders 中查找 status:”A” 的数据，并根据 cust_id 来分组，并计算 amount 的总和</description></item><item><title>四十五、MongoDB 全文检索</title><link>https://www.shellio.cc/docs/database/mongodb/45/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/45/</guid><description>这个过程类似于通过字典中的检索字表查字的过程。
+MongoDB 从 2.4 版本开始支持全文检索
+MongoDB 在 2.6 版本以后是默认开启全文检索的
+MongoDB 目前支持 15 种语言( 暂时不支持中文 )的全文索引 danish dutch english finnish french german hungarian italian norwegian portuguese romanian russian spanish swedish turkish 启用全文检索 MongoDB 在 2.6 版本以后是默认开启全文检索的，如果你使用之前的版本，你需要使用以下代码来启用全文检索:
+1&amp;gt;db.adminCommand({setParameter:true,textSearchEnabled:true}) 或者使用命令：
+1mongod --setParameter textSearchEnabled=true 创建全文索引 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 考虑以下 posts 集合的文档数据，包含了文章内容（post_text）及标签(tags)：
+1{ 2 &amp;#34;post_text&amp;#34;: &amp;#34;enjoy the mongodb articles on Twle&amp;#34;, 3 &amp;#34;tags&amp;#34;: [ 4 &amp;#34;mongodb&amp;#34;, 5 &amp;#34;souyunku&amp;#34; 6 ] 我们可以对 post_text 字段建立全文索引，这样我们可以搜索文章内的内容：
+1&amp;gt;db.posts.ensureIndex({post_text:&amp;#34;text&amp;#34;}) 使用全文索引 现在我们已经对 post_text 建立了全文索引，我们可以搜索文章中的关键词 souyunku：</description></item><item><title>四十一、MongoDB 高级索引</title><link>https://www.shellio.cc/docs/database/mongodb/41/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/41/</guid><description>查询表达式必须遵循指定的索引的顺序
+假设我们有以下文档集合 souyunku.users
+1{ 2 &amp;#34;address&amp;#34;: { 3 &amp;#34;city&amp;#34;: &amp;#34;Pek&amp;#34;, 4 &amp;#34;state&amp;#34;: &amp;#34;Pek&amp;#34;, 5 &amp;#34;pincode&amp;#34;: &amp;#34;100007&amp;#34; 6 }, 7 &amp;#34;tags&amp;#34;: [ 8 &amp;#34;video&amp;#34;, 9 &amp;#34;book&amp;#34;, 10 &amp;#34;music&amp;#34; 11 ], 12 &amp;#34;name&amp;#34;: &amp;#34;penglei&amp;#34; 这个文档包含了 address 子文档和 tags 数组
+索引数组字段 假设现在我们需要基于标签来检索用户，为此我们需要对集合中的数组 tags 建立索引
+在数组中创建索引，需要对数组中的每个字段依次建立索引
+因此要对数组 tags 创建索引时，就要为 music、book、vedio 三个值建立单独的索引
+使用以下命令创建数组索引
+1&amp;gt; db.users.ensureIndex({&amp;#34;tags&amp;#34;:1}) 2 &amp;#34;createdCollectionAutomatically&amp;#34; : false, 3 &amp;#34;numIndexesBefore&amp;#34; : 2, 4 &amp;#34;numIndexesAfter&amp;#34; : 3, 5 &amp;#34;ok&amp;#34; : 1 索引建完后，我们可以使用下面的命令来检索集合的 tags 字段</description></item><item><title>五、Linux 平台安装 MongoDB</title><link>https://www.shellio.cc/docs/database/mongodb/5/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/5/</guid><description>下载地址： https://www.mongodb.com/download-center#community
+下载完安装包，并解压 tgz （以下演示的是 64 位 Linux 上的安装 ）
+1、 下载；
+1 curl -O https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-3.4.9.tgz 2、 解压；
+1 tar -zxvf mongodb-linux-x86_64-3.4.9.tgz 3、 将解压包拷贝到指定目录；
+1 mv mongodb-linux-x86_64-3.4.9 /usr/local/mongodb 4、 添加PATHMongoDB的可执行文件位于bin目录下，所以可以将其添加到PATH路径中；
+1 export PATH=&amp;lt;mongodb-install-directory&amp;gt;/bin:$PATH 1**&amp;lt;mongodb-install-directory&amp;gt;** 是 MongoDB 的安装路径 2如本文的 **/usr/local/mongodb** 创建数据库目录 MongoDB 的数据存储在 data 目录的 db 目录下
+这个目录在安装过程不会自动创建，所以需要手动创建 data 目录，并在 data 目录中创建 db 目录
+以下范例中我们将 data 目录创建 / 目录下
+注意：/data/db 是 MongoDB 默认的启动的数据库路径 ( –dbpath )
+1mkdir -p /data/db 命令行中运行 MongoDB 服务 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 可以在MongoDB 安装目录下的 bin 目录中执行 mongod 命令来启动 MongoDB 服务</description></item><item><title>五十、MongoDB 自增 ID</title><link>https://www.shellio.cc/docs/database/mongodb/50/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/50/</guid><description>MongoDB 的 _id 是系统自动生成的 12 字节唯一标识
+为了实现 ObjectId 自动增长功能，我们需要另外取巧的方法来实现
+接下来我们将学习如何在 counters 集合中实现自增字段 _id
+使用 counters 集合 假设我们有如下的 language 文档
+我们希望 _id 字段是自增的，也就是从 1,2,3,4 到 n 的自动增长
+1{ 2 &amp;#34;_id&amp;#34;:1, 3 &amp;#34;name&amp;#34;: &amp;#34;Python&amp;#34;, 4 &amp;#34;category&amp;#34;: &amp;#34;server&amp;#34; 取巧的方法，就是创建 counters 集合，序列字段值可以实现自动长
+1&amp;gt; db.createCollection(&amp;#34;counters&amp;#34;) 然后向counters 集合中插入以下文档，使用 language_id 作为 key
+1{ 2 &amp;#34;_id&amp;#34;:&amp;#34;language_id&amp;#34;, 3 &amp;#34;sequence_value&amp;#34;: 0 sequence_value 字段是 language 中的 “_id” 通过自动增长后的一个值
+最后，使用以下命令插入 counters 集合的序列文档中
+1&amp;gt;db.counters.insert({_id:&amp;#34;language_id&amp;#34;,sequence_value:0}) 准备工作到这里就完成了，接下来创建 JavaScript 函数
+创建 Javascript 函数 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 我们创建一个函数 getNextSequenceValue 作为序列名的输入</description></item><item><title>一、MongoDB 基础教程</title><link>https://www.shellio.cc/docs/database/mongodb/1/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/database/mongodb/1/</guid><description>MongoDB 是一个介于关系数据库和非关系数据库之间的产品，是非关系数据库当中功能最丰富，最像关系数据库的。
+内容列表 MongoDB 简介
+介绍MongoDB 基础概念
+window 平台安装 MongoDB
+介绍如何在window平台上安装MongoDB
+Linux 平台安装 MongoDB
+介绍如何在Linux平台上安装MongoDB
+MongoDB 术语
+介绍MongoDB 的一些术语
+MongoDB 连接
+介绍MongoDB 数据库，对象，集合应用
+PHP安装 MongoDB 扩展
+介绍PHP 安装M MongoDB 扩展的方法
+MongoDB 插入文档
+介绍MongoDB 数据插入操作
+MongoDB 更新文档
+介绍MongoDB 更新数据操作
+MongoDB 删除文档
+介绍MongoDB 删除数据操作
+MongoDB 查询
+介绍MongoDB 数据查询操作
+MongoDB条件操作符
+介绍MongoDB 条件操作符的使用
+MongoDB $type 操作符
+介绍MongoDB 条件操作符 $type 的使用
+MongoDB 有用资源 1、 MongoDB官网地址:https://www.mongodb.com/；
+2、 MongoDB官方英文文档:https://docs.mongodb.com/manual/；
+3、 MongoDB各平台下载地址：[MongoDB3.4.9CommunityServer][]；</description></item></channel></rss>

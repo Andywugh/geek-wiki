@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>安全 on 程序员安仔</title><link>https://www.shellio.cc/categories/%E5%AE%89%E5%85%A8/</link><description>Recent content in 安全 on 程序员安仔</description><generator>Hugo -- gohugo.io</generator><language>zh-hans</language><copyright>个人技术博客</copyright><lastBuildDate>Sat, 21 Oct 2023 12:22:54 +0800</lastBuildDate><atom:link href="https://www.shellio.cc/categories/%E5%AE%89%E5%85%A8/index.xml" rel="self" type="application/rss+xml"/><item><title>Shiro InI 配置</title><link>https://www.shellio.cc/docs/java/shiro/5/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/shiro/5/</guid><description>INI 配置 之前章节我们已经接触过一些 INI 配置规则了，如果大家使用过如 Spring 之类的 IoC/DI 容器的话，Shiro 提供的 INI 配置也是非常类似的，即可以理解为是一个 IoC/DI 容器，但是区别在于它从一个根对象 securityManager 开始。
+根对象 SecurityManager 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 从之前的 Shiro 架构图可以看出，Shiro 是从根对象 SecurityManager 进行身份验证和授权的；也就是所有操作都是自它开始的，这个对象是线程安全且真个应用只需要一个即可，因此 Shiro 提供了 SecurityUtils 让我们绑定它为全局的，方便后续操作。
+因为Shiro 的类都是 POJO 的，因此都很容易放到任何 IoC 容器管理。但是和一般的 IoC 容器的区别在于，Shiro 从根对象 securityManager 开始导航；Shiro 支持的依赖注入：public 空参构造器对象的创建、setter 依赖注入。
+1、 纯Java代码写法（com.github.zhangkaitao.shiro.chapter4.NonConfigurationCreateTest）：；
+1DefaultSecurityManager securityManager = new DefaultSecurityManager(); 2//设置authenticator 3ModularRealmAuthenticator authenticator = new ModularRealmAuthenticator(); 4authenticator.setAuthenticationStrategy(new AtLeastOneSuccessfulStrategy()); 5securityManager.setAuthenticator(authenticator); 6//设置authorizer 7ModularRealmAuthorizer authorizer = new ModularRealmAuthorizer(); 8authorizer.setPermissionResolver(new WildcardPermissionResolver()); 9securityManager.setAuthorizer(authorizer); 10//设置Realm 11DruidDataSource ds = new DruidDataSource(); 12ds.</description></item><item><title>Shiro JSP 标签</title><link>https://www.shellio.cc/docs/java/shiro/10/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/shiro/10/</guid><description>JSP 标签 Shiro 提供了 JSTL 标签用于在 JSP/GSP 页面进行权限控制，如根据登录用户显示相应的页面按钮。
+导入标签库
+&amp;lt;%@taglib prefix=&amp;quot;shiro&amp;quot; uri=&amp;quot;http://shiro.apache.org/tags&amp;quot; %&amp;gt;
+标签库定义在 shiro-web.jar 包下的 META-INF/shiro.tld 中定义。
+guest 标签
+1&amp;lt;shiro:guest&amp;gt; 2欢迎游客访问，&amp;lt;a href=&amp;#34;${pageContext.request.contextPath}/login.jsp&amp;#34;&amp;gt;登录&amp;lt;/a&amp;gt; 3&amp;lt;/shiro:guest&amp;gt; 用户没有身份验证时显示相应信息，即游客访问信息。
+user 标签
+1&amp;lt;shiro:guest&amp;gt; 2欢迎游客访问，&amp;lt;a href=&amp;#34;${pageContext.request.contextPath}/login.jsp&amp;#34;&amp;gt;登录&amp;lt;/a&amp;gt; 3&amp;lt;/shiro:guest&amp;gt; 用户已经身份验证 / 记住我登录后显示相应的信息。
+authenticated 标签
+1&amp;lt;shiro:authenticated&amp;gt; 2 用户[&amp;lt;shiro:principal/&amp;gt;]已身份验证通过 3&amp;lt;/shiro:authenticated&amp;gt; 用户已经身份验证通过，即 Subject.login 登录成功，不是记住我登录的。
+notAuthenticated 标签
+1&amp;lt;shiro:notAuthenticated&amp;gt; 2 未身份验证（包括记住我） 3&amp;lt;/shiro:notAuthenticated&amp;gt; 用户已经身份验证通过，即没有调用 Subject.login 进行登录，包括记住我自动登录的也属于未进行身份验证。
+principal 标签
+&amp;lt;shiro: principal/&amp;gt;
+显示用户身份信息，默认调用 Subject.getPrincipal() 获取，即 Primary Principal。
+&amp;lt;shiro:principal type=&amp;quot;java.lang.String&amp;quot;/&amp;gt;
+相当于Subject.getPrincipals().oneByType(String.class)。
+&amp;lt;shiro:principal type=&amp;quot;java.lang.String&amp;quot;/&amp;gt;
+相当于Subject.getPrincipals().oneByType(String.class)。
+&amp;lt;shiro:principal property=&amp;quot;username&amp;quot;/&amp;gt;
+相当于((User)Subject.getPrincipals()).getUsername()。</description></item><item><title>Shiro OAuth2</title><link>https://www.shellio.cc/docs/java/shiro/18/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/shiro/18/</guid><description>OAuth2 集成 目前很多开放平台如新浪微博开放平台都在使用提供开放 API 接口供开发者使用，随之带来了第三方应用要到开放平台进行授权的问题，OAuth 就是干这个的，OAuth2 是 OAuth 协议的下一个版本，相比 OAuth1，OAuth2 整个授权流程更简单安全了，但不兼容 OAuth1，具体可以到 OAuth2 官网 http://oauth.net/2/ 查看，OAuth2 协议规范可以参考 http://tools.ietf.org/html/rfc6749。目前有好多参考实现供选择，可以到其官网查看下载。
+本文使用 [Apache Oltu]()，其之前的名字叫 Apache Amber ，是 Java 版的参考实现。使用文档可参考 https://cwiki.apache.org/confluence/display/OLTU/Documentation。
+OAuth 角色 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 资源拥有者（resource owner）：能授权访问受保护资源的一个实体，可以是一个人，那我们称之为最终用户；如新浪微博用户 zhangsan；
+资源服务器（resource server）：存储受保护资源，客户端通过 access token 请求资源，资源服务器响应受保护资源给客户端；存储着用户 zhangsan 的微博等信息。
+授权服务器（authorization server）：成功验证资源拥有者并获取授权之后，授权服务器颁发授权令牌（Access Token）给客户端。
+客户端（client）：如新浪微博客户端 weico、微格等第三方应用，也可以是它自己的官方应用；其本身不存储资源，而是资源拥有者授权通过后，使用它的授权（授权令牌）访问受保护资源，然后客户端把相应的数据展示出来 / 提交到服务器。“客户端” 术语不代表任何特定实现（如应用运行在一台服务器、桌面、手机或其他设备）。
+1、 客户端从资源拥有者那请求授权授权请求可以直接发给资源拥有者，或间接的通过授权服务器这种中介，后者更可取；
+2、 客户端收到一个授权许可，代表资源服务器提供的授权；
+3、 客户端使用它自己的私有证书及授权许可到授权服务器验证；
+4、 如果验证成功，则下发一个访问令牌；
+5、 客户端使用访问令牌向资源服务器请求受保护资源；
+6、 资源服务器会验证访问令牌的有效性，如果成功则下发受保护资源；
+更多流程的解释请参考 OAuth2 的协议规范 http://tools.ietf.org/html/rfc6749。
+服务器端 本文把授权服务器和资源服务器整合在一起实现。
+POM 依赖 此处我们使用 apache oltu oauth2 服务端实现，需要引入 authzserver（授权服务器依赖）和 resourceserver（资源服务器依赖）。</description></item><item><title>Shiro Realm</title><link>https://www.shellio.cc/docs/java/shiro/7/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/shiro/7/</guid><description>Realm 及相关对象 Realm 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 【Realm】及【Authorizer】部分都已经详细介绍过 Realm 了，接下来再来看一下一般真实环境下的 Realm 如何实现。
+1、定义实体及关系
+即用户– 角色之间是多对多关系，角色 – 权限之间是多对多关系；且用户和权限之间通过角色建立关系；在系统中验证时通过权限验证，角色只是权限集合，即所谓的显示角色；其实权限应该对应到资源（如菜单、URL、页面按钮、Java 方法等）中，即应该将权限字符串存储到资源实体中，但是目前为了简单化，直接提取一个权限表，【综合示例】部分会使用完整的表结构。
+用户实体包括：编号 (id)、用户名 (username)、密码 (password)、盐 (salt)、是否锁定 (locked)；是否锁定用于封禁用户使用，其实最好使用 Enum 字段存储，可以实现更复杂的用户状态实现。 角色实体包括：、编号 (id)、角色标识符（role）、描述（description）、是否可用（available）；其中角色标识符用于在程序中进行隐式角色判断的，描述用于以后再前台界面显示的、是否可用表示角色当前是否激活。 权限实体包括：编号（id）、权限标识符（permission）、描述（description）、是否可用（available）；含义和角色实体类似不再阐述。
+另外还有两个关系实体：用户 – 角色实体（用户编号、角色编号，且组合为复合主键）；角色 – 权限实体（角色编号、权限编号，且组合为复合主键）。
+sql及实体请参考源代码中的 sql\shiro.sql 和 com.github.zhangkaitao.shiro.chapter6.entity 对应的实体。
+2、环境准备
+为了方便数据库操作，使用了 “org.springframework: spring-jdbc: 4.0.0.RELEASE” 依赖，虽然是 spring4 版本的，但使用上和 spring3 无区别。其他依赖请参考源码的 pom.xml。
+3、定义 Service 及 Dao
+为了实现的简单性，只实现必须的功能，其他的可以自己实现即可。
+PermissionService
+1public interface PermissionService { 2 public Permission createPermission(Permission permission); 3 public void deletePermission(Long permissionId); 实现基本的创建 / 删除权限。</description></item><item><title>Shiro RememberMe</title><link>https://www.shellio.cc/docs/java/shiro/14/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/shiro/14/</guid><description>RememberMe Shiro 提供了记住我（RememberMe）的功能，比如访问如淘宝等一些网站时，关闭了浏览器下次再打开时还是能记住你是谁，下次访问时无需再登录即可访问，基本流程如下：
+1、 首先在登录页面选中RememberMe然后登录成功；如果是浏览器登录，一般会把RememberMe的Cookie写到客户端并保存下来；
+2、 关闭浏览器再重新打开；会发现浏览器还是记住你的；
+3、 访问一般的网页服务器端还是知道你是谁，且能正常访问；
+4、 但是比如我们访问淘宝时，如果要查看我的订单或进行支付时，此时还是需要再进行身份认证的，以确保当前用户还是你；
+RememberMe 配置 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 spring-shiro-web.xml 配置：
+1&amp;lt;bean id=&amp;#34;sessionIdCookie&amp;#34; class=&amp;#34;org.apache.shiro.web.servlet.SimpleCookie&amp;#34;&amp;gt; 2 &amp;lt;constructor-arg value=&amp;#34;sid&amp;#34;/&amp;gt; 3 &amp;lt;property name=&amp;#34;httpOnly&amp;#34; value=&amp;#34;true&amp;#34;/&amp;gt; 4 &amp;lt;property name=&amp;#34;maxAge&amp;#34; value=&amp;#34;-1&amp;#34;/&amp;gt; 5&amp;lt;/bean&amp;gt; 6&amp;lt;bean id=&amp;#34;rememberMeCookie&amp;#34; class=&amp;#34;org.apache.shiro.web.servlet.SimpleCookie&amp;#34;&amp;gt; 7 &amp;lt;constructor-arg value=&amp;#34;rememberMe&amp;#34;/&amp;gt; 8 &amp;lt;property name=&amp;#34;httpOnly&amp;#34; value=&amp;#34;true&amp;#34;/&amp;gt; 9 &amp;lt;property name=&amp;#34;maxAge&amp;#34; value=&amp;#34;2592000&amp;#34;/&amp;gt;&amp;lt;!-- 30天 --&amp;gt; 10&amp;lt;/bean&amp;gt; sessionIdCookie：maxAge=-1 表示浏览器关闭时失效此 Cookie； rememberMeCookie：即记住我的 Cookie，保存时长 30 天； 1`&amp;lt;!-- rememberMe管理器 --&amp;gt;` 2&amp;lt;bean id=&amp;#34;rememberMeManager&amp;#34; 3class=&amp;#34;org.apache.shiro.web.mgt.CookieRememberMeManager&amp;#34;&amp;gt; 4 &amp;lt;property name=&amp;#34;cipherKey&amp;#34; value=&amp;#34; 5#{T(org.apache.shiro.codec.Base64).decode(&amp;#39;4AvVhmFLUs0KTA3Kprsdag==&amp;#39;)}&amp;#34;/&amp;gt; 6 &amp;lt;property name=&amp;#34;cookie&amp;#34; ref=&amp;#34;rememberMeCookie&amp;#34;/&amp;gt; 7&amp;lt;/bean&amp;gt; rememberMe 管理器，cipherKey 是加密 rememberMe Cookie 的密钥；默认 AES 算法；</description></item><item><title>Shiro Spring 集成</title><link>https://www.shellio.cc/docs/java/shiro/13/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/shiro/13/</guid><description>与 Spring集成 Shiro 的组件都是 JavaBean/POJO 式的组件，所以非常容易使用 Spring 进行组件管理，可以非常方便的从 ini 配置迁移到 Spring 进行管理，且支持 JavaSE 应用及 Web 应用的集成。
+在示例之前，需要导入 shiro-spring 及 spring-context 依赖，具体请参考 pom.xml。
+spring-beans.xml 配置文件提供了基础组件如 DataSource、DAO、Service 组件的配置。
+JavaSE 应用 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 spring-shiro.xml 提供了普通 JavaSE 独立应用的 Spring 配置：
+1&amp;lt;!-- 缓存管理器 使用Ehcache实现 --&amp;gt; 2&amp;lt;bean id=&amp;#34;cacheManager&amp;#34; class=&amp;#34;org.apache.shiro.cache.ehcache.EhCacheManager&amp;#34;&amp;gt; 3 &amp;lt;property name=&amp;#34;cacheManagerConfigFile&amp;#34; value=&amp;#34;classpath:ehcache.xml&amp;#34;/&amp;gt; 4&amp;lt;/bean&amp;gt; 5&amp;lt;!-- 凭证匹配器 --&amp;gt; 6&amp;lt;bean id=&amp;#34;credentialsMatcher&amp;#34; class=&amp;#34; 7com.github.zhangkaitao.shiro.chapter12.credentials.RetryLimitHashedCredentialsMatcher&amp;#34;&amp;gt; 8 &amp;lt;constructor-arg ref=&amp;#34;cacheManager&amp;#34;/&amp;gt; 9 &amp;lt;property name=&amp;#34;hashAlgorithmName&amp;#34; value=&amp;#34;md5&amp;#34;/&amp;gt; 10 &amp;lt;property name=&amp;#34;hashIterations&amp;#34; value=&amp;#34;2&amp;#34;/&amp;gt; 11 &amp;lt;property name=&amp;#34;storedCredentialsHexEncoded&amp;#34; value=&amp;#34;true&amp;#34;/&amp;gt; 12&amp;lt;/bean&amp;gt; 13&amp;lt;!</description></item><item><title>Shiro SSL</title><link>https://www.shellio.cc/docs/java/shiro/15/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/shiro/15/</guid><description>SSL 对于SSL 的支持，Shiro 只是判断当前 url 是否需要 SSL 登录，如果需要自动重定向到 https 进行访问。
+首先生成数字证书，生成证书到 D:\localhost.keystore
+使用JDK 的 keytool 命令，生成证书（包含证书 / 公钥 / 私钥）到 D:\localhost.keystore：
+1keytool -genkey -keystore &amp;#34;D:\localhost.keystore&amp;#34; -alias localhost -keyalg RSA 2输入密钥库口令: 3再次输入新口令: 4您的名字与姓氏是什么? 5 [Unknown]: localhost 6您的组织单位名称是什么? 7 [Unknown]: sishuok.com 8您的组织名称是什么? 9 [Unknown]: sishuok.com 10您所在的城市或区域名称是什么? 11 [Unknown]: beijing 12您所在的省/市/自治区名称是什么? 13 [Unknown]: beijing 14该单位的双字母国家/地区代码是什么? 15 [Unknown]: cn 16CN=localhost, OU=sishuok.com, O=sishuok.com, L=beijing, ST=beijing, C=cn是否正确 17 [否]: y 18输入 &amp;lt;localhost&amp;gt; 的密钥口令 19 (如果和密钥库口令相同, 按回车): 20再次输入新口令: 通过如上步骤，生成证书到 D:\ localhost.</description></item><item><title>Shiro Web 集成</title><link>https://www.shellio.cc/docs/java/shiro/8/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/shiro/8/</guid><description>与 Web 集成 Shiro 提供了与 Web 集成的支持，其通过一个 ShiroFilter 入口来拦截需要安全控制的 URL，然后进行相应的控制，ShiroFilter 类似于如 Strut2/SpringMVC 这种 web 框架的前端控制器，其是安全控制的入口点，其负责读取配置（如 ini 配置文件），然后判断 URL 是否需要登录 / 权限等工作。
+准备环境 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 1、创建 webapp 应用
+此处我们使用了 jetty-maven-plugin 和 tomcat7-maven-plugin 插件；这样可以直接使用 “mvn jetty:run” 或“mvn tomcat7:run”直接运行 webapp 了。然后通过 URLhttp://localhost:8080/chapter7 / 访问即可。
+2、依赖
+Servlet3
+1&amp;lt;dependency&amp;gt; 2 &amp;lt;groupId&amp;gt;javax.servlet&amp;lt;/groupId&amp;gt; 3 &amp;lt;artifactId&amp;gt;javax.servlet-api&amp;lt;/artifactId&amp;gt; 4 &amp;lt;version&amp;gt;3.0.1&amp;lt;/version&amp;gt; 5 &amp;lt;scope&amp;gt;provided&amp;lt;/scope&amp;gt; 6&amp;lt;/dependency&amp;gt; Servlet3 的知识可以参考 https://github.com/zhangkaitao/servlet3-showcase 及 Servlet3 规范 http://www.iteye.com/blogs/subjects/Servlet-3-1。
+shiro-web
+1&amp;lt;dependency&amp;gt; 2 &amp;lt;groupId&amp;gt;org.apache.shiro&amp;lt;/groupId&amp;gt; 3 &amp;lt;artifactId&amp;gt;shiro-web&amp;lt;/artifactId&amp;gt; 4 &amp;lt;version&amp;gt;1.2.2&amp;lt;/version&amp;gt; 5&amp;lt;/dependency&amp;gt; 其他依赖请参考源码的 pom.</description></item><item><title>Shiro 编码加密</title><link>https://www.shellio.cc/docs/java/shiro/6/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/shiro/6/</guid><description>编码/加密 在涉及到密码存储问题上，应该加密 / 生成密码摘要存储，而不是存储明文密码。比如之前的 600w csdn 账号泄露对用户可能造成很大损失，因此应加密 / 生成不可逆的摘要方式存储。
+编码 / 解码 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 Shiro 提供了 base64 和 16 进制字符串编码 / 解码的 API 支持，方便一些编码解码操作。Shiro 内部的一些数据的存储 / 表示都使用了 base64 和 16 进制字符串。
+1String str = &amp;#34;hello&amp;#34;; 2String base64Encoded = Base64.encodeToString(str.getBytes()); 3String str2 = Base64.decodeToString(base64Encoded); 4Assert.assertEquals(str, str2); 通过如上方式可以进行 base64 编码 / 解码操作，更多 API 请参考其 Javadoc。
+1String str = &amp;#34;hello&amp;#34;; 2String base64Encoded = Hex.encodeToString(str.getBytes()); 3String str2 = new String(Hex.decode(base64Encoded.getBytes())); 4Assert.assertEquals(str, str2); 通过如上方式可以进行 16 进制字符串编码 / 解码操作，更多 API 请参考其 Javadoc。</description></item><item><title>Shiro 并发登录控制</title><link>https://www.shellio.cc/docs/java/shiro/19/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/shiro/19/</guid><description>并发登录人数控制 在某些项目中可能会遇到如每个账户同时只能有一个人登录或几个人同时登录，如果同时有多人登录：要么不让后者登录；要么踢出前者登录（强制退出）。比如 spring security 就直接提供了相应的功能；Shiro 的话没有提供默认实现，不过可以很容易的在 Shiro 中加入这个功能。
+示例代码基于《第十六章 综合实例》完成，通过 Shiro Filter 机制扩展 KickoutSessionControlFilter 完成。
+首先来看看如何配置使用（spring-config-shiro.xml）
+kickoutSessionControlFilter 用于控制并发登录人数的
+1&amp;lt;bean id=&amp;#34;kickoutSessionControlFilter&amp;#34; 2class=&amp;#34;com.github.zhangkaitao.shiro.chapter18.web.shiro.filter.KickoutSessionControlFilter&amp;#34;&amp;gt; 3 &amp;lt;property name=&amp;#34;cacheManager&amp;#34; ref=&amp;#34;cacheManager&amp;#34;/&amp;gt; 4 &amp;lt;property name=&amp;#34;sessionManager&amp;#34; ref=&amp;#34;sessionManager&amp;#34;/&amp;gt; 5 &amp;lt;property name=&amp;#34;kickoutAfter&amp;#34; value=&amp;#34;false&amp;#34;/&amp;gt; 6 &amp;lt;property name=&amp;#34;maxSession&amp;#34; value=&amp;#34;2&amp;#34;/&amp;gt; 7 &amp;lt;property name=&amp;#34;kickoutUrl&amp;#34; value=&amp;#34;/login?kickout=1&amp;#34;/&amp;gt; 8&amp;lt;/bean&amp;gt; cacheManager：使用 cacheManager 获取相应的 cache 来缓存用户登录的会话；用于保存用户—会话之间的关系的； sessionManager：用于根据会话 ID，获取会话进行踢出操作的； kickoutAfter：是否踢出后来登录的，默认是 false；即后者登录的用户踢出前者登录的用户； maxSession：同一个用户最大的会话数，默认 1；比如 2 的意思是同一个用户允许最多同时两个人登录； kickoutUrl：被踢出后重定向到的地址； shiroFilter 配置
+1 &amp;lt;bean id=&amp;#34;shiroFilter&amp;#34; class=&amp;#34;org.apache.shiro.spring.web.ShiroFilterFactoryBean&amp;#34;&amp;gt; 2 &amp;lt;property name=&amp;#34;securityManager&amp;#34; ref=&amp;#34;securityManager&amp;#34;/&amp;gt; 3 &amp;lt;property name=&amp;#34;loginUrl&amp;#34; value=&amp;#34;/login&amp;#34;/&amp;gt; 4 &amp;lt;property name=&amp;#34;filters&amp;#34;&amp;gt; 5 &amp;lt;util:map&amp;gt; 6 &amp;lt;entry key=&amp;#34;authc&amp;#34; value-ref=&amp;#34;formAuthenticationFilter&amp;#34;/&amp;gt; 7 &amp;lt;entry key=&amp;#34;sysUser&amp;#34; value-ref=&amp;#34;sysUserFilter&amp;#34;/&amp;gt; 8 &amp;lt;entry key=&amp;#34;kickout&amp;#34; value-ref=&amp;#34;kickoutSessionControlFilter&amp;#34;/&amp;gt; 9 &amp;lt;/util:map&amp;gt; 10 &amp;lt;/property&amp;gt; 11 &amp;lt;property name=&amp;#34;filterChainDefinitions&amp;#34;&amp;gt; 12 &amp;lt;value&amp;gt; 13 /login = authc 14 /logout = logout 15 /authenticated = authc 16 /** = kickout,user,sysUser 17 &amp;lt;/value&amp;gt; 18 &amp;lt;/property&amp;gt; 19 &amp;lt;/bean&amp;gt; 此处配置除了登录等之外的地址都走 kickout 拦截器进行并发登录控制。</description></item><item><title>Shiro 单点登录</title><link>https://www.shellio.cc/docs/java/shiro/16/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/shiro/16/</guid><description>单点登录 Shiro 1.2 开始提供了 Jasig CAS 单点登录的支持，单点登录主要用于多系统集成，即在多个系统中，用户只需要到一个中央服务器登录一次即可访问这些系统中的任何一个，无须多次登录。此处我们使用 Jasig CAS v4.0.0-RC3 版本：
+https://github.com/Jasig/cas/tree/v4.0.0-RC3
+Jasig CAS 单点登录系统分为服务器端和客户端，服务器端提供单点登录，多个客户端（子系统）将跳转到该服务器进行登录验证，大体流程如下：
+1、 访问客户端需要登录的页面http://localhost:9080/client/，此时会跳到单点登录服务器https://localhost:8443/server/login?service=https://localhost:9443/client/cas；
+2、 如果此时单点登录服务器也没有登录的话，会显示登录表单页面，输入用户名/密码进行登录；
+3、 登录成功后服务器端会回调客户端传入的地址：https://localhost:9443/client/cas?ticket=ST-1-eh2cIo92F9syvoMs5DOg-cas01.example.org，且带着一个ticket；
+4、 客户端会把ticket提交给服务器来验证ticket是否有效；如果有效服务器端将返回用户身份；
+5、 客户端可以再根据这个用户身份获取如当前系统用户/角色/权限信息；
+本章使用了和《第十四章 SSL》一样的数字证书。
+服务器端 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 我们使用了 Jasig CAS 服务器 v4.0.0-RC3 版本，可以到其官方的 github 下载：https://github.com/Jasig/cas/tree/v4.0.0-RC3 下载，然后将其 cas-server-webapp 模块封装到 shiro-example-chapter15-server 模块中，具体请参考源码。
+1、 数字证书使用和《第十四章SSL》一样的数字证书，即将localhost.keystore拷贝到shiro-example-chapter15-server模块根目录下；
+2、 在pom.xml中添加JettyMaven插件，并添加SSL支持：；
+1&amp;lt;plugin&amp;gt; 2 &amp;lt;groupId&amp;gt;org.mortbay.jetty&amp;lt;/groupId&amp;gt; 3 &amp;lt;artifactId&amp;gt;jetty-maven-plugin&amp;lt;/artifactId&amp;gt; 4 &amp;lt;version&amp;gt;8.1.8.v20121106&amp;lt;/version&amp;gt; 5 &amp;lt;configuration&amp;gt; 6 &amp;lt;webAppConfig&amp;gt; 7 &amp;lt;contextPath&amp;gt;/${project.build.finalName}&amp;lt;/contextPath&amp;gt; 8 &amp;lt;/webAppConfig&amp;gt; 9 &amp;lt;connectors&amp;gt; 10 &amp;lt;connector implementation=&amp;#34;org.eclipse.jetty.server.nio.SelectChannelConnector&amp;#34;&amp;gt; 11 &amp;lt;port&amp;gt;8080&amp;lt;/port&amp;gt; 12 &amp;lt;/connector&amp;gt; 13 &amp;lt;connector implementation=&amp;#34;org.</description></item><item><title>Shiro 动态 URL</title><link>https://www.shellio.cc/docs/java/shiro/20/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/shiro/20/</guid><description>动态 URL 权限控制 用过Spring Security 的朋友应该比较熟悉对 URL 进行全局的权限控制，即访问 URL 时进行权限匹配；如果没有权限直接跳到相应的错误页面。Shiro 也支持类似的机制，不过需要稍微改造下来满足实际需求。不过在 Shiro 中，更多的是通过 AOP 进行分散的权限控制，即方法级别的；而通过 URL 进行权限控制是一种集中的权限控制。本章将介绍如何在 Shiro 中完成动态 URL 权限控制。
+本章代码基于《第十六章 综合实例》，请先了解相关数据模型及基本流程后再学习本章。
+表及数据 SQL
+请运行shiro-example-chapter19/sql/ shiro-schema.sql 表结构
+请运行shiro-example-chapter19/sql/ shiro-schema.sql 数据
+实体
+具体请参考 com.github.zhangkaitao.shiro.chapter19 包下的实体。
+1public class UrlFilter implements Serializable { 2 private Long id; 3 private String name; //url名称/描述 4 private String url; //地址 5 private String roles; //所需要的角色，可省略 6 private String permissions; //所需要的权限，可省略 7} 表示拦截的 URL 和角色 / 权限之间的关系，多个角色 / 权限之间通过逗号分隔，此处还可以扩展其他的关系，另外可以加如 available 属性表示是否开启该拦截。</description></item><item><title>Shiro 多项目</title><link>https://www.shellio.cc/docs/java/shiro/24/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/shiro/24/</guid><description>多项目集中权限管理及分布式会话 在做一些企业内部项目时或一些互联网后台时；可能会涉及到集中权限管理，统一进行多项目的权限管理；另外也需要统一的会话管理，即实现单点身份认证和授权控制。
+学习本章之前，请务必先学习《第十章 会话管理》和《第十六章 综合实例》，本章代码都是基于这两章的代码基础上完成的。
+本章示例是同域名的场景下完成的，如果跨域请参考《第十五章 单点登录》和《第十七章 OAuth2 集成》了解使用 CAS 或 OAuth2 实现跨域的身份验证和授权。另外比如客户端 / 服务器端的安全校验可参考《第二十章 无状态 Web 应用集成》。
+部署架构 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 1、 有三个应用：用于用户/权限控制的Server（端口：8080）；两个应用App1（端口9080）和App2（端口10080）；
+2、 使用Nginx反向代理这三个应用，nginx.conf的server配置部分如下：；
+1server { 2 listen 80; 3 server_name localhost; 4 charset utf-8; 5 location ~ ^/(chapter23-server)/ { 6 proxy_pass http://127.0.0.1:8080; 7 index /; 8 proxy_set_header Host $host; 9 } 10 location ~ ^/(chapter23-app1)/ { 11 proxy_pass http://127.0.0.1:9080; 12 index /; 13 proxy_set_header Host $host; 14 } 15 location ~ ^/(chapter23-app2)/ { 16 proxy_pass http://127.</description></item><item><title>Shiro 关于</title><link>https://www.shellio.cc/docs/java/shiro/1/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/shiro/1/</guid><description>跟我学 Shiro Apache Shiro 是一个强大易用的 Java 安全框架，提供了认证、授权、加密和会话管理等功能，对于任何一个应用程序，Shiro 都可以提供全面的安全管理服务。并且相对于其他安全框架，Shiro 要简单的多。本教程只介绍基本的 Shiro 使用，不会过多分析源码等，重在使用。
+适用人群 Java 企业级安全应用开发人员。
+学习前提 相比较Spring Security，Shiro 小巧的多，但是学习本教程前，你还是需要了解 Java 开发语言。
+http://jinnianshilongnian.iteye.com/blog/2018936</description></item><item><title>Shiro 缓存机制</title><link>https://www.shellio.cc/docs/java/shiro/12/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/shiro/12/</guid><description>缓存机制 Shiro 提供了类似于 Spring 的 Cache 抽象，即 Shiro 本身不实现 Cache，但是对 Cache 进行了又抽象，方便更换不同的底层 Cache 实现。对于 Cache 的一些概念可以参考我的《Spring Cache 抽象详解》：http://jinnianshilongnian.iteye.com/blog/2001040。
+Shiro 提供的 Cache 接口：
+1public interface Cache&amp;lt;K, V&amp;gt; { 2 //根据Key获取缓存中的值 3 public V get(K key) throws CacheException; 4 //往缓存中放入key-value，返回缓存中之前的值 5 public V put(K key, V value) throws CacheException; 6 //移除缓存中key对应的值，返回该值 7 public V remove(K key) throws CacheException; 8 //清空整个缓存 9 public void clear() throws CacheException; 10 //返回缓存大小 11 public int size(); 12 //获取缓存中所有的key 13 public Set&amp;lt;K&amp;gt; keys(); 14 //获取缓存中所有的value 15 public Collection&amp;lt;V&amp;gt; values(); Shiro 提供的 CacheManager 接口：</description></item><item><title>Shiro 会话管理</title><link>https://www.shellio.cc/docs/java/shiro/11/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/shiro/11/</guid><description>会话管理 Shiro 提供了完整的企业级会话管理功能，不依赖于底层容器（如 web 容器 tomcat），不管 JavaSE 还是 JavaEE 环境都可以使用，提供了会话管理、会话事件监听、会话存储 / 持久化、容器无关的集群、失效 / 过期支持、对 Web 的透明支持、SSO 单点登录的支持等特性。即直接使用 Shiro 的会话管理可以直接替换如 Web 容器的会话管理。
+会话 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 所谓会话，即用户访问应用时保持的连接关系，在多次交互中应用能够识别出当前访问的用户是谁，且可以在多次交互中保存一些数据。如访问一些网站时登录成功后，网站可以记住用户，且在退出之前都可以识别当前用户是谁。
+Shiro 的会话支持不仅可以在普通的 JavaSE 应用中使用，也可以在 JavaEE 应用中使用，如 web 应用。且使用方式是一致的。
+1login(&amp;#34;classpath:shiro.ini&amp;#34;, &amp;#34;zhang&amp;#34;, &amp;#34;123&amp;#34;); 2Subject subject = SecurityUtils.getSubject(); 3Session session = subject.getSession(); 登录成功后使用 Subject.getSession() 即可获取会话；其等价于 Subject.getSession(true)，即如果当前没有创建 Session 对象会创建一个；另外 Subject.getSession(false)，如果当前没有创建 Session 则返回 null（不过默认情况下如果启用会话存储功能的话在创建 Subject 时会主动创建一个 Session）。
+session.getId();
+获取当前会话的唯一标识。
+session.getHost();
+获取当前 Subject 的主机地址，该地址是通过 HostAuthenticationToken.getHost() 提供的。
+1session.getTimeout(); 2session.setTimeout(毫秒); 获取/ 设置当前 Session 的过期时间；如果不设置默认是会话管理器的全局过期时间。</description></item><item><title>Shiro 集成验证码</title><link>https://www.shellio.cc/docs/java/shiro/23/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/shiro/23/</guid><description>集成验证码 在做用户登录功能时，很多时候都需要验证码支持，验证码的目的是为了防止机器人模拟真实用户登录而恶意访问，如暴力破解用户密码 / 恶意评论等。目前也有一些验证码比较简单，通过一些 OCR 工具就可以解析出来；另外还有一些验证码比较复杂（一般通过如扭曲、加线条 / 噪点等干扰）防止 OCR 工具识别；但是在中国就是人多，机器干不了的可以交给人来完成，所以在中国就有很多打码平台，人工识别验证码；因此即使比较复杂的如填字、算数等类型的验证码还是能识别的。所以验证码也不是绝对可靠的，目前比较可靠还是手机验证码，但是对于用户来说相对于验证码还是比较麻烦的。
+对于验证码图片的生成，可以自己通过如 Java 提供的图像 API 自己去生成，也可以借助如 JCaptcha 这种开源 Java 类库生成验证码图片；JCaptcha 提供了常见的如扭曲、加噪点等干扰支持。本章代码基于《第十六章 综合实例》。
+一、添加 JCaptcha 依赖
+1&amp;lt;dependency&amp;gt; 2 &amp;lt;groupId&amp;gt;com.octo.captcha&amp;lt;/groupId&amp;gt; 3 &amp;lt;artifactId&amp;gt;jcaptcha&amp;lt;/artifactId&amp;gt; 4 &amp;lt;version&amp;gt;2.0-alpha-1&amp;lt;/version&amp;gt; 5&amp;lt;/dependency&amp;gt; 6&amp;lt;dependency&amp;gt; 7 &amp;lt;groupId&amp;gt;com.octo.captcha&amp;lt;/groupId&amp;gt; 8 &amp;lt;artifactId&amp;gt;jcaptcha-integration-simple-servlet&amp;lt;/artifactId&amp;gt; 9 &amp;lt;version&amp;gt;2.0-alpha-1&amp;lt;/version&amp;gt; 10 &amp;lt;exclusions&amp;gt; 11 &amp;lt;exclusion&amp;gt; 12 &amp;lt;artifactId&amp;gt;servlet-api&amp;lt;/artifactId&amp;gt; 13 &amp;lt;groupId&amp;gt;javax.servlet&amp;lt;/groupId&amp;gt; 14 &amp;lt;/exclusion&amp;gt; 15 &amp;lt;/exclusions&amp;gt; 16&amp;lt;/dependency&amp;gt; com.octo.captcha.jcaptcha 提供了 jcaptcha 核心；而 jcaptcha-integration-simple-servlet 提供了与 Servlet 集成。
+二、GMailEngine
+来自[https://code.google.com/p/musicvalley/source/browse/trunk/musicvalley/doc/springSecurity/springSecurityIII/src/main/java/com/spring/security/jcaptcha/GMailEngine.java?spec=svn447&amp;amp;r=447]()（目前无法访问了），仿照 JCaptcha2.0 编写类似 GMail 验证码的样式；具体请参考 com.github.zhangkaitao.shiro.chapter22.jcaptcha.GMailEngine。
+三、MyManageableImageCaptchaService
+提供了判断仓库中是否有相应的验证码存在。
+1public class MyManageableImageCaptchaService extends 2 DefaultManageableImageCaptchaService { 3 public MyManageableImageCaptchaService( 4 com.</description></item><item><title>Shiro 简介</title><link>https://www.shellio.cc/docs/java/shiro/2/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/shiro/2/</guid><description>简介 Apache Shiro 是 Java 的一个安全框架。目前，使用 Apache Shiro 的人越来越多，因为它相当简单，对比 Spring Security，可能没有 Spring Security 做的功能强大，但是在实际工作时可能并不需要那么复杂的东西，所以使用小而简单的 Shiro 就足够了。对于它俩到底哪个好，这个不必纠结，能更简单的解决项目问题就好了。
+本教程只介绍基本的 Shiro 使用，不会过多分析源码等，重在使用。
+Shiro 可以非常容易的开发出足够好的应用，其不仅可以用在 JavaSE 环境，也可以用在 JavaEE 环境。Shiro 可以帮助我们完成：认证、授权、加密、会话管理、与 Web 集成、缓存等。这不就是我们想要的嘛，而且 Shiro 的 API 也是非常简单；其基本功能点如下图所示：
+Authentication：身份认证 / 登录，验证用户是不是拥有相应的身份；
+Authorization：授权，即权限验证，验证某个已认证的用户是否拥有某个权限；即判断用户是否能做事情，常见的如：验证某个用户是否拥有某个角色。或者细粒度的验证某个用户对某个资源是否具有某个权限；
+Session Manager：会话管理，即用户登录后就是一次会话，在没有退出之前，它的所有信息都在会话中；会话可以是普通 JavaSE 环境的，也可以是如 Web 环境的；
+Cryptography：加密，保护数据的安全性，如密码加密存储到数据库，而不是明文存储；
+Web Support：Web 支持，可以非常容易的集成到 Web 环境；
+Caching：缓存，比如用户登录后，其用户信息、拥有的角色 / 权限不必每次去查，这样可以提高效率；
+Concurrency：shiro 支持多线程应用的并发验证，即如在一个线程中开启另一个线程，能把权限自动传播过去；
+Testing：提供测试支持；
+Run As：允许一个用户假装为另一个用户（如果他们允许）的身份进行访问；
+Remember Me：记住我，这个是非常常见的功能，即一次登录后，下次再来的话不用登录了。
+记住一点，Shiro 不会去维护用户、维护权限；这些需要我们自己去设计 / 提供；然后通过相应的接口注入给 Shiro 即可。
+接下来我们分别从外部和内部来看看 Shiro 的架构，对于一个好的框架，从外部来看应该具有非常简单易于使用的 API，且 API 契约明确；从内部来看的话，其应该有一个可扩展的架构，即非常容易插入用户自定义实现，因为任何框架都不能满足所有需求。</description></item><item><title>Shiro 拦截器机制</title><link>https://www.shellio.cc/docs/java/shiro/9/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/shiro/9/</guid><description>拦截器机制 拦截器介绍 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 Shiro 使用了与 Servlet 一样的 Filter 接口进行扩展；所以如果对 Filter 不熟悉可以参考《Servlet 3.1 规范》http://www.iteye.com/blogs/subjects/Servlet-3-1了解 Filter 的工作原理。首先下图是 Shiro 拦截器的基础类图：
+1、NameableFilter
+NameableFilter 给 Filter 起个名字，如果没有设置默认就是 FilterName；还记得之前的如 authc 吗？当我们组装拦截器链时会根据这个名字找到相应的拦截器实例；
+2、OncePerRequestFilter
+OncePerRequestFilter 用于防止多次执行 Filter 的；也就是说一次请求只会走一次拦截器链；另外提供 enabled 属性，表示是否开启该拦截器实例，默认 enabled=true 表示开启，如果不想让某个拦截器工作，可以设置为 false 即可。
+3、ShiroFilter
+ShiroFilter 是整个 Shiro 的入口点，用于拦截需要安全控制的请求进行处理，这个之前已经用过了。
+4、AdviceFilter
+AdviceFilter 提供了 AOP 风格的支持，类似于 SpringMVC 中的 Interceptor：
+1boolean preHandle(ServletRequest request, ServletResponse response) throws Exception 2void postHandle(ServletRequest request, ServletResponse response) throws Exception 3void afterCompletion(ServletRequest request, ServletResponse response, Exception exception) throws Exception; preHandler：类似于 AOP 中的前置增强；在拦截器链执行之前执行；如果返回 true 则继续拦截器链；否则中断后续的拦截器链的执行直接返回；进行预处理（如基于表单的身份验证、授权） postHandle：类似于 AOP 中的后置返回增强；在拦截器链执行完成后执行；进行后处理（如记录执行时间之类的）； afterCompletion：类似于 AOP 中的后置最终增强；即不管有没有异常都会执行；可以进行清理资源（如接触 Subject 与线程的绑定之类的）； 5、PathMatchingFilter</description></item><item><title>Shiro 身份验证</title><link>https://www.shellio.cc/docs/java/shiro/3/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/shiro/3/</guid><description>身份验证 身份验证，即在应用中谁能证明他就是他本人。一般提供如他们的身份 ID 一些标识信息来表明他就是他本人，如提供身份证，用户名 / 密码来证明。
+在shiro 中，用户需要提供 principals （身份）和 credentials（证明）给 shiro，从而应用能验证用户身份：
+principals：身份，即主体的标识属性，可以是任何东西，如用户名、邮箱等，唯一即可。一个主体可以有多个 principals，但只有一个 Primary principals，一般是用户名 / 密码 / 手机号。
+credentials：证明 / 凭证，即只有主体知道的安全值，如密码 / 数字证书等。
+最常见的 principals 和 credentials 组合就是用户名 / 密码了。接下来先进行一个基本的身份认证。
+另外两个相关的概念是之前提到的 Subject 及 Realm，分别是主体及验证主体的数据源。
+环境准备 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 本文使用 Maven 构建，因此需要一点 Maven 知识。首先准备环境依赖：
+1&amp;lt;dependencies&amp;gt; 2 &amp;lt;dependency&amp;gt; 3 &amp;lt;groupId&amp;gt;junit&amp;lt;/groupId&amp;gt; 4 &amp;lt;artifactId&amp;gt;junit&amp;lt;/artifactId&amp;gt; 5 &amp;lt;version&amp;gt;4.9&amp;lt;/version&amp;gt; 6 &amp;lt;/dependency&amp;gt; 7 &amp;lt;dependency&amp;gt; 8 &amp;lt;groupId&amp;gt;commons-logging&amp;lt;/groupId&amp;gt; 9 &amp;lt;artifactId&amp;gt;commons-logging&amp;lt;/artifactId&amp;gt; 10 &amp;lt;version&amp;gt;1.1.3&amp;lt;/version&amp;gt; 11 &amp;lt;/dependency&amp;gt; 12 &amp;lt;dependency&amp;gt; 13 &amp;lt;groupId&amp;gt;org.apache.shiro&amp;lt;/groupId&amp;gt; 14 &amp;lt;artifactId&amp;gt;shiro-core&amp;lt;/artifactId&amp;gt; 15 &amp;lt;version&amp;gt;1.</description></item><item><title>Shiro 授权</title><link>https://www.shellio.cc/docs/java/shiro/4/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/shiro/4/</guid><description>授权 授权，也叫访问控制，即在应用中控制谁能访问哪些资源（如访问页面/编辑数据/页面操作等）。在授权中需了解的几个关键对象：主体（Subject）、资源（Resource）、权限（Permission）、角色（Role）。
+主体
+主体，即访问应用的用户，在 Shiro 中使用 Subject 代表该用户。用户只有授权后才允许访问相应的资源。
+资源
+在应用中用户可以访问的任何东西，比如访问 JSP 页面、查看/编辑某些数据、访问某个业务方法、打印文本等等都是资源。用户只要授权后才能访问。
+权限
+安全策略中的原子授权单位，通过权限我们可以表示在应用中用户有没有操作某个资源的权力。即权限表示在应用中用户能不能访问某个资源，如： 访问用户列表页面
+查看/新增/修改/删除用户数据（即很多时候都是 CRUD（增查改删）式权限控制）
+打印文档等等。。。
+如上可以看出，权限代表了用户有没有操作某个资源的权利，即反映在某个资源上的操作允不允许，不反映谁去执行这个操作。所以后续还需要把权限赋予给用户，即定义哪个用户允许在某个资源上做什么操作（权限），Shiro 不会去做这件事情，而是由实现人员提供。
+Shiro 支持粗粒度权限（如用户模块的所有权限）和细粒度权限（操作某个用户的权限，即实例级别的），后续部分介绍。
+角色
+角色代表了操作集合，可以理解为权限的集合，一般情况下我们会赋予用户角色而不是权限，即这样用户可以拥有一组权限，赋予权限时比较方便。典型的如：项目经理、技术总监、CTO、开发工程师等都是角色，不同的角色拥有一组不同的权限。
+隐式角色：
+即直接通过角色来验证用户有没有操作权限，如在应用中 CTO、技术总监、开发工程师可以使用打印机，假设某天不允许开发工程师使用打印机，此时需要从应用中删除相应代码；再如在应用中 CTO、技术总监可以查看用户、查看权限；突然有一天不允许技术总监查看用户、查看权限了，需要在相关代码中把技术总监角色从判断逻辑中删除掉；即粒度是以角色为单位进行访问控制的，粒度较粗；如果进行修改可能造成多处代码修改。
+显示角色：
+在程序中通过权限控制谁能访问某个资源，角色聚合一组权限集合；这样假设哪个角色不能访问某个资源，只需要从角色代表的权限集合中移除即可；无须修改多处代码；即粒度是以资源/实例为单位的；粒度较细。
+请google 搜索“RBAC”和“RBAC新解”分别了解“基于角色的访问控制”“基于资源的访问控制(Resource-Based Access Control)”。
+授权方式 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 Shiro 支持三种方式的授权：
+编程式：通过写 if/else 授权代码块完成：
+1Subject subject = SecurityUtils.getSubject(); 2if(subject.hasRole(“admin”)) { 3 //有权限 4} else { 5 //无权限 6} 注解式：通过在执行的 Java 方法上放置相应的注解完成：
+1@RequiresRoles(&amp;#34;admin&amp;#34;) 2public void hello() { 3 //有权限 4} 没有权限将抛出相应的异常；
+JSP/GSP 标签：在 JSP/GSP 页面通过相应的标签完成：</description></item><item><title>Shiro 授予身份和切换身份</title><link>https://www.shellio.cc/docs/java/shiro/22/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/shiro/22/</guid><description>授予身份及切换身份 在一些场景中，比如某个领导因为一些原因不能进行登录网站进行一些操作，他想把他网站上的工作委托给他的秘书，但是他不想把帐号 / 密码告诉他秘书，只是想把工作委托给他；此时和我们可以使用 Shiro 的 RunAs 功能，即允许一个用户假装为另一个用户（如果他们允许）的身份进行访问。
+本章代码基于《第十六章 综合实例》，请先了解相关数据模型及基本流程后再学习本章。
+表及数据 SQL
+请运行shiro-example-chapter21/sql/ shiro-schema.sql 表结构
+请运行shiro-example-chapter21/sql/ shiro-schema.sql 数据
+实体
+具体请参考 com.github.zhangkaitao.shiro.chapter21 包下的实体。
+1public class UserRunAs implements Serializable { 2 private Long fromUserId;//授予身份帐号 3 private Long toUserId;//被授予身份帐号 4} 该实体定义了授予身份帐号（A）与被授予身份帐号（B）的关系，意思是 B 帐号将可以假装为 A 帐号的身份进行访问。
+DAO
+具体请参考 com.github.zhangkaitao.shiro.chapter21.dao 包下的 DAO 接口及实现。
+Service
+具体请参考 com.github.zhangkaitao.shiro.chapter21.service 包下的 Service 接口及实现。
+1public interface UserRunAsService { 2 public void grantRunAs(Long fromUserId, Long toUserId); 3 public void revokeRunAs(Long fromUserId, Long toUserId); 4 public boolean exists(Long fromUserId, Long toUserId); 5 public List&amp;lt;Long&amp;gt; findFromUserIds(Long toUserId); 6 public List&amp;lt;Long&amp;gt; findToUserIds(Long fromUserId); 7} 提供授予身份、回收身份、关系存在判断及查找 API。</description></item><item><title>Shiro 无状态 Web</title><link>https://www.shellio.cc/docs/java/shiro/21/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/shiro/21/</guid><description>无状态 Web 应用集成 在一些环境中，可能需要把 Web 应用做成无状态的，即服务器端无状态，就是说服务器端不会存储像会话这种东西，而是每次请求时带上相应的用户名进行登录。如一些 REST 风格的 API，如果不使用 OAuth2 协议，就可以使用如 REST+HMAC 认证进行访问。HMAC（Hash-based Message Authentication Code）：基于散列的消息认证码，使用一个密钥和一个消息作为输入，生成它们的消息摘要。注意该密钥只有客户端和服务端知道，其他第三方是不知道的。访问时使用该消息摘要进行传播，服务端然后对该消息摘要进行验证。如果只传递用户名 + 密码的消息摘要，一旦被别人捕获可能会重复使用该摘要进行认证。解决办法如：
+1、 每次客户端申请一个Token，然后使用该Token进行加密，而该Token是一次性的，即只能用一次；有点类似于OAuth2的Token机制，但是简单些；
+2、 客户端每次生成一个唯一的Token，然后使用该Token加密，这样服务器端记录下这些Token，如果之前用过就认为是非法请求；
+为了简单，本文直接对请求的数据（即全部请求的参数）生成消息摘要，即无法篡改数据，但是可能被别人窃取而能多次调用。解决办法如上所示。
+服务器端 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 对于服务器端，不生成会话，而是每次请求时带上用户身份进行认证。
+服务控制器 1@RestController 2public class ServiceController { 3 @RequestMapping(&amp;#34;/hello&amp;#34;) 4 public String hello1(String[] param1, String param2) { 5 return &amp;#34;hello&amp;#34; + param1[0] + param1[1] + param2; 6 } 7} 当访问/ hello 服务时，需要传入 param1、param2 两个请求参数。
+加密工具类 com.github.zhangkaitao.shiro.chapter20.codec.HmacSHA256Utils：
+1//使用指定的密码对内容生成消息摘要（散列值） 2public static String digest(String key, String content); 3//使用指定的密码对整个Map的内容生成消息摘要（散列值） 4public static String digest(String key, Map&amp;lt;String, ?</description></item><item><title>Shiro 在线会话管理</title><link>https://www.shellio.cc/docs/java/shiro/25/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/shiro/25/</guid><description>在线会话管理 有时候需要显示当前在线人数、当前在线用户，有时候可能需要强制某个用户下线等；此时就需要获取相应的在线用户并进行一些操作。
+本章基于《第十六章 综合实例》代码构建。
+会话控制器 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 1@RequiresPermissions(&amp;#34;session:*&amp;#34;) 2@Controller 3@RequestMapping(&amp;#34;/sessions&amp;#34;) 4public class SessionController { 5 @Autowired 6 private SessionDAO sessionDAO; 7 @RequestMapping() 8 public String list(Model model) { 9 Collection&amp;lt;Session&amp;gt; sessions = sessionDAO.getActiveSessions(); 10 model.addAttribute(&amp;#34;sessions&amp;#34;, sessions); 11 model.addAttribute(&amp;#34;sesessionCount&amp;#34;, sessions.size()); 12 return &amp;#34;sessions/list&amp;#34;; 13 } 14 @RequestMapping(&amp;#34;/{sessionId}/forceLogout&amp;#34;) 15 public String forceLogout(@PathVariable(&amp;#34;sessionId&amp;#34;) String sessionId, 16 RedirectAttributes redirectAttributes) { 17 try { 18 Session session = sessionDAO.readSession(sessionId); 19 if(session != null) { 20 session.</description></item><item><title>Shiro 综合实例</title><link>https://www.shellio.cc/docs/java/shiro/17/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/shiro/17/</guid><description>综合实例 简单数据字典 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 用户(sys_user)
+名称
+类型
+长度
+描述
+id
+bigint
+&amp;nbsp;
+编号 主键
+username
+varchar
+100
+用户名
+password
+varchar
+100
+密码
+salt
+varchar
+50
+盐
+role_ids
+varchar
+100
+角色列表
+locked
+bool
+&amp;nbsp;
+账户是否锁定
+组织机构 (sys_organization)
+名称
+类型
+长度
+描述
+id
+bigint
+&amp;nbsp;
+编号 主键
+name
+varchar
+100
+组织机构名
+priority
+int
+&amp;nbsp;
+显示顺序
+parent_id
+bigint
+&amp;nbsp;
+父编号
+parent_ids
+varchar
+100
+父编号列表
+available
+bool
+&amp;nbsp;
+是否可用
+资源(sys_resource)
+名称
+类型
+长度
+描述</description></item><item><title>八、OAuth 2.0 授权码授权</title><link>https://www.shellio.cc/docs/security/oauth2/8/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/security/oauth2/8/</guid><description>授权码授权 授权码授权总共由2个请求和2个响应组成。一个授权请求+响应，和一个令牌请求+响应。 授权请求 授权请求被发送到授权端点以获取一个授权码。这是请求中用到的参数：
+response_type 必须。必须被设置到代码里 client_id 必须。当客户端被注册时，授权服务器要标识的客户端。 redirect_uri 可选。通过客户端注册的重定向URI。 scope 可选。请求可能的作用域。 state 可选(推荐的)。任何需要被传递到客户端请求的URI客户端的状态。 授权响应 授权响应包含了需要用来获取访问令牌的授权码。这是响应包括的参数：
+code 必须。授权码 state 如果出现在请求中，必须包含。如果有的话，和客户端请求中发送的state参数一样。 授权错误 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 如果授权期间发生错误，两种情况会发生。 第一种情形是，客户端没有被授权或识别。比如，请求中错误的重定向URI。这种情况下，授权服务器没有必要重定向资源拥有者到重定向URI，而是通知资源拥有者发生了错误。 第二种情形是，客户端被正确地授权了，但是其他某些事情失败了。这种情况下下面地错误响应会被发送到客户端，包括在重定向URI中：
+error 必须。必须是预先定义的错误码之一。参见规范查查这些错误码及它们的含义。 error_description 可选。一段UTF-8编码的描述错误的文本。适用于开发者，而不是最终用户。 error_uri 可选。 一个指向包含人类可读的错误信息网页的URI。 state 必须。如果出现在授权请求期间，和请求中的state参数一样。 令牌请求 一旦授权码被获取到了，客户端可以用它获取访问令牌。这是访问令牌请求参数：
+grant_type 必须。必须被设置到授权码中。 code 必须。被授权服务器接收到的授权码。 redirect_uri 必须。如果请求URI包括在授权请求中，之后必须是相同的。 令牌响应 访问令牌请求的响应是包含访问令牌及一些更多信息的JSON字符串：
+1{ &amp;#34;access_token&amp;#34; : &amp;#34;...&amp;#34;, 2 &amp;#34;token_type&amp;#34; : &amp;#34;...&amp;#34;, 3 &amp;#34;expires_in&amp;#34; : &amp;#34;...&amp;#34;, 4 &amp;#34;refresh_token&amp;#34; : &amp;#34;...&amp;#34;, access_type属性是授权服务器分配的访问令牌。 token_type是被授权服务器分配的令牌类型。 expires_in属性是指访问令牌过多少秒后，就不再有效。访问令牌过期值是可选的。 refresh_token属性包含令牌过期后刷新的令牌。刷新的令牌用于，一旦响应返回的不再有效时，包含一个新的访问令牌。</description></item><item><title>二、OAuth 2.0 综述</title><link>https://www.shellio.cc/docs/security/oauth2/2/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/security/oauth2/2/</guid><description>综述 如引言所说的，OAuth 2.0是一个能够使应用彼此访问数据的开放授权协议，这里我们将阐述该协议是怎么工作的以及规范中提到的概念。该图说明了整个授权过程：
+OAuth 2.0怎样被用来在应用间共享数据的例子
+第一步，用户访问客户端web应用。应用中的按钮”通过Facebook登录”(或者其他的系统，如Google或Twitter)。
+第二步，当用户点击了按钮后，会被重定向到授权的应用(如Facebook)。用户登录并确认授权应用中的数据给客户端应用。
+第三步，授权应用将用户重定向到客户端应用提供的URI，提供这种重定向的URI通常是通过注册客户端应用程序与授权应用程序完成。在注册中，客户端应用的拥有者组注册该重定向URI，在注册过程中认证应用也会给客户端应用客户端标识和密码。在URI后追加一个认证码。该认证码代表了授权。
+第四步，用户在客户端应用访问网页被定位到重定向的URI。在背后客户端应用连接授权应用，并且发送在重定向请求参数中接收到的客户端标识，客户端密码和认证码。授权应用将返回一个访问口令。
+一旦客户端有了访问口令，该口令便可以被发送到Facebook、Google、Twitter等来访问登录用户的资源。</description></item><item><title>九、OAuth 2.0 契约请求和响应</title><link>https://www.shellio.cc/docs/security/oauth2/9/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/security/oauth2/9/</guid><description>契约请求和响应 契约授权包含一个请求和一个响应。 契约授权请求 契约授权请求包含下面的参数：
+response_type 必须。必须被设置在令牌中。 client_id 必须。当客户端被注册时，有授权服务器分配的客户端标识。 redirect_uri 可选。由客户端注册的重定向URI。 scope 可选。请求可能的作用域。 state 可选(推荐)。任何需要被传递到客户端请求的URI客户端的状态。 契约授权响应 契约授权包含下面的参数。注意，契约授权响应不是JSON：
+access_token 必须。授权服务器分配的访问令牌。 token_type 必须。令牌类型。 expires_in 推荐。访问令牌过期的秒数。 scope 可选。访问令牌的作用域。 state 必须。i如果出现在授权请求期间，和请求中的state参数一样。 契约授权错误 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 如果授权期间发生错误，两种情况会发生。 第一种情形是，客户端没有被授权或识别。比如，请求中错误的重定向URI。这种情况下，授权服务器没有必要重定向资源拥有者到重定向URI，而是通知资源拥有者发生了错误。 第二种情形是，客户端是好的，但是发生了其他事情。这种情况下下面地错误响应会被发送到客户端，包括在重定向URI中：
+error 必须。必须是预先定义的错误码之一。参见规范查查这些错误码及它们的含义。 error_description 可选。一段UTF-8编码的描述错误的文本。适用于开发者，而不是最终用户。 error_uri 可选。 一个指向包含人类可读的错误信息网页的URI。 state 必须。如果出现在授权请求期间，和请求中的state参数一样。</description></item><item><title>六、OAuth 2.0 端点</title><link>https://www.shellio.cc/docs/security/oauth2/6/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/security/oauth2/6/</guid><description>端点 OAuth 2.0定义了一系列端点。端点典型的就是web服务器上的URI。比如，一个Java Servlet, JSP page, PHP page, ASP.NET网页等等。
+这些端点定义有：
+授权端点 令牌端点 重定向端点 授权端点和令牌端点都位于授权服务器上，重定向端点位于客户端应用上。每个端点都会在下面讲述。
+这些端点在下图中阐释为：
+OAuth 2.0端点
+OAuth 2.0规范没有描述这些端点怎么被发现或记录。这取决于实现者来决定。大多数网站都有一个子网站开发人员来记录这些端点。
+授权端点 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 授权端点是资源拥有者所登录的授权服务器，并授权给客户端应用的端点。
+令牌端点 令牌端点是在授权服务器上为了一个访问令牌，客户端应用要交换授权码，客户端标识和客户端密钥的端点。
+重定向端点 重定向端点是在授权端点授权以后，资源拥有者被重定向到客户端应用的端点。</description></item><item><title>七、OAuth 2.0 请求和响应</title><link>https://www.shellio.cc/docs/security/oauth2/7/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/security/oauth2/7/</guid><description>请求和响应 当客户端应用请求授权和访问令牌时，它发送http请求到授权服务器，同它的授权和令牌端点。被发送来回的请求和响应取决于授权类型。记住，这四种授权类型：
+授权码授权 契约授权 资源拥有者密钥证书授权 客户端证书授权 每一种授权类型的请求和响应的更多细节将在下文分开地阐释。
+然而，下面讲述的信息大多只是一个总结。为了得到它们更多的细节描述，你可能不得不查询OAuth 2.0规范，或者你尝试集成的系统(如Facebook, Google, Twitter, Foursquare等)文档。</description></item><item><title>三、OAuth 2.0 角色</title><link>https://www.shellio.cc/docs/security/oauth2/3/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/security/oauth2/3/</guid><description>角色 OAuth 2.0为用户和应用定义了如下角色：
+资源拥有者 资源服务器 客户端应用 授权服务器 这些角色在下图中表示为： OAuth 2.0规范中的角色定义
+资源拥有者是指拥有共享数据的人或应用。比如Facebook或者Google的用户就是是资源拥有者，他们拥有的资源就是他们的数据。资源拥有者在上图中被描述为人，这也是最常见的情况。但资源拥有者也可以是一个应用。OAuth 2.0规范中包含这两种可能性。
+资源服务器是指托管资源的服务器。比如，Facebook或Google就是资源服务器(或者有一个资源服务器)。
+客户端应用是指请求访问存储在资源服务器的资源的应用。资源被资源拥有者所拥有。客户端应用可以是一个请求访问用户Facebook账号的第三方游戏。
+授权服务器是指授权客户端应用能够访问资源拥有者所拥有的资源。授权服务器和资源服务器可以是同一个服务器，但不是必须的。如果这两个服务器是分开的，OAuth 2.0没有讨论这个两个服务器应该如何通信。这是由资源服务器和授权服务器开发者自己设计决定的。</description></item><item><title>十、OAuth 2.0 资源拥有者密钥证书授权请求和响应</title><link>https://www.shellio.cc/docs/security/oauth2/10/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/security/oauth2/10/</guid><description>资源拥有者密钥证书授权请求和响应 资源拥有者者密钥证书授权包含单个的请求+响应。 资源拥有者密钥证书授权请求 请求包含下面的参数：
+grant_type 必须。必须设置到密码中。 username 必须。UTF-8编码的资源拥有者用户名。 password 必须。UTF-8编码的资源拥有者密码。 scope 可选。授权的作用域。 资源拥有者密钥证书授权响应 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 响应是包含访问令牌的JSON结构数据。JSON结构像这样：
+1{ &amp;#34;access_token&amp;#34; : &amp;#34;...&amp;#34;, 2 &amp;#34;token_type&amp;#34; : &amp;#34;...&amp;#34;, 3 &amp;#34;expires_in&amp;#34; : &amp;#34;...&amp;#34;, 4 &amp;#34;refresh_token&amp;#34; : &amp;#34;...&amp;#34;, access_type属性是授权服务器分配的访问令牌。 token_type是被授权服务器分配的令牌类型。 expires_in属性是指访问令牌过多少秒后，就不再有效。访问令牌过期值是可选的。 refresh_token属性包含令牌过期后刷新的令牌。刷新的令牌用于，一旦响应返回的不再有效时，包含一个新的访问令牌。</description></item><item><title>十一、OAuth 2.0 客户端证书请求和响应</title><link>https://www.shellio.cc/docs/security/oauth2/11/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/security/oauth2/11/</guid><description>客户端证书请求和响应 客户端证书授权包含下面的参数：
+grant_type 必须。必须设置到客户端证书中。 scope 可选。授权的作用域。 客户端授权响应： 客户端授权响应包含下面的参数：
+1{ &amp;#34;access_token&amp;#34; : &amp;#34;...&amp;#34;, 2 &amp;#34;token_type&amp;#34; : &amp;#34;...&amp;#34;, 3 &amp;#34;expires_in&amp;#34; : &amp;#34;...&amp;#34;, access_type属性是授权服务器分配的访问令牌。 token_type是被授权服务器分配的令牌类型。 expires_in属性是指访问令牌过多少秒后，就不再有效。访问令牌过期值是可选的。 新的令牌不应该被包含在这种授权类型的请求中。</description></item><item><title>四、OAuth 2.0 客户端类型</title><link>https://www.shellio.cc/docs/security/oauth2/4/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/security/oauth2/4/</guid><description>客户端类型 OAuth 2.0客户端角色被细分为一系列类型和配置，本节将阐述这些类型和配置。
+OAuth 2.0规范定义了两种客户端类型：
+保密的 公有的 保密的客户端能够对外部保持客户端密码保密。该客户端密码是由授权服务器分配给客户端应用的。为了避免欺骗，该密码是授权服务器用来识别客户端的。例如一个保密的客户端可以是web应用，除了管理员，没有任何人能够访问服务器和看到该密码。
+公有的客户端不能使客户端密码保密。比如移动手机应用或桌面应用会将密码嵌入在内部。这样的应用可能被破解，并且泄漏密码。这同于在用户的浏览器上运行的JavaScript应用。用户可以使用一个JavaScript调试器来寻找到应用程序，并查看客户端密码。
+客户端配置 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 OAuth 2.0规范也提到了一系列客户端配置文件。这些配置文件是具体类型的应用程序，这可以是保密或公开的。这些配置文件有：
+web应用 用户代理 原生 Web应用 Web应用是指运行在Web服务器内的应用。实际上，Web应用典型地由浏览器部分和服务端部分组成。如果Web应用需要访问资源服务器(如Facebook账号)，然后客户端密码被保存在服务器上。因此密码是保密的。
+这里阐释了一个保密的客户端应用：
+保密的客户端：web应用
+用户代理应用 用户代理应用比如运行在浏览器上的的JavaScript应用。浏览器是用户代理。用户代理应用可以保存在web服务器上，但应用程序只运行一次下载的用户代理。一个例子就像一个JavaScript游戏只能运行在浏览器里。
+这里阐释了一个客户端用户代理应用：
+公有客户端：用户代理应用
+原生应用 原生应用比如桌面应用或移动手机应用。原生应用典型地被安装在用户计算机或设备(手机，平板等)上。因此客户端密码也被存储在用户计算机或设备上。
+这里阐释了客户端原生应用：
+公有客户端：本地应用
+混合应用 有些应用是这些配置的混合使用。比如本地应用也可以有服务器部分，来做一些工作(如数据存储)。OAuth2.0规范没有提及这种混合型。然而，在大多数情况下，混合型将能够使用这些配置文件的认证模型。</description></item><item><title>五、OAuth 2.0 授权</title><link>https://www.shellio.cc/docs/security/oauth2/5/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/security/oauth2/5/</guid><description>授权 当一个客户端应用想要访问拥有者托管在资源服务器的资源时，它必须先获得授权，本节将讲述客户端如何获取授权。
+客户端标识，客户端密钥和重定向URI 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 在客户端应用能请求访问资源服务器的资源之前，客户端应用程序，必须先在资源服务器相关联的授权服务器中进行注册。
+注册一个一次性的任务。一旦注册了，除非客户端注册被取消了，注册将持续有效。
+注册后客户端应用将由授权服务器分配客户端标识和密钥。在授权服务器上，客户端标识和密钥是唯一标识客户端应用的。如果客户端应用注册了多个授权服务器(如Facebook, Twitter和Google等)，每一个授权服务器将发出唯一的标识给该客户端应用。
+无论什么时候客户端应用，想要访问同样资源服务器上的资源，它都需要通过发送客户端标识和密钥到授权服务器来验证自己。
+在注册过程中，客户端应用也注册了一个重定向URI，当资源拥有者授权给客户端应用时，该重定向URI会被使用。当资源拥有者成功的通过授权服务器授权给客户端应用时，资源拥有者被重定向回客户端应用，再跳转到该重定向URI。
+授权批准 授权批准由资源服务器，及与其相关的授权服务器，给予客户端应用。
+OAuth 2.0列举四种不同类型授权批准，每一种类型都有不同的安全特性。这些授权批准类型为：
+授权码 契约 资源拥有者密钥证书 客户端证书 每种授权批准在下文都会提到。 授权码 用授权码来授权批准原理如下：资源拥有者(用户)访问客户端应用。客户端应用告诉用户通过授权服务器(如Facebook, Google和Twitter等)来登录到客户端应用。
+为了通过授权服务器登录，用户通过客户端应用被重定向到授权服务器。客户端应用发送它的客户端标识给授权服务器，那么授权服务器就知道是哪个应用尝试访问受保护的资源。当被重定向回客户端应用时，授权服务器发送给用户特定的重定向URI, 即客户端已经提前与授权服务器注册。随着重定向，授权服务器发送一个代表授权的授权码。
+当在客户端应用的重定向URI被访问时，客户端应用直接连接授权服务器。客户端应用发送授权码，客户端标识及密钥，如果客户端应用能接受这些值，那么授权服务器返回一个访问令牌。
+现在客户端应用就可以用该访问令牌请求资源服务器的资源了。该访问令牌可作为客户端授权和授权访问资源。
+下面是当用授权码授权客户端应用时的授权过程：
+通过授权码授权
+契约 契约授权类似于授权码授权，除了用户完成授权后，访问令牌返回给客户端应用外。当用户代理被重定向到重定向URI时，访问令牌因此被返回。
+当然这意味着访问令牌可以被用户代理访问，或者在契约授权过程中参与的原生应用。访问令牌在web服务器上不是安全存储的。
+进一步说，客户端应用可以只发送它的客户端标识给授权服务器。如果客户端也发送它的密钥，那么客户端密钥将不得不保存在用户代理或原生应用里，那将使它很容易被破解。
+契约授权大多数用在用户代理或原生应用中。用户代理或原生应用将收到来授权服务器的访问令牌。
+下面是阐释契约授权的图：
+契约授权
+资源拥有者密钥证书 资源拥有者证书授权方法通过客户端应用访问资源拥有者证书来工作。比如，用户可以在客户端应用输入他的Twitter用户名及密钥(证书)。该客户端应用就可以用着用户名和密钥访问用户在Twitter的资源。
+用资源拥有者密钥证书要求客户端应用很多信任。你不想在那些你怀疑会滥用证书的客户端应用中输入证书。
+资源拥有者密钥证书通常被用在用户代理或原生应用中。
+客户端证书 客户端证书授权对于客户端需要在资源服务器访问资源或调用函数的情形使用，与特定的资源拥有者无关(如用户)。比如，从Foursquare获取场地列表，这并没有必要通过某个Foursquare用户才能做。</description></item><item><title>一、OAuth 2.0 引言</title><link>https://www.shellio.cc/docs/security/oauth2/1/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/security/oauth2/1/</guid><description>引言 OAuth 2.0是一个应用之间彼此访问数据的开源授权协议。比如，一个游戏应用可以访问Facebook的用户数据或者一个基于地理的应用可以访问Foursquare的用户数据等。下面是一张阐述该概念的图：
+OAuth 2.0怎么通过应用共享数据的例子
+用户访问web游戏应用，该游戏应用要求用户通过Facebook登录。用户登录到了Facebook,再重定向会游戏应用， 游戏应用就可以访问用户在Facebook的数据了，并且该应用可以代表用户向Facebook调用函数(如发送状态更新)。
+OAuth 2.0实用案例 OAuth 2.0要么用来创建一个能够从其他应用读取用户信息的应用(如上面图表中的游戏应用)，要么创建一个使其他应用访问自己的用户数据的应用(如上面例子中的Facebook)。OAuth 2.0是OAuth 1.0的替代品，OAuth 1.0更加复杂。OAuth 1.0涉及到了证书等，而OAuth 2.0更简单，它不需要任何证书，仅仅就SSL/TLS。
+OAuth 2.0规范 该指南的目标是提供一个OAuth 2.0的很容易理解的概述，但是不会描述规范的每一个细节。如果你想实现OAuth 2.0, 你将很有可能要全面学习该规范，你可以在这里找到该规范：http://tools.ietf.org/html/draft-ietf-oauth-v2-23</description></item></channel></rss>

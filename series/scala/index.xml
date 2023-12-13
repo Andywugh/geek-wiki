@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Scala on 程序员安仔</title><link>https://www.shellio.cc/series/scala/</link><description>Recent content in Scala on 程序员安仔</description><generator>Hugo -- gohugo.io</generator><language>zh-hans</language><copyright>个人技术博客</copyright><lastBuildDate>Sat, 21 Oct 2023 12:22:54 +0800</lastBuildDate><atom:link href="https://www.shellio.cc/series/scala/index.xml" rel="self" type="application/rss+xml"/><item><title>八、Scala 教程：访问修饰符</title><link>https://www.shellio.cc/docs/programing/scala/8/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/8/</guid><description>访问修饰符是实现面向对象三大特性重要的支持语法，有了访问修饰符，我们就可以界定一个包，一个类，一个对象属性，一个对象方法的可见粒度。
+Scala 访问修饰符基本和Java的一样，分别有：private，protected，public。
+如果没有指定访问修饰符符，默认情况下，Scala对象的访问级别都是 public。
+Scala 中的 private 限定符，比 Java 更严格，在嵌套类情况下，外层类甚至不能访问被嵌套类的私有成员。
+可见级别 私有(Private)成员 用 private 关键字修饰，带有此标记的成员仅在包含了成员定义的类或对象内部可见
+同样的规则还适用内部类。
+1class Outer{ 2 class Inner{ 3 private def f(){println(&amp;#34;f&amp;#34;)} 4 class InnerMost{ 5 f() // 正确 6 } 7 } 8 (new Inner).f() //错误 (new Inner).f( ) 访问不合法是因为 f 在 Inner 中被声明为 private，而访问不在类Inner之内。
+但在InnerMost 里访问f就没有问题的，因为这个访问包含在 Inner 类之内。
+Java中允许这两种访问，因为它允许外部类访问内部类的私有成员。
+保护(Protected)成员 用 protected 关键字修饰的属性或者方法，只允许保护成员在定义了该成员的的类及其只子类中被访问。
+在scala 中，对保护（Protected）成员的访问比 java 更严格一些。 因为java中，用protected关键字修饰的成员，除了定义了该成员的类的子类可以访问，同一个包里的其他类也可以进行访问。
+1package p{ 2class Super{ 3 protected def f() {println(&amp;#34;f&amp;#34;)} 4 } 5 class Sub extends Super{ 6 f() 7 } 8 class Other{ 9 (new Super).</description></item><item><title>二、Scala 教程：简介</title><link>https://www.shellio.cc/docs/programing/scala/2/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/2/</guid><description>Scala 是 Scalable Language 的简写，是一门多范式的编程语言
+联邦理工学院洛桑（EPFL）的Martin Odersky于2001年基于Funnel的工作开始设计Scala。
+Funnel是把函数式编程思想和Petri网相结合的一种编程语言。
+Odersky先前的工作是Generic Java和javac（Sun Java编译器）。Java平台的Scala于2003年底/2004年初发布。.NET平台的Scala发布于2004年6月。该语言第二个版本，v2.0，发布于2006年3月。
+截至2009年9月，最新版本是版本2.7.6 。Scala 2.8预计的特性包括重写的Scala类库（Scala collections library）、方法的命名参数和默认参数、包对象（package object），以及Continuation。
+2009年4月，Twitter宣布他们已经把大部分后端程序从Ruby迁移到Scala，其余部分也打算要迁移。此外， Wattzon已经公开宣称，其整个平台都已经是基于Scala基础设施编写的。
+Scala 特性 1. 面向对象特性 Scala是一种纯面向对象的语言，每个值都是对象。对象的数据类型以及行为由类和特质描述。
+类抽象机制的扩展有两种途径：一种途径是子类继承，另一种途径是灵活的混入机制。这两种途径能避免多重继承的种种问题。
+2. 函数式编程 Scala也是一种函数式语言，其函数也能当成值来使用。Scala提供了轻量级的语法用以定义匿名函数，支持高阶函数，允许嵌套多层函数，并支持柯里化。Scala的case class及其内置的模式匹配相当于函数式编程语言中常用的代数类型。
+更进一步，程序员可以利用Scala的模式匹配，编写类似正则表达式的代码处理XML数据。
+3. 静态类型 Scala具备类型系统，通过编译时检查，保证代码的安全性和一致性。类型系统具体支持以下特性：
+泛型类 协变和逆变 标注 类型参数的上下限约束 把类别和抽象类型作为对象成员 复合类型 引用自己时显式指定类型 视图 多态方法 4. 扩展性 Scala的设计秉承一项事实，即在实践中，某个领域特定的应用程序开发往往需要特定于该领域的语言扩展。Scala提供了许多独特的语言机制，可以以库的形式轻易无缝添加新的语言结构：
+任何方法可用作前缀或后缀操作符 可以根据预期类型自动构造闭包。 5. 并发性 Scala使用Actor作为其并发模型，Actor是类似线程的实体，通过邮箱发收消息。Actor可以复用线程，因此可以在程序中可以使用数百万个Actor,而线程只能创建数千个。在2.10之后的版本中，使用Akka作为其默认Actor实现。
+谁使用了 Scala 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 2009年4月，Twitter宣布他们已经把大部分后端程序从Ruby迁移到Scala，其余部分也打算要迁移。 此外，Wattzon已经公开宣称，其整个平台都已经是基于Scala基础设施编写的。 瑞银集团把Scala用于一般产品中。 Coursera把Scala作为服务器语言使用。 Scala Web 框架 以下列出了两个目前比较流行的 Scala 的 Web应用框架：
+Lift 框架 Play 框架</description></item><item><title>二十、Scala 教程：模式匹配</title><link>https://www.shellio.cc/docs/programing/scala/20/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/20/</guid><description>模式匹配 是 Scala 最强大的特性之一。
+模式匹配要点 一个模式匹配包含了一系列备选项，每个都开始于关键字 case 。 每个备选项都包含了一个模式及一到多个表达式。 箭头符号 =&amp;gt; 隔开了模式和表达式。
+以下是一个简单的整型值模式匹配范例：
+1object Test { 2 def main(args: Array[String]) { 3 println(matchTest(3)) 4 println(matchTest(1)) 5 } 6 def matchTest(x: Int): String = x match { 7 case 0 =&amp;gt; &amp;#34;zero&amp;#34; 8 case 1 =&amp;gt; &amp;#34;one&amp;#34; 9 case _ =&amp;gt; &amp;#34;many&amp;#34; 10 } 上面代码执行结果为：
+1many 2one match 对应 Java 里的 switch，但是写在选择器表达式之后。即： 选择器 match {备选项}。
+match 表达式通过以代码编写的先后次序尝试每个模式来完成计算，只要发现有一个匹配的case，剩下的case不会继续匹配。
+接下来我们来看一个不同数据类型的模式匹配：
+1object Test { 2 def main(args: Array[String]) { 3 println(matchTest(&amp;#34;two&amp;#34;)) 4 println(matchTest(&amp;#34;test&amp;#34;)) 5 println(matchTest(1)) 6 println(matchTest(6)) 7 } 8 def matchTest(x: Any): Any = x match { 9 case 1 =&amp;gt; &amp;#34;one&amp;#34; 10 case &amp;#34;two&amp;#34; =&amp;gt; 2 11 case y: Int =&amp;gt; &amp;#34;scala.</description></item><item><title>二十八、Scala 教程：函数嵌套</title><link>https://www.shellio.cc/docs/programing/scala/28/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/28/</guid><description>函数嵌套 是指在函数内再定义函数,定义在函数内的函数称之为局部函数。
+下面我们用 函数嵌套 方式来实现阶乘
+1object Test { 2 def main(args: Array[String]) { 3 println( factorial(1) ) 4 println( factorial(2) ) 5 println( factorial(3) ) 6 println( factorial(4) ) 7 println( factorial(5) ) 8 } 9 def factorial(i: Int): Int = { 10 def fact(i: Int, accumulator: Int): Int = { 11 if (i &amp;lt;= 1) 12 accumulator 13 else 14 fact(i - 1, i * accumulator) 15 } 16 fact(i, 1) 17 } 上面代码执行结果为：</description></item><item><title>二十二、Scala 教程：异常处理</title><link>https://www.shellio.cc/docs/programing/scala/22/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/22/</guid><description>Scala 的异常处理和其它语言比如 Java 类似。
+Scala 的方法可以通过抛出异常的方法的方式来终止相关代码的运行，不必通过返回值。
+抛出异常 Scala 使用 throw 方法，例如，抛出一个新的参数异常：
+1throw new IllegalArgumentException 捕获异常 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 异常捕捉的机制与其他语言中一样，如果有异常发生，catch字句是按次序捕捉的。因此，在catch字句中，越具体的异常越要靠前，越普遍的异常越靠后。 如果抛出的异常不在catch字句中，该异常则无法处理，会被升级到调用者处。
+捕捉异常的catch子句，语法与其他语言中不太一样。在Scala里，借用了模式匹配的思想来做异常的匹配，因此，在catch的代码里，是一系列case字句，如下例所示：
+1import java.io.FileReader 2import java.io.FileNotFoundException 3import java.io.IOException 4object Test { 5 def main(args: Array[String]) { 6 try { 7 val f = new FileReader(&amp;#34;input.txt&amp;#34;) 8 } catch { 9 case ex: FileNotFoundException =&amp;gt;{ 10 println(&amp;#34;Missing file exception&amp;#34;) 11 } 12 case ex: IOException =&amp;gt; { 13 println(&amp;#34;IO Exception&amp;#34;) 14 } 15 } 16 } 上面代码执行结果为：</description></item><item><title>二十九、Scala 教程：Map(映射)</title><link>https://www.shellio.cc/docs/programing/scala/29/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/29/</guid><description>Map(映射) 也叫哈希表（Hash tables）或者散列表，是一种可迭代的键值对（key/value）结构。
+哈希表的特征: 1. 所有的值都可以通过键来获取。 2. Map 中的键都是唯一的。
+Map有两种类型，可变与不可变，区别在于可变对象可以修改它，而不可变对象不可以。
+默认情况下 Scala 使用不可变 Map。如果你需要使用可变集合，你需要显式的引入 import scala.collection.mutable.Map 类
+在Scala 中 你可以同时使用可变与不可变 Map，不可变的直接使用 Map，可变的使用 mutable.Map。
+以下范例演示了不可变 Map 的应用：
+1// 空哈希表，键为字符串，值为整型 2var A:Map[Char,Int] = Map() 3// Map 键值对演示 4val colors = Map(&amp;#34;red&amp;#34; -&amp;gt; &amp;#34;#FF0000&amp;#34;, &amp;#34;azure&amp;#34; -&amp;gt; &amp;#34;#F0FFFF&amp;#34;) 定义Map 时，需要为键值对定义类型。 如果需要额外添加 key-value 对，可以使用 + 号，如下所示：
+1A += (&amp;#39;I&amp;#39; -&amp;gt; 1) 2A += (&amp;#39;J&amp;#39; -&amp;gt; 5) 3A += (&amp;#39;K&amp;#39; -&amp;gt; 10) 4A += (&amp;#39;L&amp;#39; -&amp;gt; 100) Map 基本操作 Scala Map 有三个基本操作：</description></item><item><title>二十六、Scala 教程：函数 – 默认参数值</title><link>https://www.shellio.cc/docs/programing/scala/26/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/26/</guid><description>定义 函数 时可以给函数参数指定 默认值
+使用了默认参数，调用函数可以不需要传递参数，参数处理机制为: 1. 如果没有传递这个参数，这时函数就会调用它的默认参数值 2. 如果传递了参数，则传递值会取代默认值。
+1object Test { 2 def main(args: Array[String]) { 3 println( &amp;#34;返回值 : &amp;#34; + addInt() ); 4 println( &amp;#34;返回值 : &amp;#34; + addInt(8) ); 5 println( &amp;#34;返回值 : &amp;#34; + addInt(b=11)); 6 } 7 def addInt( a:Int=5, b:Int=7 ) : Int = { 8 var sum:Int = 0 9 sum = a + b 10 return sum 11 } 上面代码执行结果为：
+1返回值 : 12 2返回值 : 15 3返回值 : 16 因为有了默认值这种机制，所以我们可以选择性的给函数传递参数，后面的章节会详细讲到这一点</description></item><item><title>二十七、Scala 教程：高阶函数</title><link>https://www.shellio.cc/docs/programing/scala/27/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/27/</guid><description>高阶函数（Higher-Order Function）就是能够使用其他函数作为其参数，也能够返回函数作为返回值的的函数。
+scala 中 函数是一等公民，和基本的数据类型一样，可以作为参数来传递。
+Scala的特性之一就是支持高阶函数。
+我们用几个范例来看看 scala 中的高阶函数用法。
+函数作为参数 apply() 函数使用了另外一个函数 f 和 值 v 作为参数，而函数 f 又调用了参数 v：
+1object Test { 2 def main(args: Array[String]) { 3 println( apply( layout, 10*10) ) 4 } 5 // 函数 f 和 值 v 作为参数，而函数 f 又调用了参数 v 6 def apply(f: Int =&amp;gt; String, v: Int) = f(v) 7 def layout[A](x: A) = &amp;#34;[&amp;#34; + x.toString() + &amp;#34;]&amp;#34; 上面代码执行结果为：
+1[100] 函数作为返回值 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 高阶函数允许返回另一个函数。</description></item><item><title>二十三、Scala 教程：提取器(Extractor)</title><link>https://www.shellio.cc/docs/programing/scala/23/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/23/</guid><description>提取器 是从传递给它的对象中提取出构造该对象的参数，其作用，可以根据某一规则，非常方便的获取到想要的值。
+Scala 提取器是一个带有 unapply 方法的对象。
+unapply 方法算是 apply 方法的反向操作： unapply接受一个对象，然后从对象中提取值，提取的值通常是用来构造该对象的值。
+我们用一个例子来了解 提取器 构造方式
+1object Test { 2 def main(args: Array[String]) { 3 println (&amp;#34;Apply 方法 : &amp;#34; + apply(&amp;#34;penglei&amp;#34;, &amp;#34;gmail.com&amp;#34;)); 4 println (&amp;#34;Unapply 方法 : &amp;#34; + unapply(&amp;#34;penglei@gmail.com&amp;#34;)); 5 println (&amp;#34;Unapply 方法 : &amp;#34; + unapply(&amp;#34;penglei Ali&amp;#34;)); 6 } 7 // 注入方法 (可选) 8 def apply(user: String, domain: String) = { 9 user +&amp;#34;@&amp;#34;+ domain 10 } 11 // 提取方法（必选） 12 def unapply(str: String): Option[(String, String)] = { 13 val parts = str split &amp;#34;@&amp;#34; 14 if (parts.</description></item><item><title>二十四、Scala 教程：文件 IO</title><link>https://www.shellio.cc/docs/programing/scala/24/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/24/</guid><description>Scala 进行文件写操作，直接用的都是 java中 的 I/O 类 （ java.io.File )：
+1import java.io._ 2object Test { 3 def main(args: Array[String]) { 4 val writer = new PrintWriter(new File(&amp;#34;test.txt&amp;#34; )) 5 writer.write(&amp;#34;教程 &amp;#34;) 6 writer.close() 7 } 执行以上代码，会在你的当前目录下生产一个 test.txt 文件，文件内容为”教程 “:
+1$ cat test.txt 2教程 从屏幕上读取用户输入 有时候我们需要接收用户在屏幕输入的指令来处理程序。范例如下：
+1object Test { 2 def main(args: Array[String]) { 3 print(&amp;#34;请输入教程 官网 : &amp;#34; ) 4 val line = Console.readLine 5 println(&amp;#34;谢谢，你输入的是: &amp;#34; + line) 6 } 执行以上代码，屏幕上会显示如下信息:</description></item><item><title>二十五、Scala 教程：do…while 循环</title><link>https://www.shellio.cc/docs/programing/scala/25/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/25/</guid><description>不像while 循环在循环头部测试循环条件, Scala 语言中，do…while 循环是在循环的尾部检查它的条件。
+do…while 循环与 while 循环类似，但是 do…while 循环会确保至少执行一次循环。
+语法 Scala 语言中 while 循环的语法：
+1do { 2 statement(s); 3} while( condition ); 流程图 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 请注意，条件表达式出现在循环的尾部，所以循环中的 statement(s) 会在条件被测试之前至少执行一次。
+如果条件为 true，控制流会跳转回上面的 do，然后重新执行循环中的 statement(s)。
+这个过程会不断重复，直到给定条件变为 false 为止。
+范例 1object Test { 2 def main(args: Array[String]) { 3 // 局部变量 4 var a = 10; 5 // do 循环 6 do{ 7 println( &amp;#34;Value of a: &amp;#34; + a ); 8 a = a + 1; 9 }while( a &amp;lt; 15 ) 10 } 执行以上代码输出结果为：</description></item><item><title>二十一、Scala 教程：正则表达式</title><link>https://www.shellio.cc/docs/programing/scala/21/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/21/</guid><description>Scala 通过 **scala.util.matching** 包中的 Regex 类提供了正则表达式能力。
+如果你想对正则表达式有一个系统的了解，可以看我们的 正则表达式 手册
+Scala 中创建一个正则表达式有两种方法
+使用 字符串(String) 的 r 方法，比如 &amp;ldquo;Scala&amp;rdquo;.r 范例化一个 Regex 对象，比如 new Regex(&amp;quot;(S|s)cala&amp;quot;) 我们先用一个范例来看看 如何使用正则表达式查找单词 scala**
+1import scala.util.matching.Regex 2object Test { 3 def main(args: Array[String]) { 4 val pattern = &amp;#34;Scala&amp;#34;.r 5 val str = &amp;#34;我爱 Scala is Scalable and cool,我爱教程 &amp;#34; 6 println(pattern findFirstIn str) 7 } 上面代码执行结果为：
+1Some(Scala) 范例中使用 String 类的 r() 方法构造了一个 Regex对象 。
+然后使用 findFirstIn 方法找到首个匹配项。
+findAllIn 如果需要查看所有的匹配项可以使用 findAllIn 方法。</description></item><item><title>九、Scala 教程：运算符</title><link>https://www.shellio.cc/docs/programing/scala/9/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/9/</guid><description>一个运算符是一个符号，用于告诉编译器来执行指定的数学运算和逻辑运算。
+Scala 含有丰富的内置运算符，包括以下几种类型：
+算术运算符 关系运算符 逻辑运算符 位运算符 赋值运算符 接下来我们将为大家详细介绍以上各种运算符的应用。
+算术运算符 下表列出了 Scala 支持的算术运算符。
+假定变量 A 为 10，B 为 20：
+运算符 描述 范例 + 加号 A + B 运算结果为 30 – 减号 A – B 运算结果为 -10 * 乘号 A * B 运算结果为 200 / 除号 B / A 运算结果为 2 % 取余 B % A 运算结果为 0 范例 1object Test { 2 def main(args: Array[String]) { 3 var a = 10; 4 var b = 20; 5 var c = 25; 6 var d = 25; 7 println(&amp;#34;a + b = &amp;#34; + (a + b) ); 8 println(&amp;#34;a - b = &amp;#34; + (a - b) ); 9 println(&amp;#34;a * b = &amp;#34; + (a * b) ); 10 println(&amp;#34;b / a = &amp;#34; + (b / a) ); 11 println(&amp;#34;b % a = &amp;#34; + (b % a) ); 12 println(&amp;#34;c % a = &amp;#34; + (c % a) ); 13 } 运行范例</description></item><item><title>六、Scala 教程：中文乱码解决</title><link>https://www.shellio.cc/docs/programing/scala/6/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/6/</guid><description>在Scala 2.11.7 版本上，Mac OS X 或 Linux 系统上编译 Scala 代码，如果出现中文，会出现乱码的情况。
+解决方案如下，分别编辑以下两个执行脚本:
+1$ vim which scala 定位到
+1[ -n &amp;#34;$JAVA_OPTS&amp;#34; ] || JAVA_OPTS=&amp;#34;-Xmx256M -Xms32M&amp;#34; 替换成
+1[ -n &amp;#34;$JAVA_OPTS&amp;#34; ] || JAVA_OPTS=&amp;#34;-Xmx256M -Xms32M -Dfile.encoding=UTF-8&amp;#34; 1$ vim which scalac 定位到
+1[ -n &amp;#34;$JAVA_OPTS&amp;#34; ] || JAVA_OPTS=&amp;#34;-Xmx256M -Xms32M&amp;#34; 替换成
+1[ -n &amp;#34;$JAVA_OPTS&amp;#34; ] || JAVA_OPTS=&amp;#34;-Xmx256M -Xms32M -Dfile.encoding=UTF-8&amp;#34; 重新编译脚本，既可以正常显示中文。</description></item><item><title>七、Scala 教程：变量</title><link>https://www.shellio.cc/docs/programing/scala/7/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/7/</guid><description>变量是一种使用方便的占位符，用于引用计算机内存地址，变量创建后会占用一定的内存空间。
+基于变量的数据类型，操作系统会进行内存分配并且决定什么将被储存在保留内存中。因此，通过给变量分配不同的数据类型，你可以在这些变量中存储整数，小数或者字母。
+变量声明 在学习如何声明变量与常量之前，我们先来了解一些变量与常量。 – 变量： 在程序运行过程中其值可能发生改变的量叫做变量。如：时间，年龄。 – 常量 在程序运行过程中其值不会发生变化的量叫做常量。如：数值 3，字符’A’。
+在Scala 中，使用关键词 “var” 声明变量，使用关键词 “val” 声明常量。
+声明变量范例如下：
+1var myVar : String = &amp;#34;Foo&amp;#34; 2var myVar : String = &amp;#34;Too&amp;#34; 以上定义了变量 myVar，我们可以修改它。
+声明常量范例如下：
+1val myVal : String = &amp;#34;Foo&amp;#34; 以上定义了常量 myVal，它是不能修改的。如果程序尝试修改常量 myVal 的值，程序将会在编译时报错。
+变量类型声明 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 变量的类型在变量名之后等号之前声明。定义变量的类型的语法格式如下：
+1var VariableName : DataType [= Initial Value] 或
+1val VariableName : DataType [= Initial Value] 变量声明不一定需要初始值，以下也是正确的：
+1var myVar :Int; 2val myVal :String; 变量类型引用 在Scala 中声明变量和常量不一定要指明数据类型，在没有指明数据类型的情况下，其数据类型是通过变量或常量的初始值推断出来的。</description></item><item><title>三、Scala 教程：安装</title><link>https://www.shellio.cc/docs/programing/scala/3/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/3/</guid><description>Scala 语言可以运行在Window、Linux、Unix、 Mac OS X等系统上。
+Scala是基于java之上，大量使用java的类库和变量，必须使用Scala之前必须先安装 Java（&amp;gt;1.5版本）
+Mac OS X 和 Linux 上安装 Scala 第一步：Java 设置 确保你本地以及安装了 JDK 1.5 以上版本，并且设置了 JAVA_HOME 环境变量及 JDK 的bin目录。
+我们可以使用以下命令查看是否安装了 Java：
+1$ java -version 2ava version &amp;#34;1.8.0_101&amp;#34; 3Java(TM) SE Runtime Environment (build 1.8.0_101-b13) 4Java HotSpot(TM) 64-Bit Server VM (build 25.101-b13, mixed mode) 接着，我们可以查看是否安装了 Java 编译器。输入以下命令查看：
+1$ javac -version 2javac 1.8.0_101 如果还为安装，可以参考我们的 Java 开发环境配置
+接下来，我们可以从 Scala 官网地址(http://www.scala-lang.org/downloads)下载 Scala 二进制包，本教程我们将下载 2.12.3 版本，如下图所示：
+解压缩文件包，可将其移动至/usr/local/share下：
+1mv scala-2.12.3 scala 重命名 Scala 目录 2mv /download/scalapath /usr/local/share 下载目录需要按你实际的下载路径 修改环境变量，如果不是管理员可使用 sudo 进入管理员权限，修改配置文件profile:</description></item><item><title>三十、Scala 教程：指定函数参数名</title><link>https://www.shellio.cc/docs/programing/scala/30/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/30/</guid><description>通常情况下 调用函数 传递参数，按照函数定义时的参数顺序一个个传递。
+但有时参数太多，我们不能一一指定下去， 或者，有些参数值就是定义时的默认值，写一遍很浪费时间，那么我们就可以通过指定函数参数名来实现。
+这种参数传递的方式并且不需要按照顺序向函数传递参数。
+程序员一般都很懒，总是在节省时间
+没有默认值的参数是必须传递
+1object Test { 2 def main(args: Array[String]) { 3 printInt(b=5, a=7); 4 println() 5 printInt(c=18,a=16) 6 } 7 def printInt( a:Int, b:Int=21, c:Int=8) = { 8 println(&amp;#34;Value of a : &amp;#34; + a ); 9 println(&amp;#34;Value of b : &amp;#34; + b ); 10 println(&amp;#34;Value of c : &amp;#34; + c ); 11 } 上面代码执行结果为：
+1Value of a : 7 2Value of b : 5 3Value of c : 8 4Value of a : 16 5Value of b : 21 6Value of c : 18 最佳实战 一般情况下不要打乱参数的传递顺序，没有默认值的参数最好不要通过制定参数名来传递，防止团队协作出问题</description></item><item><title>三十八、Scala 教程：函数 – 可变参数</title><link>https://www.shellio.cc/docs/programing/scala/38/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/38/</guid><description>Scala 通过在参数的类型之后放一个星号来设置可变参数(可重复的参数)
+Scala 允许你指明函数的最后一个参数可以是重复的，即我们不需要指定函数参数的个数，可以向函数传入可变长度参数列表。
+1object Test { 2 def main(args: Array[String]) { 3 printStrings(&amp;#34;DDKK.COM 弟弟快看，程序员编程资料站&amp;#34;, &amp;#34;Scala&amp;#34;, &amp;#34;Python&amp;#34;,&amp;#34;HTML&amp;#34;); 4 } 5 def printStrings( args:String* ) = { 6 var i : Int = 0; 7 for( arg &amp;lt;- args ){ 8 println(&amp;#34;Arg value[&amp;#34; + i + &amp;#34;] = &amp;#34; + arg ); 9 i = i + 1; 10 } 11 } 上面代码执行结果为：
+1Arg value[0] = DDKK.COM 弟弟快看，程序员编程资料站 2Arg value[1] = Scala 3Arg value[2] = Python 4Arg value[3] = HTML</description></item><item><title>三十二、Scala 教程：匿名函数</title><link>https://www.shellio.cc/docs/programing/scala/32/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/32/</guid><description>Scala 中的 匿名函数 是没有方法名，也不用 def 定义的函数。一般匿名函数都是一个 表达式
+因此 匿名函数 非常适合替换那些只用一次且任务简单的常规函数
+匿名函数，会使得我们的代码变得更简洁了。
+匿名函数的语法很简单，箭头左边是参数列表，右边是函数体。
+定义匿名函数的语法为:
+1(param1,param2) =&amp;gt; [expression] 下面的表达式就定义了一个接受一个Int类型输入参数的匿名函数:
+1var inc = (x:Int) =&amp;gt; x+1 上述定义的匿名函数，其实是下面这个常规函数的简写：
+1def add(x:Int):Int { 2 return x+1; 以上范例的 inc 现在可作为一个函数，使用方式如下：
+1var x = inc(7)-1 同样我们可以在匿名函数中定义多个参数：
+1var mul = (x: Int, y: Int) =&amp;gt; x*y mul现在可作为一个函数，使用方式如下：
+1println(mul(3, 4)) 我们也可以不给匿名函数设置参数，如下所示：
+1var userDir = () =&amp;gt; { System.getProperty(&amp;#34;user.dir&amp;#34;) } userDir 现在可作为一个函数，使用方式如下：
+1println( userDir() ) 范例 1object Demo { 2 def main(args: Array[String]) { 3 println( &amp;#34;multiplier(1) value = &amp;#34; + multiplier(1) ) 4 println( &amp;#34;multiplier(2) value = &amp;#34; + multiplier(2) ) 5 } 6 var factor = 5 7 val multiplier = (i:Int) =&amp;gt; i * factor 编译执行上面的代码，输出为:</description></item><item><title>三十九、Scala 教程：Option(选项)</title><link>https://www.shellio.cc/docs/programing/scala/39/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/39/</guid><description>Scala Option(选项) 类型用来表示一个值是可选的（有值或无值)。
+Scala 使用 Option[T] 来告诉程序：「我会想办法回传一个 T 类型的数据，但也可能没有 T 类型数据给你」。
+Option[T] 是一个类型为 T 的可选值的容器： + 如果值存在， Option[T] 就是一个 Some[T] + 如果不存在， Option[T] 就是对象 None 。
+引入Option[T] 机制是为了「更严格的」类型检查，使得在编译时可以发现更多问题（未预期的变量为空）。
+下面这段代码说明了 Option 的这种特性
+1object Test { 2 def main(args: Array[String]) { 3 val myMap: Map[String, String] = Map(&amp;#34;key1&amp;#34; -&amp;gt; &amp;#34;value&amp;#34;) 4 val value1: Option[String] = myMap.get(&amp;#34;key1&amp;#34;) 5 val value2: Option[String] = myMap.get(&amp;#34;key2&amp;#34;) 6 println(value1) // Some(&amp;#34;value1&amp;#34;) 7 println(value2) // None 8 } 输出结果为:</description></item><item><title>三十六、Scala 教程：Set(集合)</title><link>https://www.shellio.cc/docs/programing/scala/36/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/36/</guid><description>Scala Set(集合) 能够存储各种数据类型，但它的元素是没有没有重复的，所有的元素都是唯一的。
+Scala 集合分为 可变集合 和 不可变集合 。 默认情况下，Scala 使用的是不可变集合，如果你想使用可变集合， 则需要引用 scala.collection.mutable.Set 包。
+如果没有特别指明，代码范例保存的文件名都是 Test.scala 。 运行代码都是指在命令行执行 scala Test.scala
+不可变集合 Scala编译器 默认引用 scala.collection.immutable.Set
+让我们来看一个不可变集合的范例：
+1object Test { 2 def main(args: Array[String]) { 3 val set = Set(1,2,3) 4 println(set.getClass.getName) // 5 println(set.exists(_ % 2 == 0)) //true 6 println(set.drop(1)) //Set(2,3) 7 } 运行结果为:
+1scala.collection.immutable.Set$Set3 2true 3Set(2, 3) 可变集合 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 如果需要使用可变集合，则需要引入 scala.collection.mutable.Set：
+1import scala.collection.mutable.Set // 可以在任何地方引入 可变集合 2object Test { 3 def main(args: Array[String]) { 4 val mutableSet = Set(1,2,3) 5 println(mutableSet.</description></item><item><title>三十七、Scala 教程：函数柯里化(Currying)</title><link>https://www.shellio.cc/docs/programing/scala/37/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/37/</guid><description>柯里化(Currying) 柯里化(Currying) 指的是将原来接受两个参数的函数变成新的接受一个参数的函数的过程。新的函数返回一个以原有第二个参数为参数的函数。
+我们先定义一个带有两个 Int 类型的常规函数
+1def add(x:Int,y:Int) = x+y 那么我们调用 add 的时候，应该是这样用：add(1,2)
+现在我们把这个函数变一下形：
+1def add(x:Int)(y:Int) = x + y 那么我们调用 add 的时候应该是这样用：add(1)(2) ,最后结果都一样是3，这种方式（过程）就叫柯里化。
+实现过程 add(1)(2) 实际上是依次调用两个普通函数（非柯里化函数），第一次调用使用一个参数 x，返回一个函数类型的值，第二次使用参数y调用这个函数类型的值。
+实质上最先演变成这样一个方法：
+1def add(x:Int)=(y:Int)=&amp;gt;x+y 那么这个函数是什么意思呢？ 接收一个x为参数，返回一个匿名函数，该匿名函数的定义是：接收一个Int型参数y，函数体为x+y。现在我们来对这个方法进行调用。
+1val result = add(1) 返回一个result，那result的值应该是一个匿名函数：(y:Int)=&amp;gt;1+y
+所以为了得到结果，我们继续调用result。
+1val sum = result(2) 最后打印出来的结果就是3。
+范例 1object Test { 2 def main(args: Array[String]) { 3 val str1:String = &amp;#34;Hello, &amp;#34; 4 val str2:String = &amp;#34;DDKK.COM 弟弟快看，程序员编程资料站!&amp;#34; 5 println( &amp;#34;str1 + str2 = &amp;#34; + strcat(str1)(str2) ) 6 } 7 def strcat(s1: String)(s2: String) = { 8 s1 + s2 9 } 上面代码执行结果为：</description></item><item><title>三十三、Scala 教程：元组</title><link>https://www.shellio.cc/docs/programing/scala/33/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/33/</guid><description>元组的值是通过将单个的值包含在圆括号中构成的。
+1val t = (1, 3.14, &amp;#34;Fred&amp;#34;) 上面的代码定义了一个由三个元素组成的元组，对应的类型分别为[Int, Double, java.lang.String]
+与列表一样，元组也是不可变的，但与列表不同的是元组可以包含不同类型的元素。
+此外我们也可以使用以上方式来定义：
+1val t3 = new Tuple3(1, 3.14, &amp;#34;Fred&amp;#34;) 2val t4 = new Tuple4(1, 3.14, &amp;#34;Fred&amp;#34;,Console) 上面的 Tuple 后面的数字表示元组有多少个元素，最长元素个数为 22。 其实 Scala 就是内置了 Tuple1,Tuple2….Tuple22 22个元组定义单例。
+元组的实际类型取决于它的元素的类型，比如： (99, “DDKK.COM 弟弟快看，程序员编程资料站”) 是 Tuple2[Int, String]。 (‘u’, ‘r’, “the”, 1, 4, “me”) 为 Tuple6[Char, Char, String, Int, Int, String]。
+目前Scala 支持的元组最大长度为 22。对于更大长度你可以使用集合，或者扩展元组。
+访问元组的元素可以通过数字索引，如下一个元组：
+1val t = (4,3,2,1) 我们可以使用 t._1 访问第一个元素， t._2 访问第二个元素，如下所示：
+1object Test { 2 def main(args: Array[String]) { 3 val t = (4,3,2,1) 4 val sum = t.</description></item><item><title>三十四、Scala 教程：函数传名调用(call-by-name)</title><link>https://www.shellio.cc/docs/programing/scala/34/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/34/</guid><description>Scala的解释器在解析函数参数(function arguments)时有两种方式：
+传值调用（call-by-value）：先计算参数表达式的值，再应用到函数内部； 传名调用（call-by-name）：将未计算的参数表达式直接应用到函数内部 在进入函数内部前，传值调用方式就已经将参数表达式的值计算完毕，而传名调用是在函数内部进行参数表达式的值计算的。
+这就造成了一种现象，每次使用传名调用时，解释器都会计算一次表达式的值。
+1object Test { 2 def main(args: Array[String]) { 3 delayed(time()); 4 } 5 def time() = { 6 println(&amp;#34;获取时间，单位为纳秒&amp;#34;) 7 System.nanoTime 8 } 9 def delayed( t: =&amp;gt; Long ) = { 10 println(&amp;#34;在 delayed 方法内&amp;#34;) 11 println(&amp;#34;参数： &amp;#34; + t) 12 t 13 } 上面的范例中，我们声明了 delayed 方法， 该方法在变量名和变量类型使用 =&amp;gt; 符号来设置传名调用。
+执行以上代码，输出结果如下：
+1在 delayed 方法内 2获取时间，单位为纳秒 3参数： 492036027300764 4获取时间，单位为纳秒 范例中delay 方法打印了一条信息表示进入了该方法，接着 delay 方法打印接收到的值，最后再返回 t。</description></item><item><title>三十五、Scala 教程：递归函数</title><link>https://www.shellio.cc/docs/programing/scala/35/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/35/</guid><description>递归函数 意味着函数可以调用它本身,递归函数在函数式编程的语言中起着重要的作用。
+下面我们举个用 递归函数 实现阶乘的范例
+1object Test { 2 def main(args: Array[String]) { 3 for (i &amp;lt;- 1 to 5) 4 println(i + &amp;#34; 的阶乘为: = &amp;#34; + factorial(i) ) 5 } 6 def factorial(n: BigInt): BigInt = { 7 if (n &amp;lt;= 1) 8 1 9 else 10 n * factorial(n - 1) 11 } 上面代码执行结果为：
+11 的阶乘为: = 1 22 的阶乘为: = 2 33 的阶乘为: = 6 44 的阶乘为: = 24 55 的阶乘为: = 120</description></item><item><title>三十一、Scala 教程：偏应用函数</title><link>https://www.shellio.cc/docs/programing/scala/31/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/31/</guid><description>Scala 偏应用 函数是一种表达式，不需要提供函数需要的所有参数，只需要提供部分，或不提供所需参数。
+如下范例，我们打印日志信息：
+1import java.util.Date 2object Test { 3 def main(args: Array[String]) { 4 val date = new Date 5 log(date, &amp;#34;message1&amp;#34; ) 6 Thread.sleep(1000) 7 log(date, &amp;#34;message2&amp;#34; ) 8 Thread.sleep(1000) 9 log(date, &amp;#34;message3&amp;#34; ) 10 } 11 def log(date: Date, message: String) = { 12 println(date + &amp;#34;----&amp;#34; + message) 13 } 上面代码执行结果为：
+1Fri Aug 11 21:57:58 CST 2017----message1 2Fri Aug 11 21:57:58 CST 2017----message2 3Fri Aug 11 21:57:58 CST 2017----message3 范例中，log() 方法接收两个参数：date 和 message。我们在程序执行时调用了三次，参数 date 值都相同，message 不同。</description></item><item><title>十、Scala 教程：if…else 语句</title><link>https://www.shellio.cc/docs/programing/scala/10/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/10/</guid><description>Scala IF…ELSE 语句是通过一条或多条语句的执行结果（True或者False）来决定执行的代码块。
+可以通过下图来简单了解条件语句的执行过程:
+if 语句 if语句有布尔表达式及之后的语句块组成。
+语法 if语句的语法格式如下：
+1if(布尔表达式) 2 // 如果布尔表达式为 true 则执行该语句块 如果布尔表达式为 true 则执行大括号内的语句块，否则跳过大括号内的语句块，执行大括号之后的语句块。
+范例 1object Test { 2 def main(args: Array[String]) { 3 var x = 10; 4 if( x &amp;lt; 20 ){ 5 println(&amp;#34;x &amp;lt; 20&amp;#34;); 6 } 7 } 运行范例
+上面代码执行结果为：
+1x &amp;lt; 20 if…else 语句 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 if语句后可以紧跟 else 语句，else 内的语句块可以在布尔表达式为 false 的时候执行。
+语法 if…else 的语法格式如下：
+1if(布尔表达式){ 2 // 如果布尔表达式为 true 则执行该语句块 3}else{ 4 // 如果布尔表达式为 false 则执行该语句块 范例 1object Test { 2 def main(args: Array[String]) { 3 var x = 30; 4 if( x &amp;lt; 20 ){ 5 println(&amp;#34;x 小于 20&amp;#34;); 6 }else{ 7 println(&amp;#34;x 大于 20&amp;#34;); 8 } 9 } 上面代码执行结果为：</description></item><item><title>十八、Scala 教程：类和对象</title><link>https://www.shellio.cc/docs/programing/scala/18/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/18/</guid><description>类是对象的抽象，而对象是类的具体范例。类是抽象的，不占用内存，而对象是具体的，占用存储空间。类是用于创建对象的蓝图，它是一个定义包括在特定类型的对象中的方法和变量的软件模板。
+我们可以使用 new 关键字来创建类的对象，范例如下：
+1class Point(xc: Int, yc: Int) { 2 var x: Int = xc 3 var y: Int = yc 4 def move(dx: Int, dy: Int) { 5 x = x + dx 6 y = y + dy 7 println (&amp;#34;x 的坐标点: &amp;#34; + x); 8 println (&amp;#34;y 的坐标点: &amp;#34; + y); 9 } Scala中的类不声明为public，一个Scala源文件中可以有多个类。
+以上范例的类定义了两个变量 x 和 y ，一个方法： move ，方法没有返回值。
+Scala 的类定义可以有参数，称为类参数，如上面的 xc, yc，类参数在整个类中都可以访问。
+接着我们可以使用 new 来范例化类，并访问类中的方法和变量：</description></item><item><title>十二、Scala 教程：函数</title><link>https://www.shellio.cc/docs/programing/scala/12/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/12/</guid><description>Scala 中使用 def 关键字来声明一个函数
+函数是一组一起执行一个任务的语句。
+Scala 有函数和方法，二者在语义上的区别很小。Scala 方法是类的一部分，而函数是一个对象可以赋值给一个变量。换句话来说在类中定义的函数即是方法。
+我们可以在任何地方定义函数，甚至可以在函数内定义函数（内嵌函数）。更重要的一点是 Scala 函数名可以有以下特殊字符： +, ++, ~, &amp;amp;,-, — , \, /, : 等。
+函数声明 Scala 函数声明格式如下：
+1def functionName ([参数列表]) : [return type] 或者
+如果不写等于号和方法主体，那么方法会被隐式声明为”抽象(abstract)”，包含它的类型于是也是一个抽象类型。
+函数定义 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 方法定义由一个 def 关键字开始，紧接着是可选的参数列表，一个冒号”：” 和方法的返回类型，一个等于号”=”，最后是方法的主体。
+Scala 函数定义格式如下：
+1def functionName ([参数列表]) : [return type] = { 2 function body 3 return [expr] 以上代码中 return type 可以是任意合法的 Scala 数据类型。
+参数列表中的参数可以使用逗号分隔。
+以下函数的功能是将两个传入的参数相加并求和：
+1object add{ 2 def addInt( a:Int, b:Int ) : Int = { 3 var sum:Int = 0 4 sum = a + b 5 return sum 6 } 如果函数没有返回值，可以返回为 Unit ，这个类似于 Java 的 void , 范例如下：</description></item><item><title>十九、Scala 教程：Trait(特征)</title><link>https://www.shellio.cc/docs/programing/scala/19/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/19/</guid><description>Scala Trait(特征) 相比于 Java 中的的接口，可以声明方法外，还可以定义属性和方法的实现。 也就是说可以在scala的trait中可以实现部分方法。
+一般情况下Scala的类只能够继承单一父类，但是如果是 Trait(特征) 的话就可以继承多个，从结果来看就是实现了多重继承。
+Trait(特征) 定义的方式与类类似，但它使用的关键字是 trait ，如下所示：
+1trait Equal { 2 def isEqual(x: Any): Boolean 3 def isNotEqual(x: Any): Boolean = !isEqual(x) 以上Trait(特征)由两个方法组成： isEqual 和 isNotEqual 。isEqual 方法没有定义方法的实现，isNotEqual定义了方法的实现。
+子类继承特征可以实现未被实现的方法。所以其实 Scala Trait(特征)更像 Java 的抽象类。
+下面这段代码演示了 Trait 的用法
+1/* 文件名：Test.scala 2 * author:教程 3 * url:ddkk.com 4 */ 5trait Equal { 6 def isEqual(x: Any): Boolean 7 def isNotEqual(x: Any): Boolean = !isEqual(x) 8class Point(xc: Int, yc: Int) extends Equal { 9 var x: Int = xc 10 var y: Int = yc 11 def isEqual(obj: Any) = 12 obj.</description></item><item><title>十六、Scala 教程：Collection</title><link>https://www.shellio.cc/docs/programing/scala/16/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/16/</guid><description>scala 提供了强大的集合类型抽象和集合实现。
+Scala 的集合分为 可变集合 和 不可变集合 。 + 可变集合是指集合在初始化之后还可以修改，添加，移除一个集合的元素。 + 不可变集合类，集合一旦被建立起来就永远不会改变。虽然我们仍然可以添加，移除或更新操作，但每次变更都会产生新的集合，而原来的集合却不会发生改变。
+下面让我们来看看几种常见的集合类型：
+集合 描述 Scala List(列表) (列表)List 的元素以线性方式存储，集合中可以存放重复对象 Scala Set(集合) Set 是最简单的一种集合。
+集合中的对象是唯一的，且无序。
+Set集合 集合中没有重复元素，且元素顺序和添加的顺序不一定一样 Scala Map(哈希表) 哈希表(Map)也称散列表， 是一种把键对象和值对象映射的集合，它的每一个元素都包含一对键对象和值对象 Scala 元组 元组是不同类型的值的集合 Scala Option Option[T] 表示有可能包含值的容器，也可能不包含值。 Scala Iterator（迭代器） 迭代器不是一个容器，更确切的说是逐一访问容器内元素的方法 范例 我们用一组范例来讲解上述表中所有的集合：
+1// 定义整型 List 2val x = List(11,12,13,14) 3// 定义 Set 4var x = Set(8,7,4,2) 5// 定义 Map 6val x = Map(&amp;#34;age&amp;#34; -&amp;gt; 27, &amp;#34;year&amp;#34; -&amp;gt; 1990, &amp;#34;sex&amp;#34; -&amp;gt; 1) 7// 创建两个不同类型元素的元组 8val x = (99, &amp;#34;DDKK.</description></item><item><title>十七、Scala 教程：Iterator（迭代器）</title><link>https://www.shellio.cc/docs/programing/scala/17/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/17/</guid><description>Scala Iterator（迭代器）不是一个集合，它提供了一序列访问集合的方法。
+迭代器it 的两个基本操作是 next 和 hasNext 。 + 调用 it.next() 会返回迭代器的下一个元素，并且更新迭代器的状态。 + 调用 it.hasNext() 用于检测集合中是否还有元素。
+while 循环遍历集合 让迭代器 it 逐个返回所有元素最简单的方法是使用 while 循环：
+1object Test { 2 def main(args: Array[String]) { 3 val it = Iterator(&amp;#34;百度&amp;#34;, &amp;#34;腾讯&amp;#34;, &amp;#34;DDKK.COM 弟弟快看，程序员编程资料站&amp;#34;, &amp;#34;淘宝&amp;#34;) 4 while (it.hasNext){ 5 println(it.next()) 6 } 7 } 上面代码执行结果为：
+1百度 2腾讯 3DDKK.COM 弟弟快看，程序员编程资料站 4淘宝 查找最大与最小元素 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 你可以使用 it.min 和 it.max 方法从迭代器中查找最大与最小元素，范例如下:
+1object Test { 2 def main(args: Array[String]) { 3 val ita = Iterator(20,40,2,50,69, 90) 4 val itb = Iterator(20,40,2,50,69, 90) 5 println(&amp;#34;最大元素是：&amp;#34; + ita.</description></item><item><title>十三、Scala 教程：闭包</title><link>https://www.shellio.cc/docs/programing/scala/13/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/13/</guid><description>闭包是一种特殊的函数，可以简单的认为是可以访问一个函数里面局部变量的另外一个函数，
+闭包的返回值依赖于声明在函数外部的一个或多个变量。
+如下面这段匿名的函数：
+1val multiplier = (i:Int) =&amp;gt; i * 10 函数体内有一个变量 i，它作为函数的一个参数。
+如下面的另一段代码:
+1val multiplier = (i:Int) =&amp;gt; i * factor 在multiplier 中有两个变量：i 和 factor。其中的一个 i 是函数的形式参数，在 multiplier 函数被调用时，i 被赋予一个新的值。
+然而，factor不是形式参数，而是自由变量，考虑下面代码：
+1var factor = 3 2val multiplier = (i:Int) =&amp;gt; i * factor 这里我们引入一个自由变量 factor，这个变量定义在函数外面。
+这样定义的函数变量 multiplier 成为一个”闭包”，因为它引用到函数外面定义的变量，定义这个函数的过程是将这个自由变量捕获而构成一个封闭的函数。
+完整范例
+1object Test { 2 def main(args: Array[String]) { 3 println( &amp;#34;muliplier(1) value = &amp;#34; + multiplier(1) ) 4 println( &amp;#34;muliplier(2) value = &amp;#34; + multiplier(2) ) 5 } 6 var factor = 3 7 val multiplier = (i:Int) =&amp;gt; i * factor 运行范例</description></item><item><title>十四、Scala 教程：字符串</title><link>https://www.shellio.cc/docs/programing/scala/14/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/14/</guid><description>在Scala 中，字符串的类型实际上是 Java String，它本身没有 String 类。
+在Scala 中，String 是一个不可变的对象，所以该对象不可被修改。这就意味着你如果修改字符串就会产生一个新的字符串对象。
+以下范例将字符串赋值给一个常量：
+1object Test { 2 val greeting: String = &amp;#34;Hello,World!&amp;#34; 3 def main(args: Array[String]) { 4 println( greeting ) 5 } 以上范例定义了变量 greeting，为字符串常量，它的类型为 String (java.lang.String)。
+但其他对象，如数组就是可变的对象。接下来我们会为大家介绍常用的 java.lang.String 方法。
+创建字符串 创建字符串范例如下：
+1var greeting = &amp;#34;Hello World!&amp;#34;; 或
+1var greeting:String = &amp;#34;Hello World!&amp;#34;; 你不一定为字符串指定 String 类型，因为 Scala 编译器会自动推断出字符串的类型为 String。
+当然我们也可以直接显示的声明字符串为 String 类型，如下范例：
+1object Test { 2 val greeting: String = &amp;#34;Hello, World!&amp;#34; 3 def main(args: Array[String]) { 4 println( greeting ) 5 } 上面代码执行结果为：</description></item><item><title>十五、Scala 教程：数组</title><link>https://www.shellio.cc/docs/programing/scala/15/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/15/</guid><description>Scala 语言中提供的数组是用来存储固定大小的同类型元素，数组对于每一门编辑应语言来说都是重要的数据结构之一。
+声明数组变量并不是声明 number0、number1、…、number99 一个个单独的变量，而是声明一个就像 numbers 这样的变量，然后使用 numbers[0]、numbers[1]、…、numbers[99] 来表示一个个单独的变量。数组中某个指定的元素是通过索引来访问的。
+数组的第一个元素索引为0，最后一个元素的索引为元素总数减1。
+数组可以使用返回整数的表达式作为索引
+声明数组 以下是Scala 数组声明的语法格式：
+1var z:Array[String] = new Array[String](3) 或
+1var z = new Array[String](3) 以上语法中，z 声明一个字符串类型的数组，数组长度为 3 ，可存储 3 个元素。我们可以为每个元素设置值，并通过索引来访问每个元素，如下所示：
+1z(0) = &amp;#34;DDKK.COM 弟弟快看，程序员编程资料站&amp;#34;; z(1) = &amp;#34;百度&amp;#34;; z(4/2) = &amp;#34;腾讯&amp;#34; 最后一个元素的索引使用了表达式 4/2 作为索引，类似于 z(2) = “腾讯” 。
+我们也可以使用以下方式来定义一个数组：
+1var z = Array(&amp;#34;DDKK.COM 弟弟快看，程序员编程资料站&amp;#34;, &amp;#34;百度&amp;#34;, &amp;#34;腾讯&amp;#34;) 下图展示了一个长度为 10 的数组 myList，索引值为 0 到 9：
+处理数组 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 数组的元素类型和数组的大小都是确定的，所以当处理数组元素时候，我们通常使用基本的 for 循环。
+以下范例演示了数组的创建，初始化等处理过程：</description></item><item><title>十一、Scala 教程：循环</title><link>https://www.shellio.cc/docs/programing/scala/11/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/11/</guid><description>有的时候，我们可能需要多次执行同一块代码。一般情况下，语句是按顺序执行的：函数中的第一个语句先执行，接着是第二个语句，依此类推。
+编程语言提供了更为复杂执行路径的多种控制结构。
+循环语句允许我们多次执行一个语句或语句组，下面是大多数编程语言中循环语句的流程图：
+循环类型 Scala 语言提供了以下几种循环类型。点击链接查看每个类型的细节。
+循环类型 描述 while 循环 运行一系列语句，如果条件为true，会重复运行，直到条件变为false do…while 循环 类似 while 语句区别在于判断循环条件之前，先执行一次循环的代码块 for 循环 用来重复执行一系列语句直到达成特定条件达成，一般通过在每次循环完成后增加计数器的值来实现 循环控制语句 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 循环控制语句改变你代码的执行顺序，通过它你可以实现代码的跳转。Scala 以下几种循环控制语句：
+Scala 不支持 break 或 continue 语句，但从 2.8 版本后提供了一种中断循环的方式，点击以下链接查看详情。
+控制语句 描述 break 语句 中断循环 无限循环 如果条件永远为 true，则循环将变成无限循环。我们可以使用 while 语句来实现无限循环：
+1object Test { 2 def main(args: Array[String]) { 3 var a = 10; 4 // 无限循环 5 while( true ){ 6 println( &amp;#34;a 的值为 : &amp;#34; + a ); 7 } 8 } 以上代码执行后循环会永久执行下去，你可以使用 Ctrl + C 键来中断无限循环。</description></item><item><title>四、Scala 教程：基础语法</title><link>https://www.shellio.cc/docs/programing/scala/4/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/4/</guid><description>如果你之前是一名 Java 程序员，并了解 Java 语言的基础知识，那么你能很快学会 Scala 的基础语法。
+Scala 与 Java 的最大区别是：Scala 语句末尾的分号 ; 是可选的。
+可以认为 Scala 程序是对象的集合，通过调用彼此的方法来实现消息传递。接下来我们来理解下，类，对象，方法，范例变量的概念：
+对象 – 对象有属性和行为。例如：一只狗的状属性有：颜色，名字，行为有：叫、跑、吃等。对象是一个类的范例。 类 – 类是对象的抽象，而对象是类的具体范例。 方法 – 方法描述的基本的行为，一个类可以包含多个方法。 字段 – 每个对象都有它唯一的范例变量集合，即字段。对象的属性通过给字段赋值来创建。 第一个 Scala 程序 交互式编程 交互式编程不需要创建脚本文件，可以通过以下命令调用：
+1$ scala 2Welcome to Scala version 2.11.7 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0_31). 3Type in expressions to have them evaluated. 4Type :help for more information. 5scala&amp;gt; 1 + 1 6res0: Int = 2 7scala&amp;gt; println(&amp;#34;Hello World!</description></item><item><title>四十、Scala 教程：do…while 循环</title><link>https://www.shellio.cc/docs/programing/scala/40/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/40/</guid><description>for循环允许您编写一个执行指定次数的循环控制结构。
+语法 Scala 语言中 for 循环的语法：
+1for( var x &amp;lt;- Range ){ 2 statement(s); 以上语法中， Range 可以是一个数字区间表示 i to j ，或者 i until j 。左箭头 &amp;lt;- 用于为变量 x 赋值。
+范例 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 i to j 以下是一个使用了 i to j 语法(包含 j)的范例:
+1object Test { 2 def main(args: Array[String]) { 3 var a = 0; 4 // for 循环 5 for( a &amp;lt;- 1 to 5){ 6 println( &amp;#34;Value of a: &amp;#34; + a ); 7 } 8 } 执行以上代码输出结果为：</description></item><item><title>四十二、Scala 教程：List(列表)</title><link>https://www.shellio.cc/docs/programing/scala/42/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/42/</guid><description>列表 Scala 列表 有点像 数组, 因为他们都是有序存储结构，而且所有元素的类型都一样，但它又不同于数组
+1、 列表(List)一旦被创建就不能改变其中的元素；
+2、 列表(List)底层的数据结构是链接表，而数组是一块连续的内存；
+因为列表不可变，所以所有操作它的方法或者构造器都会创建一个新的列表
+定义列表(List) 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 定义列表有 范例化List对象 和 构造符构造 两种方式
+范例化List对象构造列表 我们使用 List[T] 来定义一个 T 类型的列表。T 可以是 String,Int等等基本数据类型，也可以是用户自己定义的类类型。
+下面代码定义了各种类型的列表
+1// 字符串列表 2val site: List[String] = List(&amp;#34;百度&amp;#34;, &amp;#34;腾讯&amp;#34;, &amp;#34;阿里巴巴&amp;#34;) 3// 整型列表 4val nums: List[Int] = List(11, 21, 31, 41) 5// 空列表 6val empty: List[Nothing] = List() 7// 二维列表 8val dim: List[List[Int]] = 9 List( 10 List(11, 20, 30), 11 List(10, 11, 20), 12 List(30, 10, 12) 13 ) 使用运算符构造列表 Scala 提供了 **::**运算符来构造列表</description></item><item><title>四十三、Scala 教程：break 语句</title><link>https://www.shellio.cc/docs/programing/scala/43/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/43/</guid><description>当在循环中使用 break 语句，在执行到该语句时，就会中断循环并执行循环体之后的代码块。
+Scala 语言中默认是没有 break 语句，但是你在 Scala 2.8 版本后可以使用另外一种方式来实现 break 语句。
+语法 Scala 中 break 的语法有点不大一样，格式如下：
+1// 导入以下包 2import scala.util.control._ 3// 创建 Breaks 对象 4val loop = new Breaks; 5// 在 breakable 中循环 6loop.breakable{ 7 // 循环 8 for(...){ 9 .... 10 // 循环中断 11 loop.break; 12 } 流程图 范例 1import scala.util.control._ 2object Test { 3 def main(args: Array[String]) { 4 var a = 0; 5 val numList = List(1,2,3); 6 val loop = new Breaks; 7 loop.</description></item><item><title>四十一、Scala 教程：while 循环</title><link>https://www.shellio.cc/docs/programing/scala/41/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/41/</guid><description>只要给定的条件为 true，Scala 语言中的 while 循环语句会重复执行循环体内的代码块。
+语法 Scala 语言中 while 循环的语法：
+1while(condition) 2 statement(s); 在这里， statement(s) 可以是一个单独的语句，也可以是几个语句组成的代码块。
+condition 可以是任意的表达式，当为任意非零值时都为 true。当条件为 true 时执行循环。 当条件为 false 时，退出循环，程序流将继续执行紧接着循环的下一条语句。
+流程图 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 在这里， while 循环的关键点是循环可能一次都不会执行。当条件为 false 时，会跳过循环主体，直接执行紧接着 while 循环的下一条语句。
+范例 1object Test { 2 def main(args: Array[String]) { 3 // 局部变量 4 var a = 10; 5 // while 循环执行 6 while( a &amp;lt; 15 ){ 7 println( &amp;#34;Value of a: &amp;#34; + a ); 8 a = a + 1; 9 } 10 } 执行以上代码输出结果为：</description></item><item><title>五、Scala 教程：数据类型</title><link>https://www.shellio.cc/docs/programing/scala/5/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/5/</guid><description>Scala 与 Java有着相同的数据类型，下表列出了 Scala 支持的数据类型：
+数据类型 描述 Byte 8位有符号补码整数。数值区间为 -128 到 127 Short 16位有符号补码整数。数值区间为 -32768 到 32767 Int 32位有符号补码整数。数值区间为 -2147483648 到 2147483647 Long 64位有符号补码整数。数值区间为 -9223372036854775808 到 9223372036854775807 Float 32位IEEE754单精度浮点数 Double 64位IEEE754单精度浮点数 Char 16位无符号Unicode字符, 区间值为 U+0000 到 U+FFFF String 字符序列 Boolean true或false Unit 表示无值，和其他语言中void等同。用作不返回任何结果的方法的结果类型。Unit只有一个范例值，写成()。 Null null 或空引用 Nothing Nothing类型在Scala的类层级的最低端；它是任何其他类型的子类型。 Any Any是所有其他类的超类 AnyRef AnyRef类是Scala里所有引用类(reference class)的基类 上表中列出的数据类型都是对象，也就是说scala没有java中的原生类型。在scala是可以对数字等基础类型调用方法的。
+Scala 基础字面量 Scala 非常简单且直观。接下来我们会详细介绍 Scala 字面量。
+整型字面量 整型字面量用于 Int 类型，如果表示 Long，可以在数字后面添加 L 或者小写 l 作为后缀。：
+10 2035 321 40xFFFFFFFF 50777L 浮点型字面量 如果浮点数后面有f或者F后缀时，表示这是一个Float类型，否则就是一个Double类型的。范例如下：</description></item><item><title>一、Scala 教程：教程</title><link>https://www.shellio.cc/docs/programing/scala/1/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/scala/1/</guid><description>Scala 是一门多范式（multi-paradigm）的编程语言，设计初衷是要集成面向对象编程和函数式编程的各种特性,也就是创造更好的 JAVA
+Scala 源代码被编译成Java字节码，所以它可以运行于JVM之上，并可以调用现有的Java类库。
+谁适合阅读本教程？ 本教程适合想从零开始学习 Scala 编程语言的开发人员。 当然本教程也会对一些模块进行深入，让你更好的了解 Scala 的应用。
+学习本教程前你需要了解 在继续本教程之前，你应该了解一些基本的计算机编程术语。 如果你学习过Java编程语言，将有助于你更快的了解 Scala 编程。
+强烈建议你有一定的 JAVA 基础，因为 Scala 从 JAVA 演化而来 学习Java 教程)。
+第一个 Scala 程序：Hello World 以下是用 Scala 编写的典型 Hello World 程序：
+范例（HelloWorld.scala） 1object HelloWorld { 2 def main(args: Array[String]): Unit = { 3 println(&amp;#34;Hello, world!&amp;#34;) 4 } 运行代码
+将以上代码保存为 HelloWorld.scala 文件，执行以上 scala 程序（你也可以直接在线执行）：
+1$ scalac HelloWorld.scala 2$ scala HelloWorld.scala 输出结果为：
+1Hello, world!</description></item></channel></rss>

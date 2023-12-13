@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Sprint Boot 2 on 程序员安仔</title><link>https://www.shellio.cc/docs/java/sprintboot2/</link><description>Recent content in Sprint Boot 2 on 程序员安仔</description><generator>Hugo -- gohugo.io</generator><language>zh-hans</language><copyright>个人技术博客</copyright><atom:link href="https://www.shellio.cc/docs/java/sprintboot2/index.xml" rel="self" type="application/rss+xml"/><item><title>一起来学 SpringBoot 2.x | 第八篇：通用Mapper与分页插件的集成</title><link>https://www.shellio.cc/docs/java/sprintboot2/8/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/sprintboot2/8/</guid><description>作者：唐亚峰 | 出自：https://blog.battcn.com
+SpringBoot 是为了简化 Spring 应用的创建、运行、调试、部署等一系列问题而诞生的产物，自动装配的特性让我们可以更好的关注业务本身而不是外部的XML配置，我们只需遵循规范，引入相关的依赖就可以轻易的搭建出一个 WEB 工程
+在一起来学SpringBoot | 第七篇：整合Mybatis一文中，我们介绍了Mybatis这款优秀的框架，顺便提及了民间大神开发的两款插件**（通用Mapper、PageHelper）**，从此告别简单CURD代码的编写….
+插件介绍 以下两款插件作者均是同一个人，如果你想深入了解Mybatis以及插件开发可以购买作者的书籍
+京东： https://item.jd.com/12103309.html 当当： http://product.dangdang.com/25098208.html 分页插件
+GIT地址： https://github.com/pagehelper/Mybatis-PageHelper 在没有分页插件之前，写一个分页需要两条SQL语句，一条查询一条统计，然后才能计算出页码，这样的代码冗余而又枯燥，更重要的一点是**数据库迁移**，众所周知不同的数据库分页写法是不同的，而Mybatis不同于Hibernate的是它只提供动态SQL和结果集映射。值得庆幸的是，它虽然没有为分页提供良好的解决方案，但却提供了Interceptor以供开发者自己扩展，这也是这款分页插件的由来….
+通用Mapper
+GIT地址： https://gitee.com/free/Mapper 通用 Mapper 是一个可以实现任意 MyBatis 通用方法的框架，项目提供了常规的增删改查操作以及 Example 相关的单表操作。通用 Mapper 是为了解决 MyBatis 使用中 90% 的基本操作，使用它可以很方便的进行开发，可以节省开发人员大量的时间。
+导入依赖 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 在pom.xml 中添加通用Mapper与分页插件的依赖包
+1&amp;lt;!-- 通用Mapper插件 2 文档地址：https://gitee.com/free/Mapper/wikis/Home --&amp;gt; 3&amp;lt;dependency&amp;gt; 4 &amp;lt;groupId&amp;gt;tk.mybatis&amp;lt;/groupId&amp;gt; 5 &amp;lt;artifactId&amp;gt;mapper-spring-boot-starter&amp;lt;/artifactId&amp;gt; 6 &amp;lt;version&amp;gt;2.0.2&amp;lt;/version&amp;gt; 7&amp;lt;/dependency&amp;gt; 8&amp;lt;!-- 分页插件 9 文档地址：https://github.com/pagehelper/Mybatis-PageHelper/blob/master/wikis/zh/HowToUse.md --&amp;gt; 10&amp;lt;dependency&amp;gt; 11 &amp;lt;groupId&amp;gt;com.github.pagehelper&amp;lt;/groupId&amp;gt; 12 &amp;lt;artifactId&amp;gt;pagehelper-spring-boot-starter&amp;lt;/artifactId&amp;gt; 13 &amp;lt;version&amp;gt;1.2.5&amp;lt;/version&amp;gt; 14&amp;lt;/dependency&amp;gt; 15&amp;lt;!-- MYSQL包 --&amp;gt; 16&amp;lt;dependency&amp;gt; 17 &amp;lt;groupId&amp;gt;mysql&amp;lt;/groupId&amp;gt; 18 &amp;lt;artifactId&amp;gt;mysql-connector-java&amp;lt;/artifactId&amp;gt; 19&amp;lt;/dependency&amp;gt; 20&amp;lt;!</description></item><item><title>一起来学 SpringBoot 2.x | 第二篇：SpringBoot配置详解</title><link>https://www.shellio.cc/docs/java/sprintboot2/2/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/sprintboot2/2/</guid><description>作者：唐亚峰 | 出自：https://blog.battcn.com
+SpringBoot 是为了简化 Spring 应用的创建、运行、调试、部署等一系列问题而诞生的产物，自动装配的特性让我们可以更好的关注业务本身而不是外部的XML配置，我们只需遵循规范，引入相关的依赖就可以轻易的搭建出一个 WEB 工程
+上一篇介绍了 SpringBoot 由来及构建方式，通过第一章的教程我们对 SpringBoot 不在感到陌生，可以发现 SpringBoot 虽然干掉了 XML 但未做到 零配置，它体现出了一种 约定优于配置，也称作按约定编程，是一种软件设计范式，旨在减少软件开发人员需做决定的数量，获得简单的好处，而又不失灵活性。 一般情况下默认的配置足够满足日常开发所需，但在特殊的情况下，我们往往需要用到自定义属性配置、自定义文件配置、多环境配置、外部命令引导等一系列功能。不用担心，这些 SpringBoot 都替我们考虑好了，我们只需要遵循它的规则配置即可
+准备前提
+为了让SpringBoot 更好的生成数据，我们需要添加如下依赖（该依赖可以不添加，但是在 IDEA 和 STS 中不会有属性提示，没有提示的配置就跟你用记事本写代码一样苦逼，出个问题弄哭你去），该依赖只会在编译时调用，所以不用担心会对生产造成影响…
+1&amp;lt;dependency&amp;gt; 2 &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; 3 &amp;lt;artifactId&amp;gt;spring-boot-configuration-processor&amp;lt;/artifactId&amp;gt; 4 &amp;lt;optional&amp;gt;true&amp;lt;/optional&amp;gt; 5&amp;lt;/dependency&amp;gt; 自定义属性配置 在application.properties 写入如下配置内容
+1my1.age=22 2my1.name=battcn 其次定义 MyProperties1.java 文件，用来映射我们在 application.properties 中的内容，这样一来我们就可以通过操作对象的方式来获得配置文件的内容了
+1package com.battcn.properties; 2import org.springframework.boot.context.properties.ConfigurationProperties; 3import org.springframework.stereotype.Component; 4/** 5 * @author Levin 6 * @since 2018/4/23 0023 7 */ 8@Component 9@ConfigurationProperties(prefix = &amp;#34;my1&amp;#34;) 10public class MyProperties1 { 11 private int age; 12 private String name; 13 // 省略 get set 14 @Override 15 public String toString() { 16 return &amp;#34;MyProperties1{&amp;#34; + 17 &amp;#34;age=&amp;#34; + age + 18 &amp;#34;, name=&amp;#39;&amp;#34; + name + &amp;#39;\&amp;#39;&amp;#39; + 19 &amp;#39;}&amp;#39;; 20 } 21} 接下来就是定义我们的 PropertiesController 用来注入 MyProperties1 测试我们编写的代码，值得注意的是 Spring4.</description></item><item><title>一起来学 SpringBoot 2.x | 第二十二篇：轻松搞定重复提交（本地锁）</title><link>https://www.shellio.cc/docs/java/sprintboot2/22/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/sprintboot2/22/</guid><description>作者：唐亚峰 | 出自：https://blog.battcn.com
+SpringBoot 是为了简化 Spring 应用的创建、运行、调试、部署等一系列问题而诞生的产物，自动装配的特性让我们可以更好的关注业务本身而不是外部的XML配置，我们只需遵循规范，引入相关的依赖就可以轻易的搭建出一个 WEB 工程
+在平时开发中，如果网速比较慢的情况下，用户提交表单后，发现服务器半天都没有响应，那么用户可能会以为是自己没有提交表单，就会再点击提交按钮重复提交表单，我们在开发中必须防止表单重复提交….
+重复提交 字面意思就是提交了很多次，这种情况一般都是前端给你挖的坑….
+前段时间在开发中遇到一个这样的问题；前端小哥哥调用接口的时候存在 循环调用 的问题，正常情况下发送一个请求添加一条数据，结果变成了同一时刻并发的发送了 N 个请求，服务端瞬间懵逼的插入了 N 条一模一样的数据，前端小哥哥也不知道问题在哪里（恩...坑就这样挖好了，反正不填坑，气死你） 这时候咋办呢；后端干呗，反正脏活累活，背锅的事情也没少干了，多一件也不多….
+本章目标 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 利用自定义注解、Spring Aop、Guava Cache 实现表单防重复提交（不适用于分布式哦，后面会讲分布式方式...）
+具体代码 非常简单…
+导入依赖 在pom.xml 中添加上 spring-boot-starter-web 的依赖即可
+1&amp;lt;dependencies&amp;gt; 2 &amp;lt;dependency&amp;gt; 3 &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; 4 &amp;lt;artifactId&amp;gt;spring-boot-starter-web&amp;lt;/artifactId&amp;gt; 5 &amp;lt;/dependency&amp;gt; 6 &amp;lt;dependency&amp;gt; 7 &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; 8 &amp;lt;artifactId&amp;gt;spring-boot-starter-aop&amp;lt;/artifactId&amp;gt; 9 &amp;lt;/dependency&amp;gt; 10 &amp;lt;dependency&amp;gt; 11 &amp;lt;groupId&amp;gt;com.google.guava&amp;lt;/groupId&amp;gt; 12 &amp;lt;artifactId&amp;gt;guava&amp;lt;/artifactId&amp;gt; 13 &amp;lt;version&amp;gt;21.0&amp;lt;/version&amp;gt; 14 &amp;lt;/dependency&amp;gt; 15&amp;lt;/dependencies&amp;gt; Lock 注解 创建一个 LocalLock 注解，简单点就一个 key 可以了，由于暂时未用到 redis 所以 expire 是摆设….</description></item><item><title>一起来学 SpringBoot 2.x | 第二十六篇：轻松搞定安全框架（Shiro）</title><link>https://www.shellio.cc/docs/java/sprintboot2/26/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/sprintboot2/26/</guid><description>作者：唐亚峰 | 出自：https://blog.battcn.com
+SpringBoot 是为了简化 Spring 应用的创建、运行、调试、部署等一系列问题而诞生的产物，自动装配的特性让我们可以更好的关注业务本身而不是外部的XML配置，我们只需遵循规范，引入相关的依赖就可以轻易的搭建出一个 WEB 工程
+Shiro 是 Apache 旗下开源的一款强大且易用的Java安全框架，身份验证、授权、加密、会话管理。 相比 Spring Security 而言 Shiro 更加轻量级，且 API 更易于理解…
+Shiro Shiro 主要分为 安全认证 和 接口授权 两个部分，其中的核心组件为 Subject、SecurityManager、Realms，公共部分 Shiro 都已经为我们封装好了，我们只需要按照一定的规则去编写响应的代码即可…
+Subject 即表示主体，将用户的概念理解为当前操作的主体，因为它即可以是一个通过浏览器请求的用户，也可能是一个运行的程序，外部应用与 Subject 进行交互，记录当前操作用户。Subject 代表了当前用户的安全操作，SecurityManager 则管理所有用户的安全操作。 SecurityManager 即安全管理器，对所有的 Subject 进行安全管理，并通过它来提供安全管理的各种服务（认证、授权等） Realm 充当了应用与数据安全间的 桥梁 或 连接器。当对用户执行认证（登录）和授权（访问控制）验证时，Shiro 会从应用配置的 Realm 中查找用户及其权限信息。 本章目标 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 利用Spring Boot 与 Shiro 实现安全认证和授权….
+导入依赖 依赖spring-boot-starter-web…
+1&amp;lt;properties&amp;gt; 2 &amp;lt;project.build.sourceEncoding&amp;gt;UTF-8&amp;lt;/project.build.sourceEncoding&amp;gt; 3 &amp;lt;project.reporting.outputEncoding&amp;gt;UTF-8&amp;lt;/project.reporting.outputEncoding&amp;gt; 4 &amp;lt;java.version&amp;gt;1.8&amp;lt;/java.version&amp;gt; 5 &amp;lt;shiro.version&amp;gt;1.4.0&amp;lt;/shiro.version&amp;gt; 6&amp;lt;/properties&amp;gt; 7&amp;lt;dependencies&amp;gt; 8 &amp;lt;dependency&amp;gt; 9 &amp;lt;groupId&amp;gt;org.</description></item><item><title>一起来学 SpringBoot 2.x | 第二十篇：轻松搞定数据验证（二）</title><link>https://www.shellio.cc/docs/java/sprintboot2/20/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/sprintboot2/20/</guid><description>作者：唐亚峰 | 出自：https://blog.battcn.com
+SpringBoot 是为了简化 Spring 应用的创建、运行、调试、部署等一系列问题而诞生的产物，自动装配的特性让我们可以更好的关注业务本身而不是外部的XML配置，我们只需遵循规范，引入相关的依赖就可以轻易的搭建出一个 WEB 工程
+一起来学SpringBoot | 第十九篇：轻松搞定数据验证（一） 中介绍了数据有效性校验的重要性，也简单介绍了如何用轻松的方式搞定数据有效性校验，但是当系统自带的注解无法满足我们的要求时候应该咋办呢？这就是本章将给各位介绍的**自定义 Validator 注解**
+为何要自定义 javax.validation 包与 hibernate-validator 包中存在的注解几乎可以满足大部分的要求，又拥有基于正则表达式的@Pattern，为什么还需要自己去定义呢？
+原因如下
+正则效率不高 正则可读性不好 正则门槛较高，很多开发者并不会编写正则表达式 本章目标 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 熟悉ConstraintValidator 接口并且编写自己的数据验证注解
+具体代码 非常简单…
+导入依赖 在pom.xml 中添加上 spring-boot-starter-web 的依赖即可
+1&amp;lt;dependencies&amp;gt; 2 &amp;lt;dependency&amp;gt; 3 &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; 4 &amp;lt;artifactId&amp;gt;spring-boot-starter-web&amp;lt;/artifactId&amp;gt; 5 &amp;lt;/dependency&amp;gt; 6 &amp;lt;dependency&amp;gt; 7 &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; 8 &amp;lt;artifactId&amp;gt;spring-boot-starter-test&amp;lt;/artifactId&amp;gt; 9 &amp;lt;scope&amp;gt;test&amp;lt;/scope&amp;gt; 10 &amp;lt;/dependency&amp;gt; 11&amp;lt;/dependencies&amp;gt; 自定义注解 这里定义了一个 @DateTime 注解，在该注解上标注了 @Constraint 注解，它的作用就是指定一个具体的校验器类
+关键字段（强制性）
+message： 验证失败提示的消息内容 groups： 为约束指定验证组（非常不错的一个功能，下一章介绍） payload： 不太清楚（欢迎留言交流） 1package com.</description></item><item><title>一起来学 SpringBoot 2.x | 第二十七篇：优雅解决分布式限流</title><link>https://www.shellio.cc/docs/java/sprintboot2/27/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/sprintboot2/27/</guid><description>作者：唐亚峰 | 出自：https://blog.battcn.com
+SpringBoot 是为了简化 Spring 应用的创建、运行、调试、部署等一系列问题而诞生的产物， 自动装配的特性让我们可以更好的关注业务本身而不是外部的XML配置，我们只需遵循规范，引入相关的依赖就可以轻易的搭建出一个WEB工程
+在前面的两篇文章中，介绍了一些限流的类型和策略，本篇从 SpringBoot、 Redis 应用层面来实现分布式的限流….
+分布式限流 单机版中我们了解到 AtomicInteger、 RateLimiter、 Semaphore 这几种解决方案，但它们也仅仅是单机的解决手段，在集群环境下就透心凉了，后面又讲述了 Nginx 的限流手段，可它又属于网关层面的策略之一，并不能解决所有问题。例如供短信接口，你无法保证消费方是否会做好限流控制，所以自己在应用层实现限流还是很有必要的。
+本章目标 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 利用自定义注解、 SpringAop、 RedisCache 实现分布式限流….
+具体代码 很简单…
+导入依赖 在pom.xml 中添加上 starter-web、 starter-aop、 starter-data-redis 的依赖即可，习惯了使用 commons-lang3 和 guava 中的一些工具包…
+1&amp;lt;dependencies&amp;gt; 2 &amp;lt;!-- 默认就内嵌了Tomcat 容器，如需要更换容器也极其简单--&amp;gt; 3 &amp;lt;dependency&amp;gt; 4 &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; 5 &amp;lt;artifactId&amp;gt;spring-boot-starter-aop&amp;lt;/artifactId&amp;gt; 6 &amp;lt;/dependency&amp;gt; 7 &amp;lt;dependency&amp;gt; 8 &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; 9 &amp;lt;artifactId&amp;gt;spring-boot-starter-web&amp;lt;/artifactId&amp;gt; 10 &amp;lt;/dependency&amp;gt; 11 &amp;lt;dependency&amp;gt; 12 &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; 13 &amp;lt;artifactId&amp;gt;spring-boot-starter-data-redis&amp;lt;/artifactId&amp;gt; 14 &amp;lt;/dependency&amp;gt; 15 &amp;lt;dependency&amp;gt; 16 &amp;lt;groupId&amp;gt;com.</description></item><item><title>一起来学 SpringBoot 2.x | 第二十三篇：轻松搞定重复提交（分布式锁）</title><link>https://www.shellio.cc/docs/java/sprintboot2/23/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/sprintboot2/23/</guid><description>作者：唐亚峰 | 出自：https://blog.battcn.com
+SpringBoot 是为了简化 Spring 应用的创建、运行、调试、部署等一系列问题而诞生的产物，自动装配的特性让我们可以更好的关注业务本身而不是外部的XML配置，我们只需遵循规范，引入相关的依赖就可以轻易的搭建出一个 WEB 工程
+在一起来学SpringBoot | 第二十二篇：轻松搞定重复提交（一） 一文中介绍了单机版的重复提交解决方案，在如今这个分布式与集群横行的世道中，那怎么够用呢，所以本章重点来了....
+重复提交（分布式） 单机版中我们用的是Guava Cache，但是这玩意存在集群的时候就凉了，所以我们还是要借助类似Redis、ZooKeeper 之类的中间件实现分布式锁。
+本章目标 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 利用自定义注解、Spring Aop、Redis Cache 实现分布式锁，你想锁表单锁表单，想锁接口锁接口….
+具体代码 也很简单…
+导入依赖 在pom.xml 中添加上 starter-web、starter-aop、starter-data-redis 的依赖即可
+1&amp;lt;dependencies&amp;gt; 2 &amp;lt;dependency&amp;gt; 3 &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; 4 &amp;lt;artifactId&amp;gt;spring-boot-starter-web&amp;lt;/artifactId&amp;gt; 5 &amp;lt;/dependency&amp;gt; 6 &amp;lt;dependency&amp;gt; 7 &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; 8 &amp;lt;artifactId&amp;gt;spring-boot-starter-aop&amp;lt;/artifactId&amp;gt; 9 &amp;lt;/dependency&amp;gt; 10 &amp;lt;dependency&amp;gt; 11 &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; 12 &amp;lt;artifactId&amp;gt;spring-boot-starter-data-redis&amp;lt;/artifactId&amp;gt; 13 &amp;lt;/dependency&amp;gt; 14&amp;lt;/dependencies&amp;gt; 属性配置 在application.properites 资源文件中添加 redis 相关的配置项
+1spring.redis.host=localhost 2spring.redis.port=6379 3spring.redis.password=battcn CacheLock 注解 创建一个 CacheLock 注解，本章内容都是实战使用过的，所以属性配置会相对完善了，话不多说注释都给各位写齐全了….</description></item><item><title>一起来学 SpringBoot 2.x | 第二十四篇：数据库管理与迁移（Liquibase）</title><link>https://www.shellio.cc/docs/java/sprintboot2/24/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/sprintboot2/24/</guid><description>作者：唐亚峰 | 出自：https://blog.battcn.com
+SpringBoot 是为了简化 Spring 应用的创建、运行、调试、部署等一系列问题而诞生的产物，自动装配的特性让我们可以更好的关注业务本身而不是外部的XML配置，我们只需遵循规范，引入相关的依赖就可以轻易的搭建出一个 WEB 工程
+目前Spring Boot 支持较好的两款工具分别是 flyway、liquibase，支持 sql script，在初始化数据源之后执行指定的脚本代码或者脚本文件，本章基于 Liquibase…
+Liquibase LiquiBase 是一个用于数据库重构和迁移的开源工具，通过 changelog文件 的形式记录数据库的变更，然后执行 changelog文件 中的修改，将数据库更新或回滚到一致的状态。
+主要特点
+支持几乎所有主流的数据库，如MySQL、PostgreSQL、Oracle、Sql Server、DB2等 支持多开发者的协作维护； 日志文件支持多种格式；如XML、YAML、SON、SQL等 支持多种运行方式；如命令行、Spring 集成、Maven 插件、Gradle 插件等 在平时开发中，无可避免测试库增加字段或者修改字段以及创建表之类的，环境切换的时候如果忘记修改数据库那么肯定会出现 不可描述的事情 ，这个时候不妨考虑考虑Liquibase。
+官方文档：http://www.liquibase.org/documentation/index.html
+本章目标 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 利用Spring Boot 集成 Liquibase，避免因粗心大意导致环境迁移时缺少字段….
+导入依赖 依赖spring-boot-starter-jdbc 目的是为了让 liquibase 能够获得 datasource ，这里换成 mybatis、hibernate 等也是一样，主要偷懒不想写配置….
+1&amp;lt;dependencies&amp;gt; 2 &amp;lt;dependency&amp;gt; 3 &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; 4 &amp;lt;artifactId&amp;gt;spring-boot-starter-web&amp;lt;/artifactId&amp;gt; 5 &amp;lt;/dependency&amp;gt; 6 &amp;lt;dependency&amp;gt; 7 &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; 8 &amp;lt;artifactId&amp;gt;spring-boot-starter-jdbc&amp;lt;/artifactId&amp;gt; 9 &amp;lt;/dependency&amp;gt; 10 &amp;lt;dependency&amp;gt; 11 &amp;lt;groupId&amp;gt;mysql&amp;lt;/groupId&amp;gt; 12 &amp;lt;artifactId&amp;gt;mysql-connector-java&amp;lt;/artifactId&amp;gt; 13 &amp;lt;/dependency&amp;gt; 14 &amp;lt;dependency&amp;gt; 15 &amp;lt;groupId&amp;gt;org.</description></item><item><title>一起来学 SpringBoot 2.x | 第二十五篇：打造属于你的聊天室（WebSocket）</title><link>https://www.shellio.cc/docs/java/sprintboot2/25/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/sprintboot2/25/</guid><description>作者：唐亚峰 | 出自：https://blog.battcn.com
+SpringBoot 是为了简化 Spring 应用的创建、运行、调试、部署等一系列问题而诞生的产物，自动装配的特性让我们可以更好的关注业务本身而不是外部的XML配置，我们只需遵循规范，引入相关的依赖就可以轻易的搭建出一个 WEB 工程
+Webscoket 对浏览器有一定的要求，所以使用之前要考虑兼容性的问题….
+Webscoket WebSocket 是 HTML5 新增的一种在单个 TCP 连接上进行全双工通讯的协议，与 HTTP 协议没有太大关系….
+在 WebSocket API 中，浏览器和服务器只需要做一个握手的动作，然后，浏览器和服务器之间就形成了一条快速通道。两者之间就直接可以数据互相传送。
+浏览器通过 JavaScript 向服务器发出建立 WebSocket 连接的请求，连接建立以后，客户端和服务器端就可以通过 TCP 连接直接交换数据。
+当你获取 WebSocket 连接后，你可以通过 send() 方法来向服务器发送数据，并通过 onmessage() 事件来接收服务器返回的数据..
+长连接
+与AJAX 轮训的方式差不多，但长连接不像 AJAX 轮训一样，而是采用的阻塞模型（一直打电话，没收到就不挂电话）；客户端发起连接后，如果没消息，就一直不返回 Response 给客户端。直到有消息才返回，返回完之后，客户端再次建立连接，周而复始。
+在没有WebSocket 之前，大家常用的手段应该就是轮训了，比如每隔几秒发起一次请求，但这样带来的就是高性能开销，都知道一次 HTTP 响应是需要经过三次握手和四次挥手，远不如 TCP 长连接来的划算
+WebSocket 事件
+本章目标 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 利用Spring Boot 与 WebSocke 打造 一对一 和 一对多 的在线聊天….
+导入依赖 依赖spring-boot-starter-websocket…
+1&amp;lt;dependencies&amp;gt; 2 &amp;lt;dependency&amp;gt; 3 &amp;lt;groupId&amp;gt;org.</description></item><item><title>一起来学 SpringBoot 2.x | 第二十一篇：轻松搞定数据验证（三）</title><link>https://www.shellio.cc/docs/java/sprintboot2/21/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/sprintboot2/21/</guid><description>作者：唐亚峰 | 出自：https://blog.battcn.com
+SpringBoot 是为了简化 Spring 应用的创建、运行、调试、部署等一系列问题而诞生的产物，自动装配的特性让我们可以更好的关注业务本身而不是外部的XML配置，我们只需遵循规范，引入相关的依赖就可以轻易的搭建出一个 WEB 工程
+前面两章中详细介绍了数据有效性校验的重要性、自定有数据有效性校验注解 本章也是轻松搞定数据验证的最后一篇， 一起来揭开神秘的分组验证
+分组验证 有的时候，我们对一个实体类需要有多中验证方式，在不同的情况下使用不同验证方式，比如说对于一个实体类来的 id 来说，新增的时候是不需要的，对于更新时是必须的，这个时候你是选择写一个实体类呢还是写两个呢？
+在自定有数据有效性校验注解中介绍到注解需要有一个 groups 属性，这个属性的作用又是什么呢？
+接下来就让我们看看如何用一个验证类实现多个接口之间不同规则的验证…
+本章目标 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 利用一个验证类实现多个接口之间不同规则的验证…
+具体代码 非常简单…
+导入依赖 在pom.xml 中添加上 spring-boot-starter-web 的依赖即可
+1&amp;lt;dependencies&amp;gt; 2 &amp;lt;dependency&amp;gt; 3 &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; 4 &amp;lt;artifactId&amp;gt;spring-boot-starter-web&amp;lt;/artifactId&amp;gt; 5 &amp;lt;/dependency&amp;gt; 6 &amp;lt;dependency&amp;gt; 7 &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; 8 &amp;lt;artifactId&amp;gt;spring-boot-starter-test&amp;lt;/artifactId&amp;gt; 9 &amp;lt;scope&amp;gt;test&amp;lt;/scope&amp;gt; 10 &amp;lt;/dependency&amp;gt; 11&amp;lt;/dependencies&amp;gt; 分组验证器 定义一个验证组，里面写上不同的空接口类即可
+1package com.battcn.groups; 2/** 3 * 验证组 4 * 5 * @author Levin 6 * @since 2018/6/7 0007 7 */ 8public class Groups { 9 public interface Update { 10 } 11 public interface Default { 12 } 13} 实体类 **groups 属性的作用就让 @Validated 注解只验证与自身 value 属性相匹配的字段，可多个，只要满足就会去纳入验证范围；**我们都知道针对新增的数据我们并不需要验证 ID 是否存在，我们只在做修改操作的时候需要用到，因此这里将 ID 字段归纳到 Groups.</description></item><item><title>一起来学 SpringBoot 2.x | 第九篇：整合Lettuce Redis</title><link>https://www.shellio.cc/docs/java/sprintboot2/9/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/sprintboot2/9/</guid><description>作者：唐亚峰 | 出自：https://blog.battcn.com
+SpringBoot 是为了简化 Spring 应用的创建、运行、调试、部署等一系列问题而诞生的产物，自动装配的特性让我们可以更好的关注业务本身而不是外部的XML配置，我们只需遵循规范，引入相关的依赖就可以轻易的搭建出一个 WEB 工程
+Spring Boot 除了支持常见的ORM框架外，更是对常用的中间件提供了非常好封装，随着Spring Boot2.x的到来，支持的组件越来越丰富，也越来越成熟，其中对Redis的支持不仅仅是丰富了它的API，更是替换掉底层Jedis的依赖，取而代之换成了Lettuce(生菜)
+Redis介绍 Redis是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。相比Memcached它支持存储的类型相对更多**（字符、哈希、集合、有序集合、列表、GEO）**，同时Redis是线程安全的。2010年3月15日起，Redis的开发工作由VMware主持，2013年5月开始，Redis的开发由Pivotal赞助。
+Lettuce 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 Lettuce 和 Jedis 的都是连接Redis Server的客户端程序。Jedis在实现上是直连redis server，多线程环境下非线程安全，除非使用连接池，为每个Jedis实例增加物理连接。Lettuce基于Netty的连接实例（StatefulRedisConnection），可以在多个线程间并发访问，且线程安全，满足多线程环境下的并发访问，同时它是可伸缩的设计，一个连接实例不够的情况也可以按需增加连接实例。
+导入依赖 在pom.xml 中spring-boot-starter-data-redis的依赖，Spring Boot2.x 后底层不在是Jedis如果做版本升级的朋友需要注意下
+1&amp;lt;dependency&amp;gt; 2 &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; 3 &amp;lt;artifactId&amp;gt;spring-boot-starter-data-redis&amp;lt;/artifactId&amp;gt; 4&amp;lt;/dependency&amp;gt; 5&amp;lt;dependency&amp;gt; 6 &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; 7 &amp;lt;artifactId&amp;gt;spring-boot-starter-web&amp;lt;/artifactId&amp;gt; 8&amp;lt;/dependency&amp;gt; 9&amp;lt;dependency&amp;gt; 10 &amp;lt;groupId&amp;gt;org.apache.commons&amp;lt;/groupId&amp;gt; 11 &amp;lt;artifactId&amp;gt;commons-pool2&amp;lt;/artifactId&amp;gt; 12&amp;lt;/dependency&amp;gt; 13&amp;lt;dependency&amp;gt; 14 &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; 15 &amp;lt;artifactId&amp;gt;spring-boot-starter-test&amp;lt;/artifactId&amp;gt; 16 &amp;lt;scope&amp;gt;test&amp;lt;/scope&amp;gt; 17&amp;lt;/dependency&amp;gt; 属性配置 在application.properties 文件中配置如下内容，由于Spring Boot2.x 的改动，连接池相关配置需要通过spring.redis.lettuce.pool 或者 spring.redis.jedis.pool 进行配置了
+1spring.redis.host=localhost 2spring.redis.password=battcn 3# 连接超时时间（毫秒） 4spring.redis.timeout=10000 5# Redis默认情况下有16个分片，这里配置具体使用的分片，默认是0 6spring.</description></item><item><title>一起来学 SpringBoot 2.x | 第六篇：整合SpringDataJpa</title><link>https://www.shellio.cc/docs/java/sprintboot2/6/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/sprintboot2/6/</guid><description>作者：唐亚峰 | 出自：https://blog.battcn.com
+SpringBoot 是为了简化 Spring 应用的创建、运行、调试、部署等一系列问题而诞生的产物，自动装配的特性让我们可以更好的关注业务本身而不是外部的XML配置，我们只需遵循规范，引入相关的依赖就可以轻易的搭建出一个 WEB 工程
+[上一篇][Link1]介绍了Spring JdbcTemplate的使用，对比原始的JDBC而言，它更加的简洁。但随着表的增加，重复的CRUD工作让我们苦不堪言，这时候Spring Data Jpa的作用就体现出来了…..
+JPA JPA是Java Persistence API的简称，中文名Java持久层API，是官方（Sun）在JDK5.0后提出的Java持久化规范。其目的是为了简化现有JAVA EE和JAVA SE应用开发工作，以及整合现有的ORM技术实现规范统一
+JPA的总体思想和现有Hibernate、TopLink、JDO等ORM框架大体一致。总的来说，JPA包括以下3方面的技术：
+ORM映射元数据： 支持XML和注解两种元数据的形式，元数据描述对象和表之间的映射关系，框架据此将实体对象持久化到数据库表中； API： 操作实体对象来执行CRUD操作，框架在后台替代我们完成所有的事情，开发者从繁琐的JDBC和SQL代码中解脱出来。 查询语言： 通过面向对象而非面向数据库的查询语言查询数据，避免程序的SQL语句紧密耦合。 JPA只是一种规范，它需要第三方自行实现其功能，在众多框架中Hibernate是最为强大的一个。从功能上来说，JPA就是Hibernate功能的一个子集。Hibernate 从3.2开始，就开始兼容JPA。同时Hibernate3.2获得了Sun TCK的JPA(Java Persistence API) 兼容认证。
+Spring Data JPA 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 常见的ORM框架中Hibernate的JPA最为完整，因此Spring Data JPA 是采用基于JPA规范的Hibernate框架基础下提供了Repository层的实现。Spring Data Repository极大地简化了实现各种持久层的数据库访问而写的样板代码量，同时CrudRepository提供了丰富的CRUD功能去管理实体类。
+优点
+丰富的API，简单操作无需编写额外的代码 丰富的SQL日志输出 缺点
+学习成本较大，需要学习HQL 配置复杂，虽然SpringBoot简化的大量的配置，关系映射多表查询配置依旧不容易 性能较差，对比JdbcTemplate、Mybatis等ORM框架，它的性能无异于是最差的 导入依赖 在pom.xml 中添加 spring-boot-starter-data-jpa 的依赖
+1&amp;lt;!-- Spring JDBC 的依赖包，使用 spring-boot-starter-jdbc 或 spring-boot-starter-data-jpa 将会自动获得HikariCP依赖 --&amp;gt; 2&amp;lt;dependency&amp;gt; 3 &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; 4 &amp;lt;artifactId&amp;gt;spring-boot-starter-data-jpa&amp;lt;/artifactId&amp;gt; 5&amp;lt;/dependency&amp;gt; 6&amp;lt;!</description></item><item><title>一起来学 SpringBoot 2.x | 第七篇：整合Mybatis</title><link>https://www.shellio.cc/docs/java/sprintboot2/7/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/sprintboot2/7/</guid><description>作者：唐亚峰 | 出自：https://blog.battcn.com
+SpringBoot 是为了简化 Spring 应用的创建、运行、调试、部署等一系列问题而诞生的产物，自动装配的特性让我们可以更好的关注业务本身而不是外部的XML配置，我们只需遵循规范，引入相关的依赖就可以轻易的搭建出一个 WEB 工程
+MyBatis 是一款优秀的持久层框架，它支持定制化 SQL、存储过程以及高级映射，几乎避免了所有的 JDBC 代码和手动设置参数以及获取结果集，使用简单的 XML 或注解来配置和映射原生信息，将接口和 Java 的 POJOs(Plain Old Java Objects,普通的 Java对象)映射成数据库中的记录，在国内可谓是占据了半壁江山……
+ORM对比图 以下针对**Spring JDBC、Spring Data Jpa、Mybatis**三款框架做了个粗略的对比。一般应用的性能瓶颈并不是在于ORM，所以这三个框架技术选型应该考虑项目的场景、团队的技能掌握情况、开发周期(开发效率)…
+框架对比 Spring JDBC Spring Data Jpa Mybatis 性能 性能最好 性能最差 居中 代码量 多 少 多 学习成本 低 高 居中 推荐指数 ❤❤❤ ❤❤❤❤❤ ❤❤❤❤❤ 个人观点
+抛开学习成本而言，对于业务简单的中小型项目中使用Spring Data Jpa 开发无异于是最快速的。但是鉴于国内市场环境而言，掌握Mybatis无异于是佳的选择，低学习成本和动态SQL解耦的特点使得更容易被人们所接受。对于业务复杂且对性能要求较高的项目来说Mybatis往往能更好的胜任，可以自己进行SQL优化，同时更让我喜欢的是Mybatis分页插件与通用Mapper(单表CURD无需自己手写)有了这两款插件的支持，还有什么理由拒绝Mybatis呢
+导入依赖 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 在pom.xml 中添加 Mybatis 的依赖包mybatis-spring-boot-starter，该包拥有自动装配的特点
+1&amp;lt;dependency&amp;gt; 2 &amp;lt;groupId&amp;gt;org.mybatis.spring.boot&amp;lt;/groupId&amp;gt; 3 &amp;lt;artifactId&amp;gt;mybatis-spring-boot-starter&amp;lt;/artifactId&amp;gt; 4 &amp;lt;version&amp;gt;1.3.2&amp;lt;/version&amp;gt; 5&amp;lt;/dependency&amp;gt; 6&amp;lt;!</description></item><item><title>一起来学 SpringBoot 2.x | 第三篇：SpringBoot日志配置</title><link>https://www.shellio.cc/docs/java/sprintboot2/3/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/sprintboot2/3/</guid><description>作者：唐亚峰 | 出自：https://blog.battcn.com
+SpringBoot 是为了简化 Spring 应用的创建、运行、调试、部署等一系列问题而诞生的产物，自动装配的特性让我们可以更好的关注业务本身而不是外部的XML配置，我们只需遵循规范，引入相关的依赖就可以轻易的搭建出一个 WEB 工程
+Spring Boot 内部采用的是 Commons Logging进行日志记录，但在底层为 Java Util Logging、Log4J2、Logback 等日志框架提供了默认配置 。
+Java 虽然有很多可用的日志框架，但请不要担心，一般来说，使用 SpringBoot 默认的 Logback 就可以了。
+日志格式 SpringBoot 的默认输出的日志格式如下：
+12014-03-05 10:57:51.112 INFO 45469 --- [ main] org.apache.catalina.core.StandardEngine : Starting Servlet Engine: Apache Tomcat/7.0.52 22014-03-05 10:57:51.253 INFO 45469 --- [ost-startStop-1] o.a.c.c.C.[Tomcat].[localhost].[/] : Initializing Spring embedded WebApplicationContext 32014-03-05 10:57:51.253 INFO 45469 --- [ost-startStop-1] o.s.web.context.ContextLoader : Root WebApplicationContext: initialization completed in 1358 ms 42014-03-05 10:57:51.</description></item><item><title>一起来学 SpringBoot 2.x | 第十八篇：轻松搞定全局异常</title><link>https://www.shellio.cc/docs/java/sprintboot2/18/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/sprintboot2/18/</guid><description>作者：唐亚峰 | 出自：https://blog.battcn.com
+SpringBoot 是为了简化 Spring 应用的创建、运行、调试、部署等一系列问题而诞生的产物，自动装配的特性让我们可以更好的关注业务本身而不是外部的XML配置，我们只需遵循规范，引入相关的依赖就可以轻易的搭建出一个 WEB 工程
+实际项目开发中，程序往往会发生各式各样的异常情况，特别是身为服务端开发人员的我们，总是不停的编写接口提供给前端调用，分工协作的情况下，避免不了异常的发生，如果直接将错误的信息直接暴露给用户，这样的体验可想而知，且对黑客而言，详细异常信息往往会提供非常大的帮助…
+初窥异常 一个简单的异常请求的接口
+1@GetMapping(&amp;#34;/test1&amp;#34;) 2public String test1() { 3 // TODO 这里只是模拟异常，假设业务处理的时候出现错误了，或者空指针了等等... 4 int i = 10 / 0; 5 return &amp;#34;test1&amp;#34;; 6} 打开浏览器访问它的时候发现
+又或者是用 postman 等模拟工具
+如果这接口是给第三方调用或者是自己公司的系统，看到这种错误估计得暴走吧….
+笨方法（极其不建议）
+采用try-catch的方式，手动捕获异常信息，然后返回对应的结果集，相信很多人都看到过类似的代码（如：封装成Result对象）；该方法虽然间接性的解决错误暴露的问题，同样的弊端也很明显，增加了大量的代码量，当异常过多的情况下对应的catch层愈发的多了起来，很难管理这些业务异常和错误码之间的匹配，所以最好的方法就是通过简单配置全局掌控….
+1@GetMapping(&amp;#34;/test2&amp;#34;) 2public Map&amp;lt;String, String&amp;gt; test2() { 3 Map&amp;lt;String, String&amp;gt; result = new HashMap&amp;lt;&amp;gt;(16); 4 // TODO 直接捕获所有代码块，然后在 cache 5 try { 6 int i = 10 / 0; 7 result.put(&amp;#34;code&amp;#34;, &amp;#34;200&amp;#34;); 8 result.</description></item><item><title>一起来学 SpringBoot 2.x | 第十二篇：初探RabbitMQ消息队列</title><link>https://www.shellio.cc/docs/java/sprintboot2/12/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/sprintboot2/12/</guid><description>作者：唐亚峰 | 出自：https://blog.battcn.com
+SpringBoot 是为了简化 Spring 应用的创建、运行、调试、部署等一系列问题而诞生的产物，自动装配的特性让我们可以更好的关注业务本身而不是外部的XML配置，我们只需遵循规范，引入相关的依赖就可以轻易的搭建出一个 WEB 工程
+**MQ全称（Message Queue）又名消息队列，是一种异步通讯的中间件。**可以将它理解成邮局，发送者将消息传递到邮局，然后由邮局帮我们发送给具体的消息接收者（消费者），具体发送过程与时间我们无需关心，它也不会干扰我进行其它事情。常见的MQ有kafka、activemq、zeromq、rabbitmq 等等，各大MQ的对比和优劣势可以自行Google
+rabbitmq RabbitMQ是一个遵循AMQP协议，由面向高并发的erlanng语言开发而成，用在实时的对可靠性要求比较高的消息传递上，支持多种语言客户端。支持延迟队列（这是一个非常有用的功能）….
+基础概念 **Broker：**简单来说就是消息队列服务器实体
+**Exchange：**消息交换机，它指定消息按什么规则，路由到哪个队列
+**Queue：**消息队列载体，每个消息都会被投入到一个或多个队列
+**Binding：**绑定，它的作用就是把exchange和queue按照路由规则绑定起来
+**Routing Key：**路由关键字，exchange根据这个关键字进行消息投递
+**vhost：**虚拟主机，一个broker里可以开设多个vhost，用作不同用户的权限分离
+**producer：**消息生产者，就是投递消息的程序
+**consumer：**消息消费者，就是接受消息的程序
+**channel：**消息通道，在客户端的每个连接里，可建立多个channel，每个channel代表一个会话任务
+基于Centos7.x安装请参考： http://blog.battcn.com/2017/08/20/linux/linux-centos7-ribbitmq/
+常见应用场景 1、 邮箱发送：用户注册后投递消息到rabbitmq中，由消息的消费方异步的发送邮件，提升系统响应速度；
+2、 流量削峰：一般在秒杀活动中应用广泛，秒杀会因为流量过大，导致应用挂掉，为了解决这个问题，一般在应用前端加入消息队列用于控制活动人数，将超过此一定阀值的订单直接丢弃缓解短时间的高流量压垮应用；
+3、 订单超时：利用rabbitmq的延迟队列，可以很简单的实现**订单超时**的功能，比如用户在下单后30分钟未支付取消订单；
+4、 还有更多应用场景就不一一列举了…..；
+导入依赖 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 在pom.xml 中添加 spring-boot-starter-amqp的依赖
+1&amp;lt;dependencies&amp;gt; 2 &amp;lt;dependency&amp;gt; 3 &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; 4 &amp;lt;artifactId&amp;gt;spring-boot-starter-amqp&amp;lt;/artifactId&amp;gt; 5 &amp;lt;/dependency&amp;gt; 6 &amp;lt;dependency&amp;gt; 7 &amp;lt;groupId&amp;gt;com.alibaba&amp;lt;/groupId&amp;gt; 8 &amp;lt;artifactId&amp;gt;fastjson&amp;lt;/artifactId&amp;gt; 9 &amp;lt;version&amp;gt;1.2.46&amp;lt;/version&amp;gt; 10 &amp;lt;/dependency&amp;gt; 11 &amp;lt;dependency&amp;gt; 12 &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; 13 &amp;lt;artifactId&amp;gt;spring-boot-starter-web&amp;lt;/artifactId&amp;gt; 14 &amp;lt;/dependency&amp;gt; 15 &amp;lt;dependency&amp;gt; 16 &amp;lt;groupId&amp;gt;org.</description></item><item><title>一起来学 SpringBoot 2.x | 第十九篇：轻松搞定数据验证（一）</title><link>https://www.shellio.cc/docs/java/sprintboot2/19/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/sprintboot2/19/</guid><description>作者：唐亚峰 | 出自：https://blog.battcn.com
+SpringBoot 是为了简化 Spring 应用的创建、运行、调试、部署等一系列问题而诞生的产物，自动装配的特性让我们可以更好的关注业务本身而不是外部的XML配置，我们只需遵循规范，引入相关的依赖就可以轻易的搭建出一个 WEB 工程
+对于任何一个应用而言，客户端做的数据有效性验证都不是安全有效的，而数据验证又是一个企业级项目架构上最为基础的功能模块，这时候就要求我们在服务端接收到数据的时候也对数据的有效性进行验证。为什么这么说呢？往往我们在编写程序的时候都会感觉后台的验证无关紧要，毕竟客户端已经做过验证了，后端没必要在浪费资源对数据进行验证了，但恰恰是这种思维最为容易被别人钻空子。毕竟只要有点开发经验的都知道，我们完全可以模拟 HTTP 请求到后台地址，模拟请求过程中发送一些涉及系统安全的数据到后台，后果可想而知….
+为什么要轻松搞定？ 相信通过上面的阅读，大家对数据验证的重要性有了一定的了解，那么为什么我这里要说 轻松搞定呢？
+下面这段代码很多人一定见到过，就是对参数进行有效性校验，但仔细观察的话就会发现；随着参数的增加，格式的变化，校验数据有效性的代码愈发的繁琐杂乱，一点都不轻松
+1public String test1(String name) { 2 if (name == null) { 3 throw new NullPointerException(&amp;#34;name 不能为空&amp;#34;); 4 } 5 if (name.length() &amp;lt; 2 || name.length() &amp;gt; 10) { 6 throw new RuntimeException(&amp;#34;name 长度必须在 2 - 10 之间&amp;#34;); 7 } 8 return &amp;#34;success&amp;#34;; 9} 本章目标 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 通过Spring Boot 完成参数后台数据校验，轻松搞定数据有效性验证，留出更多的时间来和小姐姐聊天…
+具体代码 通过上面的阅读大家也大致能了解到为啥需要对异常进行全局捕获了，接下来就看看 Spring Boot 提供的解决方案</description></item><item><title>一起来学 SpringBoot 2.x | 第十六篇：定时任务详解</title><link>https://www.shellio.cc/docs/java/sprintboot2/16/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/sprintboot2/16/</guid><description>作者：唐亚峰 | 出自：https://blog.battcn.com
+SpringBoot 是为了简化 Spring 应用的创建、运行、调试、部署等一系列问题而诞生的产物，自动装配的特性让我们可以更好的关注业务本身而不是外部的XML配置，我们只需遵循规范，引入相关的依赖就可以轻易的搭建出一个 WEB 工程
+在我们日常开发中，经常会遇到 数据定时增量同步、定时发送邮件、爬虫定时抓取 的需求；这时我们可以采用定时任务的方式去进行工作…..
+定时任务概述 定时任务：顾名思义就是在指定/特定的时间进行工作，比如我们的手机闹钟，它就是一种定时任务。
+实现方式
+Timer： JDK自带的java.util.Timer；通过调度java.util.TimerTask的方式 让程序按照某一个频度执行，但不能在指定时间运行。 一般用的较少。
+ScheduledExecutorService： JDK1.5新增的，位于java.util.concurrent包中；是基于线程池设计的定时任务类，每个调度任务都会被分配到线程池中，并发执行，互不影响。
+Spring Task： Spring3.0 以后新增了task，一个轻量级的Quartz，功能够用，用法简单。
+Quartz： 功能最为强大的调度器，可以让程序在指定时间执行，也可以按照某一个频度执行，它还可以动态开关，但是配置起来比较复杂。现如今开源社区中已经很多基于Quartz 实现的分布式定时任务项目（xxl-job、elastic-job）。
+Timer 方式 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 基于Timer 实现的定时调度，基本就是手撸代码，目前应用较少，不是很推荐
+1package com.battcn.timer; 2import java.time.LocalDateTime; 3import java.util.Timer; 4import java.util.TimerTask; 5/** 6 * 基于Timer实现的定时调度（不推荐，用该方式不如用 ScheduledExecutorService ） 7 * 8 * @author Levin 9 * @since 2018/5/29 0029 10 */ 11public class TimerDemo { 12 public static void main(String[] args) { 13 TimerTask timerTask = new TimerTask() { 14 @Override 15 public void run() { 16 System.</description></item><item><title>一起来学 SpringBoot 2.x | 第十篇：使用Spring Cache集成Redis</title><link>https://www.shellio.cc/docs/java/sprintboot2/10/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/sprintboot2/10/</guid><description>作者：唐亚峰 | 出自：https://blog.battcn.com
+SpringBoot 是为了简化 Spring 应用的创建、运行、调试、部署等一系列问题而诞生的产物，自动装配的特性让我们可以更好的关注业务本身而不是外部的XML配置，我们只需遵循规范，引入相关的依赖就可以轻易的搭建出一个 WEB 工程
+Spring 3.1 引入了激动人心的基于注释（annotation）的缓存（cache）技术，它本质上不是一个具体的缓存实现方案（例如 EHCache 或者 Redis），而是一个对缓存使用的抽象，通过在既有代码中添加少量它定义的各种 annotation，即能够达到缓存方法的返回对象的效果。
+特点 具备相当的好的灵活性，不仅能够使用 **SpEL（Spring Expression Language）**来定义缓存的 key 和各种 condition，还提供开箱即用的缓存临时存储方案，也支持和主流的专业缓存例如 EHCache、Redis、Guava 的集成。
+基于 annotation 即可使得现有代码支持缓存 开箱即用 Out-Of-The-Box，不用安装和部署额外第三方组件即可使用缓存 支持 Spring Express Language，能使用对象的任何属性或者方法来定义缓存的 key 和 condition 支持 AspectJ，并通过其实现任何方法的缓存支持 支持自定义 key 和自定义缓存管理者，具有相当的灵活性和扩展性 使用前后 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 下面针对Spring Cache使用前后给出了伪代码部分，具体中也许比这要更加复杂，但是Spring Cache都可以很好的应对
+使用前
+我们需要硬编码，如果切换Cache Client还需要修改代码，耦合度高，不易于维护
+1public String get(String key) { 2 String value = userMapper.selectById(key); 3 if (value != null) { 4 cache.put(key,value); 5 } 6 return value; 7} 使用后</description></item><item><title>一起来学 SpringBoot 2.x | 第十七篇：轻松搞定文件上传</title><link>https://www.shellio.cc/docs/java/sprintboot2/17/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/sprintboot2/17/</guid><description>作者：唐亚峰 | 出自：https://blog.battcn.com
+SpringBoot 是为了简化 Spring 应用的创建、运行、调试、部署等一系列问题而诞生的产物，自动装配的特性让我们可以更好的关注业务本身而不是外部的XML配置，我们只需遵循规范，引入相关的依赖就可以轻易的搭建出一个 WEB 工程
+文件上传和下载是JAVA WEB中常见的一种操作，文件上传主要是将文件通过IO流传输到服务器的某一个特定的文件夹下；刚开始工作那会一个上传文件常常花费小半天的时间，繁琐的代码量以及XML配置让我是痛不欲生；值得庆幸的是有了Spring Boot短短的几句代码就能实现文件上传与本地写入操作….
+文件上传 文件上传和下载是JAVA WEB中常见的一种操作，文件上传主要是将文件通过IO流传输到服务器的某一个特定的文件夹下；刚开始工作那会一个上传文件常常花费小半天的时间，繁琐的代码量以及XML配置让我是痛不欲生；值得庆幸的是有了Spring Boot短短的几句代码就能实现文件上传与本地写入操作….
+导入依赖 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 在pom.xml 中添加上 spring-boot-starter-web 和 spring-boot-starter-thymeleaf 的依赖
+1&amp;lt;dependencies&amp;gt; 2 &amp;lt;dependency&amp;gt; 3 &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; 4 &amp;lt;artifactId&amp;gt;spring-boot-starter-web&amp;lt;/artifactId&amp;gt; 5 &amp;lt;/dependency&amp;gt; 6 &amp;lt;dependency&amp;gt; 7 &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; 8 &amp;lt;artifactId&amp;gt;spring-boot-starter-thymeleaf&amp;lt;/artifactId&amp;gt; 9 &amp;lt;/dependency&amp;gt; 10 &amp;lt;dependency&amp;gt; 11 &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; 12 &amp;lt;artifactId&amp;gt;spring-boot-starter-test&amp;lt;/artifactId&amp;gt; 13 &amp;lt;scope&amp;gt;test&amp;lt;/scope&amp;gt; 14 &amp;lt;/dependency&amp;gt; 15&amp;lt;/dependencies&amp;gt; 配置文件 默认情况下 Spring Boot 无需做任何配置也能实现文件上传的功能，但有可能因默认配置不符而导致文件上传失败问题，所以了解相关配置信息更有助于我们对问题的定位和修复；
+1# 禁用 thymeleaf 缓存 2spring.thymeleaf.cache=false 3# 是否支持批量上传 (默认值 true) 4spring.servlet.multipart.enabled=true 5# 上传文件的临时目录 （一般情况下不用特意修改） 6spring.</description></item><item><title>一起来学 SpringBoot 2.x | 第十三篇：RabbitMQ延迟队列</title><link>https://www.shellio.cc/docs/java/sprintboot2/13/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/sprintboot2/13/</guid><description>作者：唐亚峰 | 出自：https://blog.battcn.com
+SpringBoot 是为了简化 Spring 应用的创建、运行、调试、部署等一系列问题而诞生的产物，自动装配的特性让我们可以更好的关注业务本身而不是外部的XML配置，我们只需遵循规范，引入相关的依赖就可以轻易的搭建出一个 WEB 工程
+初探RabbitMQ消息队列中介绍了RabbitMQ的简单用法，顺带提及了下延迟队列的作用。所谓延时消息就是指当消息被发送以后，并不想让消费者立即拿到消息，而是等待指定时间后，消费者才拿到这个消息进行消费。
+延迟队列 延迟队列能做什么？
+订单业务： 在电商/点餐中，都有下单后 30 分钟内没有付款，就自动取消订单。 短信通知： 下单成功后 60s 之后给用户发送短信通知。 失败重试： 业务操作失败后，间隔一定的时间进行失败重试。 这类业务的特点就是：非实时的，需要延迟处理，需要进行失败重试。一种比较笨的方式是采用定时任务，轮训数据库，方法简单好用，但性能底下，在高并发情况下容易弄死数据库，间隔时间不好设置，时间过大，影响精度，过小影响性能，而且做不到按超时的时间顺序处理。另一种就是用**Java中的DelayQueue 位于java.util.concurrent包下，本质是由PriorityQueue和BlockingQueue实现的阻塞优先级队列。，这玩意最大的问题就是不支持分布式与持久化**
+RabbitMQ 实现思路 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 RabbitMQ队列本身是没有直接实现支持延迟队列的功能，但可以通过它的Time-To-Live Extensions 与 Dead Letter Exchange 的特性模拟出延迟队列的功能。
+Time-To-Live Extensions
+RabbitMQ支持为队列或者消息设置TTL（time to live 存活时间）。TTL表明了一条消息可在队列中存活的最大时间。当某条消息被设置了TTL或者当某条消息进入了设置了TTL的队列时，这条消息会在TTL时间后**死亡成为Dead Letter**。如果既配置了消息的TTL，又配置了队列的TTL，那么较小的那个值会被取用。
+Dead Letter Exchange
+死信交换机，上文中提到设置了 TTL 的消息或队列最终会成为Dead Letter。如果为队列设置了Dead Letter Exchange（DLX），那么这些Dead Letter就会被重新发送到Dead Letter Exchange中，然后通过Dead Letter Exchange路由到其他队列，即可实现延迟队列的功能。
+导入依赖 在pom.xml 中添加 spring-boot-starter-amqp的依赖
+1&amp;lt;dependencies&amp;gt; 2 &amp;lt;dependency&amp;gt; 3 &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; 4 &amp;lt;artifactId&amp;gt;spring-boot-starter-amqp&amp;lt;/artifactId&amp;gt; 5 &amp;lt;/dependency&amp;gt; 6 &amp;lt;dependency&amp;gt; 7 &amp;lt;groupId&amp;gt;com.</description></item><item><title>一起来学 SpringBoot 2.x | 第十四篇：强大的 actuator 服务监控与管理</title><link>https://www.shellio.cc/docs/java/sprintboot2/14/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/sprintboot2/14/</guid><description>作者：唐亚峰 | 出自：https://blog.battcn.com
+SpringBoot 是为了简化 Spring 应用的创建、运行、调试、部署等一系列问题而诞生的产物，自动装配的特性让我们可以更好的关注业务本身而不是外部的XML配置，我们只需遵循规范，引入相关的依赖就可以轻易的搭建出一个 WEB 工程
+actuator是spring boot项目中非常强大一个功能，有助于对应用程序进行监视和管理，通过 restful api 请求来监管、审计、收集应用的运行情况，针对微服务而言它是必不可少的一个环节…
+Endpoints actuator 的核心部分，它用来监视应用程序及交互，spring-boot-actuator中已经内置了非常多的 Endpoints（health、info、beans、httptrace、shutdown等等），同时也允许我们自己扩展自己的端点
+Spring Boot 2.0 中的端点和之前的版本有较大不同,使用时需注意。另外端点的监控机制也有很大不同，启用了不代表可以直接访问，还需要将其暴露出来，传统的management.security管理已被标记为不推荐。
+内置Endpoints id desc Sensitive auditevents 显示当前应用程序的审计事件信息 Yes beans 显示应用Spring Beans的完整列表 Yes caches 显示可用缓存信息 Yes conditions 显示自动装配类的状态及及应用信息 Yes configprops 显示所有 @ConfigurationProperties 列表 Yes env 显示 ConfigurableEnvironment 中的属性 Yes flyway 显示 Flyway 数据库迁移信息 Yes health 显示应用的健康信息（未认证只显示status，认证显示全部信息详情） No info 显示任意的应用信息（在资源文件写info.xxx即可） No liquibase 展示Liquibase 数据库迁移 Yes metrics 展示当前应用的 metrics 信息 Yes mappings 显示所有 @RequestMapping 路径集列表 Yes scheduledtasks 显示应用程序中的计划任务 Yes sessions 允许从Spring会话支持的会话存储中检索和删除用户会话。 Yes shutdown 允许应用以优雅的方式关闭（默认情况下不启用） Yes threaddump 执行一个线程dump Yes httptrace 显示HTTP跟踪信息（默认显示最后100个HTTP请求 – 响应交换） Yes 导入依赖 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 在pom.</description></item><item><title>一起来学 SpringBoot 2.x | 第十五篇：actuator与spring-boot-admin 可以说的秘密</title><link>https://www.shellio.cc/docs/java/sprintboot2/15/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/sprintboot2/15/</guid><description>作者：唐亚峰 | 出自：https://blog.battcn.com
+SpringBoot 是为了简化 Spring 应用的创建、运行、调试、部署等一系列问题而诞生的产物，自动装配的特性让我们可以更好的关注业务本身而不是外部的XML配置，我们只需遵循规范，引入相关的依赖就可以轻易的搭建出一个 WEB 工程
+一起来学SpringBoot | 第十四篇：强大的 actuator 服务监控与管理 中介绍了actuator 的作用，细心的朋友可能会发现通过http restful api的方式查看信息过于繁琐也不够直观，效率低下，运维人员看到JSON数据更是一脸懵逼，当服务过多的时候查看起来就过于操蛋了，每个服务都需要调用不同的接口来查看监控信息，备受各种困扰因素的我默默翻了下全球最大男性交友平台找到了spring-boot-admin
+什么是SBA SBA 全称 Spring Boot Admin 是一个管理和监控 Spring Boot 应用程序的开源项目。分为admin-server 与 admin-client 两个组件，admin-server通过采集 actuator 端点数据，显示在 spring-boot-admin-ui 上，已知的端点几乎都有进行采集，通过 spring-boot-admin 可以动态切换日志级别、导出日志、导出heapdump、监控各项指标 等等….
+Spring Boot Admin 在对单一应用服务监控的同时也提供了集群监控方案，支持通过eureka、consul、zookeeper等注册中心的方式实现多服务监控与管理…
+导入依赖 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 在pom.xml 中添加 spring-boot-admin 的相关依赖，这里只演示单机版本的，因此就自己监控自己了
+1&amp;lt;dependencies&amp;gt; 2 &amp;lt;!-- 服务端：带UI界面 --&amp;gt; 3 &amp;lt;dependency&amp;gt; 4 &amp;lt;groupId&amp;gt;de.codecentric&amp;lt;/groupId&amp;gt; 5 &amp;lt;artifactId&amp;gt;spring-boot-admin-starter-server&amp;lt;/artifactId&amp;gt; 6 &amp;lt;version&amp;gt;2.0.0&amp;lt;/version&amp;gt; 7 &amp;lt;/dependency&amp;gt; 8 &amp;lt;!-- 客户端包 --&amp;gt; 9 &amp;lt;dependency&amp;gt; 10 &amp;lt;groupId&amp;gt;de.</description></item><item><title>一起来学 SpringBoot 2.x | 第十一篇：集成Swagger在线调试</title><link>https://www.shellio.cc/docs/java/sprintboot2/11/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/sprintboot2/11/</guid><description>作者：唐亚峰 | 出自：https://blog.battcn.com
+SpringBoot 是为了简化 Spring 应用的创建、运行、调试、部署等一系列问题而诞生的产物，自动装配的特性让我们可以更好的关注业务本身而不是外部的XML配置，我们只需遵循规范，引入相关的依赖就可以轻易的搭建出一个 WEB 工程
+随着互联网技术的发展，现在的网站架构基本都由原来的后端渲染，变成了：前端渲染、前后端分离的形态，而且前端技术和后端技术在各自的道路上越走越远。
+前端和后端唯一联系，变成了API接口；API文档自然就成了前后端开发人员联系的纽带，变得尤为的重要，swagger就是一款让你更好的书写API文档的框架。
+文档工具 没有API文档工具之前，基本都是手写API文档的，如有在Word上写的，有在对应的项目目录下readme.md上写的，每个公司都有每个公司的玩法，无所谓好坏。但是这种手写文档带来的弊端就是维护起来苦不堪言，对于接口容易发生变化的开发者来说，维护文档就是噩梦….
+好在现如今市场上书写API文档的工具有很多，常见的有 postman、yapi、阿里的RAP 但是能称之为框架的，估计也只有swagger了。
+swagger 优缺点
+集成方便，功能强大 在线调试与文档生成 代码耦合，需要注解支持，但不影响程序性能 导入依赖 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 在pom.xml 中添加 swagger-spring-boot-starter 的依赖
+1 2 3 4 5 6 7 8 org.springframework.boot 9 10 11 12 13 14 15 spring-boot-starter-web 16 17 18 19 20 21 22 23 24 25 26 com.battcn 27 28 29 30 31 32 33 swagger-spring-boot-starter 34 35 36 37 38 39 40 1.</description></item><item><title>一起来学 SpringBoot 2.x | 第四篇：整合Thymeleaf模板</title><link>https://www.shellio.cc/docs/java/sprintboot2/4/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/sprintboot2/4/</guid><description>SpringBoot 是为了简化 Spring 应用的创建、运行、调试、部署等一系列问题而诞生的产物，自动装配的特性让我们可以更好的关注业务本身而不是外部的XML配置，我们只需遵循规范，引入相关的依赖就可以轻易的搭建出一个 WEB 工程
+在前面几章中已经介绍了如何创建一个SpringBoot 项目，同时简单的描述了SpringBoot REST Web服务。除此之外它也是支持如JSP、Thymeleaf、FreeMarker、Mustache、Velocity 等各种模板引擎，同时还为开发者提供了自定义模板扩展的支持。
+使用嵌入式Servlet容器时，请避免使用JSP，因为使用JSP打包后会存在一些限制。
+在SpringBoot使用上述模板，默认从 **src/main/resources/templates**下加载。
+thymeleaf介绍 Thymeleaf是现代化服务器端的Java模板引擎，不同与其它几种模板的是Thymeleaf的语法更加接近HTML，并且具有很高的扩展性。详细资料可以浏览官网。
+特点
+支持无网络环境下运行，由于它支持 html 原型，然后在 html 标签里增加额外的属性来达到模板+数据的展示方式。浏览器解释 html 时会忽略未定义的标签属性，所以 thymeleaf 的模板可以静态地运行；当有数据返回到页面时，Thymeleaf 标签会动态地替换掉静态内容，使页面动态显示。所以它可以让前端小姐姐在浏览器中查看页面的静态效果，又可以让程序员小哥哥在服务端查看带数据的动态页面效果。 开箱即用，为Spring提供方言，可直接套用模板实现JSTL、 OGNL表达式效果，避免每天因套用模板而修改JSTL、 OGNL标签的困扰。同时开发人员可以扩展自定义的方言。 SpringBoot官方推荐模板，提供了可选集成模块(spring-boot-starter-thymeleaf)，可以快速的实现表单绑定、属性编辑器、国际化等功能。 使用 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 首先要在 pom.xml 中添加对 thymeleaf 模板依赖
+1 2 3 4 5 6 7 8 org.springframework.boot 9 10 11 12 13 14 15 spring-boot-starter-thymeleaf 16 17 18 19 然后创建一个 ThymeleafController 用来映射HTTP请求与页面的跳转，下面写了两种方式，第一种比较直观和优雅，第二种相对普遍且代码较少，且迎合从struts2跳坑的朋友们…
+Spring4.3以后为简化@RequestMapping(method = RequestMethod.XXX)的写法，故而将其做了一层包装，也就是现在的GetMapping、PostMapping、PutMapping、DeleteMapping、PatchMapping 1package com.battcn.controller; 2import org.springframework.stereotype.Controller; 3import org.</description></item><item><title>一起来学 SpringBoot 2.x | 第五篇：使用 JdbcTemplate 访问数据库</title><link>https://www.shellio.cc/docs/java/sprintboot2/5/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/sprintboot2/5/</guid><description>作者：唐亚峰 | 出自：https://blog.battcn.com
+SpringBoot 是为了简化 Spring 应用的创建、运行、调试、部署等一系列问题而诞生的产物，自动装配的特性让我们可以更好的关注业务本身而不是外部的XML配置，我们只需遵循规范，引入相关的依赖就可以轻易的搭建出一个 WEB 工程
+Spring Framework对数据库的操作在JDBC上面做了深层次的封装，通过依赖注入功能，可以将 DataSource 注册到JdbcTemplate之中，使我们可以轻易的完成对象关系映射，并有助于规避常见的错误，在SpringBoot中我们可以很轻松的使用它。
+特点
+速度快，对比其它的ORM框架而言，JDBC的方式无异于是最快的 配置简单，Spring自家出品，几乎没有额外配置 学习成本低，毕竟JDBC是基础知识，JdbcTemplate更像是一个DBUtils 导入依赖 在pom.xml 中添加对 JdbcTemplate 的依赖
+1&amp;lt;!-- Spring JDBC 的依赖包，使用 spring-boot-starter-jdbc 或 spring-boot-starter-data-jpa 将会自动获得HikariCP依赖 --&amp;gt; 2&amp;lt;dependency&amp;gt; 3 &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; 4 &amp;lt;artifactId&amp;gt;spring-boot-starter-jdbc&amp;lt;/artifactId&amp;gt; 5&amp;lt;/dependency&amp;gt; 6&amp;lt;!-- MYSQL包 --&amp;gt; 7&amp;lt;dependency&amp;gt; 8 &amp;lt;groupId&amp;gt;mysql&amp;lt;/groupId&amp;gt; 9 &amp;lt;artifactId&amp;gt;mysql-connector-java&amp;lt;/artifactId&amp;gt; 10&amp;lt;/dependency&amp;gt; 11&amp;lt;!-- 默认就内嵌了Tomcat 容器，如需要更换容器也极其简单--&amp;gt; 12&amp;lt;dependency&amp;gt; 13 &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; 14 &amp;lt;artifactId&amp;gt;spring-boot-starter-web&amp;lt;/artifactId&amp;gt; 15&amp;lt;/dependency&amp;gt; 连接数据库 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 在application.properties中添加如下配置。值得注意的是，SpringBoot默认会自动配置DataSource，它将优先采用HikariCP连接池，如果没有该依赖的情况则选取tomcat-jdbc，如果前两者都不可用最后选取Commons DBCP2。通过spring.datasource.type属性可以指定其它种类的连接池
+1spring.datasource.url=jdbc:mysql://localhost:3306/chapter4?useUnicode=true&amp;amp;characterEncoding=UTF-8&amp;amp;zeroDateTimeBehavior=convertToNull&amp;amp;allowMultiQueries=true&amp;amp;useSSL=false 2spring.datasource.password=root 3spring.datasource.username=root 4#spring.datasource.type 5#更多细微的配置可以通过下列前缀进行调整 6#spring.datasource.hikari 7#spring.datasource.tomcat 8#spring.datasource.dbcp2 启动项目，通过日志，可以看到默认情况下注入的是HikariDataSource
+12018-05-07 10:33:54.</description></item><item><title>一起来学 SpringBoot 2.x | 第一篇：构建第一个 SpringBoot 工程</title><link>https://www.shellio.cc/docs/java/sprintboot2/1/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/sprintboot2/1/</guid><description>作者：唐亚峰 | 出自：https://blog.battcn.com
+SpringBoot 是为了简化 Spring 应用的创建、运行、调试、部署等一系列问题而诞生的产物，自动装配的特性让我们可以更好的关注业务本身而不是外部的XML配置，我们只需遵循规范，引入相关的依赖就可以轻易的搭建出一个 WEB 工程
+未接触SpringBoot 之前，搭建一个普通的 WEB 工程往往需要花费30分钟左右，如果遇到点奇葩的问题耽搁的时间会更长一点，但自从用了SpringBoot 后，真正体会到什么叫分分钟搭建一个WEB，让我拥有更多的时间跟我的小伙伴们唠嗑了。使用 SpringBoot 后发现一切是如此的简单（还记得读书那会被JAR包，xml支配的恐惧吗，如今都可以说 good bye）
+设计的目标 为所有使用 Spring 的开发者提供一个更简单，快速的入门体验 提供一些常见的功能、如监控、WEB容器，健康，安全等功能 干掉XML，遵循规范，开箱即用 前提 SpringBoot 为我们提供了一系列的依赖包，所以需要构建工具的支持：Maven 或 Gradle。由于本人更习惯使用**Maven所以后续案例都是基于Maven 与 IntelliJ IDEA，同时这里是基于最新的SpringBoot2编写的哦...**
+创建项目 初次接触，我们先来看看如何创建一个Spring Boot项目，这里以IntelliJ IDEA为例，其他的IDE工具小伙伴们自行搜索创建方式。创建完项目后，各位小伙伴请认真、细心的对比下与传统的WEB工程有何区别（如：目录结构）。
+点击**File -&amp;gt; Project**
+如果用过 Eclipse/IDEA 等工具的，对创建项目肯定不会陌生，但为了照顾第一次使用的我贴上了图文
+选择**Spring Initializr**
+到这一步选择的时候，如图中选项的是Spring Initializr(官方的构建插件，需要联网)，第二个是自己选择Maven构建，为了更好的适合初学者，我们将在本章用插件构建
+填写项目基本信息
+Group： 组织ID，一般分为多个段，这里我只说两段，第一段为域，第二段为公司名称。域又分为 org、com、cn等等，其中 org为非营利组织，com为商业组织。如阿里、淘宝（com.alibaba/com.taobao） Artifact: 唯一标识符，一般是项目名称 选择包
+Spring Initializr 为我们提供了很多的选项，不同的选项有不同的作用，在初期我们只需要依赖**Web -&amp;gt; Web** 就可以了，选择好依赖包之后点击**Next -&amp;gt; Finish**
+目录结果 1- src 2 -main 3 -java 4 -package 5 主函数，启动类，运行它如果运行了 Tomcat、Jetty、Undertow 等容器 6 -SpringbootApplication 7 -resouces 8 存放静态资源 js/css/images 等 9 - statics 10 存放 html 模板文件 11 - templates 12 主要的配置文件，SpringBoot启动时候会自动加载application.</description></item></channel></rss>

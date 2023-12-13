@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Java8新特性 on 程序员安仔</title><link>https://www.shellio.cc/series/java8%E6%96%B0%E7%89%B9%E6%80%A7/</link><description>Recent content in Java8新特性 on 程序员安仔</description><generator>Hugo -- gohugo.io</generator><language>zh-hans</language><copyright>个人技术博客</copyright><lastBuildDate>Sat, 21 Oct 2023 12:22:54 +0800</lastBuildDate><atom:link href="https://www.shellio.cc/series/java8%E6%96%B0%E7%89%B9%E6%80%A7/index.xml" rel="self" type="application/rss+xml"/><item><title>八、Java 8 Lambda 表达式 （ 下 ）范例</title><link>https://www.shellio.cc/docs/java/java8/8/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java8/8/</guid><description>经过Java 8 Lambda 表达式 （ 上 ）- 简介 和 Java 8 Lambda 表达式 （ 中 ）- 外部参数 两个章节的学习，想必你已经对 Java 8 中的 Lambda 表达式已经非常熟悉了。
+本章节我们就来回顾下上面两章节的所学知识，然后写一些范例巩固下。
+回顾 lambda 表达式是 java 8 引入的最重要的功能之一。 lambda 表达式为那些只包含一个方法的接口提供了简洁代码，例如函数接口 ( function interface )。 lambda 表达式还为集合的迭代提供了一种更为简单的方式。 对于那些使用匿名类或内部类实现的单个方法接口，在 Java 8 中，可以使用 lambda 表达式来实现。不仅功能相同，而且代码更简洁。 lambda 表达式真正的原理，是 「 为那些函数接口定义了它们包含的唯一方法，而且返回函数接口的实例 」
+lambda 表达式语法 lambda 表达式语法非常易于阅读和理解
+lambda 表达式语法看起来像
+1(Argument part) -&amp;gt; Body part 例如
+1、 如果某个方法没有参数，并打印信息，则可能像下面这样；
+1 () -&amp;gt; System.out.println(&amp;#34;Your message&amp;#34;); 2、 如果某个方法接受两个参数，执行一些业务逻辑并返回值，则看起来可能像下面这样；</description></item><item><title>二、Java8 IntStream,LongStream,DoubleStream</title><link>https://www.shellio.cc/docs/java/java8/2/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java8/2/</guid><description>本章节我们提供一些 Java 8 中的 IntStream、LongStream 和 DoubleStream 使用范例。IntStream、LongStream 和 DoubleStream 分别表示原始 int 流、 原始 long 流 和 原始 double 流。
+这三个原始流类提供了大量的方法用于操作流中的数据，同时提供了相应的静态方法来初始化它们自己。
+这三个原始流类都在 java.util.stream 命名空间下。
+java.util.stream.IntStream java.util.stream.IntStream 是一个原始整数值序列 ( sequence ) 。该流提供了许多方法可以对该流中的元素顺序执行或并行执行一些聚合操作，比如 max() 或 average()
+聚合方法 方法 说明 rangeClosed(a,b) 返回子序列 [a,b]，包含起始值，增长步值为 1 range(a,b) 返回子序列 [a,b)，左闭右开，意味着不包括 b sum 计算所有元素的总和 sorted 排序元素 这些方法使用示例如下
+IntStreamDemo.java 1package com.ddkk.util.stream; 2import java.util.stream.IntStream; 3public class IntStreamDemo { 4 public static void main(String[] args) { 5 System.out.println(&amp;#34;--Using IntStream.rangeClosed--&amp;#34;); 6 IntStream.</description></item><item><title>二十、Java 8 函数接口 （ Functional interface ）</title><link>https://www.shellio.cc/docs/java/java8/20/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java8/20/</guid><description>Java 8 引入了 「 函数接口 」 ( funtional interface ) 的概念，「 函数接口 」就是那些有且只有显式定义一个方法的接口。
+例如，具有单个方法 compareTo() 的接口 Comparable 接口，它只有一个功能，就是用于比较。
+这种函数接口一般用于 Java 8 中的 Lambda 表达式 。 而且 Java 8 为了支持 Lambda 表达式，更是定义了许多函数接口。这些接口基本都在 java.util.function 包中。
+函数接口 函数接口为 Java 8 Lambda 表达式和方法引用提供目标类型。每个函数接口都有一个 虚 ( abstract ) 方法，成为该函数接口的函数方法。用于适配该类型的 Lambda 表达式的参数类型和返回值类型。
+函数接口可以在多个上下文中提供目标类型，例如赋值上下文，方法调用或强制转换上下文。
+我们写一小段代码演示下
+1// Assignment context 2Predicate&amp;lt;String&amp;gt; p = String::isEmpty; 3// Method invocation context 4stream.filter(e -&amp;gt; e.getSize() &amp;gt; 10)... 5// Cast context 6stream.map((ToIntFunction) e -&amp;gt; e.</description></item><item><title>九、Java 8 方法引用</title><link>https://www.shellio.cc/docs/java/java8/9/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java8/9/</guid><description>Java 8 中新增加了 方法引用 这个概念。 但，什么是方法引用呢 ？
+我们先来看一个例子，下面这个范例演示了如何遍历字符串列表并进行一些操作
+LambdaTester.java 1import java.util.Arrays; 2import java.util.List; 3import java.util.function.Function; 4public class LambdaTester { 5 public static void main(String[] args) 6 { 7 LambdaTester tester = new LambdaTester(); 8 tester.run(); 9 } 10 public void run() 11 { 12 List&amp;lt;String&amp;gt; list = Arrays.asList(&amp;#34;Ram&amp;#34;,&amp;#34;Shyam&amp;#34;,&amp;#34;Kabir&amp;#34;); 13 // 输出 14 for(String st: list){ 15 System.out.println(st); 16 } 17 // 转换为大写 18 for(String st: list){ 19 upperAndPrint(st); 20 } 21 } 22 public static void upperAndPrint(String s) 23 { 24 System.</description></item><item><title>六、Java 8 Lambda 表达式 （ 上 ）- 简介</title><link>https://www.shellio.cc/docs/java/java8/6/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java8/6/</guid><description>Lambda 表达式在 Java 8 中引入，并且被吹捧为 Java 8 最大的特性。
+Lambda 表达式是函数式编程的的一个重要特性，标志者 Java 向函数式编程迈出了重要的第一步。
+Java Lambda 表达式语法 Java Lambda 表达式的语法结构如下
+1parameter -&amp;gt; expression body 实际代码可能如下
+有参数且只有一条语句时 1(a,b) -&amp;gt; a + b 只有一个参数时 1a -&amp;gt; a 没有参数时 1() -&amp;gt; System.out.println(&amp;#34;DDKK.COM 弟弟快看，程序员编程资料站&amp;#34;) 有多条语句时 1(a,b) -&amp;gt; { 2 int c = a + b; 3 System.out.println(&amp;#34;DDKK.COM 弟弟快看，程序员编程资料站&amp;#34;) 针对这个 Java Lambda 表达式语法，有几个重要的特征需要说明
+可选的参数类型声明 ： 无需声明参数的类型。编译器可以从参数的值推断出相同的值。 可选的参数周围的小括号 () ： 如果只有一个参数，可以忽略参数周围的小括号。但如果有多个参数，则必须添加小括号。 可选的大括号 {} : 如果 Lambda 表达式只包含一条语句，那么可以省略大括号。但如果有多条语句，则必须添加大括号。 可选的 return 关键字 ： 如果 Lambda 表达式只有一条语句，那么编译器会自动 return 该语句最后的结果。但如果显式使用了 return 语句，则必须添加大括号 {} ，哪怕只有一条语句。 Java Lambda 表达式的原理 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 后面我们会讲到，Java 8 中的 Lambda 表达式其实是一个特殊的只有一个方法的类的实例。</description></item><item><title>七、Java 8 Lambda 表达式 （ 中 ）- 外部参数</title><link>https://www.shellio.cc/docs/java/java8/7/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java8/7/</guid><description>在Java 8 Lambda 表达式 （ 上 ）- 简介 章节中我们讲解了 Java 8 Lambda 表达式的一些基础知识。我们也了解 Java 8 Lambda 表达式的一些使用场景：
+Java Lambda 表达式主要用于定义函数接口的内联实现。而函数接口，就是只包含了一个方法的接口。在前一章节中，我们使用了各种类型的 lambda 表达式来定义 MathOperation 接口的 operation 方法。 Java Lambda 表达式消除了对 匿名类 的需求，并为 Java 提供了非常简单但功能强大的函数编程功能。 Java 8 Lambda 表达式作用域 ( scope ) 因为Java 8 的 lambda 表达式其实是函数接口的内联实现，也就是匿名内部类，因此，可以引用任何外部的变量或者常量。
+但是，lambda 对这些外部的变量是有要求的： 它们必须使用 final 修饰符修饰。
+如果一个变量允许被第二次赋值，则 Lambda 表达式会抛出编译错误。
+注意： 其实这条规则并不是非常严格执行的，普通变量也是可以的，只要，只要不进行第二次赋值就可以。
+注意： 刚刚测试了下，其实只要不是当前作用域声明的变量，可以随意第二次赋值，也不会报错
+范例一 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 Java 8 lambda 表达式使用外部 final 变量
+LambdaTester.java 1public class LambdaTester 2 final static String salutation = &amp;#34;你好，&amp;#34;; 3 public static void main(String args[]) 4 { 5 GreetingService greetService1 = message -&amp;gt; 6 System.</description></item><item><title>三、Java8 Collectors.joining() 详解</title><link>https://www.shellio.cc/docs/java/java8/3/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java8/3/</guid><description>本章节我们来详细讲讲 Java 8 流 ( stream ) 收集器 ( Collectors ) 中的 joining() 方法。该方法会返回一个 Collectors 实例，方便在流收集器上的链式操作。
+Collectors.joining() 方法以遭遇元素的顺序拼接元素。我们可以传递可选的拼接字符串、前缀和后缀
+joinning() 方法定义 假设我们的流中有四个元素 [&amp;quot;A&amp;quot;,&amp;quot;B&amp;quot;,&amp;quot;C&amp;quot;,&amp;quot;D&amp;quot;]，那么我们就可以按照以下方式来收集它们
+joining() joinning() 无参数方法会返回一个 Collectors 实例，并且以空字符串 ( &amp;quot;&amp;quot; ) 来拼接收集到的所有元素
+JoiningExample.java 1package com.ddkk.util.stream; 2import java.util.Arrays; 3import java.util.List; 4import java.util.stream.Collectors; 5public class JoiningExample { 6 public static void main(String[] args) { 7 List&amp;lt;String&amp;gt; list = Arrays.asList(&amp;#34;A&amp;#34;,&amp;#34;B&amp;#34;,&amp;#34;C&amp;#34;,&amp;#34;D&amp;#34;); 8 String result= list.stream().collect(Collectors.joining()); 9 System.out.println(result); 10 } 输出结果为 ABCD
+joining(CharSequence delimiter) 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 joining(CharSequence delimiter) 接受一个参数字符串序列作为拼接符，并返回一个 Collectors 实例。假如我们传递的拼接符为 &amp;quot;-&amp;quot; 。那么输出结果为 A-B-C-D</description></item><item><title>十、Java 8 接口 ( interface ) 默认方法</title><link>https://www.shellio.cc/docs/java/java8/10/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java8/10/</guid><description>总所周知，在 Java 7 和之前的版本中，接口 interface 是不能包含具体的方法实现的。
+比如，下面的代码，是会报错的。
+1public class InterfaceDefaultMethodTester 2 public static void main(String[] args) 3 { 4 } 5 interface Greeter { 6 public void greeter(String name) 7 { 8 Syste.out.println(&amp;#34;你好，&amp;#34; + name ); 9 } 10 } 运行结果如下
+1[penglei@ddkk.com helloworld]$ javac InterfaceDefaultMethodTester.java &amp;amp;&amp;amp; java InterfaceDefaultMethodTester 2InterfaceDefaultMethodTester.java:10: 错误: 接口抽象方法不能带有主体 3 { 4 ^ 51 个错误 如果一个接口有多个实现，那么每个实现都要重复的一遍一遍的实现接口中的所有方法，岂不是很痛苦。
+在Java 7 及以前的版本，对于一个接口有多个实现的时候，我们通常的做法就是让所有的实现继承另一个基础类，然后在这个基础类中实现这个方法。
+这就是，为什么 Java 中的 I/O 那么多类的原因，一个庞大的家族体系，每次看到我都头疼。
+但是Java 8 中，我想应该是 Java 8 核心开发者们也厌倦了这种不断的重复实现接口方法和庞大的类家族体系。竟然在 Java 8 中为接口提供了一个新的功能，允许某个接口方法有个默认实现。</description></item><item><title>十八、Java 8 流 Stream ( 上 )</title><link>https://www.shellio.cc/docs/java/java8/18/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java8/18/</guid><description>流(Stream ) 是 Java 8 新增加的一个重磅级的功能。流是一个抽象层。有了流，我们就可以使用类似于 SQL 语句的声明方式来处理数据。
+比如，下面的 SQL 语句
+1SELECT max(grade), student_id, student_name FROM Students; 上面这条 SQL 会自动返回最高学习绩点的学生的信息，而全程，开发人员却不用直接面对任何计算和比较。
+在流（ Stream ) 出现之前，对于Java 中的集合框架的使用。开发人员不得不一次次的写一个循环，一次次的重复检查。当然了，这也什么，毕竟大家都是这样过来的。
+更大的问题在于开发效率。面对当前的多核 CPU 计算机，面对并发编程。我们开发者常常会写出非常容易出错的并发执行的代码。
+为了解决这些问题，Java 8 引入了流 ( Stream ) 这个概念，允许开发人员以声明的方式处理数据的同时，还能利用多核构架，而无需编写任何特殊的代码。
+流是什么 ? Java 中的 流 ( Stream ) 表示来自 源 ( source ) 的一系列对象，它支持统计、求和、求平均值等聚合操作。
+流具有以下特征：
+元素序列 : 流以顺序方式提供特定类型的一组元素。流只会按需获取/计算元素。但它从不存储元素。 源 ( Source )：流可以将集合，数组或 I/O 资源作为输入源。 聚合操作： 流支持聚合操作，如 filter、map、limit、reduce、find、match 等 管道 ( pipelining )：大多数流操作都返回流本身，以便可以对其结果进行流水线操作。这些操作称为 中间 操作，它们的功能是获取输入，处理它们并将输出返回到目标。collect() 方法是一个终端操作，通常在流水线操作结束时出现，以标记流的结尾。 原子性迭代 ( Automatic iterations ) ： 与需要显式迭代的集合相比，流操作在内部对所提供的源元素进行迭代。 流的创建 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 Java 8 在推出流的同时，对集合框架也进行了一些比较大变更。主要是在 Collection 接口上提供了两种生成 Stream 的方法:</description></item><item><title>十二、Java 8 集合遍历 forEach() 方法</title><link>https://www.shellio.cc/docs/java/java8/12/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java8/12/</guid><description>本文中，我们将介绍一个 java.util.concurrent 包提供的用于解决并发生产者 – 消费者问题的最有用的类 – BlockQueue。我们将介绍BlockingQueue 接口的 API 以及如何使用该接口的方法使编写并发程序更容易。
+在本文的后面，我们将展示一个具有多个生产者线程和多个消费者线程的简单程序的示例。
+BlockingQueue 的队列类型 java.util.concurrent 提供了两种类型的 BlockingQueue：
+1、 无限队列（unboundedqueue）–几乎可以无限增长；
+2、 有限队列（boundedqueue）–定义了最大容量；
+无限队列 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 创建一个无限队列的方法很简单
+1BlockingQueue&amp;lt;String&amp;gt; blockingQueue = new LinkedBlockingDeque&amp;lt;&amp;gt;(); 上面这段代码中，blockingQueue 的容量将设置为 Integer.MAX_VALUE 。
+向无限队列添加元素的所有操作都将永远不会阻塞，因此它可以增长到非常大的容量。
+使用无限 BlockingQueue 设计生产者 – 消费者模型时最重要的是 消费者应该能够像生产者向队列添加消息一样快地消费消息 。否则，内存可能会填满，然后就会得到一个 OutOfMemory 异常。
+有限队列 第二种类型的队列是有限队列。我们可以通过将容量作为参数传递给构造函数来创建这样的队列
+1BlockingQueue&amp;lt;String&amp;gt; blockingQueue = new LinkedBlockingDeque&amp;lt;&amp;gt;(10); 上面这句代码中，我们设置了 blockingQueue 的容量为 10 。这意味着当消费者尝试将元素添加到已经满了的队列时，结果取决于添加元素的方法（ offer() 、add() 、put() ) ，它将阻塞，直到有足够的空间可以插入元素。否则，添加操作将会失败。
+使用有限队列是设计并发程序的好方法，因为当我们将元素插入到已经满了的队列时，这些操作需要等到消费者赶上并在队列中提供一些空间。这种机制可以让那个我们不做任何其它更改就可以实现节流。
+BlockingQueue API BlockingQueue 接口的所有方法可以分为两大类：负责向队列添加元素的方法和检索这些元素的方法。
+在队列满/空的情况下，来自这两个组的每个方法的行为都不同。
+添加元素 BlockingQueue 提供了以下方法用于添加元素
+方法 说明 add() 如果插入成功则返回 true，否则抛出 IllegalStateException 异常 put() 将指定的元素插入队列，如果队列满了，那么会阻塞直到有空间插入 offer() 如果插入成功则返回 true，否则返回 false offer(E e, long timeout, TimeUnit unit) 尝试将元素插入队列，如果队列已满，那么会阻塞直到有空间插入 检索元素 BlockingQueue 提供了以下方法用于检索元素</description></item><item><title>十九、Java 8 流 Stream ( 下 )</title><link>https://www.shellio.cc/docs/java/java8/19/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java8/19/</guid><description>上一章节 Java 8 流 Stream ( 上 ) 因为时间关系，我们介绍到一半半就停止了。本章节我们继续。
+limit() 方法 limit() 方法用于减少( 限制 ) 流中的元素数量。
+例如下面的代码段演示了如何使用 limit() 方法只输出 10 个随机数
+1Random random = new Random(); 2random.ints().limit(10).forEach(System.out::println); sorted() 方法 sorted() 方法用于给流中的元素进行排序。
+下面的范例演示了如何按照排序顺序打印 10 个随机数
+1Random random = new Random(); 2random.ints().limit(10).sorted().forEach(System.out::println); 并发处理 parallelStream() 是需要并发处理的流的替代方案。stream() 方法产生的流只能是串行处理，可以理解为只在一个线程中，按照流中元素的顺序一个接一个的处理。
+而并发处理，就是传说中的 map-reduce 方法，可以充分利用多核优势。
+需要注意的是，parallelStream() 会打乱流的顺序，也就是返回的序列顺序不一定是输入的序列顺序。
+例如下面的代码用于打印序列中的空字符串的数量
+1List&amp;lt;String&amp;gt; strings = Arrays.asList(&amp;#34;abc&amp;#34;, &amp;#34;&amp;#34;, &amp;#34;bc&amp;#34;, &amp;#34;efg&amp;#34;, &amp;#34;abcd&amp;#34;,&amp;#34;&amp;#34;, &amp;#34;jkl&amp;#34;); 2//get count of empty string 3int count = strings.parallelStream().filter(string -&amp;gt; string.isEmpty()).count(); 因为stream() 返回是串行流，而 parallelStream() 返回的是并行流。因此在串行和并行之间切换是非常简单的。</description></item><item><title>十六、Java 8 新日期时间 API ( 中 ) – 时区日期时间</title><link>https://www.shellio.cc/docs/java/java8/16/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java8/16/</guid><description>上一章节 Java 8 新日期时间 API ( 上 ) – 本地日期时间 我们对 Java 8 重新设计的日期时间 API 做了一些基础的介绍，同时详细介绍了和本地时间有关的几个类 LocalDateTime 、LocalDate 和 LocalTime 。
+我同时也发现，这三个类没有任何时区相关的信息，但也不能说它们没处理时区，而只能说它们有选择的隐藏了时区的处理。它们内部会使用操作系统当前的时区。
+以此同时，Java 在 java.time 包中也提供了几个类用于处理需要关注时区的日期时间 API。它们是 java.time.ZonedDateTime 和 java.time.ZoneId。前者用于处理需要时区的日期时间，后者用于处理时区。
+ZonedDateTime 和 LocalDateTime 类似，几乎有着相同的 API。从某些方面说，ZonedLocalTime 如果不传递时区信息，那么它会默认使用操作系统的时区，这样，结果其实和 LocalDateTime 是类似的。
+比如，我们可以使用 ZonedDateTime 的 now() 方法返回当前时区 ( 操作系统时区 ) 的日期时间，调用 parse() 方法可以将一个包含了时区信息的字符串格式的日期时间转化为一个 ZonedDateTime 实例。
+Java8Tester.java 1import java.time.ZonedDateTime; 2public class Java8Tester { 3 public static void main(String args[]) { 4 Java8Tester tester = new Java8Tester(); 5 tester.</description></item><item><title>十七、Java 8 新日期时间 API ( 下 ) – 格式化</title><link>https://www.shellio.cc/docs/java/java8/17/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java8/17/</guid><description>Java 8 似乎也对 java.text.SimpleDateFormat 也不太满意，竟然重新创建了一个 java.time.format 包，该包下包含了几个类和枚举用于格式化日期时间。
+java.time.format 包 java.time.format 包提供了以下几个类用于格式化日期时间
+类 说明 DateTimeFormatter 用于打印和解析日期时间对象的格式化程序 DateTimeFormatterBuilder 创建日期时间格式化样式的构建器 DecimalStyle 日期和时间格式中使用的本地化十进制样式 java.time.format 包还提供了以下几个枚举，包含了常见的几种日期时间格式。
+枚举 说明 FormatStyle 包含了本地化日期，时间或日期时间格式器的样式的枚举 ResolverStyle 包含了解决日期和时间的不同方法的枚举 SignStyle 包含了如何处理正/负号的方法的枚举 TextStyle 包含了文本格式和解析的样式的枚举 DateTimeFormatter 类 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 DateTimeFormatter 类格式化日期时间的最重要的类，该类是一个最终类，只能实例化，不能被扩展和继承。
+DateTimeFormatter 类的定义如下
+1public final class DateTimeFormatter extends Object DateTimeFormatter 类用于打印和解析日期时间对象的格式化器。此类提供打印和解析的主要应用程序入口点，并提供 DateTimeFormatter 的常见模式
+使用预定义的常量，比如 ISO_LOCAL_DATE 使用模式字母，例如 uuuu-MMM-dd 使用本地化样式，例如 long 或 medium 所有的日期时间类，包括本地日期时间和包含时区的日期时间类，都提供了两个重要的方法
+1、 一个用于格式化，format(DateTimeFormatterformatter)；
+2、 另一个用于解析，parse(CharSequencetext,DateTimeFormatterformatter)；
+下面，我们写几个示例来演示下这两个方法，并演示下如和使用 DateTimeFormatter 类
+Java8Tester 1import java.time.ZonedDateTime; 2import java.time.format.DateTimeFormatter; 3public class Java8Tester { 4 public static void main(String args[]) { 5 Java8Tester tester = new Java8Tester(); 6 tester.</description></item><item><title>十三、Java 8 可选值 java.util.Optional 类</title><link>https://www.shellio.cc/docs/java/java8/13/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java8/13/</guid><description>在不考虑竖起来的情况下，抛一个硬币，落地时，显示正面的情况只有两种：是正面和不是正面。很多时候，这是一个 「 谓词 」，也就是返回布尔类型 ( bool )。但有时候，我们需要返回另一种类型：存在 和 空。
+存在 就是硬币落地时显示为正面 空 就是硬币落地式显示的不是正面。 从另一方面说，结果就是 有值 和 空 。
+一个类，如果可以同时表示 有值 和 空 ，我们称这种类为 可选类 ( Optional )
+从某些方面说，Optional 类型就是 「那里有一个值，它等于 x，或者那里没有那个值」
+JAVA 8 java.util.Optional 类 Java 8 在 java.util 包中添加了一个新的类 Optional 。
+Optional 类是一个容器，用于表示可能包含也可能不包含非 null 值。如果存在值，isPresent() 方法将返回 true，get() 将返回该值。
+Optional 类提供了许多方法用于处理 「 可用 」 或 「 不可用 」 ，而不是简单的检查空值情况。
+java.util.Optional 类的声明如下
+1public final class Optional&amp;lt;T&amp;gt; extends Object 注意：该类是一个最终类，不能被继承和扩展。
+Optional 类提供了以下静态方法来创建 Optional 类的实例 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 Optional 类提供了三个静态方法用于创建 Optional 类的实例，这三个方法的返回值都是 Optional&amp;lt;T&amp;gt;</description></item><item><title>十四、Java 8 Nashorn JavaScript</title><link>https://www.shellio.cc/docs/java/java8/14/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java8/14/</guid><description>对于Java 中的 JavaScript 引擎， Java 8 引入了 Nashorn 来代替原先的 Rhino。
+Nashorn 使用 Java 7 中引入的调用动态特性，且直接编译内存中的代码并将字节码传递给 JVM。这两项改进，直接给 Nashorn 带了至少 2 到 10 倍的性能提升。
+jjs 在Nashorn JavaScript 引擎中。JAVA 8 引入了一个新的命令行工具 jjs，用于在控制台执行 javascript 代码。
+例如我们可以在当前目录下 ( 任意位置 ) 创建一个 JavaScript 文件 hello.js ，然后输入以下内容
+1print(&amp;#39;你好，DDKK.COM 弟弟快看，程序员编程资料站，教程 ！&amp;#39;); 保存文件后，使用下面的 jjs 命令运行它
+1jjs hello.js 运行结果如下
+1[penglei@ddkk.com helloworld]$ jjs hello.js 2你好，DDKK.COM 弟弟快看，程序员编程资料站，教程 ！ jjs 交互式解释器 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 我们也可以直接在命令行中输出 jjs 进入 Java 8 提供的 jjs 交互式解释器。
+1[penglei@ddkk.com helloworld]$ jjs 2jjs&amp;gt; 然后输入一些 JavaScript 语句，就会立即显示结果</description></item><item><title>十五、Java 8 新日期时间 API ( 上 ) – 本地日期时间</title><link>https://www.shellio.cc/docs/java/java8/15/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java8/15/</guid><description>作为开发者，经常需要处理日期时间。如果你跟随者 Java 5 一路走来，那么一定会对 java.util.Date 、java.util.Calendar 、java.util.GregoiranCalendar 和 java.text.SimpleDateFormat 四大类非常熟悉，它们分别用于处理日期、日历、日历表示、日期时间格式化。
+这四个类，对于编程老人来讲，应该是习惯了，但对于编程新人来讲，就有好多疑问，有好多陷阱和坑等着它们跳，比如
+1、 非线程安全：java.util.Date并不是线程安全的开发者在使用这个类时必须自己处理多线程并发问题；
+2、 设计不佳：一方面日期和日期格式化分布在多个包中另一方面，java.util.Date的默认日期，年竟然是从1900开始，月从1开始，日从0开始，没有统一性而且Date类也缺少直接操作日期的相关方法；
+3、 时区处理困难：因为设计不佳，开发人员不得不编写大量代码来处理时区问题；
+4、 还有其它一些问题；
+面对种种问题，Java 8 终于重新设计了所有日期时间、日历及时区相关的 API。并把它们都统一放置在 java.time 包和子包下。并作出了以下改进
+1、 新的日期时间API是线程安全的不仅没有setter方法，而且任何对实例的变更都会返回一个新的实例而保证原来的实例不变；
+2、 新的日期时间API提供了大量的方法，用于修改日期时间的各个部分，并返回一个新的实例；
+3、 在时区方面，新的日期时间API引入了域(domain)这个概念；
+同时Java 8 还针对原来复杂的 API 进行重新组合和拆分，分成了好多个类。本章接下来的章节，我们就来详细介绍其中几个最重要的。
+本地日期时间 API Java 8 为处理本地的日期时间提供了三个类 LocalDate 、LocalTime 和 LocalDateTime。分别用于处理 本地日期、本地时间 和 本地日期时间。
+当使用这三个类时，开发者并不需要关心时区是什么。因为它默认使用的是操作系统的时区。
+比如，可以使用 LocalDateTime.now() 方法返回当前的日期时间。
+Java8Tester.java 1import java.time.LocalDateTime; 2public class Java8Tester { 3 public static void main(String args[]) { 4 Java8Tester tester = new Java8Tester(); 5 tester.</description></item><item><title>十一、Java 8 接口静态方法</title><link>https://www.shellio.cc/docs/java/java8/11/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java8/11/</guid><description>本章节我们来讨论下 java.util.concurrent.CountDownLatch 这个类，顺带演示下如何在一些实际例子中使用它。
+CountDownLatch 类的作用呢？ 怎么说呢？ 简单来说，我们可以使用它来阻塞线程，直到其他线程完成给定任务。
+并发编程中使用 CountDownLatch 简而言之，CountDownLatch 有一个计数器字段，我们可以根据需要减少它，因此，我们可以使用它来阻止调用线程，直到它被计数到零。
+如果我们正在进行一些并行处理，我们可以使用与计数器相同的值来实例化 CountDownLatch，因为我们想要处理多个线程。然后，我们可以在每个线程完成后调用 countdown()，保证调用 await() 的依赖线程将阻塞，直到工作线程完成。
+使用 CountDownLatch 等待线程池完成 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 我们通过创建一个 Worker 来尝试这个模式，并使用 CountDownLatch 字段来指示它何时完成
+1public class Worker implements Runnable { 2 private List&amp;lt;String&amp;gt; outputScraper; 3 private CountDownLatch countDownLatch; 4 public Worker(List&amp;lt;String&amp;gt; outputScraper, CountDownLatch countDownLatch) { 5 this.outputScraper = outputScraper; 6 this.countDownLatch = countDownLatch; 7 } 8 @Override 9 public void run() { 10 doSomeWork(); 11 outputScraper.add(&amp;#34;Counted down&amp;#34;); 12 countDownLatch.</description></item><item><title>四、Java8 Runnable Lambda 表达式</title><link>https://www.shellio.cc/docs/java/java8/4/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java8/4/</guid><description>本章节我们重点来讲讲 Java 8 中的 Runnable Lambda 表达式。众所周知，Java 8 中的 Runable 和 Callable 两个接口都添加了 @FunctionalInterface 注解，因此我们可以直接使用 Lambda 表达式来代替它们的 run() 和 call() 方法
+Runnable 表达式 Java 8 开始支持 Lambda 表达式，所以，好像，一夜间，所有添加了 @FunctionalInterface 注解的方法都可以使用 Lambda 表达式来创建实例，Runnable 也不例外，我们可以直接使用一个 Lambda 表达式来创建它的实例
+1Runnable r = () -&amp;gt; System.out.println(&amp;#34;Hello World!&amp;#34;); 2Thread th = new Thread(r); 3th.start(); 运行结果输出为 Hello World ，是不是很神奇，如果没有 Lambda 表达式，那么原来的代码可能如下
+1Runnable r = new Runnable() { 2 @Override 3 public void run() { 4 System.out.println(&amp;#34;Hello World!&amp;#34;); 5 } 6}; 7Thread th = new Thread(r); 8th.</description></item><item><title>五、Java 8 java.util.Base64 编码解码</title><link>https://www.shellio.cc/docs/java/java8/5/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java8/5/</guid><description>Base64 是一种常见的字符编码解码方式，一般用于将二进制数据编码为更具可读性的 Base64 进制格式。
+在Java 6 （ JDK 1.6 ) 之前， JDK 一直没有包含 Base64 的实现类。因此大部分人都使用 Sum/Orale JDK 里面的 sun.misc.BASE64Encode 和sun.misc.BASE64Decode。然后这也成为很多 Java 开发者的习惯。一直沿用到今天的 Java8 中还有人在用。
+JDK1.6 虽然添加了 Base64 的实现。但是，非常隐秘，竟然是在 javax.xml.bind 包下的 DatastypeConvert 类中的两个静态方法 parseBase64Binary 和 printBase64Binary.
+Java 8 终于把 Base64 扶正了，在 java.util 包下提供了 Base64 类用于编码和解码 Base64 数据。
+Java 8 java.util.Base64 Java 8 中的 java.util.Base64 类提供了三种类型的 Base64 编码解码格式：
+1、 简单类型(simple):编码字符只包含A-Za-z0-9+/等64个字符且编码的时候不会包含任何换行符(\r、\n、\r\n）解码的时候也只会解码A-Za-z0-9+/内的字符，超出的则会被拒绝；
+2、 URL:编码字符只包含A-Za-z0-9+_等64个字符和简单相比，就是把/换成了_因为没有/字符，因此这种编码方式非常适合URL和文件名等；
+3、 MIME:编码会被映射为MIME友好格式：每一行输出不超过76个字符，而且每行以\r\n符结束但末尾行并不会包含\r\n；
+内部类 java.util.Base64 还包含了两个内部静态类，分别实现了 RFC 4648 和 RFC 2045 中规范的 Base64 编码和解码方式。</description></item><item><title>一、Java8 收集器 – java.util.stream.Collectors</title><link>https://www.shellio.cc/docs/java/java8/1/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java8/1/</guid><description>Java 8 流的新类 java.util.stream.Collectors 实现了 java.util.stream.Collector 接口，同时又提供了大量的方法对流 ( stream ) 的元素执行 map and reduce 操作，或者统计操作。
+本章节，我们就来看看那些常用的方法，顺便写几个示例练练手。
+Collectors.averagingDouble() Collectors.averagingDouble() 方法将流中的所有元素视为 double 类型并计算他们的平均值。该方法返回的是同一个 Collectors 实例，因此可以进行链式操作。
+Collectors.averagingDouble() 接受一个参数，这个参数是一个 lambda 表达式，用于对所有的元素执行一个 map 操作。
+Java 所有集合的 stream().collect() 可以接受一个收集器实例作为其参数并返回该收集器的计算结果
+例如下面的代码，collect() 方法会把所有的元素收集起来然后传递给 Collectors.averagingDouble(d-&amp;gt;d*2) 收集器，对每个元素执行 *2 操作后计算平均值
+AveragingDoubleExample.java 1package com.ddkk.util.stream; 2import java.util.Arrays; 3import java.util.List; 4import java.util.stream.Collectors; 5public class AveragingDoubleExample { 6 public static void main(String[] args) { 7 List&amp;lt;Integer&amp;gt; list = Arrays.asList(1,2,3,4); 8 Double result = list.stream().collect(Collectors.averagingDouble(d-&amp;gt;d*2)); 9 System.</description></item></channel></rss>

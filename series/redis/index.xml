@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Redis on 程序员安仔</title><link>https://www.shellio.cc/series/redis/</link><description>Recent content in Redis on 程序员安仔</description><generator>Hugo -- gohugo.io</generator><language>zh-hans</language><copyright>个人技术博客</copyright><lastBuildDate>Sat, 21 Oct 2023 12:22:54 +0800</lastBuildDate><atom:link href="https://www.shellio.cc/series/redis/index.xml" rel="self" type="application/rss+xml"/><item><title>八、Redis 键(key) 命令</title><link>https://www.shellio.cc/docs/cache/redis/8/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/cache/redis/8/</guid><description>Redis 键相关的命令用于管理 redis 的键
+Redis 键命令语法 Redis 键命令的基本语法如下：
+1127、0.0.1:6379&amp;gt; COMMAND KEY_NAME 范例 1127、0.0.1:6379&amp;gt; SET site ddkk.com 2OK 3127、0.0.1:6379&amp;gt; DEL site 4(integer) 1 DEL 是一个命令，用来删除一个键 site
+如果键被删除成功，命令执行后输出 (integer) 1 ，否则将输出 (integer) 0
+Redis keys 命令 下表列出了 Redis 键相关的命令
+命令 描述 DEL 用于删除 key DUMP 序列化给定 key ，并返回被序列化的值 EXISTS 检查给定 key 是否存在 EXPIRE 为给定 key 设置过期时间 EXPIREAT 用于为 key 设置过期时间
+接受的时间参数是 UNIX 时间戳 PEXPIRE 设置 key 的过期时间，以毫秒计 PEXPIREAT 设置 key 过期时间的时间戳(unix timestamp)，以毫秒计 KEYS 查找所有符合给定模式的 key MOVE 将当前数据库的 key 移动到给定的数据库中 PERSIST 移除 key 的过期时间，key 将持久保持 PTTL 以毫秒为单位返回 key 的剩余的过期时间 TTL 以秒为单位，返回给定 key 的剩余生存时间( RANDOMKEY 从当前数据库中随机返回一个 key RENAME 修改 key 的名称 RENAMENX 仅当 newkey 不存在时，将 key 改名为 newkey TYPE 返回 key 所储存的值的类型 更多命令请参考：https://redis.</description></item><item><title>二、Redis 简介</title><link>https://www.shellio.cc/docs/cache/redis/2/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/cache/redis/2/</guid><description>Redis 是完全开源免费的，遵守 BSD 协议，是一个高性能的 key-value 数据库
+Redis 与其它 key/value 缓存产品有以下三个特点：
+1、 Redis支持数据的持久化，可以将内存中的数据保存在磁盘中，重启的时候可以再次加载进行使用；
+2、 Redis不仅支持key-value类型的数据，还提供list，set，zset，hash等数据结构的存储；
+3、 Redis支持数据的备份，即master-slave模式的数据备份；
+Redis 优势 1、 **高性能：**Redis能读的速度是110000次/s,写的速度是81000次/s；
+2、 **丰富的数据类型：**Redis支持Strings,Lists,Hashes,Sets及OrderedSets数据类型操作；
+3、 **原子型操作:**Redis的所有操作都是原子性的，还支持对几个操作全并后的原子性执行；
+4、 **丰富的特性:**Redis支持publish/subscribe,通知,key过期等等特性；
+Redis 与其它 key-value 存储有什么不同？ 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 1、 Redis支持更多的数据类型，并且提供对这些数据类型的原子性操作；
+Redis的数据类型都是基于基本数据结构的同时对程序员透明，无需进行额外的抽象
+2、 Redis的数据可以持久化到磁盘；
+1所以在对不同数据集进行高速读写时需要权衡内存，因为数据量不能大于硬件内存。</description></item><item><title>二十、Java 使用 Redis</title><link>https://www.shellio.cc/docs/cache/redis/20/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/cache/redis/20/</guid><description>JAVA 可以通过 jedis 包访问 Redis
+安装 jedis 包 JAVA 语言访问 Redis 需要先安装 Redis 服务和 jedis 包
+如果你还未安装 JAVA，可以移步我们的 JAVA 开发环境配置
+然后通过以下地址下载 jedis 包： jedis 2.9.0 把下载好的 jedis.jar 放在 CLASSPATH* 目录下
+JAVA 连接到 Redis 服务 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 1/* 2 * filename: JavaRedisDemo.java 3 * author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 4 * Copyright © 2015-2065 ddkk.com. All rights reserved. 5*/ 6import redis.clients.jedis.Jedis; 7public class JavaRedisDemo 8 public static void main(String[] args) 9 { 10 //连接本地的 Redis 服务 11 Jedis jedis = new Jedis(&amp;#34;localhost&amp;#34;); 12 System.</description></item><item><title>二十二、Redis 数据备份与恢复</title><link>https://www.shellio.cc/docs/cache/redis/22/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/cache/redis/22/</guid><description>Redis SAVE 命令用于创建当前数据库的备份
+SAVE 命令将在 Redis 安装目录中创建 dump.rdb 文件
+获取Redis 目录可以使用 CONFIG 命令
+1127、0.0.1:6379&amp;gt; CONFIG GET dir 21) &amp;#34;dir&amp;#34; 32) &amp;#34;/usr/local/var/db/redis&amp;#34; Redis SAVE 语法 redis SAVE 命令基本语法如下：
+1127、0.0.1:6379&amp;gt; SAVE 范例 1127、0.0.1:6379&amp;gt; SAVE 2OK SAVE 会在前台执行，如果数据量巨大，可能会堵塞 Redis 服务 Redis 提供了 BGSAVE 命令用于后台运行备份数据库
+BGSAVE 创建Redis 备份文件也可以使用命令 BGSAVE ，该命令在后台执行
+1127、0.0.1:6379&amp;gt; BGSAVE 2Background saving started 恢复数据 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 恢复数据，只需将备份文件 ( dump.rdb ) 移动到 Redis 安装目录并启动服务即可
+延伸阅读 更多SAVE 和 BGSAVE 命令的知识，请移步 Redis SAVE 命令 和 Redis BGSAVE 命令</description></item><item><title>二十六、Redis 管道技术</title><link>https://www.shellio.cc/docs/cache/redis/26/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/cache/redis/26/</guid><description>Redis 是一种基于 客户端-服务端 模型以及 请求/响应 协议的 TCP 服务
+所以一次 Redis 命令请求会遵循以下步骤
+1、 客户端向服务端发送一个查询请求，并监听Socket返回，通常是以阻塞模式，等待服务端响应；
+2、 服务端处理命令，并将结果返回给客户端；
+每一个单独的 Redis 命令都要重复以上步骤，如果要同时发送多个 Redis 命令，则非常消耗带宽和时间
+Redis 管道技术 Redis 管道可以向 Redis 服务发送多个 Redis 命令，然后一次性读取所有服务端的响应
+下面的Shell 范例使用 Redis 管道来一次性操作多个 Redis 命令
+注意 $ 符号是命令提示符 nc 命令 NetCat 的简写，你可以访问 Linux nc 了解更多
+1$ (echo -en &amp;#34;PING\r\n SET site ddkk.com\r\nGET site\r\nINCR visitor\r\nINCR visitor\r\nINCR visitor\r\n&amp;#34;; sleep 10) | nc localhost 6379 2+PONG 3+OK 4$11 5ddkk.com 6:1 7:2 8:3 上面的Shell 命令，我们先使用 PING 命令查看 Redis 服务是否可用， 之后我们们设置了 site 的值为 ddkk.</description></item><item><title>二十七、Redis 分区</title><link>https://www.shellio.cc/docs/cache/redis/27/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/cache/redis/27/</guid><description>分区为Redis 提供了更大的存储能力，更高的性能，更强的传输能力
+分区是分割数据到多个 Redis 实例的处理过程
+分区后每个 Redis 实例只保存 key 的一个子集
+分区的优势 1、 通过利用多台计算机内存，我们可以构造更大的Redis数据库；
+2、 通过多核和多台计算机，我们可以扩展计算能力，提供更高的性能；
+3、 通过多台计算机和网络适配器，我们可以扩展网络带宽，提供更强的传输能力；
+分区的不足 Redis 分区也不是万能的，分区后也有一些缺点
+1、 涉及多个key的操作通常是不被支持的比如当两个set映射到不同的Redis实例上时，就不能对这两个set执行交集操作；
+2、 涉及多个key的Redis事务不能使用；
+3、 当使用Redis分区时，数据处理较为复杂，比如需要处理多个rdb/aof文件，并且从多个实例和主机备份持久化文件；
+4、 增加或删除容量也比较复杂；
+Redis 集群大多数支持在运行时增加、删除节点的透明数据平衡的能力，但是类似于客户端分区、代理等其他系统则不支持这项特性。
+1不过，一种叫做 presharding 的技术对此是有帮助的 分区类型 Redis 有两种分区： 范围分区和哈希分区
+这两个分区系统可以用来映射某个 key 到某个 Redis 服务
+假设有4 个 Redis 实例 R0，R1，R2，R3，和 user:1，user:2 这样的表示用户的多个 key ，对既定的 key 有多种不同方式来选择这个 key 存放在哪个实例中
+范围分区 范围分区是最简单的分区，它可以映射一定范围的对象到特定的 Redis 实例
+比如可以把 ID 从 0 到 10000 的用户会保存到实例 R0 ，ID 从 10001 到 20000 的用户会保存到 R1，以此类推</description></item><item><title>二十三、Redis 服务安全</title><link>https://www.shellio.cc/docs/cache/redis/23/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/cache/redis/23/</guid><description>默认的Redis 服务是不需要用户名和密码就能访问的，如果把 Redis 服务开放给公网访问是非常危险的。
+Redis 服务安全设置包括以下几个方面
+1、 设置iptables过滤IP地址；
+2、 更改Redis监听的IP地址和端口；
+3、 设置Redis密码；
+1和2 我们不做过多讨论，本章节主要学习如何设置 Redis 密码
+设置 Redis 密码 可以通过 Redis 的配置文件设置密码参数，这样客户端连接到 redis 服务就需要密码验证
+设置Redis 密码后让我们的 Redis 服务更安全
+1. 通过命令查看是否设置了密码验证 1127、0.0.1:6379&amp;gt; CONFIG get requirepass 21) &amp;#34;requirepass&amp;#34; 32) &amp;#34;&amp;#34; 默认情况下 requirepass 参数是空的，无需通过密码验证就可以连接到 Redis 服务
+2. 通过命令来设置密码 1127、0.0.1:6379&amp;gt; CONFIG set requirepass &amp;#34;1F26e@dF1b&amp;#34; 2OK 3127、0.0.1:6379&amp;gt; CONFIG get requirepass 41) &amp;#34;requirepass&amp;#34; 52) &amp;#34;1F26e@dF1b&amp;#34; 设置密码后，客户端连接 Redis 服务就需要密码验证，否则无法执行命令
+3. 通过 AUTH 命名进行密码验证 Redis AUTH 命令语法格式如下
+1127、0.0.1:6379&amp;gt; AUTH password 范例 如果不验证密码</description></item><item><title>二十四、Redis 性能测试</title><link>https://www.shellio.cc/docs/cache/redis/24/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/cache/redis/24/</guid><description>Redis 服务通过同时执行多个命令来测试性能表现
+Redis 性能测试语法 Redis 性能测试的基本命令如下
+1redis-benchmark [option] [option value] 范例 以下范例同时执行 10000 个请求来检测性能
+1$ redis-benchmark -n 10000 -q 2PING_INLINE: 40000.00 requests per second 3PING_BULK: 54347.82 requests per second 4SET: 50251.26 requests per second 5GET: 51813.47 requests per second 6INCR: 52631.58 requests per second 7LPUSH: 48309.18 requests per second 8RPUSH: 47846.89 requests per second 9LPOP: 49261.09 requests per second 10RPOP: 44247.79 requests per second 11SADD: 51020.41 requests per second 12HSET: 42372.</description></item><item><title>二十五、Redis 客户端连接</title><link>https://www.shellio.cc/docs/cache/redis/25/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/cache/redis/25/</guid><description>Redis 通过监听一个 TCP 端口或者 Unix socket 的方式来接收来自客户端的连接
+当一个连接建立后，Redis 内部会进行以下一些操作：
+1、 客户端socket会被设置为非阻塞模式，因为Redis在网络事件处理上采用的是非阻塞多路复用模型；
+2、 为这个socket设置TCP_NODELAY属性，禁用Nagle算法；
+3、 创建一个可读的文件事件用于监听这个客户端socket的数据发送；
+最大连接数 在Redis 2.6 以前的版本中 最大连接数 ( maxclients ) 被直接编码在 Redis 源代码中
+但那之后的版本，这个值是可配置的
+maxclients 的默认值是 10000
+查看当前连接的 Redis 最大连接数 使用以下命令可以查看当前连接的 Redis 服务允许的最大连接数
+1config get maxclients 21) &amp;#34;maxclients&amp;#34; 32) &amp;#34;10000&amp;#34; 在 redis.conf 文件中配置 我们可以在 redis.conf 中对这个值进行修改
+1# maxclients 10000 只要去掉 # 号，并把 10000 改成你想要的数字
+Redis 启动时配置 下面的Shell 命令用来启动 Redis 服务并设置设置最大连接数为 100000
+1redis-server --maxclients 100000 Redis 客户端命令 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 命令 描述 CLIENT LIST 返回连接到 redis 服务的客户端列表 CLIENT SETNAME 设置当前连接的名称 CLIENT GETNAME 获取通过 CLIENT SETNAME 命令设置的服务名称 CLIENT PAUSE 挂起客户端连接，指定挂起的时间以毫秒计 CLIENT KILL 关闭客户端连接</description></item><item><title>二十一、PHP 和 Redis</title><link>https://www.shellio.cc/docs/cache/redis/21/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/cache/redis/21/</guid><description>PHP可以通过 phpredis 扩展访问 Redis
+安装 phpredis 扩展 PHP语言访问 Redis 需要先安装 Redis 服务和 PHP Redis 扩展。
+phpredis 扩展官方地址为 https://github.com/phpredis/phpredis
+phpredis 扩展下载地址为: https://github.com/phpredis/phpredis/releases
+当前最新的扩展版本为: 3.1.4
+1. 使用下面的一些列命令安装这个 phpredis 扩展 1$ wget https://github.com/phpredis/phpredis/archive/3.1.4.tar.gz 2$ tar zxvf 3.1.4.tar.gz 解压 3$ cd phpredis-3.1.4 进入 phpredis 目录 4$ /usr/local/php/bin/phpize php安装后的路径 5$ ./configure --with-php-config=/usr/local/php/bin/php-config 6$ make &amp;amp;&amp;amp; sudo make install 如果是PHP 7 及以上版本，则需要下载指定分支：
+1git clone -b php7 https://github.com/phpredis/phpredis.git 2. 修改 php.ini 文件 修改 php.ini 文件添加 redis 扩展</description></item><item><title>九、Redis 字符串(String) 命令</title><link>https://www.shellio.cc/docs/cache/redis/9/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/cache/redis/9/</guid><description>Redis 字符串数据类型的相关命令用于管理 Redis 字符串值
+Redis 字符串命令语法 1127、0.0.1:6379&amp;gt; COMMAND KEY_NAME 范例 1127、0.0.1:6379&amp;gt; SET site ddkk.com 2OK 3127、0.0.1:6379&amp;gt; GET site 4&amp;#34;ddkk.com&amp;#34; SET 命令用于设置指定 key 的值
+GET 命令用于获取指定 key 的值
+Redis 字符串命令 下表列出了 Redis 字符串命令
+命令 描述 SET 设置指定 key 的值 GET 获取指定 key 的值 GETRANGE 返回 key 中字符串值的子字符 GETSET 将给定 key 的值设为 value ，并返回 key 的旧值 ( old value ) GETBIT 对 key 所储存的字符串值，获取指定偏移量上的位 ( bit ) MGET 获取所有(一个或多个)给定 key 的值 SETBIT 对 key 所储存的字符串值，设置或清除指定偏移量上的位(bit) SETEX 设置 key 的值为 value 同时将过期时间设为 seconds SETNX 只有在 key 不存在时设置 key 的值 SETRANGE 从偏移量 offset 开始用 value 覆写给定 key 所储存的字符串值 STRLEN 返回 key 所储存的字符串值的长度 MSET 同时设置一个或多个 key-value 对 MSETNX 同时设置一个或多个 key-value 对 PSETEX 以毫秒为单位设置 key 的生存时间 INCR 将 key 中储存的数字值增一 INCRBY 将 key 所储存的值加上给定的增量值 ( increment ) INCRBYFLOAT 将 key 所储存的值加上给定的浮点增量值 ( increment ) DECR 将 key 中储存的数字值减一 DECRBY 将 key 所储存的值减去给定的减量值 ( decrement ) APPEND 将 value 追加到 key 原来的值的末尾 更多命令请参考：https://redis.</description></item><item><title>六、Redis 数据类型</title><link>https://www.shellio.cc/docs/cache/redis/6/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/cache/redis/6/</guid><description>Redis 比 Memcached 更优秀的地方之一就是支持更丰富的数据类型
+Redis 支持七种数据类型 1、 string(字符串)；
+2、 hash(哈希)；
+3、 list(列表)；
+4、 set(集合)；
+5、 zset(sortedset：有序集合)；
+6、 Bitmaps(位图)；
+7、 HyperLogLogs(基数统计)；
+String（字符串） string 是 Redis 最基本的数据类型，一个 key 对应一个 value
+string 类型是二进制安全的
+Redis 的 string 可以包含任何数据，比如 jpg 图片或者序列化的对象
+string 类型的一个键最大能存储 512 MB 数据
+1127、0.0.1:6379&amp;gt; SET site &amp;#34;ddkk.com&amp;#34; 2OK 3127、0.0.1:6379&amp;gt; GET site 4&amp;#34;ddkk.com&amp;#34; 上面的范例中我们使用了 Redis 的 SET 和 GET 命令
+Hash（哈希） 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 Redis Hash 是一个键名对集合
+Redis Hash 是一个 string 类型的 field 和 value 的映射表</description></item><item><title>七、Redis 命令</title><link>https://www.shellio.cc/docs/cache/redis/7/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/cache/redis/7/</guid><description>Redis 命令用于在 Redis 服务上执行操作
+我们使用 Redis 服务自带的 redis-cli 客户端来发送命令
+最新版的 redis-cli 会有命令提示功能，方便学些
+启动 redis-cli 客户端 1$ redis-cli 范例 下面的范例演示了如何启动 redis 客户端，并发送 ping 命令
+1$ redis-cli 2127、0.0.1:6379&amp;gt; 3127、0.0.1:6379&amp;gt; PING 4PONG PING 命令用于检测 Redis 服务是否启动
+使用 redis-cli 在远程 Redis 服务上执行命令 使用redis-cli 也可以在远程 Redis 服务上执行命令
+启动远程 redis-cli 语法 1$ redis-cli -h host -p port -a password 下面的范例演示了如何连接到主机为 192.168.1.100，端口为 6379 ，密码为 123456 的 Redis 服务上
+1$ redis-cli -h 192.168.1.100 -p 6379 -a &amp;#34;123456&amp;#34; 2192、168.1.100&amp;gt; 3192、168.</description></item><item><title>三、Redis 安装</title><link>https://www.shellio.cc/docs/cache/redis/3/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/cache/redis/3/</guid><description>Redis 是垮平台的，高性能的 key-value 数据库
+本章将学习如何安装 Redis 和如何启动 Redis 服务
+Windows 上安装 Redis Windows 上安装 Redis 可以使用 Redis 社区编译好的 Redis 安装包
+Redis Windows 下载地址：https://github.com/MicrosoftArchive/redis/releases
+这个版本会落后于 Redis 官方版本，但不影响使用
+Redis 支持 32 位和 64 位，这个需要根据你系统平台的实际情况选择
+如果你不知道选择哪个版本，那么就下载 64 位
+我们下载 Redis-x64-xxx.zip 压缩包到 C 盘，解压后，将文件夹重新命名为 redis
+打开一个 cmd 窗口 使用 cd 命令切换目录到 C:\redis 运行 redis-server.exe redis.windows.conf
+可以把redis 的路径加到系统的环境变量里，这样就省得再输路径了
+redis.windows.conf 可以省略，如果省略，会启用默认的。
+输入之后，会显示如下界面
+另启一个 cmd 窗口，原来的不要关闭，不然就无法访问服务端了
+切换到redis 目录下运行
+1redis-cli.exe -h 127.0.0.1 -p 6379 设置键值对
+1127、0.0.1:6379&amp;gt; set site ddkk.</description></item><item><title>十、Redis 哈希(Hash) 命令</title><link>https://www.shellio.cc/docs/cache/redis/10/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/cache/redis/10/</guid><description>Redis hash 是一个 string 类型的 field 和 value 的映射表
+Redis hash 特别适合用于存储对象
+Redis 中每个 hash 可以存储 232- 1 键值对（40多亿)
+范例 1127、0.0.1:6379&amp;gt; HMSET company:qq name &amp;#34;腾讯&amp;#34; url &amp;#34;http://www.qq.com&amp;#34; rank 1 visitors 230000000 2OK 3127、0.0.1:6379&amp;gt; HGETALL company:qq 41) &amp;#34;name&amp;#34; 52) &amp;#34;\xe8\x85\xbe\xe8\xae\xaf&amp;#34; 63) &amp;#34;url&amp;#34; 74) &amp;#34;http://www.qq.com&amp;#34; 85) &amp;#34;rank&amp;#34; 96) &amp;#34;1&amp;#34; 107) &amp;#34;visitors&amp;#34; 118) &amp;#34;230000000&amp;#34; 在上面的实例中，我们设置了 qq 的一些描述信息(name, url, rank, visitors) 到哈希表的 company:qq 中
+Redis hash 命令 下表列出了 redis hash 命令
+命令 描述 HDEL 删除一个或多个哈希表字段 HEXISTS 查看哈希表 key 中，指定的字段是否存在 HGET 获取存储在哈希表中指定字段的值 HGETALL 获取在哈希表中指定 key 的所有字段和值 HINCRBY 为哈希表 key 中的指定字段的整数值加上增量 increment HINCRBYFLOAT 为哈希表 key 中的指定字段的浮点数值加上增量 increment HKEYS 获取所有哈希表中的字段 HLEN 获取哈希表中字段的数量 HMGET 获取所有给定字段的值 HMSET 同时将多个 field-value (域-值)对设置到哈希表 key 中 HSET 将哈希表 key 中的字段 field 的值设为 value HSETNX 只有在字段 field 不存在时，设置哈希表字段的值 HVALS 获取哈希表中所有值 HSCAN 迭代哈希表中的键值对 HSTRLEN 返回哈希表 key 中， 与给定域 field 相关联的值的字符串长度 更多命令请参考：https://redis.</description></item><item><title>十八、Redis 连接命令</title><link>https://www.shellio.cc/docs/cache/redis/18/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/cache/redis/18/</guid><description>Redis 连接命令主要是用于连接到 Redis 服务
+下面的范例演示客户端如何通过密码验证连接到 Redis 服务，并检测服务是否在运行
+1127、0.0.1:6379&amp;gt; AUTH &amp;#34;password&amp;#34; 2OK 3127、0.0.1:6379&amp;gt; PING 4PONG Redis 连接命令 下表列出了用于 Redis 连接相关的命令
+命令 描述 AUTH password 验证密码是否正确 ECHO message 打印字符串 PING 查看服务是否运行 QUIT 关闭当前连接 SELECT index 切换到指定的数据库</description></item><item><title>十二、Redis 集合(Set) 命令</title><link>https://www.shellio.cc/docs/cache/redis/12/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/cache/redis/12/</guid><description>Redis Set是 string 类型的无序集合
+Redis set 集合成员是唯一的，这就意味着集合中不能出现重复的数据
+Redis set 是通过哈希表实现的，所以添加，删除，查找的复杂度都是 O(1)
+Redis set 最大的成员数量为 232 – 1(4294967295)
+范例 1127、0.0.1:6379&amp;gt; SADD language PHP 2(integer) 1 3127、0.0.1:6379&amp;gt; SADD language Python 4(integer) 1 5127、0.0.1:6379&amp;gt; SADD language Perl 6(integer) 1 7127、0.0.1:6379&amp;gt; SADD language Python 8(integer) 0 9127、0.0.1:6379&amp;gt; SMEMBERS language 101) &amp;#34;Perl&amp;#34; 112) &amp;#34;Python&amp;#34; 123) &amp;#34;PHP&amp;#34; 上面的范例，我们通过 SADD 命令向名为 language 的集合插入的三个元素
+Redis 集合命令 下表列出了 Redis 集合相关命令
+命令 描述 SADD 向集合添加一个或多个成员 SCARD 获取集合的成员数 SDIFF 返回给定所有集合的差集 SDIFFSTORE 返回给定所有集合的差集并存储在 destination 中 SINTER 返回给定所有集合的交集 SINTERSTORE 返回给定所有集合的交集并存储在 destination 中 SISMEMBER 判断 member 元素是否是集合 key 的成员 SMEMBERS 返回集合中的所有成员 SMOVE 将 member 元素从 source 集合移动到 destination 集合 SPOP 移除并返回集合中的一个随机元素 SRANDMEMBER 返回集合中一个或多个随机数 SREM 移除集合中一个或多个成员 SUNION 返回所有给定集合的并集 SUNIONSTORE 所有给定集合的并集存储在 destination 集合中 SSCAN 迭代集合中的元素</description></item><item><title>十九、Redis 服务器</title><link>https://www.shellio.cc/docs/cache/redis/19/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/cache/redis/19/</guid><description>Redis 服务器命令主要是用于管理 redis 服务
+范例 以下范例演示了如何获取 redis 服务器的统计信息
+1$ redis-cli 2127、0.0.1:6379&amp;gt; info 3# Server 4redis_version:3.0.7 5redis_git_sha1:00000000 6redis_git_dirty:0 7redis_build_id:aa27a151289c9b98 8redis_mode:standalone 9os:Darwin 17.2.0 x86_64 10arch_bits:64 11multiplexing_api:kqueue 12gcc_version:4.2.1 13process_id:702 14run_id:63a232c39b249561664fb3a427a95f1bfe33e33e 15tcp_port:6379 16uptime_in_seconds:611995 17uptime_in_days:7 18hz:10 19lru_clock:15307220 20config_file:/usr/local/etc/redis.conf 21# Clients 22connected_clients:1 23client_longest_output_list:0 24client_biggest_input_buf:0 25blocked_clients:0 26# Memory 27used_memory:1009664 28used_memory_human:986.00K 29used_memory_rss:602112 30used_memory_peak:1009664 31used_memory_peak_human:986.00K 32used_memory_lua:36864 33mem_fragmentation_ratio:0.60 34mem_allocator:libc 35# Persistence 36loading:0 37rdb_changes_since_last_save:0 38rdb_bgsave_in_progress:0 39rdb_last_save_time:1507867449 40rdb_last_bgsave_status:ok 41rdb_last_bgsave_time_sec:-1 42rdb_current_bgsave_time_sec:-1 43aof_enabled:0 44aof_rewrite_in_progress:0 45aof_rewrite_scheduled:0 46aof_last_rewrite_time_sec:-1 47aof_current_rewrite_time_sec:-1 48aof_last_bgrewrite_status:ok 49aof_last_write_status:ok 50# Stats 51total_connections_received:1 52total_commands_processed:1 53instantaneous_ops_per_sec:0 54total_net_input_bytes:31 55total_net_output_bytes:6049617 56instantaneous_input_kbps:0.</description></item><item><title>十六、Redis 事务</title><link>https://www.shellio.cc/docs/cache/redis/16/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/cache/redis/16/</guid><description>Redis 事务可以一次执行多个命令， 并且带有以下两个重要的保证
+1、 事务是一个单独的隔离操作；
+1事务中的所有命令都会序列化、按顺序地执行 事务在执行的过程中，不会被其他客户端发送来的命令请求所打断 2、 事务是一个原子操作；
+1事务中的命令要么全部被执行，要么全部都不执行 Redis 事务执行过程 一个事务从开始到执行会经历以下三个阶段
+1、 开始事务，使用MULTI命令；
+2、 命令入队；
+3、 执行事务，使用EXEC命令；
+范例 下面的范例演示了 Redis 事务如何工作
+它先以MULTI 开始一个事务， 然后将多个命令入队到事务中， 最后由 EXEC 命令触发事务， 一并执行事务中的所有命令
+1127、0.0.1:6379&amp;gt; MULTI 2OK 3127、0.0.1:6379&amp;gt; SET site &amp;#34;ddkk.com&amp;#34; 4QUEUED 5127、0.0.1:6379&amp;gt; GET site 6QUEUED 7127、0.0.1:6379&amp;gt; SADD lession &amp;#34;PHP&amp;#34; &amp;#34;HTML&amp;#34; &amp;#34;Python&amp;#34; &amp;#34;JavaScript&amp;#34; 8QUEUED 9127、0.0.1:6379&amp;gt; SMEMBERS lession 10QUEUED 11127、0.0.1:6379&amp;gt; EXEC 121) OK 132) &amp;#34;ddkk.com&amp;#34; 143) (integer) 4 154) 1) &amp;#34;JavaScript&amp;#34; 16 2) &amp;#34;Python&amp;#34; 17 3) &amp;#34;HTML&amp;#34; 18 4) &amp;#34;PHP&amp;#34; 19127、0.</description></item><item><title>十七、Redis Script( 脚本 ) 命令</title><link>https://www.shellio.cc/docs/cache/redis/17/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/cache/redis/17/</guid><description>Redis 脚本使用 Lua 解释器来执行脚本
+Reids 2.6 版本通过内嵌支持 Lua 环境
+Redis 执行脚本的常用命令为 EVAL
+EVAL 命令语法格式 Redis Eval 命令的基本语法如下：
+1127、0.0.1:6379&amp;gt; EVAL script numkeys key [key ...] arg [arg ...] 范例 下面的范例演示了 Redis 脚本工作过程
+1127、0.0.1:6379&amp;gt; EVAL &amp;#34;return {KEYS[1],KEYS[2],ARGV[1],ARGV[2]}&amp;#34; 2 key1 key2 first second 21) &amp;#34;key1&amp;#34; 32) &amp;#34;key2&amp;#34; 43) &amp;#34;first&amp;#34; 54) &amp;#34;second&amp;#34; Redis 脚本命令 下表列出了 Redis 脚本相关的命令
+命令 描述 EVAL 执行 Lua 脚本 EVALSHA 执行 Lua 脚本 SCRIPT EXISTS 查看指定的脚本是否已经被保存在缓存当中 SCRIPT FLUSH 从脚本缓存中移除所有脚本 SCRIPT KILL 杀死当前正在运行的 Lua 脚本 SCRIPT LOAD 将脚本 script 添加到脚本缓存中，但并不立即执行这个脚本</description></item><item><title>十三、Redis 有序集合(sorted set) 命令</title><link>https://www.shellio.cc/docs/cache/redis/13/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/cache/redis/13/</guid><description>Redis 有序集合(sorted set) Redis sorted set 和 set 一样也是 string 类型元素的集合，且不允许重复的成员
+Redis sorted set 的每个元素都会关联一个 double 类型的分数(score)
+Redis sorted set 通过分数(score) 来为集合中的成员进行从小到大的排序
+Redis sorted set(有序集合) 的成员是唯一的,但分数 (score) 却可以重复
+Redis sorted set 是通过哈希表实现的，所以添加，删除，查找的复杂度都是O(1)
+Redis sorted set 中最大的成员数为 232 – 1
+范例 1127、0.0.1:6379&amp;gt; ZADD language 1 PHP 2(integer) 1 3127、0.0.1:6379&amp;gt; ZADD language 2 Python 4(integer) 1 5127、0.0.1:6379&amp;gt; ZADD language 3 Ruby 6(integer) 1 7127、0.0.1:6379&amp;gt; ZADD language 3 Perl 8(integer) 0 9127、0.0.1:6379&amp;gt; ZADD language 4 Perl 10(integer) 0 11127、0.</description></item><item><title>十四、Redis HyperLogLog 命令</title><link>https://www.shellio.cc/docs/cache/redis/14/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/cache/redis/14/</guid><description>Redis 在 2.8.9 版本添加了 HyperLogLog 结构
+Redis HyperLogLog 是用来做基数统计的算法
+HyperLogLog 的优点是，在输入元素的数量或者体积非常非常大时，计算基数所需的空间总是固定 的、并且是很小的
+每个HyperLogLog 键只需要花费 12 KB 内存，就可以计算接近 2^64 个不同元素的基 数。这和计算基数时，元素越多耗费内存就越多的集合形成鲜明对比。
+但是，因为 HyperLogLog 只会根据输入元素来计算基数，而不会储存输入元素本身，所以 HyperLogLog 不能像集合那样，返回输入的各个元素
+什么是基数? 假如我们有一个数据集 {1, 3, 5, 7, 5, 7, 8}
+那么这个数据集的基数集为 {1, 3, 5 ,7, 8}, 基数 (不重复元素个数) 为5
+基数估计 就是在误差可接受的范围内，快速计算基数
+范例 下面的范例演示了 HyperLogLog 的工作过程
+1127、0.0.1:6379&amp;gt; PFADD language &amp;#34;PHP&amp;#34; 21) (integer) 1 3127、0.0.1:6379&amp;gt; PFADD language &amp;#34;Python&amp;#34; 41) (integer) 1 5127、0.0.1:6379&amp;gt; PFADD language &amp;#34;Perl&amp;#34; 61) (integer) 1 7127、0.</description></item><item><title>十五、Redis 发布订阅</title><link>https://www.shellio.cc/docs/cache/redis/15/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/cache/redis/15/</guid><description>Redis 发布订阅(pub/sub)是一种消息通信模式
+1发送者(pub)发送消息，订阅者(sub)接收消息 Redis 允许客户端订阅任意数量的频道
+发布订阅(pub/sub) 图示 下图展示了频道 channel1，以及订阅这个频道的三个客户端 : client2 、 client5 和 client1 之间的关系
+当有新消息通过 PUBLISH 命令发送给频道 channel1 时， 这个消息就会被发送给订阅它的三个客户端
+范例 下面的范例演示了发布订阅是如何工作的
+1. 新建订阅频道 chart:io 1127、0.0.1:6379&amp;gt; SUBSCRIBE chart:io 2Reading messages... (press Ctrl-C to quit) 31) &amp;#34;subscribe&amp;#34; 42) &amp;#34;chart:io&amp;#34; 53) (integer) 1 2. 重新打卡另一个 Redis 客户端 在同一个频道 chart:io 发布两次消息，订阅者就能接收到消息
+1127、0.0.1:6379&amp;gt; PUBLISH chart:io &amp;#34;Hello, I am ddkk.com&amp;#34; 2(integer) 1 3127、0.0.1:6379&amp;gt; PUBLISH chart:io &amp;#34;Nict to see you, My old friends!&amp;#34; 4(integer) 1 5127、0.</description></item><item><title>十一、Redis 列表(List) 命令</title><link>https://www.shellio.cc/docs/cache/redis/11/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/cache/redis/11/</guid><description>Redis List(列表) 是简单的字符串列表，按照插入顺序排序
+可以添加一个元素到 Redis 列表的头部（左边）或者尾部（右边）
+Redis 一个列表最多可以包含 232- 1 个元素 (4294967295)
+范例 1127、0.0.1:6379&amp;gt; LPUSH language Python 2(integer) 1 3127、0.0.1:6379&amp;gt; LPUSH language Perl 4(integer) 2 5127、0.0.1:6379&amp;gt; LPUSH language Ruby 6(integer) 3 7127、0.0.1:6379&amp;gt; LRANGE language 0 10 81) &amp;#34;Ruby&amp;#34; 92) &amp;#34;Perl&amp;#34; 103) &amp;#34;Python&amp;#34; 上面的范例，我们使用 LPUSH 命令将三个值插入了名为 language 的列表当中
+Redis 列表命令 下表列出了列表相关命令
+命令 描述 BLPOP 移出并获取列表的第一个元素 BRPOP 移出并获取列表的最后一个元素 BRPOPLPUSH 从列表中弹出一个值，并将该值插入到另外一个列表中并返回它 LINDEX 通过索引获取列表中的元素 LINSERT 在列表的元素前或者后插入元素 LLEN 获取列表长度 LPOP 移出并获取列表的第一个元素 LPUSH 将一个或多个值插入到列表头部 LPUSHX 将一个值插入到已存在的列表头部 LRANGE 获取列表指定范围内的元素 LREM 移除列表元素 LSET 通过索引设置列表元素的值 LTRIM 对一个列表进行修剪(trim) RPOP 移除并获取列表最后一个元素 RPOPLPUSH 移除列表的最后一个元素，并将该元素添加到另一个列表并返回 RPUSH 在列表中添加一个或多个值 RPUSHX 为已存在的列表添加值</description></item><item><title>四、Redis 配置</title><link>https://www.shellio.cc/docs/cache/redis/4/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/cache/redis/4/</guid><description>Redis 提供了很多配置选项来优化 Redis 服务
+Redis 的配置文件位于 Redis 安装目录下，文件名为 redis.conf
+可以通过 Redis CONFIG 命令查看或设置配置项
+Redis CONFIG GET 命令语法格式 Redis CONFIG GET 命令语法格式如下
+1CONFIG GET CONFIG_SETTING_NAME 范例 1127、0.0.1:6379&amp;gt; CONFIG GET loglevel 21) &amp;#34;loglevel&amp;#34; 32) &amp;#34;notice&amp;#34; 可以使用 * 号获取所有的 Redis 配置
+1127、0.0.1:6379&amp;gt; CONFIG GET * 2 1) &amp;#34;dbfilename&amp;#34; 3 2) &amp;#34;dump.rdb&amp;#34; 4 3) &amp;#34;requirepass&amp;#34; 5 4) &amp;#34;&amp;#34; 6 5) &amp;#34;masterauth&amp;#34; 7 6) &amp;#34;&amp;#34; 8 7) &amp;#34;unixsocket&amp;#34; 9 8) &amp;#34;&amp;#34; 10 9) &amp;#34;logfile&amp;#34; 11 10) &amp;#34;&amp;#34; 12 11) &amp;#34;pidfile&amp;#34; 13 12) &amp;#34;/usr/local/var/run/redis.</description></item><item><title>五、Redis redis.conf 配置选项</title><link>https://www.shellio.cc/docs/cache/redis/5/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/cache/redis/5/</guid><description>Redis 提供了很多配置选项来优化 Redis 服务
+Redis 的配置文件位于 Redis 安装目录下，文件名为 redis.conf
+Redis 配置参数说明 Redis 配置文件 redis.conf 配置项说明如下
+1、 daemonize；
+Redis 默认不是以守护进程的方式运行，可以通过该配置项修改，使用 yes 启用守护进程
+1# daemonize yes|no 2daemonize yes 2、 pidfile；
+Redis 以守护进程方式运行时，Redis 默认会把 pid 写入 /var/run/redis.pid 文件 可以通过 pidfile 项指定
+1pidfile /var/run/redis.pid 3、 port；
+指定Redis 监听端口，默认端口为 6379
+6379 的典故:
+Redis 作者曾经解释了为什么选用 6379 作为默认端口
+因为 6379 在手机按键上 MERZ 对应的号码，而 MERZ 取自意大利歌女 Alessia Merz 的名字
+1port 6379 4、 bind；
+绑定的主机地址
+1bind 127.0.0.1 5、 timeout；</description></item><item><title>一、Redis 基础教程</title><link>https://www.shellio.cc/docs/cache/redis/1/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/cache/redis/1/</guid><description>Redis ( Remote DIctionary Server ) 是由 Salvatore Sanfilippo 开发的 key-value 缓存数据库
+Redis 是开源的，遵守 BSD 协议，使用 ANSI C 语言开发
+谁适合阅读本教程？ 本教程是为程序开发人员准备的
+通过本教程你可以一步一步揭开 Redis 面纱
+阅读本教程前，你需要了解的知识 在阅读本教程前，你需要具备一些基本的程序开发
+如果你了解基本的数据结构，那就能容易精通了</description></item></channel></rss>

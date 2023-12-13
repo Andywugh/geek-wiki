@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Gradle on 程序员安仔</title><link>https://www.shellio.cc/categories/gradle/</link><description>Recent content in Gradle on 程序员安仔</description><generator>Hugo -- gohugo.io</generator><language>zh-hans</language><copyright>个人技术博客</copyright><lastBuildDate>Sat, 21 Oct 2023 12:22:54 +0800</lastBuildDate><atom:link href="https://www.shellio.cc/categories/gradle/index.xml" rel="self" type="application/rss+xml"/><item><title>八、Gradle Groovy 快速入门</title><link>https://www.shellio.cc/docs/java/gradle/8/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/gradle/8/</guid><description>Groovy 快速入门 要构建一个 Groovy 项目，你需要使用 Groovy 插件。该插件扩展了 Java 插件，对你的项目增加了 Groovy 的编译功能. 你的项目可以包含 Groovy 源码，Java 源码，或者两者都包含。在其他各方面，Groovy 项目与我们在第七章 Java 快速入门中所看到的Java 项目几乎相同。
+一个基本的 Groovy 项目 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 让我们来看一个例子。要使用 Groovy 插件，你需要在构建脚本文件当中添加以下内容：
+例子Groovy plugin
+build.gradle
+1apply plugin: &amp;#39;groovy&amp;#39; 注意：此例子的代码可以在 Gradle 的二进制文件或源码中的 samples/groovy/quickstart 里看到。
+这段代码同时会将 Java 插件应用到 project 中，如果 Java 插件还没被应用的话。Groovy 插件继承了 compile 任务 ，在 src/main/groovy 目录中查找源文件；且继承了 compileTest 任务，在 src/test/groovy 目录中查找测试的源文件。这些编译任务对这些目录使用了联合编译，这意味着它们可以同时包含 java 和 groovy 源文件。
+要使用groovy 编译任务，还必须声明要使用的 Groovy 版本以及从哪里获取 Groovy 库。你可以通过在 groovy 配置中添加依赖来完成。compile 配置继承了这个依赖,从而在编译 Groovy和 Java 源代码时，groovy 库也会被包含在类路径中。下面例子中，我们会使用 Maven 中央仓库中的 Groovy 2.</description></item><item><title>八、Maven 创建工程</title><link>https://www.shellio.cc/docs/java/maven/8/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/maven/8/</guid><description>Maven – 创建工程 Maven 使用**原型（archetype）**插件创建工程。要创建一个简单的 Java 应用，我们将使用 maven-archetype-quickstart 插件。在下面的例子中，我们将在 C:\MVN 文件夹下创建一个基于 maven 的 java 应用工程。
+我们打开命令控制台，跳转到 C:\MVN 目录，并执行下面的 mvn 命令。
+1C:\MVN&amp;gt;mvn archetype:generate 2-DgroupId=com.companyname.bank 3-DartifactId=consumerBanking 4-DarchetypeArtifactId=maven-archetype-quickstart 5-DinteractiveMode=false Maven 将开始处理，并将创建完成的 java 应用工程结构。
+1INFO] Scanning for projects... 2[INFO] Searching repository for plugin with prefix: &amp;#39;archetype&amp;#39;. 3[INFO] ------------------------------------------------------------------- 4[INFO] Building Maven Default Project 5[INFO] task-segment: [archetype:generate] (aggregator-style) 6[INFO] ------------------------------------------------------------------- 7[INFO] Preparing archetype:generate 8[INFO] No goals needed for project - skipping 9[INFO] [archetype:generate {execution: default-cli}] 10[INFO] Generating project in Batch mode 11[INFO] ------------------------------------------------------------------- 12[INFO] Using following parameters for creating project 13 from Old (1.</description></item><item><title>二、Gradle 概述</title><link>https://www.shellio.cc/docs/java/gradle/2/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/gradle/2/</guid><description>概述 特性说明 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 下面是一些 Gradle 特性的列表。
+基于声明的构建和基于约定的构建 Gradle 的核心在于基于 Groovy 的丰富而可扩展的域描述语言(DSL)。 Groovy 通过声明性的语言元素将基于声明的构建推向下层，你可以按你想要的方式进行组合。 这些元素同样也为支持 Java， Groovy，OSGi，Web 和 Scala 项目提供了基于约定的构建。 并且，这种声明性的语言是可以扩展的。你可以添加新的或增强现有的语言元素。 因此，它提供了简明、可维护和易理解的构建。
+为以依赖为基础的编程方式提供语言支持 声明性语言优点在于通用任务图，你可以将其充分利用在构建中. 它提供了最大限度的灵活性，以让 Gradle 适应你的特殊需求。
+构建结构化 Gradle 的灵活和丰富性最终能够支持在你的构建中应用通用的设计模式。 例如，它可以很容易地将你的构建拆分为多个可重用的模块，最后再进行组装，但不要强制地进行模块的拆分。 不要把原本在一起的东西强行分开（比如在你的项目结构里），从而避免让你的构建变成一场噩梦。 最后，你可以创建一个结构良好，易于维护，易于理解的构建。
+深度 API Gradle 允许你在构建执行的整个生命周期，对它的核心配置及执行行为进行监视并自定义。
+Gradle 的扩展 Gradle 有非常良好的扩展性。 从简单的单项目构建，到庞大的多项目构建，它都能显著地提升你的效率。 这才是真正的结构化构建。通过最先进的增量构建功能，它可以解决许多大型企业所面临的性能瓶颈问题。
+多项目构建 Gradle 对多项目构建的支持非常出色。项目依赖是首先需要考虑的问题。 我们允许你在多项目构建当中对项目依赖关系进行建模，因为它们才是你真正的问题域。 Gradle 遵守你的布局。
+Gradle 提供了局部构建的功能。 如果你在构建一个单独的子项目，Gradle 也会帮你构建它所依赖的所有子项目。 你也可以选择重新构建依赖于特定子项目的子项目。 这种增量构建将使得在大型构建任务中省下大量时间。
+多种方式管理依赖 不同的团队喜欢用不同的方式来管理他们的外部依赖。 从 Maven 和 Ivy 的远程仓库的传递依赖管理，到本地文件系统的 jar 包或目录，Gradle 对所有的管理策略都提供了方便的支持。
+Gradle 是第一个构建集成工具 Anttasks 是最重要的。而更有趣的是，Ant projects 也是最重要的。 Gradle 对任意的 Ant 项目提供了深度导入，并在运行时将 Ant 目标(target)转换为原生的 Gradle 任务(task)。 你可以从 Gradle 上依赖它们(Ant targets)，增强它们，甚至在你的 build.</description></item><item><title>二、Maven 环境配置</title><link>https://www.shellio.cc/docs/java/maven/2/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/maven/2/</guid><description>Maven – 环境配置 Maven 是一个基于 Java 的工具，所以要做的第一件事情就是安装 JDK。
+系统要求 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 项目 要求 JDK Maven 3.3 要求 JDK 1.7 或以上
+Maven 3.2 要求 JDK 1.6 或以上
+Maven 3.0/3.1 要求 JDK 1.5 或以上 内存 没有最低要求 磁盘 Maven 自身安装需要大约 10 MB 空间。除此之外，额外的磁盘空间将用于你的本地 Maven 仓库。你本地仓库的大小取决于使用情况，但预期至少 500 MB 操作系统 没有最低要求 步骤 1：检查 Java 安装 现在打开控制台，执行下面的 java 命令。
+操作系统 任务 命令 Windows 打开命令控制台 c:\&amp;gt; java -version Linux 打开命令终端 $ java -version Mac 打开终端 machine:~ joseph$ java -version 我们来验证一下所有平台上的输出：</description></item><item><title>二十、Gradle Gradle 插件</title><link>https://www.shellio.cc/docs/java/gradle/20/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/gradle/20/</guid><description>Gradle 插件 Gradle 在它的核心中有意地提供了一些小但有用的功能，用于在真实世界中的自动化。所有有用的功能，例如以能够编译 Java 代码为例，都是通过插件进行添加的。插件添加了新任务 （例如JavaCompile），域对象 （例如SourceSet），约定（例如主要的 Java 源代码是位于 src/main/java），以及扩展的核心对象和其他插件的对象。
+在这一章中，我们将讨论如何使用插件以及术语和插件相关的概念。
+应用插件 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 插件都认为是被应用，通过 Project.apply() 方法来完成。
+应用插件
+build.gradle
+1apply plugin: &amp;#39;java&amp;#39; 插件都有表示它们自己的一个短名称。. 在上述例子中，我们使用短名称 java 去应用 JavaPlugin。
+我们还可以使用下面的语法：
+通过类型应用插件
+build.gradle
+1apply plugin: org.gradle.api.plugins.JavaPlugin 由于Gradle 的默认导入，您还可以这样写：
+通过类型应用插件
+build.gradle
+1apply plugin: JavaPlugin 插件的应用是幂等的。也就是说，一个插件可以被应用多次。如果以前已应用了该插件，任何进一步的应用都不会再有任何效果。
+一个插件是任何实现了 Plugin 接口的简单的类。Gradle 提供了核心插件作为其发行包的一部分，所以简单地应用如上插件是你所需要做的。然而，对于第三方插件，你需要进行配置以使插件在构建类路径中可用。有关如何进行此操作的详细信息。
+插件都做了什么 把插件应用到项目中可以让插件来扩展项目的功能。它可以做的事情如：
+将任务添加到项目 （如编译、 测试） 使用有用的默认设置对已添加的任务进行预配置。 向项目中添加依赖配置 （见“依赖管理基础”）。 通过扩展对现有类型添加新的属性和方法。 让我们来看看：
+通过插件添加任务
+build.gradle
+1apply plugin: &amp;#39;java&amp;#39; 2task show &amp;lt;&amp;lt; { 3 println relativePath(compileJava.destinationDir) 4 println relativePath(processResources.</description></item><item><title>二十、Maven IntelliJ IDEA</title><link>https://www.shellio.cc/docs/java/maven/20/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/maven/20/</guid><description>Maven – IntelliJ IDEA IntelliJ IDEA 针对 Maven 支持内部构建功能。 在本例中，我们使用 IntelliJ IDEA Community Edition 11.1 的版本。
+关于IntelliJ IDEA 的一些特性如下：
+可以通过 IntelliJ IDEA 来运行 Maven 目标。 可以在 IntelliJ IDEA 自己的终端里查看 Maven 命令的输出结果。 可以在 IDE 里更新 Maven 的依赖关系。 可以在 IntelliJ IDEA 中启动 Maven 的构建。 IntelliJ IDEA 基于 Maven 的 pom.xml 来实现自动化管理依赖关系。 IntelliJ IDEA 可以通过自己的工作区解决 Maven 的依赖问题，而无需安装到本地的 Maven 仓库，虽然需要依赖的工程在同一个工作区。 IntelliJ IDEA 可以自动从远程 Moven 仓库上下载需要的依赖和源码。 IntelliJ IDEA 提供了创建 Maven 工程，pom.xml 文件的向导。 下面的例子将会帮助你更加充分的认识集成的 IntelliJ IDEA 和 Maven 的优势。</description></item><item><title>二十八、Gradle Checkstyle 插件</title><link>https://www.shellio.cc/docs/java/gradle/28/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/gradle/28/</guid><description>Checkstyle 插件 Checkstyle 插件使用 Checkstyle 对你的项目的 Java 源文件执行质量检查，并从检查结果中生成报告。
+用法 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 要使用Checkstyle 插件，请在构建脚本中包含以下语句：
+使用 Checkstyle 插件
+build.gradle
+1apply plugin: &amp;#39;checkstyle&amp;#39; 该插件向你的项目添加了大量的执行质量检查的任务。你可以通过运行 gradle check 执行检查。
+Tasks Checkstyle 插件向 project 中添加了以下 tasks：
+表29.1. Checkstyle 插件 – tasks
+任务名称 依赖于 类型 描述 checkstyleMain classes checkstyle 针对生产Java 源文件运行 Checkstyle。 checkstyleTest testClasses checkstyle 针对测试 Java 源文件运行 Checkstyle。 SourceSet sourceSetClasses checkstyle 针对source set 的 Java 源文件运行 Checkstyle。 Checkstyle 插件向 Java 插件所加入的 tasks 添加了以下的依赖。
+表29.2. Checkstyle 插件 – 额外的 task 依赖</description></item><item><title>二十二、Gradle Java 插件</title><link>https://www.shellio.cc/docs/java/gradle/22/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/gradle/22/</guid><description>Java 插件 Java 插件向一个项目添加了 Java 编译、 测试和 bundling 的能力。它是很多其他 Gradle 插件的基础服务。
+用法 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 要使用Java 插件，请在构建脚本中加入：
+使用 Java 插件
+build.gradle
+1apply plugin: &amp;#39;java&amp;#39; 源集 Java 插件引入了一个源集的概念。一个源集只是一组用于编译并一起执行的源文件。这些源文件可能包括 Java 源代码文件和资源文件。其他有一些插件添加了在源集里包含 Groovy 和 Scala 的源代码文件的能力。一个源集有一个相关联的编译类路径和运行时类路径。
+源集的一个用途是，把源文件进行逻辑上的分组，以描述它们的目的。例如，你可能会使用一个源集来定义一个集成测试套件，或者你可能会使用单独的源集来定义你的项目的 API 和实现类。
+Java 插件定义了两个标准的源集，分别是 main 和 test。main 源集包含你产品的源代码，它们将被编译并组装成一个 JAR 文件。test 源集包含你的单元测试的源代码，它们将被编译并使用 JUnit 或 TestNG 来执行。
+任务 Java 插件向你的项目添加了大量的任务，如下所示。
+表23.1. Java 插件-任务
+任务名称 依赖于 类型 描述 compileJava 产生编译类路径中的所有任务。这包括了用于jar任务。 JavaCompile 使用 javac 编译产品中的 Java 源文件。 processResources – Copy 把生产资源文件拷贝到生产的类目录中。 classes processResources。一些插件添加了额外的编译任务。 Task 组装生产的类目录。 compileTestJava compile，再加上所有能产生测试编译类路径的任务。 JavaCompile 使用 javac 编译 Java 的测试源文件。 processTestResources – Copy 把测试的资源文件拷贝到测试的类目录中。 testClasses processTestResources。一些插件添加了额外的测试编译任务。 Task 组装测试的类目录。 jar compile Jar 组装 JAR 文件 javadoc compile Javadoc 使用 Javadoc 生成生产的 Java 源代码的API文档 test compileTest，再加上所有产生测试运行时类路径的任务。 Test 使用 JUnit 或 TestNG运行单元测试。 uploadArchives 使用jar。 Upload 使用archives配置上传包括 JAR 文件的构件。 clean – Delete 删除项目的 build 目录。 TaskName – Delete 删除由指定的任务所产生的输出文件。例如，&amp;nbsp;jar任务中所创建的 JAR 文件，test任务所创建的测试结果。 对于每个你添加到该项目中的源集，Java 插件将添加以下的编译任务：</description></item><item><title>二十九、Gradle CodeNarc 插件</title><link>https://www.shellio.cc/docs/java/gradle/29/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/gradle/29/</guid><description>CodeNarc 插件 CodeNarc 插件使用 CodeNarc 对项目的 Groovy 源文件执行质量检查并生成报告。
+用法 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 要使用CodeNarc 插件，请在构建脚本中包含以下语句：
+使用 CodeNarc 插件
+build.gradle
+1apply plugin: &amp;#39;codenarc&amp;#39; 该插件向你的项目添加了大量的执行质量检查的任务。你可以通过运行 gradle check 执行检查。
+任务 CodeNarc 插件向project 中添加了以下任务：
+表30.1. CodeNarc 插件 – 任务
+任务名称 依赖于 类型 描述 codenarcMain – codenarc 针对生产 Groovy 源文件运行 CodeNarc。 codenarcTest – codenarc 针对测试 Groovy 源文件运行 CodeNarc。 SourceSet – codenarc 针对给定的source set 的 Groovy 源文件运行 CodeNarc。 CodeNarc 插件向 Groovy 插件所加入的任务添加了以下的依赖。
+表30.2. CodeNarc 插件 – 附加的任务依赖
+任务名称 依赖于 check 所有的 CodeNarc 任务，包括codenarcTest。 项目布局 CodeNarc 插件预计是以下的项目布局：</description></item><item><title>二十六、Gradle Ear 插件</title><link>https://www.shellio.cc/docs/java/gradle/26/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/gradle/26/</guid><description>Ear 插件 Ear插件添加了用于组装 web 应用程序的 EAR 文件的支持。它添加了一个默认的 EAR archive task。它不需要 Java 插件，但是对于使用了 Java 插件的项目，它将禁用默认的 JAR archive 的生成。
+用法 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 要使用Ear 的插件，请在构建脚本中包含以下语句：
+使用 Ear 插件
+build.gradle
+1apply plugin: &amp;#39;ear&amp;#39; Tasks Ear插件向 project 中添加了以下任务。
+表27.1. Ear 插件 – tasks
+任务名称 依赖于 类型 描述 ear compile（仅在也配置了使用 Java 插件的时候） ear 组装应用程序 EAR 文件。 Ear插件向基础插件所加入的 tasks 添加了以下的依赖。
+表27.2. Ear 插件 – 额外的 task 依赖
+任务名称 依赖于 assemble ear 项目布局 表27.3. Ear 插件 – 项目布局</description></item><item><title>二十七、Gradle Jetty 插件</title><link>https://www.shellio.cc/docs/java/gradle/27/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/gradle/27/</guid><description>Jetty 插件 Jetty 插件继承自 War 插件，并添加一些任务，这些任务可以让你在构建时部署你的 web 应用程序到一个 Jetty 的 web 嵌入式容器中。
+用法 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 要使用Jetty 的插件，请在构建脚本中包含以下语句：
+使用 Jetty 插件
+build.gradle
+1apply plugin: &amp;#39;jetty&amp;#39; 任务 Jetty 插件定义了以下任务：
+表28.1. Jetty 插件 – 任务
+任务名称 依赖于 类型 描述 jettyRun compile jettyRun 启动 Jetty 实例并将部署上 exploded web 应用程序。 jettyRunWar war jettyRunWar 启动 Jetty 实例并将部署上 WAR 包。 jettyStop – jettyStop 停止 Jetty 实例。 图28.1. Jetty 插件 – tasks
+项目布局 Jetty 插件使用 和 War 插件相同的布局。</description></item><item><title>二十三、Gradle Groovy 插件</title><link>https://www.shellio.cc/docs/java/gradle/23/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/gradle/23/</guid><description>Groovy 插件 Groovy 的插件继承自 Java 插件并添加了对 Groovy 项目的支持。它可以处理 Groovy 代码，以及混合的 Groovy 和 Java 代码，甚至是纯 Java 代码（尽管我们不一定推荐使用）。该插件支持联合编译，可以任意地混合及匹配 Groovy 和 Java 代码各自的依赖。例如，一个 Groovy 类可以继承自一个 Java 类，而这个 Java 类也可以继承自一个 Groovy 类。这样一来，我们就能够在项目中使用最适合的语言，并且在有需要的情况下用其他的语言重写其中的任何类。
+用法 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 要使用Groovy 的插件，请在构建脚本中包含以下语句：
+使用 Groovy 插件
+build.gradle
+1apply plugin: &amp;#39;groovy&amp;#39; 任务 Groovy 的插件向 project 中添加了以下任务。
+表24.1. Groovy 插件 – 任务
+任务名称 依赖于 类型 描述 compileGroovy compileJava GroovyCompile 编译production 的 Groovy 源文件。 compileTestGroovy compileTestJava GroovyCompile 编译test 的 Groovy 的源文件。 SourceSetGroovy SourceSetJava GroovyCompile 编译给定的 source set 里的 Groovy 源文件。 groovydoc – Groovydoc 为 production 里的 Groovy 源文件生成 API 文档。 Groovy 的插件向 Java 插件所加入的 tasks 添加了以下的依赖。</description></item><item><title>二十四、Gradle Scala 插件</title><link>https://www.shellio.cc/docs/java/gradle/24/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/gradle/24/</guid><description>Scala 插件 Scala 的插件继承自 Java 插件并添加了对 Scala 项目的支持。它可以处理 Scala 代码，以及混合的 Scala 和 Java 代码，甚至是纯 Java 代码（尽管我们不一定推荐使用）。该插件支持联合编译，联合编译可以通过 Scala 及 Java 的各自的依赖任意地混合及匹配它们的代码。例如，一个 Scala 类可以继承自一个 Java 类，而这个 Java 类也可以继承自一个 Scala 类。这样一来，我们就能够在项目中使用最适合的语言，并且在有需要的情况下用其他的语言重写其中的任何类。
+用法 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 要使用Scala 插件，请在构建脚本中包含以下语句：
+使用 Scala 插件
+build.gradle
+1apply plugin: &amp;#39;scala&amp;#39; 任务 Scala 的插件向 project 中添加了以下任务。
+表25.1. Scala 插件 – 任务
+任务名称 依赖于 类型 描述 compileScala compileJava ScalaCompile 编译production 的 Scala 源文件。 compileTestScala compileTestJava ScalaCompile 编译test 的 Scala 的源文件。 SourceSetScala SourceSetJava ScalaCompile 编译给定的source set 里的 Scala 源文件。 scaladoc – scaladoc 为production 里的 Scala 源文件生成 API 文档。 Scala 插件向 Java 插件所加入的 tasks 添加了以下的依赖。</description></item><item><title>二十五、Gradle War 插件</title><link>https://www.shellio.cc/docs/java/gradle/25/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/gradle/25/</guid><description>War 插件 War的插件继承自 Java 插件并添加了对组装 web 应用程序的 WAR 文件的支持。它禁用了 Java 插件生成默认的 JAR archive，并添加了一个默认的 WAR archive 任务。
+用法 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 要使用War 的插件，请在构建脚本中包含以下语句：
+使用 War 插件
+build.gradle
+1apply plugin: &amp;#39;war&amp;#39; 任务 War插件向 project 中添加了以下任务。
+表26.1. War 插件 – 任务
+任务名称 依赖于 类型 描述 war compile War 组装应用程序 WAR 文件。 War插件向 Java 插件所加入的 tasks 添加了以下的依赖。
+表26.2. War 插件 – 额外的 task 依赖
+任务名称 依赖于 assemble war 图26.1. War 插件 – tasks
+项目布局 表26.3. War 插件 – 项目布局</description></item><item><title>二十一、Gradle 标准的 Gradle 插件</title><link>https://www.shellio.cc/docs/java/gradle/21/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/gradle/21/</guid><description>标准的 Gradle 插件 Gradle 的发行包中有大量的插件。如下列所示：
+语言插件 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 这些插件添加了让各种语言可以被编译和在 JVM 执行的支持。
+语言插件
+插件 Id 自动应用 与什么插件一起使用 描述 java java-base – 向一个项目添加 Java 编译、 测试和捆绑的能力。它是很多其他 Gradle 插件的基础服务。 groovy groovy-base – 添加对 Groovy 项目构建的支持。 scala scala-base – 添加对 Scala 项目构建的支持。
+antlr java – 添加对使用Antlr作为生成解析器的支持。 正在孵化的语言插件 这些插件添加了对多种语言的支持：
+语言插件
+插件 Id 自动应用 与什么插件一起使用 描述 assembler – – 向项目添加本机汇编语言的功能。
+c – – 向项目添加 C语言源代码编译功能。
+cpp – – 向项目添加 c++ 源代码编译功能。
+objective-c – – 向项目中添加 Objective-C 源代码编译功能。</description></item><item><title>九、Gradle Web 工程构建</title><link>https://www.shellio.cc/docs/java/gradle/9/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/gradle/9/</guid><description>Web 工程构建 本章介绍了 Gradle 对 Web 工程的相关支持。Gradle 为 Web 开发提供了两个主要插件，War plugin 和 Jetty plugin。 其中 War plugin 继承自 Java plugin，可以用来打 war 包。jetty plugin 继承自 War plugin 作为工程部署的容器。
+打 War 包 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 需要打包 War 文件，需要在脚本中使用 War plugin：
+War plugin build.gradle
+1apply plugin: &amp;#39;war&amp;#39; 备注：本示例代码可以在 Gradle 发行包中的 samples/webApplication/quickstart 路径下找到。
+由于继承自 Java 插件，当你执行 gradle build 时，将会编译、测试、打包你的工程。Gradle 会在 src/main/webapp 下寻找 Web 工程文件。编译后的 classes 文件以及运行时依赖也都会被包含在 War 包中。
+Groovy web构建
+在一个工程中你可以采用多个插件。比如你可以在 web 工程中同时使用 War plugin 和 Groovy plugin。插件会将 Gradle 依赖添加到你的 War 包中。</description></item><item><title>九、Maven 构建 &amp;amp; 测试工程</title><link>https://www.shellio.cc/docs/java/maven/9/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/maven/9/</guid><description>Maven – 构建 &amp;amp; 测试工程 我们在创建工程章节中学到的是如何使用 Maven 创建 Java 应用。现在我们将看到如何构建和测试这个应用。
+跳转到C:/MVN 目录下，既你的 java 应用目录下。打开 consumerBanking 文件夹。你将看到 POM.xml 文件中有下面的内容。
+1&amp;lt;project xmlns=&amp;#34;http://maven.apache.org/POM/4.0.0&amp;#34; 2 xmlns:xsi=&amp;#34;http://www.w3.org/2001/XMLSchema-instance&amp;#34; 3 xsi:schemaLocation=&amp;#34;http://maven.apache.org/POM/4.0.0 4 http://maven.apache.org/xsd/maven-4.0.0.xsd&amp;#34;&amp;gt; 5 &amp;lt;modelVersion&amp;gt;4.0.0&amp;lt;/modelVersion&amp;gt; 6 &amp;lt;groupId&amp;gt;com.companyname.projectgroup&amp;lt;/groupId&amp;gt; 7 &amp;lt;artifactId&amp;gt;project&amp;lt;/artifactId&amp;gt; 8 &amp;lt;version&amp;gt;1.0&amp;lt;/version&amp;gt; 9 &amp;lt;dependencies&amp;gt; 10 &amp;lt;dependency&amp;gt; 11 &amp;lt;groupId&amp;gt;junit&amp;lt;/groupId&amp;gt; 12 &amp;lt;artifactId&amp;gt;junit&amp;lt;/artifactId&amp;gt; 13 &amp;lt;version&amp;gt;3.8.1&amp;lt;/version&amp;gt; 14 &amp;lt;/dependency&amp;gt; 15 &amp;lt;/dependencies&amp;gt; 16&amp;lt;/project&amp;gt; 可以看到，Maven 已经添加了 JUnit 作为测试框架。默认 Maven 添加了一个源码文件 App.java 和一个测试文件 AppTest.java 到上个章节中我们提到的默认目录结构中。
+打开命令控制台，跳转到 C:\MVN\consumerBanking 目录下，并执行以下 mvn 命令。
+1C:\MVN\consumerBanking&amp;gt;mvn clean package Maven 将开始构建工程。
+1[INFO] Scanning for projects.</description></item><item><title>六、Gradle Java 构建入门</title><link>https://www.shellio.cc/docs/java/gradle/6/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/gradle/6/</guid><description>Java 构建入门 Java 插件 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 如你所见，Gradle 是一个通用工具。它可以通过脚本构建任何你想要实现的东西，真正实现开箱即用。但前提是你需要在脚本中编写好代码才行。
+大部分Java 项目基本流程都是相似的：编译源文件，进行单元测试，创建 jar 包。使用 Gradle 做这些工作不必为每个工程都编写代码。Gradle 已经提供了完美的插件来解决这些问题。插件就是 Gradle 的扩展，简而言之就是为你添加一些非常有用的默认配置。Gradle 自带了很多插件，并且你也可以很容易的编写和分享自己的插件。Java plugin 作为其中之一，为你提供了诸如编译，测试，打包等一些功能。
+Java 插件为工程定义了许多默认值，如Java源文件位置。如果你遵循这些默认规则，那么你无需在你的脚本文件中书写太多代码。当然，Gradle 也允许你自定义项目中的一些规则，实际上，由于对 Java 工程的构建是基于插件的，那么你也可以完全不用插件自己编写代码来进行构建。
+后面的章节我们通过许多深入的例子介绍了如何使用 Java 插件来进行以来管理和多项目构建等。但在这个章节我们需要先了解 Java 插件的基本用法。
+一个基本 Java 项目 来看一下下面这个小例子，想用 Java 插件，只需增加如下代码到你的脚本里。
+采用 Java 插件 1build.gradle 1apply plugin: &amp;#39;java&amp;#39; 备注:示例代码可以在 Gralde 发行包中的 samples/java/quickstart 下找到。
+定义一个 Java 项目只需如此而已。这将会为你添加 Java 插件及其一些内置任务。
+添加了哪些任务?
+你可以运行 gradle tasks 列出任务列表。这样便可以看到 Java 插件为你添加了哪些任务。
+标准目录结构如下:
+1project 2 +build 3 +src/main/java 4 +src/main/resources 5 +src/test/java 6 +src/test/resources Gradle 默认会从 src/main/java 搜寻打包源码，在 src/test/java 下搜寻测试源码。并且 src/main/resources 下的所有文件按都会被打包，所有 src/test/resources 下的文件 都会被添加到类路径用以执行测试。所有文件都输出到 build 下，打包的文件输出到 build/libs 下。</description></item><item><title>六、Maven 仓库</title><link>https://www.shellio.cc/docs/java/maven/6/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/maven/6/</guid><description>Maven – 仓库 什么是 Maven 仓库？ 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 在Maven 的术语中，仓库是一个位置（place），例如目录，可以存储所有的工程 jar 文件、library jar 文件、插件或任何其他的工程指定的文件。
+Maven 仓库有三种类型：
+本地（local） 中央（central） 远程（remote） 本地仓库 Maven 本地仓库是机器上的一个文件夹。它在你第一次运行任何 maven 命令的时候创建。
+Maven 本地仓库保存你的工程的所有依赖（library jar、plugin jar 等）。当你运行一次 Maven 构建，Maven 会自动下载所有依赖的 jar 文件到本地仓库中。它避免了每次构建时都引用存放在远程机器上的依赖文件。
+Maven 本地仓库默认被创建在 %USER_HOME% 目录下。要修改默认位置，在 %M2_HOME%\conf 目录中的 Maven 的 settings.xml 文件中定义另一个路径。
+1&amp;lt;settings xmlns=&amp;#34;http://maven.apache.org/SETTINGS/1.0.0&amp;#34; 2 xmlns:xsi=&amp;#34;http://www.w3.org/2001/XMLSchema-instance&amp;#34; 3 xsi:schemaLocation=&amp;#34;http://maven.apache.org/SETTINGS/1.0.0 4 http://maven.apache.org/xsd/settings-1.0.0.xsd&amp;#34;&amp;gt; 5 &amp;lt;localRepository&amp;gt;C:/MyLocalRepository&amp;lt;/localRepository&amp;gt; 6&amp;lt;/settings&amp;gt; 当你运行 Maven 命令，Maven 将下载依赖的文件到你指定的路径中。
+中央仓库 Maven 中央仓库是由 Maven 社区提供的仓库，其中包含了大量常用的库。
+中央仓库的关键概念：
+这个仓库由 Maven 社区管理。 不需要配置。 需要通过网络才能访问。 要浏览中央仓库的内容，maven 社区提供了一个 URL：http://search.</description></item><item><title>七、Gradle 依赖管理基础</title><link>https://www.shellio.cc/docs/java/gradle/7/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/gradle/7/</guid><description>依赖管理基础 本章节介绍如何使用 Gradle 进行基本的依赖管理.
+什么是依赖管理? 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 通俗来讲，依赖管理由如下两部分组成。首先，Gradle 需要知道项目构建或运行所需要的一些文件，以便于找到这些需要的文件。我们称这些输入的文件为项目的依赖。其次，你可能需要构建完成后自动上传到某个地方。我们称这些输出为发布。下面来仔细介绍一下这两部分：
+大部分工程都不太可能完全自给自足，一般你都会用到其他工程的文件。比如我工程需要 Hibernate 就得把它的类库加进来，比如测试的时候可能需要某些额外 jar 包，例如 JDBC 驱动或 Ehcache 之类的 Jar 包。
+这些文件就是工程的依赖。Gradle 需要你告诉它工程的依赖是什么，它们在哪，然后帮你加入构建中。依赖可能需要去远程库下载，比如 Maven 或者 Ivy 库。也可以是本地库，甚至可能是另一个工程。我们称这个过程叫依赖解决。
+通常，依赖的自身也有依赖。例如，Hibernate 核心类库就依赖于一些其他的类库。所以，当 Gradle 构建你的工程时，会去找到这些依赖。我们称之为依赖传递。
+大部分工程构建的主要目的是脱离工程使用。例如，生成 jar 包，包括源代码、文档等，然后发布出去。
+这些输出的文件构成了项目的发布内容。Gralde 也会为你分担这些工作。你声明了发布到到哪，Gradle 就会发布到哪。“发布”的意思就是你想做什么。比如，复制到某个目录，上传到 Maven 或 Ivy 仓库。或者在其它项目里使用，这些都可以称之为发行。
+依赖声明 来看一下这个脚本里声明依赖的部分：
+声明依赖 build.gradle
+1apply plugin: &amp;#39;java&amp;#39; 2repositories { 3 mavenCentral() 4dependencies { 5 compile group: &amp;#39;org.hibernate&amp;#39;, name: &amp;#39;hibernate-core&amp;#39;, version: &amp;#39;3.6.7.Final&amp;#39; 6 testCompile group: &amp;#39;junit&amp;#39;, name: &amp;#39;junit&amp;#39;, version: &amp;#39;4.+&amp;#39; 这是什么意思呢？这段脚本是这么个意思。首先，Hibernate-core.3.6.7.final.jar 这货是编译期必需的依赖。并且这货相关的依赖也会一并被加载进来，该段脚本同时还声明项目测试阶段需要 4.</description></item><item><title>七、Maven 插件</title><link>https://www.shellio.cc/docs/java/maven/7/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/maven/7/</guid><description>Maven – 插件 什么是 Maven 插件？ 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 Maven 实际上是一个依赖插件执行的框架，每个任务实际上是由插件完成。Maven 插件通常被用来：
+创建 jar 文件 创建 war 文件 编译代码文件 代码单元测试 创建工程文档 创建工程报告 插件通常提供了一个目标的集合，并且可以使用下面的语法执行：
+1mvn [plugin-name]:[goal-name] 例如，一个 Java 工程可以使用 maven-compiler-plugin 的 compile-goal 编译，使用以下命令：
+1mvn compiler:compile 插件类型 Maven 提供了下面两种类型的插件：
+类型 描述 Build plugins 在构建时执行，并在 pom.xml 的 元素中配置。 Reporting plugins 在网站生成过程中执行，并在 pom.xml 的 元素中配置。 下面是一些常用插件的列表：
+插件 描述 clean 构建之后清理目标文件。删除目标目录。 compiler 编译 Java 源文件。 surefile 运行 JUnit 单元测试。创建测试报告。 jar 从当前工程中构建 JAR 文件。 war 从当前工程中构建 WAR 文件。 javadoc 为工程生成 Javadoc。 antrun 从构建过程的任意一个阶段中运行一个 ant 任务的集合。 例子 我们已经在我们的例子中大量使用了 maven-antrun-plugin 来输出数据到控制台上。请查看 Maven – 构建配置文件 章节。让我们用一种更好的方式理解这部分内容，在 C:\MVN\project 目录下创建一个 pom.</description></item><item><title>三、Gradle 安装</title><link>https://www.shellio.cc/docs/java/gradle/3/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/gradle/3/</guid><description>安装 先决条件 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 Gradle 需要 1.5 或更高版本的 JDK.Gradle 自带了 Groovy 库，所以不需要安装 Groovy。Gradle 会忽略已经安装的 Groovy。Gradle 会使用 ptah (这里的”path”应该是指 PATH 环境变量。[Rover12421]译注) 中的 JDK(可以使用 java -version 检查)。当然，你可以配置 JAVA_HOME 环境变量来指向 JDK 的安装目录。
+下载 从Gralde 官方网站下载 Gradle 的最新发行包。
+解压 Gradle 发行包是一个 ZIP 文件。完整的发行包包括以下内容(官方发行包有 full 完整版，也有不带源码和文档的版本，可根据需求下载。[Rover12421]译注):
+Gradle 可执行文件 用户手册 (有 PDF 和 HTML 两种版本) DSL 参考指南 API 手册(Javadoc 和 Groovydoc) 样例，包括用户手册中的例子，一些完整的构建样例和更加复杂的构建脚本 源代码。仅供参考使用,如果你想要自己来编译 Gradle 你需要从源代码仓库中检出发行版本源码，具体请查看 Gradle 官方主页。 配置环境变量 运行gradle 必须将 GRADLE_HOME/bin 加入到你的 PATH 环境变量中。
+测试安装 运行如下命令来检查是否安装成功.该命令会显示当前的 JVM 版本和 Gradle 版本。</description></item><item><title>三、Maven POM</title><link>https://www.shellio.cc/docs/java/maven/3/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/maven/3/</guid><description>Maven – POM POM代表工程对象模型。它是使用 Maven 工作时的基本组建，是一个 xml 文件。它被放在工程根目录下，文件命名为 pom.xml。
+POM包含了关于工程和各种配置细节的信息，Maven 使用这些信息构建工程。
+POM也包含了目标和插件。当执行一个任务或者目标时，Maven 会查找当前目录下的 POM，从其中读取所需要的配置信息，然后执行目标。能够在 POM 中设置的一些配置如下：
+project dependencies plugins goals build profiles project version developers mailing list 在创建POM 之前，我们首先确定工程组（groupId），及其名称（artifactId）和版本，在仓库中这些属性是工程的唯一标识。
+POM 举例 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 1&amp;lt;project xmlns=&amp;#34;http://maven.apache.org/POM/4.0.0&amp;#34; 2 xmlns:xsi=&amp;#34;http://www.w3.org/2001/XMLSchema-instance&amp;#34; 3 xsi:schemaLocation=&amp;#34;http://maven.apache.org/POM/4.0.0 4 http://maven.apache.org/xsd/maven-4.0.0.xsd&amp;#34;&amp;gt; 5 &amp;lt;modelVersion&amp;gt;4.0.0&amp;lt;/modelVersion&amp;gt; 6 &amp;lt;groupId&amp;gt;com.companyname.project-group&amp;lt;/groupId&amp;gt; 7 &amp;lt;artifactId&amp;gt;project&amp;lt;/artifactId&amp;gt; 8 &amp;lt;version&amp;gt;1.0&amp;lt;/version&amp;gt; 9&amp;lt;/project&amp;gt; 需要说明的是每个工程应该只有一个 POM 文件。
+所有的 POM 文件需要 project 元素和三个必须的字段：groupId, artifactId,version。 在仓库中的工程标识为 groupId:artifactId:version POM.xml 的根元素是 project，它有三个主要的子节点： 节点 描述 groupId 这是工程组的标识。它在一个组织或者项目中通常是唯一的。例如，一个银行组织 com.company.bank 拥有所有的和银行相关的项目。 artifactId 这是工程的标识。它通常是工程的名称。例如，消费者银行。groupId 和 artifactId 一起定义了 artifact 在仓库中的位置。 version 这是工程的版本号。在 artifact 的仓库中，它用来区分不同的版本。例如：</description></item><item><title>三十、Gradle FindBugs 插件</title><link>https://www.shellio.cc/docs/java/gradle/30/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/gradle/30/</guid><description>FindBugs 插件 FindBugs 插件使用 FindBugs 对项目的 Java 源文件执行质量检查，并从检查结果中生成报告。
+用法 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 要使用FindBugs 插件，请在构建脚本中包含以下语句：
+使用 FindBugs 插件
+build.gradle
+1apply plugin: &amp;#39;findbugs&amp;#39; 该插件向你的项目添加了大量的执行质量检查的任务。你可以通过运行 gradle check 执行检查。
+任务 FindBugs 插件向 project 中添加了以下任务：
+表31.1. FindBugs 插件 – 任务
+任务名称 依赖于 类型 描述 findbugsMain classes findbugs 针对生产Java 源文件运行 FindBugs。 findbugsTest testClasses findbugs 针对测试 Java 源文件运行 FindBugs。 SourceSet sourceSetClasses findbugs 针对source set 的 Java 源文件运行 FindBugs。 FindBugs 插件向 Java 插件所加入的任务添加了以下的依赖。
+表31.2. FindBugs 插件 – 附加的任务依赖
+任务名称 依赖于 check 所有 FindBugs 任务，包括findbugsTest。 依赖管理 FindBugs 插件增加了下列的依赖配置：</description></item><item><title>三十二、Gradle PMD 插件</title><link>https://www.shellio.cc/docs/java/gradle/32/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/gradle/32/</guid><description>PMD 插件 PMD插件使用 PMD 对项目的 Java 源文件执行质量检查，并从检查结果中生成报告。
+用法 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 要使用PMD 插件，请在构建脚本中包含以下语句：
+使用 PMD 插件
+build.gradle
+1apply plugin: &amp;#39;pmd&amp;#39; 该插件向你的项目添加了大量的执行质量检查的任务。你可以通过运行 gradle check 执行检查。
+任务 PMD插件向 project 中添加了以下任务：
+表33.1. PMD 插件 – 任务
+任务名称 依赖于 类型 描述 pmdMain – pmd 针对生产Java 源文件运行 PMD。 pmdTest – pmd 针对测试 Java 源文件运行 PMD。 SourceSet – pmd 针对source set 的 Java 源文件运行 PMD。 PMD插件向 Java 插件所加入的任务添加了以下的依赖。
+表33.2. PMD 插件 – 附加的任务依赖
+任务名称 依赖于 check 所有的 PMD 任务，包括pmdTest。 依赖管理 PMD插件添加了下列的依赖配置：</description></item><item><title>三十六、Gradle OSGi 插件</title><link>https://www.shellio.cc/docs/java/gradle/36/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/gradle/36/</guid><description>OSGi 插件 OSGi 插件提供了工厂方法来创建一个 OsgiManifest 对象。OsgiManifest 继承自 Manifest。如果应用了 Java 插件，OSGi 插件将把默认 jar 的 manifest 对象替换为一个 OsgiManifest 对象。被替换的 manifest 会被合并到新的对象单中。
+OSGi 插件使 Peter Kriens BND tool 大量使用。
+用法 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 要使用OSGi 插件，请在构建脚本中包含以下语句：
+使用 OSGi 插件
+build.gradle
+1apply plugin: &amp;#39;osgi&amp;#39; 隐式应用插件 适用于Java 基础插件。
+任务 此插件不会添加任何任务。
+依赖管理 待决定
+约定对象 OSGi 插件添加了下列约定对象： OsgiPluginConvention
+约定属性 OSGi 插件没有向 project 添加任何的公约属性。
+约定方法 OSGi 插件添加了以下方法。有关更多详细信息，请参见约定对象的 API 文档。
+表37.1. OSGi 方法
+方法 返回类型 描述 osgiManifest() OsgiManifest 返回一个 OsgiManifest 对象。 osgiManifest(Closure cl) OsgiManifest 返回一个通过闭包配置的 OsgiManifest 对象。 在classes 目录下的类文件会被分析出关于它们的包的依赖，以及它们所公布的包名。并基于此计算 OSGi Manifest 中 Import-Package 和 Export-Package 的值。如果 classpath 中包含了 jar 包和 OSGi bundle，bundle 信息会被用来指定 Import-Package 的值的版本信息。在 OsgiManifest 对象的显式属性旁边，你可以添加 instructions。</description></item><item><title>三十三、Gradle JaCoCo 插件</title><link>https://www.shellio.cc/docs/java/gradle/33/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/gradle/33/</guid><description>JaCoCo 插件 JaCoCo 插件目前还是孵化中状态。请务必注意，在以后的 Gradle 版本中，DSL 和其他配置可能会有所改变。
+JaCoCo 插件通过集成 JaCoCo为 Java 代码提供了代码覆盖率指标。
+入门 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 要想开始，请将 JaCoCo 插件应用于你想要计算代码覆盖率的项目中。
+应用 JaCoCo 插件
+build.gradle
+1apply plugin: &amp;#34;jacoco&amp;#34; 如果Java 插件也被应用于你的项目，那么会创建一个名为 jacocoTestReport 的新任务，该新任务依赖于 test 任务。该报告可以在 $buildDir/reports/jacoco/test 中看到。默认情况下，会生成一个 HTML 报告。
+配置 JaCoCo 插件 JaCoCo 插件添加一个名为 jacoco 类型为 JacocoPluginExtension 的 project 扩展，这个扩展允许在你的构建中配置 JaCoCo 所使用的默认值。
+配置 JaCoCo 插件设置
+build.gradle
+1jacoco 2 toolVersion = &amp;#34;0.6.2.201302030002&amp;#34; 3 reportsDir = file(&amp;#34;$buildDir/customJacocoReportDir&amp;#34;) 4} 表34.1. JaCoCo 属性的 Gradle 默认值
+Property Gradle 默认值 reportsDir “$buildDir/reports/jacoco” JaCoCo 报告配置 JacocoReport 任务可以用于生成不同格式的代码覆盖率报告。它实现了标准的 Gradle 类型 Reporting，并呈现了一个 JacocoReportsContainer 类型的报告容器。</description></item><item><title>三十四、Gradle Sonar 插件</title><link>https://www.shellio.cc/docs/java/gradle/34/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/gradle/34/</guid><description>Sonar 插件 你可能会想使用新的 Sonar Runner 插件来代替现在这个插件。尤其是因为只有 Sonar Runner 插件支持 Sonar 3.4 及更高的版本。
+Sonar 插件提供了对 Sonar，一个基于 web 的代码质量监测平台的集成。该插件添加了sonarAnalyze task ，用来分析一个 project 及子 project 都应用了哪个插件。分析结果存储于 Sonar 数据库中。该插件基于 Sonar Runner，并要求是 Sonar 2.11 或更高的版本。
+SonarAnalyze task 是一项需要显式执行的独立任务，不依赖于任何其他 task。除了源代码之外，该 task 还分析了类文件和测试结果文件（如果有）。为获得最佳结果，建议在分析前运行一次完整的构建。在典型的设置中，会每天在构建服务器上运行一次分析。
+用法 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 最低要求是必须配置 Sonar 插件应用于该 project。
+配置使用 Sonar 插件
+build.gradle
+1apply plugin: &amp;#34;sonar&amp;#34; 除非Sonar 是在本地上运行，并且有默认的配置，否则有必要配置 Sonar 服务器及数据库的连接设置。
+配置 Sonar 连接设置
+build.gradle
+1sonar 2 server { 3 url = &amp;#34;http://my.server.com&amp;#34; 4 } 5 database { 6 url = &amp;#34;jdbc:mysql://my.</description></item><item><title>三十五、Gradle Sonar Runner 插件</title><link>https://www.shellio.cc/docs/java/gradle/35/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/gradle/35/</guid><description>Sonar Runner 插件 Sonar runner 插件是目前仍是孵化状态。请务必注意，在以后的 Gradle 版本中，DSL 和其他配置可能会有所改变。
+Sonar Runner 插件提供了对 Sonar，一个基于 web 的代码质量监测平台的集成。它基于 Sonar Runner，一个分析源代码及构建输出，并将所有收集的信息储存在 Sonar 数据库的 Sonar 客户端组件。相比单独使用 Sonar Runner，Sonar Runner 插件提供了以下便利：
+自动配置 Sonar Runner
+可以通过一个正规的 Gradle 任务来执行 Sonar Runner，这使得在任何 Gradle 可用的地方，它都可以用（开发人员构建，CI 服务器等），而无需下载，安装，和维护 Sonar Runner 的安装。
+通过 Gradle 构建脚本动态配置
+根据需要，可以利用 Gradle 脚本的所有特性去配置 Sonar Runner。
+提供了广泛范围的默认配置
+Gradle 已经有很多 Sonar Runner 成功分析一个项目所需的信息。基于这些信息对 Sonar Runner 进行预配置，减少了许多手动配置的需要。
+插件状态和兼容性 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 Sonar Runner 插件是 Sonar 插件的继任者。目前它还在孵化中的状态。该插件基于 Sonar Runner 2.0，这使它与 Sonar 2.11 或更高的版本相兼容。不同于 Sonar 插件，Sonar Runner 插件与 Sonar 3.</description></item><item><title>三十一、Gradle JDepend 插件</title><link>https://www.shellio.cc/docs/java/gradle/31/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/gradle/31/</guid><description>JDepend 插件 JDepend 插件使用 JDepend 对项目的源文件执行质量检查，并从检查结果中生成报告。
+用法 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 要使用JDepend 插件，请在构建脚本中包含以下语句：
+使用 JDepend 插件
+build.gradle
+1apply plugin: &amp;#39;jdepend&amp;#39; 该插件向你的项目添加了大量的执行质量检查的任务。你可以通过运行 gradle check 执行检查。
+任务 JDepend 插件向 project 中添加了以下任务：
+表32.1. JDepend 插件 – 任务
+任务名称 依赖于 类型 描述 jdependMain classes jdepend 针对生产Java 源文件运行 JDepend。 jdependTest testClasses jdepend 针对测试Java 源文件运行 JDepend。 SourceSet sourceSetClasses jdepend 针对source set 的 Java 源文件运行 JDepend。 JDepend 插件向 Java 插件所加入的任务添加了以下的依赖。
+表32.2. JDepend 插件 – 附加的任务依赖
+任务名称 依赖于 check 所有 JDepend 任务，包括jdependTest。 依赖管理 JDepend 插件添加了下列的依赖配置：</description></item><item><title>十、Gradle Gradle 命令行的基本使用</title><link>https://www.shellio.cc/docs/java/gradle/10/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/gradle/10/</guid><description>Gradle 命令行的基本使用 本章介绍了命令行的基本使用。正如在前面的章节里你所见到的调用 gradle 命令来完成一些功能。
+多任务调用 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 你可以以列表的形式在命令行中一次调用多个任务。例如 gradle compile test 命令会依次调用，并且每个任务仅会被调用一次。compile 和 test 任务以及它们的依赖任务。无论它们是否被包含在脚本中：即无论是以命令行的形式定义的任务还是依赖于其它任务都会被调用执行。来看下面的例子。
+下面定义了四个任务。dist 和 test 都依赖于 compile，只用当 compile 被调用之后才会调用 gradle dist test 任务。
+任务依赖 多任务调用 build.gradle
+1task compile &amp;lt;&amp;lt; { 2 println &amp;#39;compiling source&amp;#39; 3task compileTest(dependsOn: compile) &amp;lt;&amp;lt; { 4 println &amp;#39;compiling unit tests&amp;#39; 5task test(dependsOn: [compile, compileTest]) &amp;lt;&amp;lt; { 6 println &amp;#39;running unit tests&amp;#39; 7task dist(dependsOn: [compile, test]) &amp;lt;&amp;lt; { 8 println &amp;#39;building the distribution&amp;#39; gradle dist test 的输出结果。</description></item><item><title>十、Maven 外部依赖</title><link>https://www.shellio.cc/docs/java/maven/10/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/maven/10/</guid><description>Maven – 外部依赖 现在，如你所知道的，Maven的依赖管理使用的是 Maven – 仓库 的概念。但是如果在远程仓库和中央仓库中，依赖不能被满足，如何解决呢? Maven 使用外部依赖的概念来解决这个问题。
+例如，让我们对在 Maven – 创建工程 部分创建的项目做以下修改：
+在 src 文件夹下添加 lib 文件夹 复制任何 jar 文件到 lib 文件夹下。我们使用的是 ldapjdk.jar ，它是为 LDAP 操作的一个帮助库 现在，我们的工程结构应该像下图一样：
+现在你有了自己的工程库（library），通常情况下它会包含一些任何仓库无法使用，并且 maven 也无法下载的 jar 文件。如果你的代码正在使用这个库，那么 Maven 的构建过程将会失败，因为在编译阶段它不能下载或者引用这个库。
+为了处理这种情况，让我们用以下方式，将这个外部依赖添加到 maven pom.xml 中。
+1 &amp;lt;project xmlns=&amp;#34;http://maven.apache.org/POM/4.0.0&amp;#34; 2 xmlns:xsi=&amp;#34;http://www.w3.org/2001/XMLSchema-instance&amp;#34; 3 xsi:schemaLocation=&amp;#34;http://maven.apache.org/POM/4.0.0 4 http://maven.apache.org/maven-v4_0_0.xsd&amp;#34;&amp;gt; 5 &amp;lt;modelVersion&amp;gt;4.0.0&amp;lt;/modelVersion&amp;gt; 6 &amp;lt;groupId&amp;gt;com.companyname.bank&amp;lt;/groupId&amp;gt; 7 &amp;lt;artifactId&amp;gt;consumerBanking&amp;lt;/artifactId&amp;gt; 8 &amp;lt;packaging&amp;gt;jar&amp;lt;/packaging&amp;gt; 9 &amp;lt;version&amp;gt;1.0-SNAPSHOT&amp;lt;/version&amp;gt; 10 &amp;lt;name&amp;gt;consumerBanking&amp;lt;/name&amp;gt; 11 &amp;lt;url&amp;gt;http://maven.apache.org&amp;lt;/url&amp;gt; 12 &amp;lt;dependencies&amp;gt; 13 &amp;lt;dependency&amp;gt; 14 &amp;lt;groupId&amp;gt;junit&amp;lt;/groupId&amp;gt; 15 &amp;lt;artifactId&amp;gt;junit&amp;lt;/artifactId&amp;gt; 16 &amp;lt;version&amp;gt;3.</description></item><item><title>十八、Gradle Gradle 守护进程</title><link>https://www.shellio.cc/docs/java/gradle/18/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/gradle/18/</guid><description>Gradle 守护进程 走进守护进程 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 Gradle 守护进程（有时也称为构建守护进程） 的目的是改善 Gradle 的启动和执行时间。
+我们准备了几个守护进程非常有用的用例。对于一些工作流，用户会多次调用 Gradle，以执行少量的相对快速的任务。举个例子：
+当使用测试驱动开发时，单元测试会被执行多次。 当开发一个 web 应用程序中，应用程序会被组装多次。 当发现构建能做什么，在 gradle tasks 在哪里会执行多次。 对以上各种工作流来说，让调用 Gradle 的启动成本尽可能小会很重要。
+此外，如果可以相对较快地建立 Gradle 模型，用户界面可以提供一些有趣的功能。例如，该守护进程可能用于以下情形：
+在 IDE 中的内容帮助 在 GUI 中的实时可视化构建 在 CLI 中的 tab 键完成 一般情况下，构建工具的敏捷行为总是可以派上用场。如果你尝试在你的本地构建中使用守护进程的话，它会变得让你很难回到正常的 Gradle 使用。
+Tooling API 在整个过程当中都使用守护进程。如，你无法在没有守护进程时正式地使用 Tooling API。这意味着当您在 Eclipse 中使用 STS Gradle 或在 Intellij IDEA 中使用 Gradle 支持时，您已经在使用 Gradle 守护进程。
+未来，该守护进程还会提供更多的功能：
+敏捷的 up-to-date 检查：使用本地文件系统修改通知（例如，通过 jdk7 nio.2）预先执行 up-to-date 分析。 更快的构建： 预评估项目，这样当用户接下来调用 Gradle 时，模型就准备好了。 我们提到了更快的构建吗？守护进程可以预先下载依赖项或进行快照依赖的新版本检查。 使用可用于编译和测试的一个可复用线程池。例如，Groovy 和 Scala 的编译器启动开销都很大。构建守护进程可以维持一个已下载的 Groovy 和 （或） Scala 进程。 预先执行某些任务，比如编译。更快的反馈。 快速、 准确的 bash 的 tab 键完成。 Gradle 缓存的定期垃圾收集。 重用和失效的守护程序 基本的思想是， gradle 命令会 fork 一个守护进程，用于执行实际的构建。Gradle 命令的后续调用将重用该守护进程，以避免启动开销。有时我们不能使用现有的守护进程，是因为它正忙或其 java 版本或 jvm 参数不同。关于 fork 一个完全新的守护进程的具体细节，请阅读下面的专题。守护进程将在空闲3小时后自动失效。</description></item><item><title>十八、Maven Elipse IDE</title><link>https://www.shellio.cc/docs/java/maven/18/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/maven/18/</guid><description>Maven – Elipse IDE Eclipse 提供一种卓越的插件 m2eclipse，该插件使得 Maven 和 Eclipse 能够无缝集成。
+下面列出 m2eclipse 的一些特点：
+可以在 Eclipse 环境上运行 Maven 的目标文件。 可以使用其自带的控制台在 Eclipse 中直接查看 Maven 命令的输出。 可以在 IDE 下更新 Maven 的依赖关系。 可以使用 Eclipse 开展 Maven 工程的构建。 Eclipse 基于 Maven 的 pom.xml 来实现自动化管理依赖关系。 它解决了 Maven 与 Eclipse 的工作空间之间的依赖，而不需要安装到本地 Maven 的存储库（需要依赖项目在同一个工作区）。 它可以自动地从远端的 Maven 库中下载所需要的依赖以及源码。 它提供了向导，为建立新 Maven 工程，pom.xml 以及在已有的工程上开启 Maven 支持。 它提供了远端的 Maven 存储库的依赖的快速搜索。 安装 m2eclipse 插件 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 使用以下任意一个链接来安装 m2eclipse:
+Eclipse URL Eclipse 3.5 (Gallileo) Installing m2eclipse in Eclipse 3.</description></item><item><title>十二、Gradle 编写构建脚本</title><link>https://www.shellio.cc/docs/java/gradle/12/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/gradle/12/</guid><description>编写构建脚本 这一章着眼于一些编写构建脚本的详细信息。
+Gradle 构建语言 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 Gradle 提供一种领域特定语言或者说是 DSL，来描述构建。这种构建语言基于 Groovy 中，并进行了一些补充，使其易于描述构建。
+Project API 在Java 构建入门的教程中，我们使用了 apply ()方法。这方法从何而来？我们之前说在 Gradle 中构建脚本定义了一个项目（project）。在构建的每一个项目中，Gradle 创建了一个 Project 类型的实例，并在构建脚本中关联此 Project 对象。当构建脚本执行时，它会配置此 Project 对象：
+在构建脚本中，你所调用的任何一个方法，如果在构建脚本中未定义，它将被委托给 Project 对象。 在构建脚本中，你所访问的任何一个属性，如果在构建脚本里未定义，它也会被委托给 Project 对象。 下面我们来试试这个，试试访问 Project 对象的 name 属性。
+访问 Project 对象的属性
+build.gradle
+1println name 2println project.name gradle -q check 的输出结果
+1&amp;gt; gradle -q check 2projectApi 3projectApi 这两个println 语句打印出相同的属性。在生成脚本中未定义的属性，第一次使用时自动委托到 Project 对象。其他语句使用了在任何构建脚本中可以访问的 project 属性，则返回关联的 Project 对象。只有当您定义的属性或方法 Project 对象的一个成员相同名字时，你才需要使用 project 属性。
+标准 project 属性 Project对象提供了一些在构建脚本中可用的标准的属性。下表列出了常用的几个属性。</description></item><item><title>十二、Maven 工程模版</title><link>https://www.shellio.cc/docs/java/maven/12/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/maven/12/</guid><description>Maven – 工程模板 Maven 使用原型（Archetype）概念为用户提供了大量不同类型的工程模版（614 个）。Maven 使用下面的命令帮助用户快速创建 java 项目。
+1mvn archetype:generate 什么是原型？ 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 原型是一个 Maven 插件，它的任务是根据模板创建一个项目结构。我们将使用 quickstart 原型插件创建一个简单的 java 应用程序。
+使用工程模板 让我们打开命令控制台，跳转到 C:\ &amp;gt; MVN 目录并执行以下 mvn 命令
+1C:\MVN&amp;gt;mvn archetype:generate Maven 将开始处理，并要求选择所需的原型
+1INFO] Scanning for projects... 2[INFO] Searching repository for plugin with prefix: &amp;#39;archetype&amp;#39;. 3[INFO] ------------------------------------------------------------------- 4[INFO] Building Maven Default Project 5[INFO]task-segment: [archetype:generate] (aggregator-style) 6[INFO] ------------------------------------------------------------------- 7[INFO] Preparing archetype:generate 8... 9600: remote -&amp;gt; org.trailsframework:trails-archetype (-) 10601: remote -&amp;gt; org.trailsframework:trails-secure-archetype (-) 11602: remote -&amp;gt; org.</description></item><item><title>十九、Gradle 构建环境</title><link>https://www.shellio.cc/docs/java/gradle/19/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/gradle/19/</guid><description>构建环境 通过 gradle.properties 配置构建环境 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 Gradle 提供了几个选项，可以很容易地配置将用于执行您的构建的 Java 进程。当可以通过 GRADLE_OPTS 或 JAVA_OPTS 在你的本地环境中配置这些选项时，如果某些设置如 JVM 内存设置，Java home，守护进程的开/关，它们可以和你的项目在你的版本控制系统中被版本化的话，将会更有用，这样整个团队就可以使用一致的环境了。在你的构建当中，建立一致的环境，就和把这些配置放进 gradle.properties 文件一样简单。这些配置将会按以下顺序被应用（以防在多个地方都有配置时只有最后一个 生效）：
+位于项目构建目录的gradle.properties。 位于gradle 用户主目录的gradle.properties。 系统属性，例如当在命令行中使用 -Dsome.property 时。 下面的属性可以用于配置 Gradle 构建环境：
+org.gradle.daemon
+当设置为 true 时，Gradle 守护进程会运行构建。对于本地开发者的构建而言，这是我们最喜欢的属性。开发人员的环境在速度和反馈上会优化，所以我们几乎总是使用守护进程运行 Gradle 作业。由于 CI 环境在一致性和可靠性上的优化，我们不通过守护进程运行 CI 构建（即长时间运行进程）。
+org.gradle.java.home 为 Gradle 构建进程指定 java home 目录。这个值可以设置为 jdk 或 jre 的位置，不过，根据你的构建所做的，选择 jdk 会更安全。如果该设置未指定，将使用合理的默认值。
+org.gradle.jvmargs 指定用于该守护进程的 jvmargs。该设置对调整内存设置特别有用。目前的内存上的默认设置很大方。
+org.gradle.configureondemand
+启用新的孵化模式，可以在配置项目时使得 Gradle 具有选择性。只适用于相关的项目被配置为在大型多项目中更快地构建。
+org.gradle.parallel
+如果配置了这一个，Gradle 将在孵化的并行模式下运行。
+Forked java 进程 许多设置（如 java 版本和最大堆大小）可以在启动一个新的 JVM 构建进程时指定。这意味着 Gradle 在分析了各种 gradle.</description></item><item><title>十九、Maven NetBeans</title><link>https://www.shellio.cc/docs/java/maven/19/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/maven/19/</guid><description>Maven – NetBeans NetBeans 6.7 版本或者更新的版本针对 Maven 支持内部构建功能。 针对之前的版本，可以在插件管理器中找到 Maven 插件。在本例中，我们使用 NetBeans 6.9 版本。
+关于NetBeans 的一些特性如下：
+可以通过 NetBeans 来运行 Maven 目标。 可以在 NetBeans 自己的终端里查看 Maven 命令的输出结果。 可以更新 Maven 与 IDE 的依赖。 可以在 NetBeans 中启动 Maven 的构建。 NetBeans 基于 Maven 的 pom.xml 来实现自动化管理依赖关系。 NetBeans 可以通过自己的工作区解决 Maven 的依赖问题，而无需安装到本地的 Maven 仓库，虽然需要依赖的工程在同一个工作区。 NetBeans 可以自动从远程 Moven 库上下载需要的依赖和源码。 NetBeans 提供了创建 Maven 工程，pom.xml 文件的向导。 NetBeans 提供了 关于Maven 仓库的浏览器，使您可以查看本地存储库和注册在外部的 Maven 仓库。 下面的例子将会帮助你更加充分的认识集成的 NetBeans 和 Maven 的优势。
+在 NetBeans 里打开一个 Maven 工程 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 打开 NetBeans.</description></item><item><title>十六、Gradle 从 Gradle 中调用 Ant</title><link>https://www.shellio.cc/docs/java/gradle/16/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/gradle/16/</guid><description>从 Gradle 中调用 Ant Gradle 提供了对 Ant 的优秀集成您可以在你的 Gradle 构建中，使用单独的 Ant 任务或整个 Ant 构建。事实上，你会发现在 Gradle 中使用 Ant 任务比使用 Ant 的 XML 格式更容易也更强大。你甚至可以只把 Gradle 当作一个强大的 Ant 任务脚本的工具。
+Ant可以分为两层。第一层是 Ant 的语言。它提供了用于 build.xml，处理的目标，特殊的构造方法比如宏，还有其他等等的语法。换句话说，除了 Ant 任务和类型之外全部都有。Gradle 理解这种语言，并允许您直接导入你的 Ant build.xml 到 Gradle 项目中。然后你可以使用你的 Ant 构建中的 target，就好像它们是 Gradle 任务一样。
+Ant的第二层是其丰富的 Ant 任务和类型，如 javac、copy 或 jar。这一层 Gradle 单靠 Groovy 和不可思议的 AntBuilder，对其提供了集成。
+最后，由于构建脚本是 Groovy 脚本，所以您始终可以作为一个外部进程来执行 Ant 构建。你的构建脚本可能包含有类似这样的语句：”ant clean compile”.execute()。[8]
+你可以把 Gradle 的 Ant 集成当成一个路径，将你的构建从 Ant 迁移至 Gradle 。例如，你可以通过导入您现有的 Ant 构建来开始。然后，可以将您的依赖声明从 Ant 脚本移到您的构建文件。最后，您可以将整个任务移动到您的构建文件，或者把它们替换为一些 Gradle 插件。这个过程可以随着时间一点点完成，并且在这整个过程当中你的 Gradle 构建都可以使用用。</description></item><item><title>十六、Maven 自动化部署</title><link>https://www.shellio.cc/docs/java/maven/16/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/maven/16/</guid><description>Maven – 自动化部署 一般情况下，在一个工程开发进程里，一次部署的过程包含需如下步骤：
+合入每个子工程下的代码到 SVN 或者源代码库，并标记它。 从 SVN 下载完整的源代码。 构建应用程序。 保存构建结果为 WAR 或者 EAR 类型文件并存放到一个共同的指定的网络位置上。 从网络上获得该文件并且部署该文件到产品线上。 更新文档日期和应用程序的版本号。 问题陈述 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 通常，将会有很多不同的人参与到上述部署过程中。一个团队可以负责代码的合入工作，另外一个可以负责构建，以此类推。上述的任何一个步骤都可能因为人为的原因没有被执行。例如，较旧的版本没有在网络机器上更新，负责部署的团队再一次部署了旧的版本。
+解决方案 通过结合如下的方案来实现自动化部署：
+Maven 构建和发布项目， SubVersion, 源代码库用以管理源代码， 远程仓库管理工具 (Jfrog/Nexus) 用以管理工程的二进制文件。 更新工程的 POM.xml 我们将会使用 Maven 发布的插件来创建一个自动化发布过程：
+例如：bus-core-api 工程的 POM.xml 如下
+1&amp;lt;project xmlns=&amp;#34;http://maven.apache.org/POM/4.0.0&amp;#34; 2 xmlns:xsi=&amp;#34;http://www.w3.org/2001/XMLSchema-instance&amp;#34; 3 xsi:schemaLocation=&amp;#34;http://maven.apache.org/POM/4.0.0 4 http://maven.apache.org/xsd/maven-4.0.0.xsd&amp;#34;&amp;gt; 5 &amp;lt;modelVersion&amp;gt;4.0.0&amp;lt;/modelVersion&amp;gt; 6 &amp;lt;groupId&amp;gt;bus-core-api&amp;lt;/groupId&amp;gt; 7 &amp;lt;artifactId&amp;gt;bus-core-api&amp;lt;/artifactId&amp;gt; 8 &amp;lt;version&amp;gt;1.0-SNAPSHOT&amp;lt;/version&amp;gt; 9 &amp;lt;packaging&amp;gt;jar&amp;lt;/packaging&amp;gt; 10 &amp;lt;scm&amp;gt; 11 &amp;lt;url&amp;gt;http://www.svn.com&amp;lt;/url&amp;gt; 12 &amp;lt;connection&amp;gt;scm:svn:http://localhost:8080/svn/jrepo/trunk/ 13 Framework&amp;lt;/connection&amp;gt; 14 &amp;lt;developerConnection&amp;gt;scm:svn:${username}/${password}@localhost:8080: 15 common_core_api:1101:code&amp;lt;/developerConnection&amp;gt; 16 &amp;lt;/scm&amp;gt; 17 &amp;lt;distributionManagement&amp;gt; 18 &amp;lt;repository&amp;gt; 19 &amp;lt;id&amp;gt;Core-API-Java-Release&amp;lt;/id&amp;gt; 20 &amp;lt;name&amp;gt;Release repository&amp;lt;/name&amp;gt; 21 &amp;lt;url&amp;gt;http://localhost:8081/nexus/content/repositories/ 22 Core-Api-Release&amp;lt;/url&amp;gt; 23 &amp;lt;/repository&amp;gt; 24 &amp;lt;/distributionManagement&amp;gt; 25 &amp;lt;build&amp;gt; 26 &amp;lt;plugins&amp;gt; 27 &amp;lt;plugin&amp;gt; 28 &amp;lt;groupId&amp;gt;org.</description></item><item><title>十七、Gradle 日志</title><link>https://www.shellio.cc/docs/java/gradle/17/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/gradle/17/</guid><description>日志 日志是构建工具的主要界面。如果日志太多，真正的警告和问题容易被隐藏。另一方面，如果出了错，你需要找出相关的信息。Gradle 定义了6个日志级别，如表 18.1，“日志级别”所示。除了那些您通过可能会看到的日志级别之外，有两个 Gradle 特定日志级别。这两个级别分别是 QUIET 和 LIFECYCLE. 默认使用后面的这个日志级别，用于报告构建进度。
+表18.1. 日志级别
+Level 用于 ERROR 错误消息 QUIET 重要的信息消息 WARNING 警告消息 LIFECYCLE 进度信息消息 INFO 信息性消息 DEBUG 调试消息 选择一个日志级别 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 您可以使用表 18.2，“日志级别的命令行选项”中所示的命令行开关来选择不同的日志级别。在表 18.3，“栈跟踪的命令行选项”中，你可以看到影响栈跟踪日志的命令行开关。
+表18.2. 日志级别的命令行选项
+选项 输出日志级别 没有日志选项 LIFECYCLE 及更高 --quiet QUIET 及更高 --info INFO 及更高 --debug DEBUG 及更高 表18.3. 栈跟踪的命令行选项
+选项 意义 没有栈跟踪选项 构建错误（如编译错误）时没有栈跟踪打印到控制台。只有在内部异常的情况下才打印栈跟踪。如果选择&amp;nbsp;DEBUG&amp;nbsp;日志级别，则总是输出截取后的栈跟踪信息。 --stacktrace 输出截断的栈跟踪。我们推荐使用这一个选项而不是打印全栈的跟踪信息。Groovy 的全栈跟踪非常冗长 （由于其潜在的动态调用机制，然而他们通常不包含你的的代码中哪里错了的相关信息。） --full-stacktrace 打印全栈的跟踪信息。 编写自己的日志消息 在构建文件，打印日志的一个简单方法是把消息写到标准输出中。Gradle 会把写到标准输出的所有内容重定向到它的日志系统的 QUIET 级别中。
+使用标准输出写日志
+build.gradle
+1println &amp;#39;A message which is logged at QUIET level&amp;#39; Gradle 还提供了一个 logger 属性给构建脚本，它是一个 Logger 实例。该接口扩展自 SLF4J的 Logger 接口，并添加了几个 Gradle 的特有方法。下面是关于如何在构建脚本中使用它的示例：</description></item><item><title>十七、Maven Web 应用</title><link>https://www.shellio.cc/docs/java/maven/17/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/maven/17/</guid><description>Maven – Web 应用 本教程将指导你如何使用 Maven 版本控制系统来管理一个基于 Web 的工程。在此，你将学习到如何创建/构建/部署以及运行 Web 应用程序：
+创建 Web 应用 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 建立一个简单的 Java web 应用，我们可以使用 maven-archetype-webapp 插件。首先我们打开命令控制台，进入 C:\MVN 目录并且执行以下的 mvn 命令。
+1C:\MVN&amp;gt;mvn archetype:generate 2-DgroupId=com.companyname.automobile 3-DartifactId=trucks 4-DarchetypeArtifactId=maven-archetype-webapp 5-DinteractiveMode=false Maven 将开始处理并且将创建完整的基于 Web 的 java 应用工程结构。
+1[INFO] Scanning for projects... 2[INFO] Searching repository for plugin with prefix: &amp;#39;archetype&amp;#39;. 3[INFO] ------------------------------------------------------------------- 4[INFO] Building Maven Default Project 5[INFO] task-segment: [archetype:generate] (aggregator-style) 6[INFO] ------------------------------------------------------------------- 7[INFO] Preparing archetype:generate 8[INFO] No goals needed for project - skipping 9[INFO] [archetype:generate {execution: default-cli}] 10[INFO] Generating project in Batch mode 11[INFO] -------------------------------------------------------------------- 12[INFO] Using following parameters for creating project 13from Old (1.</description></item><item><title>十三、Gradle 教程 – 杂七杂八</title><link>https://www.shellio.cc/docs/java/gradle/13/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/gradle/13/</guid><description>教程-杂七杂八 创建目录 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 有一个常见的情况是，多个任务都依赖于某个目录的存在。当然，你可以在这些任务的开始加入 mkdir 来解决这个问题。但这是种臃肿的解决方法。这里有一个更好的解决方案 (仅适用于这些需要这个目录的任务有着 dependsOn 的关系的情况)：
+使用 mkdir 创建目录
+build.gradle
+1classesDir = new File(&amp;#39;build/classes&amp;#39;) 2task resources &amp;lt;&amp;lt; { 3 classesDir.mkdirs() 4 // do something 5task compile(dependsOn: &amp;#39;resources&amp;#39;) &amp;lt;&amp;lt; { 6 if (classesDir.isDirectory()) { 7 println &amp;#39;The class directory exists. I can operate&amp;#39; 8 } 9 // do something 10} gradle -q compile的输出结果
+1&amp;gt; gradle -q compile 2The class directory exists. I can operate Gradle 属性和系统属性 Gradle 提供了许多方式将属性添加到您的构建中。 从Gradle 启动的 JVM，你可以使用 -D 命令行选项向它传入一个系统属性。 Gradle 命令的-D选项和 java 命令的 -D 选项有着同样的效果。</description></item><item><title>十三、Maven 快照</title><link>https://www.shellio.cc/docs/java/maven/13/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/maven/13/</guid><description>Maven – 快照 大型软件应用程序通常由多个模块组成，这是多个团队工作于同一应用程序的不同模块的常见场景。例如一个团队工作负责应用程序的前端应用用户接口工程（app-ui.jar:1.0)），同时他们使用数据服务工程（data-service.jar:1.0）。
+现在负责数据服务的团队可能正在进行修正 bug 或者增强功能，并快速迭代，然后他们几乎每天都会 release 工程库文件到远程仓库中。
+现在如果数据服务团队每天上传新的版本，那么就会有下面的问题：
+每次数据服务团队发布了一版更新的代码时，都要告诉应用接口团队。 应用接口团队需要定期更新他们的 pom.xml 来得到更新的版本 为了解决这样的情况，快照概念发挥了作用.
+什么是快照？ 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 快照是一个特殊的版本，它表示当前开发的一个副本。与常规版本不同，Maven 为每一次构建从远程仓库中检出一份新的快照版本。
+现在数据服务团队会将每次更新的代码的快照（例如 data-service:1.0-SNAPSHOT）发布到仓库中，来替换旧的快照 jar 文件。
+快照 vs 版本 对于版本，Maven 一旦下载了指定的版本（例如 data-service:1.0），它将不会尝试从仓库里再次下载一个新的 1.0 版本。想要下载新的代码，数据服务版本需要被升级到 1.1。
+对于快照，每次用户接口团队构建他们的项目时，Maven 将自动获取最新的快照（data-service:1.0-SNAPSHOT）。
+应用用户接口 pom.xml 应用用户接口工程正在使用 1.0 版本的数据服务的快照
+1&amp;lt;project xmlns=&amp;#34;http://maven.apache.org/POM/4.0.0&amp;#34; 2 xmlns:xsi=&amp;#34;http://www.w3.org/2001/XMLSchema-instance&amp;#34; 3 xsi:schemaLocation=&amp;#34;http://maven.apache.org/POM/4.0.0 4 http://maven.apache.org/xsd/maven-4.0.0.xsd&amp;#34;&amp;gt; 5 &amp;lt;modelVersion&amp;gt;4.0.0&amp;lt;/modelVersion&amp;gt; 6 &amp;lt;groupId&amp;gt;app-ui&amp;lt;/groupId&amp;gt; 7 &amp;lt;artifactId&amp;gt;app-ui&amp;lt;/artifactId&amp;gt; 8 &amp;lt;version&amp;gt;1.0&amp;lt;/version&amp;gt; 9 &amp;lt;packaging&amp;gt;jar&amp;lt;/packaging&amp;gt; 10 &amp;lt;name&amp;gt;health&amp;lt;/name&amp;gt; 11 &amp;lt;url&amp;gt;http://maven.apache.org&amp;lt;/url&amp;gt; 12 &amp;lt;properties&amp;gt; 13 &amp;lt;project.build.sourceEncoding&amp;gt;UTF-8&amp;lt;/project.build.sourceEncoding&amp;gt; 14 &amp;lt;/properties&amp;gt; 15 &amp;lt;dependencies&amp;gt; 16 &amp;lt;dependency&amp;gt; 17 &amp;lt;groupId&amp;gt;data-service&amp;lt;/groupId&amp;gt; 18 &amp;lt;artifactId&amp;gt;data-service&amp;lt;/artifactId&amp;gt; 19 &amp;lt;version&amp;gt;1.</description></item><item><title>十四、Gradle 任务详述</title><link>https://www.shellio.cc/docs/java/gradle/14/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/gradle/14/</guid><description>任务详述 在入门教程构建基础中，你已经学习了如何创建简单的任务。之后您还学习了如何将其他行为添加到这些任务中。并且你已经学会了如何创建任务之间的依赖。这都是简单的任务。但 Gradle 让任务的概念更深远。Gradle 支持增强的任务，也就是，有自己的属性和方法的任务。这是真正的与你所使用的 Ant 目标（target）的不同之处。这种增强的任务可以由你提供，或由 Gradle 提供。
+定义任务 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 在构建基础中我们已经看到如何通过关键字这种风格来定义任务。在某些情况中，你可能需要使用这种关键字风格的几种不同的变式。例如，在表达式中不能用这种关键字风格。
+定义任务
+build.gradle
+1task(hello) &amp;lt;&amp;lt; { 2 println &amp;#34;hello&amp;#34; 3task(copy, type: Copy) { 4 from(file(&amp;#39;srcDir&amp;#39;)) 5 into(buildDir) 6} 您还可以使用字符串作为任务名称：
+定义任务 — — 使用字符串作为任务名称
+build.gradle
+1task(&amp;#39;hello&amp;#39;) &amp;lt;&amp;lt; 2 println &amp;#34;hello&amp;#34; 3task(&amp;#39;copy&amp;#39;, type: Copy) { 4 from(file(&amp;#39;srcDir&amp;#39;)) 5 into(buildDir) 6} 对于定义任务，有一种替代的语法你可能更愿意使用：
+使用替代语法定义任务
+build.gradle
+1tasks.create(name: &amp;#39;hello&amp;#39;) &amp;lt;&amp;lt; { 2 println &amp;#34;hello&amp;#34; 3tasks.create(name: &amp;#39;copy&amp;#39;, type: Copy) { 4 from(file(&amp;#39;srcDir&amp;#39;)) 5 into(buildDir) 6} 在这里我们将任务添加到 tasks 集合。关于 create() 方法的更多变化可以看看 TaskContainer。</description></item><item><title>十四、Maven 构建自动化</title><link>https://www.shellio.cc/docs/java/maven/14/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/maven/14/</guid><description>Maven – 构建自动化 构建自动化定义为一种场景：一旦该工程成功构建完成，其相关的依赖工程即开始构建，目的是为了保证其依赖项目的稳定。
+实例 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 考虑一个团队正在开发一个关于总线核心 Api（称其为 bus-core-api）的工程，依赖它的工程有 2 个，分别为网页 UI（称其为 app-web-ui）和应用程序桌面 UI（称其为 app-desktop-ui）。
+app-web-ui 工程使用 1.0-SNAPSHOT 总线核心 Api 工程，其 POM 文件如下：
+1&amp;lt;project xmlns=&amp;#34;http://maven.apache.org/POM/4.0.0&amp;#34; 2 xmlns:xsi=&amp;#34;http://www.w3.org/2001/XMLSchema-instance&amp;#34; 3 xsi:schemaLocation=&amp;#34;http://maven.apache.org/POM/4.0.0 4 http://maven.apache.org/xsd/maven-4.0.0.xsd&amp;#34;&amp;gt; 5 &amp;lt;modelVersion&amp;gt;4.0.0&amp;lt;/modelVersion&amp;gt; 6 &amp;lt;groupId&amp;gt;app-web-ui&amp;lt;/groupId&amp;gt; 7 &amp;lt;artifactId&amp;gt;app-web-ui&amp;lt;/artifactId&amp;gt; 8 &amp;lt;version&amp;gt;1.0&amp;lt;/version&amp;gt; 9 &amp;lt;packaging&amp;gt;jar&amp;lt;/packaging&amp;gt; 10 &amp;lt;dependencies&amp;gt; 11 &amp;lt;dependency&amp;gt; 12 &amp;lt;groupId&amp;gt;bus-core-api&amp;lt;/groupId&amp;gt; 13 &amp;lt;artifactId&amp;gt;bus-core-api&amp;lt;/artifactId&amp;gt; 14 &amp;lt;version&amp;gt;1.0-SNAPSHOT&amp;lt;/version&amp;gt; 15 &amp;lt;/dependency&amp;gt; 16 &amp;lt;/dependencies&amp;gt; 17&amp;lt;/project&amp;gt; app-desktop-ui 工程也正在使用 1.0-SNAPSHOT 总线核心 Api 工程，其 POM 文件如下：
+1&amp;lt;project xmlns=&amp;#34;http://maven.apache.org/POM/4.0.0&amp;#34; 2 xmlns:xsi=&amp;#34;http://www.w3.org/2001/XMLSchema-instance&amp;#34; 3 xsi:schemaLocation=&amp;#34;http://maven.</description></item><item><title>十五、Gradle 使用文件</title><link>https://www.shellio.cc/docs/java/gradle/15/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/gradle/15/</guid><description>使用文件 大多数构建工作都要使用到文件。Gradle 添加了一些概念和 API 来帮助您实现这一目标。
+定位文件 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 你可以使用 Project.file()方法来找到一个相对于项目目录的文件 。
+查找文件
+build.gradle
+1// Using a relative path 2File configFile = file(&amp;#39;src/config.xml&amp;#39;) 3// Using an absolute path 4configFile = file(configFile.absolutePath) 5// Using a File object with a relative path 6configFile = file(new File(&amp;#39;src/config.xml&amp;#39;)) 您可以把任何对象传递给 file()方法，而它将尝试将其转换为一个绝对路径的 File 对象。通常情况下，你会传给它一个 String 或 File 的实例。而所提供的这个对象的 tostring() 方法的值会作为文件路径。如果这个路径是一个绝对路径，它会用于构构一个 File 实例。否则，会通过先计算所提供的路径相对于项目目录的相对路径来构造 File 实例。这个 file()方法也可以识别URL，例如是 file:/some/path.xml。
+这是把一些用户提供的值转换为一个相对路径的 File 对象的有用方法。由于 file()方法总是去计算所提供的路径相对于项目目录的路径，最好是使用 new File(somePath)，因为它是一个固定的路径，而不会因为用户运行 Gradle 的具体工作目录而改变。
+文件集合 一个文件集合只是表示一组文件。它通过 FileCollection 接口来表示。Gradle API 中的许多对象都实现了此接口。比如，依赖配置 就实现了 FileCollection 这一接口。</description></item><item><title>十五、Maven 管理依赖</title><link>https://www.shellio.cc/docs/java/maven/15/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/maven/15/</guid><description>Maven – 依赖管理 Maven 核心特点之一是依赖管理。一旦我们开始处理多模块工程（包含数百个子模块或者子工程）的时候，模块间的依赖关系就变得非常复杂，管理也变得很困难。针对此种情形，Maven 提供了一种高度控制的方法。
+传递依赖发现 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 这种情形经常可见，当一个库 A 依赖于其他库 B. 另一工程 C 想要使用库 A, 那么该工程同样也需要使用到库 B。
+Maven 可以避免去搜索所有需要的库资源的这种需求。通过读取工程文件（pom.xml）中的依赖项，Maven 可以找出工程之间的依赖关系。
+我们只需要在每个工程的 pom 文件里去定义直接的依赖关系。Maven 则会自动的来接管后续的工作。
+通过传递依赖，所有被包含的库的图形可能会快速的增长。当重复的库存在时，可能出现的情形将会持续上升。Maven 提供一些功能来控制可传递的依赖的程度。
+功能 功能描述 依赖调节 决定当多个手动创建的版本同时出现时，哪个依赖版本将会被使用。 如果两个依赖版本在依赖树里的深度是一样的时候，第一个被声明的依赖将会被使用。 依赖管理 直接的指定手动创建的某个版本被使用。例如当一个工程 C 在自己的以来管理模块包含工程 B，即 B 依赖于 A， 那么 A 即可指定在 B 被引用时所使用的版本。 依赖范围 包含在构建过程每个阶段的依赖。 依赖排除 任何可传递的依赖都可以通过 “exclusion” 元素被排除在外。举例说明，A 依赖 B， B 依赖 C，因此 A 可以标记 C 为 “被排除的”。 依赖可选 任何可传递的依赖可以被标记为可选的，通过使用 “optional” 元素。例如：A 依赖 B， B 依赖 C。因此，B 可以标记 C 为可选的， 这样 A 就可以不再使用 C。 依赖范围 传递依赖发现可以通过使用如下的依赖范围来得到限制：</description></item><item><title>十一、Gradle 使用 Gradle 图形用户界面</title><link>https://www.shellio.cc/docs/java/gradle/11/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/gradle/11/</guid><description>使用 Gradle 图形用户界面 除了支持传统的命令行界面，Gradle 也提供了一个图形用户界面（GUI）。这是一个独立的用户界面，可以通过加上 –gui 参数来启动。
+Launching the GUI 1gradle --gui 注意：此命令行窗口被将锁定，直到 Gradle GUI 被关闭。如果是在 linux/unix 系统下，则可以通过(gradle –gui&amp;amp;)让它作为后台任务运行。
+如果你在你的 Gradle 项目目录下运行 Gradle GUI，你应该会看到一个任务树。
+GUI Task Tree
+最好是从 Gradle 项目目录运行此命令，这样对 UI 的设置就可以存储在你的项目目录中。当然，你也可以先运行它，然后通过在 UI 中的设置（Setup）选项卡，改变工作目录。
+在Gradle 的用户界面（UI）中，上面是 4 个选项卡，下面则是输出窗口。
+任务树 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 任务树显示了所有项目和它们的任务的层次结构。双击一个任务可以执行它。
+这里还提供了一个过滤器，可以把比较少用的任务隐藏。你可以通过过滤器（Filter）按钮切换是否进行过滤。通过编辑过滤器，你可以对哪些任务和项目要显示进行配置。隐藏的任务显示为红色。注意：新创建的任务默认情况下是显示状态（而不是隐藏状态）
+任务树的上下文菜单会提供以下选项：
+执行忽略依赖关系。这使得重新构建时不去依赖项目（与 -a 选项一样） 将任务添加到收藏夹（见收藏夹（Favourites）选项卡） 隐藏选择的任务。这将会把它们添加到过滤器中。 编辑 build.gradle 文件。注意：该操作需要 Java 1.6 或更高的版本，并且要求在你的操作系统中关联 gradle 文件。 收藏夹 收藏夹选项卡用来储存经常执行的命令。这些命令可以是复杂的命令（只要它们符合 Gradle 的语法），你可以给它们设置一个显示名称。它用于创建一个自定义的命令，来显示地跳过测试，文档，例子。你可以称之为“快速构建”。
+你可以根据自己的喜好，对收藏夹进行排序，甚至可以把它们导出到磁盘，并在其他地方导入。如果你在编辑它们的时候，选上“始终显示实时输出”，它只有在你选上“当发生错误时才显示输出”时有效。它会始终强制显示输出。
+命令行 命令行选项卡是直接执行单个的 Gradle 命令的地方。你只需要输入命令行中你经常在“Gradle”后面输入的命令即可。它也对要添加到收藏夹的命令提供了先去尝试的地方。
+设置 设置（Setup）选项卡允许你配置一些常规的设置
+GUI Setup</description></item><item><title>十一、Maven 工程文档</title><link>https://www.shellio.cc/docs/java/maven/11/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/maven/11/</guid><description>Maven – 工程文档 本教程将教你如何创建应用程序的文档。那么让我们开始吧，在 C:/ MVN 目录下，创建你的 java consumerBanking 应用程序。打开 consumerBanking 文件夹并执行以下 mvn 命令。
+1C:\MVN&amp;gt;mvn site Maven 将开始构建工程。
+1[INFO] Scanning for projects... 2[INFO] ------------------------------------------------------------------- 3[INFO] Building consumerBanking 4[INFO]task-segment: [site] 5[INFO] ------------------------------------------------------------------- 6[INFO] [site:site {execution: default-site}] 7[INFO] artifact org.apache.maven.skins:maven-default-skin: 8checking for updates from central 9[INFO] Generating &amp;#34;About&amp;#34; report. 10[INFO] Generating &amp;#34;Issue Tracking&amp;#34; report. 11[INFO] Generating &amp;#34;Project Team&amp;#34; report. 12[INFO] Generating &amp;#34;Dependencies&amp;#34; report. 13[INFO] Generating &amp;#34;Continuous Integration&amp;#34; report. 14[INFO] Generating &amp;#34;Source Repository&amp;#34; report.</description></item><item><title>四、Gradle 问题反馈</title><link>https://www.shellio.cc/docs/java/gradle/4/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/gradle/4/</guid><description>问题反馈 当年使用 Gradle 或其它软件的时候或多或少都会遇到一些问题，或许是无法驾驭的新特性，或许是一些 bug，又抑或是关于 Gradle 一些常见问题。本章将给你一些解决问题的建议和如何获取帮助。
+解决问题 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 当你遇到问题时，首先确认一下是否用的最新版本的 Gradle。最新版本总是会更加的完善并且带有更多的新特性。或许你的问题在最新版本中已经得到的解决。
+如果你采用守护模式运行，那么尝试用 –no-daemon 来停掉守护模式。
+获取帮助 你可以去 Gralde 官方论坛 http://forums.gradle.org 来寻求一些帮助。在这里你可以和 Gradle 的开发人员以及其他社区人员进行交流。
+如果有什么搞不定了，去论坛发帖是解决问题的最佳方式。或许这对我们而言也是一些良好的改进建议。同时，开发团队也会周期性的在论坛发布一些帖子和发布最新版本。这样可以使你与 Gradle 开发团队一样时刻保持最新版本。</description></item><item><title>四、Maven 构建生命周期</title><link>https://www.shellio.cc/docs/java/maven/4/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/maven/4/</guid><description>Maven – 构建生命周期 什么是构建生命周期 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 构建生命周期是一组阶段的序列（sequence of phases），每个阶段定义了目标被执行的顺序。这里的阶段是生命周期的一部分。
+举例说明，一个典型的 Maven 构建生命周期是由以下几个阶段的序列组成的：
+阶段 处理 描述 prepare-resources 资源拷贝 本阶段可以自定义需要拷贝的资源 compile 编译 本阶段完成源代码编译 package 打包 本阶段根据 pom.xml 中描述的打包配置创建 JAR / WAR 包 install 安装 本阶段在本地 / 远程仓库中安装工程包 当需要在某个特定阶段之前或之后执行目标时，可以使用 pre 和 post 来定义这个目标。
+当Maven 开始构建工程，会按照所定义的阶段序列的顺序执行每个阶段注册的目标。Maven 有以下三个标准的生命周期：
+clean default(or build) site 目标表示一个特定的、对构建和管理工程有帮助的任务。它可能绑定了 0 个或多个构建阶段。没有绑定任何构建阶段的目标可以在构建生命周期之外被直接调用执行。
+执行的顺序依赖于目标和构建阶段被调用的顺序。例如，考虑下面的命令。clean 和 package 参数是构建阶段，而 dependency:copy-dependencies 是一个目标。
+1mvn clean dependency:copy-dependencies package 这里的clean 阶段将会被首先执行，然后 dependency:copy-dependencies 目标会被执行，最终 package 阶段被执行。
+Clean 生命周期 当我们执行 mvn post-clean 命令时，Maven 调用 clean 生命周期，它包含以下阶段。</description></item><item><title>五、Gradle 构建基础</title><link>https://www.shellio.cc/docs/java/gradle/5/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/gradle/5/</guid><description>构建基础 Projects 和 tasks 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 projects 和 tasks是 Gradle 中最重要的两个概念。
+任何一个 Gradle 构建都是由一个或多个 projects 组成。每个 project 包括许多可构建组成部分。 这完全取决于你要构建些什么。举个例子，每个 project 或许是一个 jar 包或者一个 web 应用，它也可以是一个由许多其他项目中产生的 jar 构成的 zip 压缩包。一个 project 不必描述它只能进行构建操作。它也可以部署你的应用或搭建你的环境。不要担心它像听上去的那样庞大。 Gradle 的 build-by-convention 可以让您来具体定义一个 project 到底该做什么。
+每个project 都由多个 tasks 组成。每个 task 都代表了构建执行过程中的一个原子性操作。如编译，打包，生成 javadoc，发布到某个仓库等操作。
+到目前为止，可以发现我们可以在一个 project 中定义一些简单任务，后续章节将会阐述多项目构建和多项目多任务的内容。
+Hello world 你可以通过在命令行运行 gradle 命令来执行构建，gradle 命令会从当前目录下寻找 build.gradle 文件来执行构建。我们称 build.gradle 文件为构建脚本。严格来说这其实是一个构建配置脚本，后面你会了解到这个构建脚本定义了一个 project 和一些默认的 task。
+你可以创建如下脚本到 build.gradle 中 To try this out，create the following build script named build.</description></item><item><title>五、Maven 构建配置文件</title><link>https://www.shellio.cc/docs/java/maven/5/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/maven/5/</guid><description>Maven – 构建配置文件 什么是构建配置文件？ 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 构建配置文件是一组配置的集合，用来设置或者覆盖 Maven 构建的默认配置。使用构建配置文件，可以为不同的环境定制构建过程，例如 Producation 和 Development 环境。
+Profile 在 pom.xml 中使用 activeProfiles / profiles 元素指定，并且可以用很多方式触发。Profile 在构建时修改 POM，并且为变量设置不同的目标环境（例如，在开发、测试和产品环境中的数据库服务器路径）。
+Profile 类型 Profile 主要有三种类型。
+类型 在哪里定义 Per Project 定义在工程 POM 文件 pom.xml 中 Per User 定义在 Maven 设置 xml 文件中 （%USER_HOME%/.m2/settings.xml） Global 定义在 Maven 全局配置 xml 文件中 （%M2_HOME%/conf/settings.xml） Profile 激活 Maven 的 Profile 能够通过几种不同的方式激活。
+显式使用命令控制台输入 通过 maven 设置 基于环境变量（用户 / 系统变量） 操作系统配置（例如，Windows family） 现存 / 缺失 文件 Profile 激活示例 我们假定你的工程目录像下面这样：</description></item><item><title>一、Gradle 简介</title><link>https://www.shellio.cc/docs/java/gradle/1/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/gradle/1/</guid><description>简介 介绍 很高兴能向大家介绍 Gradle，这是一个基于 JVM 的富有突破性构建工具。
+它为您提供了:
+一个像 ant 一样，通用的灵活的构建工具 一种可切换的，像 maven 一样的基于约定约定优于配置的构建框架 强大的多工程构建支持 强大的依赖管理(基于 ApacheIvy) 对已有的 maven 和 ivy 仓库的全面支持 支持传递性依赖管理，而不需要远程仓库或者 pom.xml 或者 ivy 配置文件 ant 式的任务和构建是 gradle 的第一公民 基于 groovy，其 build 脚本使用 groovy dsl 编写 具有广泛的领域模型支持你的构建 在第二章节概述中，你会看到关于 Gradle 的详细介绍和指导 关于本手册 与Gradle 一样，本手册也在不停的更新中。许多部分并未完全进行描述。有些内容并未完全描述。我们需要你来一起帮助改进本手册。你可以在 Gradle 官方网站找到其余格式的文档。</description></item><item><title>一、Maven 概述</title><link>https://www.shellio.cc/docs/java/maven/1/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/maven/1/</guid><description>Maven – 概述 Maven 是什么？ Maven 是一个项目管理和整合工具。Maven 为开发者提供了一套完整的构建生命周期框架。开发团队几乎不用花多少时间就能够自动完成工程的基础构建配置，因为 Maven 使用了一个标准的目录结构和一个默认的构建生命周期。
+在有多个开发团队环境的情况下，Maven 能够在很短的时间内使得每项工作都按照标准进行。因为大部分的工程配置操作都非常简单并且可复用，在创建报告、检查、构建和测试自动配置时，Maven 可以让开发者的工作变得更简单。
+Maven 能够帮助开发者完成以下工作：
+构建 文档生成 报告 依赖 SCMs 发布 分发 邮件列表 总的来说，Maven 简化了工程的构建过程，并对其标准化。它无缝衔接了编译、发布、文档生成、团队合作和其他任务。Maven 提高了重用性，负责了大部分构建相关的任务。
+Maven 的历史 Maven 最初是在 Jakarta Turbine 项目中为了简化构建过程而设计的。项目中有几个子工程，每个工程包含稍有不同的 ANT 文件。JAR 文件使用 CVS 管理。
+Apache 小组随后开发了 Maven，能够同时构建多个工程、发布工程信息、部署工程、在几个工程中共享 JAR 文件，并且协助团队合作。
+Maven 的目标 Maven 的主要目的是为开发者提供
+一个可复用、可维护、更易理解的工程综合模型 与这个模型交互的插件或者工具 Maven 工程结构和内容被定义在一个 xml 文件中 － pom.xml，是 Project Object Model (POM) 的简称，此文件是整个 Maven 系统的基础组件。详细内容请参考 Maven POM 部分。
+约定优于配置 Maven 使用约定而不是配置，意味着开发者不需要再自己创建构建过程。
+开发者不需要再关心每一个配置细节。Maven 为工程提供了合理的默认行为。当创建 Maven 工程时，Maven 会创建默认的工程结构。开发者只需要合理的放置文件，而在 pom.</description></item></channel></rss>

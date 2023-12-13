@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>RocketMQ源码剖析 on 程序员安仔</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/</link><description>Recent content in RocketMQ源码剖析 on 程序员安仔</description><generator>Hugo -- gohugo.io</generator><language>zh-hans</language><copyright>个人技术博客</copyright><atom:link href="https://www.shellio.cc/docs/mq/rocketmq-advanced/index.xml" rel="self" type="application/rss+xml"/><item><title>八、RocketMQ源码分析之消息ACK机制（消费进度）</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/8/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/mq/rocketmq-advanced/8/</guid><description>1、消息消费进度概述 首先简要阐述一下消息消费进度：
+消费者订阅消息消费队列（MessageQueue), 当生产者将消息负载发送到 MessageQueue 中时，消费订阅者开始消费消息，消息消费过程中，为了避免重复消费，需要一个地方存储消费进度（消费偏移量）。
+消息模式主要分为集群模式、广播模式：
+集群模式：一条消息被集群中任何一个消费者消费。 广播模式：每条消息都被每一个消费者消费。 广播模式，既然每条消息要被每一个消费者消费，则消费进度可以与消费者保存在一起，也就是本地保存，但由于集群模式下，一条消息只能被集群内的一个消费者消费，进度不能保存在消费端，只能集中保存在一个地方，比较合适的是在 Broker 端。
+2、消息消费进度存储接口 接下来我们先分析一下消息消费进度接口：OffsetStore。
+1/** 2 * Offset store interface 3 */ 4public interface OffsetStore { 5 /** 6 * Load 7 * 8 * @throws MQClientException 9 */ 10 void load() throws MQClientException; 11 /** 12 * Update the offset,store it in memory 13 * 14 * @param mq 15 * @param offset 16 * @param increaseOnly 17 */ 18 void updateOffset(final MessageQueue mq, final long offset, final boolean increaseOnly); 19 /** 20 * Get offset from local storage 21 * 22 * @param mq 23 * @param type 24 * @return The fetched offset 25 */ 26 long readOffset(final MessageQueue mq, final ReadOffsetType type); 27 /** 28 * Persist all offsets,may be in local storage or remote name server 29 * 30 * @param mqs 31 */ 32 void persistAll(final Set&amp;lt;MessageQueue&amp;gt; mqs); 33 /** 34 * Persist the offset,may be in local storage or remote name server 35 * 36 * @param mq 37 */ 38 void persist(final MessageQueue mq); 39 /** 40 * Remove offset 41 * 42 * @param mq 43 */ 44 void removeOffset(MessageQueue mq); 45 /** 46 * @param topic 47 * @return The cloned offset table of given topic 48 */ 49 Map&amp;lt;MessageQueue, Long&amp;gt; cloneOffsetTable(String topic); 50 /** 51 * @param mq 52 * @param offset 53 * @param isOneway 54 */ 55 void updateConsumeOffsetToBroker(MessageQueue mq, long offset, boolean isOneway) throws RemotingException, 56 MQBrokerException, InterruptedException, MQClientException; 入口代码：DefaultMQPushConsumerImpl#start()。</description></item><item><title>二、RocketMQ源码分析之Broker概述与同步消息发送原理与高可用设计及思考</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/2/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/mq/rocketmq-advanced/2/</guid><description>1、Broker概述 Broker 在 RocketMQ 架构中的角色，就是存储消息，核心任务就是持久化消息，生产者发送消息给 Broker,消费者从 Broker 消费消息，其物理部署架构图如下：
+备注：以上摘录自官方 RocketMQ 设计文档。
+上述基本描述了消息中间件的架构设计，不仅限于 RocketMQ,不同消息中间件的最大区别之一在消息的存储上。
+2、Broker存储设计概要 接下来从配置文件的角度来窥探 Broker 存储设计的关注点，对应代码（MessageStoreConfig）。
+storePathRootDir
+设置Broker的存储根目录，默认为 $Broker_Home/store。 storePathCommitLog
+设置commitlog的存储目录，默认为$Broker_Home/store/commitlog。 mapedFileSizeCommitLog
+commitlog 文件的大小，默认为1G。 mapedFileSizeConsumeQueue
+consumeQueueSize，ConsumeQueue 存放的是定长的信息（20个字节，偏移量、size、tagscode）,默认30w * ConsumeQueue.CQ_STORE_UNIT_SIZE。 enableConsumeQueueExt
+是否开启 consumeQueueExt,默认为 false,就是如果消费端消息消费速度跟不上，是否创建一个扩展的 ConsumeQueue文件，如果不开启，应该会阻塞从 commitlog 文件中获取消息，并且 ConsumeQueue,应该是按topic独立的。 mappedFileSizeConsumeQueueExt
+扩展consume文件的大小，默认为48M。 flushIntervalCommitLog
+刷写 CommitLog 的间隔时间，RocketMQ 后台会启动一个线程，将消息刷写到磁盘，这个也就是该线程每次运行后等待的时间，默认为500毫秒。flush 操作，调用文件通道的force()方法。 commitIntervalCommitLog
+提交消息到 CommitLog 对应的文件通道的间隔时间，原理与上面类似；将消息写入到文件通道（调用FileChannel.write方法）得到最新的写指针，默认为200毫秒。 useReentrantLockWhenPutMessage
+在put message( 将消息按格式封装成msg放入相关队列时实用的锁机制：自旋或ReentrantLock)。 flushIntervalConsumeQueue
+刷写到ConsumeQueue的间隔，默认为1s。 flushCommitLogLeastPages
+每次 flush commitlog 时最小发生变化的页数。 commitCommitLogLeastPages
+每一次 commitlog 提交任务至少需要的页数。 flushLeastPagesWhenWarmMapedFile
+用字节0填充整个文件，每多少页刷盘一次，默认4096，异步刷盘模式生效。 flushConsumeQueueLeastPages
+一次刷盘至少需要的脏页数量，默认为2，针对 consuequeue 文件。 putMsgIndexHightWater</description></item><item><title>二十、RocketMQ源码分析之从官方示例窥探RocketMQ事务消息实现基本思想</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/20/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/mq/rocketmq-advanced/20/</guid><description>RocketMQ事务消息阅读目录指引：
+RocketMQ源码分析之从官方示例窥探RocketMQ事务消息实现基本思想
+RocketMQ源码分析之RocketMQ事务消息实现原理上篇
+RocketMQ源码分析之RocketMQ事务消息实现原理中篇—-事务消息状态回查
+RocketMQ源码分析之事务消息实现原理下篇-消息服务器Broker提交回滚事务实现原理
+RocketMQ事务消息实战
+RocketMQ4.3.0版本开始支持事务消息，本节开始将剖析事务消息的实现原理，首先将从官方给出的Demo实例入手，以此通往RocketMQ事务消息的世界中。
+官方版本未发布之前，从apache rocketmq第一个版本上线后，代码中存在者与事务消息相关的代码，例如COMMIT、ROLLBACK、PREPARED， 网上对于事务消息的“声音”基本上是使用类似二阶段提交，消息系统标志MessageSysFlag中定义的：TRANSACTION_PREPARED_TYPE、TRANSACTION_COMMIT_TYPE、
+TRANSACTION_ROLLBACK_TYPE，消息发送者首先发送TRANSACTION_PREPARED_TYPE类型的消息，然后事务介绍后，发送commit请求或rollback请求，如果commit,rollback消息丢失的话，rocketmq会在一定超时时间后会查，应用程序需要告知该消息是提交还是回滚。让我们各自带着自己的理解和猜出，先重点看一下Demo程式，大概可以窥探一些大体的信息。
+Demo实例程序位于：/rocketmq-example/src/main/java/org/apache/rocketmq/example/transaction包中。从而先运行生产者，然后运行消费者，判断事务消息的预发放、提交、回滚等效果，二话不说，先运行一下，看下效果再说：
+消息发送端运行结果：
+1SendResult [sendStatus=SEND_OK, msgId=C0A8010518DC6D06D69C8D5767EC0000, offsetMsgId=null, messageQueue=MessageQueue [topic=transaction_topic_test, brokerName=broker-a, queueId=1], queueOffset=0] 2SendResult [sendStatus=SEND_OK, msgId=C0A8010518DC6D06D69C8D57680F0001, offsetMsgId=null, messageQueue=MessageQueue [topic=transaction_topic_test, brokerName=broker-a, queueId=2], queueOffset=1] 3SendResult [sendStatus=SEND_OK, msgId=C0A8010518DC6D06D69C8D57681E0002, offsetMsgId=null, messageQueue=MessageQueue [topic=transaction_topic_test, brokerName=broker-a, queueId=3], queueOffset=2] 4SendResult [sendStatus=SEND_OK, msgId=C0A8010518DC6D06D69C8D57682B0003, offsetMsgId=null, messageQueue=MessageQueue [topic=transaction_topic_test, brokerName=broker-a, queueId=0], queueOffset=3] 5SendResult [sendStatus=SEND_OK, msgId=C0A8010518DC6D06D69C8D5768380004, offsetMsgId=null, messageQueue=MessageQueue [topic=transaction_topic_test, brokerName=broker-a, queueId=1], queueOffset=4] 6SendResult [sendStatus=SEND_OK, msgId=C0A8010518DC6D06D69C8D5768490005, offsetMsgId=null, messageQueue=MessageQueue [topic=transaction_topic_test, brokerName=broker-a, queueId=2], queueOffset=5] 7SendResult [sendStatus=SEND_OK, msgId=C0A8010518DC6D06D69C8D5768560006, offsetMsgId=null, messageQueue=MessageQueue [topic=transaction_topic_test, brokerName=broker-a, queueId=3], queueOffset=6] 8SendResult [sendStatus=SEND_OK, msgId=C0A8010518DC6D06D69C8D5768640007, offsetMsgId=null, messageQueue=MessageQueue [topic=transaction_topic_test, brokerName=broker-a, queueId=0], queueOffset=7] 9SendResult [sendStatus=SEND_OK, msgId=C0A8010518DC6D06D69C8D5768730008, offsetMsgId=null, messageQueue=MessageQueue [topic=transaction_topic_test, brokerName=broker-a, queueId=1], queueOffset=8] 10SendResult [sendStatus=SEND_OK, msgId=C0A8010518DC6D06D69C8D5768800009, offsetMsgId=null, messageQueue=MessageQueue [topic=transaction_topic_test, brokerName=broker-a, queueId=2], queueOffset=9] 综上所述，服务端发送了10条消息，但我们从rocketmq-consonse上只能查看到3条消息，一个合理的解释就是只有3条消息提交，其他都回滚了，如图所示：</description></item><item><title>二十八、RocketMQ ACL使用指南</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/28/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/mq/rocketmq-advanced/28/</guid><description>本节目录 1、什么是ACL? 2、 ACL基本流程图；
+3、 如何配置ACL；
+3.1 acl配置文件
+3.1.1 globalWhiteRemoteAddresses
+3.1.2 accounts
+3.1.2.1 accessKey 3.1.2.2 secretKey 3.1.2.3 whiteRemoteAddress 3.1.2.4 admin 3.1.2.5 defaultTopicPerm 3.1.2.6 defaultGroupPerm 3.1.2.7 topicPerms 3.1.2.8 groupPerms 3.2 RocketMQ ACL权限可选值
+3.3、权限验证流程
+4、 使用示例；
+4.1 Broker端安装 4.2 消息发送端示例 4.3 消息消费端示例 1、什么是ACL? ACL是access control list的简称，俗称访问控制列表。访问控制，基本上会涉及到用户、资源、权限、角色等概念，那在RocketMQ中上述会对应哪些对象呢？
+用户
+用户是访问控制的基础要素，也不难理解，RocketMQ ACL必然也会引入用户的概念，即支持用户名、密码。 资源
+资源，需要保护的对象，在RocketMQ中，消息发送涉及的Topic、消息消费涉及的消费组，应该进行保护，故可以抽象成资源。 权限
+针对资源，能进行的操作， 角色
+RocketMQ中，只定义两种角色：是否是管理员。 另外，RocketMQ还支持按照客户端IP进行白名单设置。
+2、ACL基本流程图 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 在讲解如何使用ACL之前，我们先简单看一下RocketMQ ACL的请求流程：
+对于上述具体的实现，将在后续文章中重点讲解，本文的目的只是希望给读者一个大概的了解。
+3、如何配置ACL 3.1 acl配置文件 acl默认的配置文件名：plain_acl.yml,需要放在${ROCKETMQ_HOME}/store/config目录下。下面对其配置项一一介绍。
+3.1.1 globalWhiteRemoteAddresses 全局白名单，其类型为数组，即支持多个配置。其支持的配置格式如下：
+空
+表示不设置白名单，该条规则默认返回false。 “*”</description></item><item><title>二十二、RocketMQ源码分析之RocketMQ事务消息实现原理中篇—-事务消息状态回查</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/22/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/mq/rocketmq-advanced/22/</guid><description>上节已经梳理了RocketMQ发送事务消息的流程（基于二阶段提交），本节将继续深入学习事务状态消息回查，我们知道，第一次提交到消息服务器，消息的主题被替换为RMQ_SYS_TRANS_HALF_TOPIC，当执行本地事务，如果返回本地事务状态为UN_KNOW时，第二次提交到服务器时将不会做任何操作，也就是消息还存在与RMQ_SYS_TRANS_HALF_TOPIC主题中，并不能被消息消费者消费，那这些消息最终如何被提交或回滚呢？原来RocketMQ使用TransactionalMessageCheckService线程定时去检测RMQ_SYS_TRANS_HALF_TOPIC主题中的消息，回查消息的事务状态。TransactionalMessageCheckService的检测频率默认1分钟，可通过在broker.conf文件中设置transactionCheckInterval的值来改变默认值，单位为毫秒。
+温馨提示：文末附有流程图。
+TransactionalMessageCheckService#onWaitEnd
+1protected void onWaitEnd() { 2 long timeout = brokerController.getBrokerConfig().getTransactionTimeOut(); // @1 3 int checkMax = brokerController.getBrokerConfig().getTransactionCheckMax(); // @2 4 long begin = System.currentTimeMillis(); 5 log.info(&amp;#34;Begin to check prepare message, begin time:{}&amp;#34;, begin); 6 this.brokerController.getTransactionalMessageService().check(timeout, checkMax, this.brokerController.getTransactionalMessageCheckListener()); // @3 7 log.info(&amp;#34;End to check prepare message, consumed time:{}&amp;#34;, System.currentTimeMillis() - begin); 8 } 代码@1：从broker配置文件中获取transactionTimeOut参数值，表示事务的过期时间，一个消息的存储时间 + 该值 大于系统当前时间，才对该消息执行事务状态会查。
+代码@2：从broker配置文件中获取transactionCheckMax参数值，表示事务的最大检测次数，如果超过检测次数，消息会默认为丢弃，即rollback消息。
+接下来重点分析TransactionalMessageService#check的实现逻辑，其实现类：org.apache.rocketmq.broker.transaction.queue.TransactionalMessageServiceImpl
+TransactionalMessageServiceImpl#check
+1String topic = MixAll.RMQ_SYS_TRANS_HALF_TOPIC; 2Set&amp;lt;MessageQueue&amp;gt; msgQueues = transactionalMessageBridge.fetchMessageQueues(topic); 3if (msgQueues == null || msgQueues.</description></item><item><title>二十九、RocketMQ源码分析 ACL实现机制</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/29/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/mq/rocketmq-advanced/29/</guid><description>有关RocketMQ ACL的使用请查看上一篇《RocketMQ ACL使用指南》，本文从源码的角度，分析一下RocketMQ ACL的实现原理。
+备注：RocketMQ在4.4.0时引入了ACL机制，本文代码基于RocketMQ4.5.0版本。
+本节目录 1、BrokerController#initialAcl 2、 PlainAccessValidator；
+2.1 类图 2.1.2 PlainAccessResource类图 2.2 构造方法 2.3 parse方法 2.4 validate 方法 3、 PlainPermissionLoader；
+3.1 类图 3.2 PlainPermissionLoader构造方法 3.3 load 3.4 watch 3.5 validate 3.5.1 checkPerm 4、 AclClientRPCHook；
+4.1 doBeforeRequest 根据RocketMQ ACL使用手册，我们应该首先看一下Broker服务器在开启ACL机制时如何加载配置文件，并如何工作的。
+1、BrokerController#initialAcl Broker端ACL的入口代码为：BrokerController#initialAcl
+1private void initialAcl() { 2 if (!this.brokerConfig.isAclEnable()) { // @1 3 log.info(&amp;#34;The broker dose not enable acl&amp;#34;); 4 return; 5 } 6 List&amp;lt;AccessValidator&amp;gt; accessValidators = ServiceProvider.load(ServiceProvider.ACL_VALIDATOR_ID, AccessValidator.class); // @2 7 if (accessValidators == null || accessValidators.</description></item><item><title>二十六、RocketMQ 消息发送system busy、broker busy原因分析与解决方案</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/26/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/mq/rocketmq-advanced/26/</guid><description>本节目录 1、现象 2、 原理解读；
+2.1 RocketMQ 网络处理机制概述
+2.2 pair.getObject1().rejectRequest()
+2.2.1 isOSPageCacheBusy()
+2.2.2 isTransientStorePoolDeficient()
+2.3 漫谈transientStorePoolEnable机制
+2.3.1 MappedFile
+2.3.2 TransientStorePool初始化
+3、 现象解答；
+3.1 [REJECTREQUEST]system busy 3.2 too many requests and system thread pool busy, RejectedExecutionException 3.3 [PC_SYNCHRONIZED]broker busy 3.4 broker busy, period in queue: %sms, size of queue: %d 4、 实践建议；
+4.1 开启transientStorePoolEnable 4.2 扩容Broker服务器 1、现象 最近收到很多RocketMQ使用者，反馈生产环境中在消息发送过程中偶尔会出现如下4个错误信息之一：
+1）[REJECTREQUEST]system busy, start flow control for a while
+2）too many requests and system thread pool busy, RejectedExecutionException</description></item><item><title>二十七、RocketMQ HA机制(主从同步)</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/27/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/mq/rocketmq-advanced/27/</guid><description>温馨提示：建议参考代码RocketMQ4.4版本，4.5版本引入了多副本机制，实现了主从自动切换，本文并不关心主从切换功能。
+本节目录 1、初识主从同步 2、 提出问题；
+3、 原理探究；
+3.1 RocketMQ主从读写分离机制 3.2 消息消费进度同步机制 3.2.1 从服务定时同步主服务器进度
+3.2.2 主服务器消息拉取时更新消息消费进度 4、 总结；
+1、初识主从同步 主从同步基本实现过程如下图所示：
+RocketMQ 的主从同步机制如下：
+A.首先启动Master并在指定端口监听；
+B.客户端启动，主动连接Master，建立TCP连接；
+C.客户端以每隔5s的间隔时间向服务端拉取消息，如果是第一次拉取的话，先获取本地commitlog文件中最大的偏移量，以该偏移量向服务端拉取消息；
+D.服务端解析请求，并返回一批数据给客户端；
+E.客户端收到一批消息后，将消息写入本地commitlog文件中，然后向Master汇报拉取进度，并更新下一次待拉取偏移量；
+F.然后重复第3步；
+RocketMQ主从同步一个重要的特征：主从同步不具备主从切换功能，即当主节点宕机后，从不会接管消息发送，但可以提供消息读取。
+温馨提示：本文并不会详细分析RocketMQ主从同步的实现细节，如大家对其感兴趣，可以查阅笔者所著的《RocketMQ技术内幕》或查看笔者博文：https://blog.csdn.net/prestigeding/article/details/79600792
+2、提出问题 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 主，从服务器都在运行过程中，消息消费者是从主拉取消息还是从从拉取？ RocketMQ主从同步架构中，如果主服务器宕机，从服务器会接管消息消费，此时消息消费进度如何保持，当主服务器恢复后，消息消费者是从主拉取消息还是从从服务器拉取，主从服务器之间的消息消费进度如何同步？ 接下来带着上述问题，一起来探究其实现原理。
+3、原理探究 3.1 RocketMQ主从读写分离机制 RocketMQ的主从同步，在默认情况下RocketMQ会优先选择从主服务器进行拉取消息，并不是通常意义的上的读写分离，那什么时候会从拉取呢？
+温馨提示：本节同样不会详细整个流程，只会点出其关键点，如果想详细了解消息拉取、消息消费等核心流程，建议大家查阅笔者所著的《RocketMQ技术内幕》。
+在RocketMQ中判断是从主拉取，还是从从拉取的核心代码如下：
+DefaultMessageStore#getMessage
+1long diff = maxOffsetPy - maxPhyOffsetPulling; // @1 2long memory = (long) (StoreUtil.TOTAL_PHYSICAL_MEMORY_SIZE 3 * (this.messageStoreConfig.getAccessMessageInMemoryMaxRatio() / 100.0)); // @2 4getResult.setSuggestPullingFromSlave(diff &amp;gt; memory); // @3 代码@1：首先介绍一下几个局部变量的含义：
+maxOffsetPy</description></item><item><title>二十三、RocketMQ源码分析之事务消息实现原理下篇-消息服务器Broker提交回滚事务实现原理</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/23/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/mq/rocketmq-advanced/23/</guid><description>本文将重点分析RocketMQ Broker如何处理事务消息提交、回滚命令，其核心实现就是根据commitlogOffset找到消息，如果是提交动作，就恢复原消息的主题与队列，再次存入commitlog文件进而转到消息消费队列，供消费者消费，然后将原预处理消息存入一个新的主题RMQ_SYS_TRANS_OP_HALF_TOPIC，代表该消息已被处理；回滚消息与提交事务消息不同的是，提交事务消息会将消息恢复原主题与队列，再次存储在commitlog文件中。源码入口：
+EndTransactionProcessor#processRequest
+1OperationResult result = new OperationResult(); 2if (MessageSysFlag.TRANSACTION_COMMIT_TYPE == requestHeader.getCommitOrRollback()) { // @1 3result = this.brokerController.getTransactionalMessageService().commitMessage(requestHeader); // @2 4 if (result.getResponseCode() == ResponseCode.SUCCESS) { // @3 5 RemotingCommand res = checkPrepareMessage(result.getPrepareMessage(), requestHeader); // @4 6 if (res.getCode() == ResponseCode.SUCCESS) { 7 MessageExtBrokerInner msgInner = endMessageTransaction(result.getPrepareMessage()); // @5 8 msgInner.setSysFlag(MessageSysFlag.resetTransactionValue(msgInner.getSysFlag(), requestHeader.getCommitOrRollback())); 9 msgInner.setQueueOffset(requestHeader.getTranStateTableOffset()); 10 msgInner.setPreparedTransactionOffset(requestHeader.getCommitLogOffset()); 11 msgInner.setStoreTimestamp(result.getPrepareMessage().getStoreTimestamp()); // @6 12 RemotingCommand sendResult = sendFinalMessage(msgInner); // @7 13 if (sendResult.</description></item><item><title>二十四、RocketMQ事务消息实战</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/24/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/mq/rocketmq-advanced/24/</guid><description>我们以一个订单流转流程来举例，例如订单子系统创建订单，需要将订单数据下发到其他子系统（与第三方系统对接）这个场景，我们通常会将两个系统进行解耦，不直接使用服务调用的方式进行交互。其业务实现步骤通常为：
+1、A系统创建订单并入库。
+2、发送消息到MQ。
+3、MQ消费者消费消息，发送远程RPC服务调用，完成订单数据的同步。
+1、方案一
+方案弊端：
+1、如果消息发送成功，在提交事务的时候JVM突然挂掉，事务没有成功提交，导致两个系统之间数据不一致。
+2、由于消息是在事务提交之前提交，发送的消息内容是订单实体的内容，会造成在消费端进行消费时如果需要去验证订单是否存在时可能出现订单不存在。
+3、消息发送可以考虑异步发送。
+方案二：
+由于存在上述问题，在MQ不支持事务消息的前提条件下，可以采用下面的方式进行优化。
+然后在控制器层，使用异步发送，将消息发送，并在消息发送成功后，更新待发送状态为已发送。
+然后通过定时任务，扫描待发送，结合创建时间的记录（小于当前时间5分钟的消息待发送记录），进行消息发送。
+方案弊端：
+1、消息有可能重复发送，但在消费端可以通过唯一业务编号来进行去重设计。
+2、实现过于复杂，为了避免 极端情况下的消息丢失，需要使用定时任务。
+方案三：基于RocketMQ4.3版本事务消息
+额外需要实现事务会查监听器：TransactionListener，其实例代码：
+1import org.apache.rocketmq.client.producer.LocalTransactionState; 2import org.apache.rocketmq.client.producer.TransactionListener; 3import org.apache.rocketmq.common.message.Message; 4import org.apache.rocketmq.common.message.MessageExt; 5import java.util.concurrent.ConcurrentHashMap; 6@SuppressWarnings(&amp;#34;unused&amp;#34;) 7public class OrderTransactionListenerImpl implements TransactionListener { 8 private ConcurrentHashMap&amp;lt;String, Integer&amp;gt; countHashMap = new ConcurrentHashMap&amp;lt;&amp;gt;(); 9 private final static int MAX_COUNT = 5; 10 @Override 11 public LocalTransactionState executeLocalTransaction(Message msg, Object arg) { 12 // 13 String bizUniNo = msg.getUserProperty(&amp;#34;bizUniNo&amp;#34;); // 从消息中获取业务唯一ID。 14 // 将bizUniNo入库，表名：t_message_transaction,表结构 bizUniNo(主键),业务类型。 15 return LocalTransactionState.</description></item><item><title>二十五、RocketMQ实战：生产环境中，autoCreateTopicEnable为什么不能设置为true</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/25/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/mq/rocketmq-advanced/25/</guid><description>本节目录 1、 现象；
+2、 思考；
+3、 原理；
+3.1 RocketMQ基本路由规则 3.2 探究autoCreateTopicEnable机制 3.2.1 默认Topic路由创建时机 3.2.2 现象分析 1、现象 很多网友会问，为什么明明集群中有多台Broker服务器，autoCreateTopicEnable设置为true，表示开启Topic自动创建，但新创建的Topic的路由信息只包含在其中一台Broker服务器上，这是为什么呢？
+期望值：为了消息发送的高可用，希望新创建的Topic在集群中的每台Broker上创建对应的队列，避免Broker的单节点故障。
+现象截图如下：
+正如上图所示，自动创建的topicTest5的路由信息：
+topicTest5只在broker-a服务器上创建了队列，并没有在broker-b服务器创建队列，不符合期望。 默认读写队列的个数为4。 我们再来看一下RocketMQ默认topic的路由信息截图如下：
+从图中可以默认Topic的路由信息为broker-a、broker-b上各8个队列。
+2、思考 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 默认Topic的路由信息是如何创建的？
+1、 Topic的路由信息是存储在哪里？Nameserver？broker?；
+2、 RocketMQTopic默认队列个数是多少呢？；
+3、原理 3.1 RocketMQ基本路由规则 1、 Broker在启动时向Nameserver注册存储在该服务器上的路由信息，并每隔30s向Nameserver发送心跳包，并更新路由信息；
+2、 Nameserver每隔10s扫描路由表，如果检测到Broker服务宕机，则移除对应的路由信息；
+3、 消息生产者每隔30s会从Nameserver重新拉取Topic的路由信息并更新本地路由表；在消息发送之前，如果本地路由表中不存在对应主题的路由消息时，会主动向Nameserver拉取该主题的消息；
+回到本文的主题：autoCreateTopicEnable，开启自动创建主题，试想一下，如果生产者向一个不存在的主题发送消息时，上面的任何一个步骤都无法获取一个不存在的主题的路由信息，那该如何处理这种情况呢？
+在RocketMQ中，如果autoCreateTopicEnable设置为true，消息发送者向NameServer查询主题的路由消息返回空时，会尝试用一个系统默认的主题名称(MixAll.AUTO_CREATE_TOPIC_KEY_TOPIC)，此时消息发送者得到的路由信息为：
+但问题就来了，默认Topic在集群的每一台Broker上创建8个队列，那问题来了，为啥新创建的Topic只在一个Broker上创建4个队列？
+3.2 探究autoCreateTopicEnable机制 3.2.1 默认Topic路由创建时机 温馨提示：本文不会详细跟踪整个创建过程，只会点出源码的关键入口点，如想详细了解NameServer路由消息、消息发送高可用的实现原理，建议查阅笔者的书籍《RocketMQ技术内幕》第二、三章。
+Step1：在Broker启动流程中，会构建TopicConfigManager对象，其构造方法中首先会判断是否开启了允许自动创建主题，如果启用了自动创建主题，则向topicConfigTable中添加默认主题的路由信息。
+TopicConfigManager构造方法
+备注：该topicConfigTable中所有的路由信息，会随着Broker向Nameserver发送心跳包中，Nameserver收到这些信息后，更新对应Topic的路由信息表。
+BrokerConfig的defaultTopicQueueNum默认为8。两台Broker服务器都会运行上面的过程，故最终Nameserver中关于默认主题的路由信息中，会包含两个Broker分别各8个队列信息。
+Step2：生产者寻找路由信息
+生产者首先向NameServer查询路由信息，由于是一个不存在的主题，故此时返回的路由信息为空，RocketMQ会使用默认的主题再次寻找，由于开启了自动创建路由信息，NameServer会向生产者返回默认主题的路由信息。然后从返回的路由信息中选择一个队列（默认轮询）。消息发送者从Nameserver获取到默认的Topic的队列信息后，队列的个数会改变吗？答案是会的，其代码如下：
+MQClientInstance#updateTopicRouteInfoFromNameServer
+温馨提示：消息发送者在到默认路由信息时，其队列数量，会选择DefaultMQProducer#defaultTopicQueueNums与Nameserver返回的的队列数取最小值，DefaultMQProducer#defaultTopicQueueNums默认值为4，故自动创建的主题，其队列数量默认为4。
+Step3：发送消息
+DefaultMQProducerImpl#sendKernelImpl
+在消息发送时的请求报文中，设置默认topic名称，消息发送topic名称，使用的队列数量为DefaultMQProducer#defaultTopicQueueNums，即默认为4。
+Step4：Broker端收到消息后的处理流程
+服务端收到消息发送的处理器为：SendMessageProcessor，在处理消息发送时，会调用super.msgCheck方法：
+AbstractSendMessageProcessor#msgCheck
+在Broker端，首先会使用TopicConfigManager根据topic查询路由信息，如果Broker端不存在该主题的路由配置(路由信息),此时如果Broker中存在默认主题的路由配置信息，则根据消息发送请求中的队列数量，在Broker创建新Topic的路由信息。这样Broker服务端就会存在主题的路由信息。
+在Broker端的topic配置管理器中存在的路由信息，一会向Nameserver发送心跳包，汇报到Nameserver，另一方面会有一个定时任务，定时存储在broker端，具体路径为${ROCKET_HOME}/store/config/topics.json中，这样在Broker关闭后再重启，并不会丢失路由信息。
+广大读者朋友，跟踪到这一步的时候，大家应该对启用自动创建主题机制时，新主题是的路由信息是如何创建的，为了方便理解，给出创建主题序列图：
+3.2.2 现象分析 经过上面自动创建路由机制的创建流程，我们可以比较容易的分析得出如下结论：</description></item><item><title>二十一、RocketMQ源码分析之RocketMQ事务消息实现原理上篇</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/21/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/mq/rocketmq-advanced/21/</guid><description>根据上节Demo示例，发送事务消息的入口为：TransactionMQProducer#sendMessageInTransaction：
+1public TransactionSendResult sendMessageInTransaction(final Message msg, final Object arg) throws MQClientException { 2 if (null == this.transactionListener) { // @1 3 throw new MQClientException(&amp;#34;TransactionListener is null&amp;#34;, null); 4 } 5 return this.defaultMQProducerImpl.sendMessageInTransaction(msg, transactionListener, arg); // @2 6 } 代码@1：如果transactionListener为空，则直接抛出异常。
+代码@2：调用defaultMQProducerImpl的sendMessageInTransaction方法。
+DefaultMQProducerImpl#sendMessageInTransaction
+1public TransactionSendResult sendMessageInTransaction(final Message msg, 2 final TransactionListener tranExecuter, final Object arg) throws MQClientException { Step1：首先先阐述一下参数含义。final Message msg：消息；TransactionListener tranExecuter：事务监听器； Object arg：其他附加参数，该参数会再TransactionListener 回调函数中原值传入。
+DefaultMQProducerImpl#sendMessageInTransaction
+1SendResult sendResult = null; 2MessageAccessor.putProperty(msg, MessageConst.</description></item><item><title>九、RocketMQ源码分析之消费队列、Index索引文件存储结构与存储机制-上篇</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/9/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/mq/rocketmq-advanced/9/</guid><description>RocketMQ 存储基础回顾： 源码分析RocketMQ之CommitLog消息存储机制
+本文主要从源码的角度分析 Rocketmq 消费队列 ConsumeQueue 物理文件的构建与存储结构，同时分析 RocketMQ 索引文件IndexFile 文件的存储原理、存储格式以及检索方式。RocketMQ 的存储机制是所有的主题消息都存储在 CommitLog 文件中，也就是消息发送是完全的顺序 IO 操作，加上利用内存文件映射机制，极大的提供的 IO 性能。消息的全量信息存放在 commitlog 文件中，并且每条消息的长度是不一样的，消息的具体存储格式如下：
+如果消费者直接基于commitlog 进行消费的话，简直就是一个恶梦，因为不同的主题的消息完全顺序的存储在 commitlog 文件中，根据主题去查询消息，不得不遍历整个 commitlog 文件，显然作为一款消息中间件这是绝不允许的。RocketMQ 的ConsumeQueue 文件就是来解决消息消费的。首先我们知道，一个主题，在 broker 上可以分成多个消费对列，默认为4个，也就是消费队列是基于主题+broker。那 ConsumeQueue 中当然不会再存储全量消息了，而是存储为定长（20字节，8字节commitlog 偏移量+4字节消息长度+8字节tag hashcode）,消息消费时，首先根据 commitlog offset 去 commitlog 文件组（commitlog每个文件1G，填满了，另外创建一个文件），找到消息的起始位置，然后根据消息长度，读取整条消息。但问题又来了，如果我们需要根据消息ID，来查找消息，consumequeue 中没有存储消息ID,如果不采取其他措施，又得遍历 commitlog文件了，为了解决这个问题，rocketmq 的 index 文件又派上了用场。
+接下来，本文重点关注 ConsumeQueue、Index 文件是如何基于 Commitlog 构建的，并且根据 ConsumeQueue、Index 文件如何查找消息。
+根据commitlog 文件生成 consumequeue、index 文件，主要同运作于两种情况：
+1、 运行中，发送端发送消息到commitlog文件，此时如何及时传达到consume文件、Index文件呢？；
+2、 broker启动时，检测commitlog文件与consumequeue、index文件中信息是否一致，如果不一致，需要根据commitlog文件重新恢复consumequeue文件和index文件；
+1、commitlog、consumequeue、index 文件同步问题 RocketMQ 采用专门的线程来根据 comitlog offset 来将 commitlog 转发给ConsumeQueue、Index。其线程为DefaultMessageStore$ReputMessageService
+1.1 核心属性 private volatile long reputFromOffset = 0</description></item><item><title>六、RocketMQ源码分析消息消费机制—-消费端消息负载均衡机制与重新分布</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/6/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/mq/rocketmq-advanced/6/</guid><description>1、消息消费需要解决的问题 首先再次重复啰嗦一下 RocketMQ 消息消费的一些基本元素的关系
+主题—》 消息队列(MessageQueue) 1 对多。
+主题—》 消息生产者，一般主题会由多个生产者组成，生产者组。
+主题—》 消息消费者，一般一个主题也会被多个消费者消费。
+那消息消费至少需要解决如下问题：
+1、 一个消费组中多个消费者是如何对消息队列（1个主题多个消息队列）进行负载消费的；
+2、 一个消费者中多个线程又是如何协作（并发）的消费分配给该消费者的消息队列中的消息呢？；
+3、 消息消费进度如何保存，包括MQ是如何知道消息是否正常被消费了；
+4、 RocketMQ推拉模式实现机制；
+再提一个业界关于消费者与消息队列的消费规则。
+1个消费者可以消费多个消息队列，但一个消息队列同一时间只能被一个消费者消费，这又是如何实现的呢？
+本文紧接着上文：消息消费概述 。
+继续探讨消息分发与消费端负载均衡。
+我们从上文知道，PullMessageService 线程主要是负责 pullRequestQueue 中的 PullResult，那问题来了，pullRequestQueue 中的数据从哪来，在什么时候由谁来填充呢。
+那我们就先沿着这条线索分析下去，看一下 PullMessageService 的 pullReqestQueue 添加元素的方法的调用链条如下：
+也就是调用链：
+1RebalanceService. run() 2MQClientInstance.doRebalance() 3DefaultMQPulConsumerImpl.doRebalance() 4RebalanceImpl.doRebalance() 5RebalanceImpl.rebalanceByTopic 6RebalanceImpl.updateProcessQueueTableInRebalance 7RebalanceImpl.dispatchPullRequest 8DefaultMQPushConsumerImpl.executePullRequestImmediately 从上面可以直观的看出，向 PullMesssageService 的 LinkedBlockingQueue pullRequestQueue 添加 PullRequest的是 RebalanceService.run 方法，就是向 PullMessageService 中放入 PullRequest,才会驱动 PullMessageSerivce run方法的运行，如果 pullRequestQueue 中没有元素，PullMessageService 线程将被阻塞。
+那么RebalanceService是何许人也，让我们一起来揭开其神秘面纱。
+2、消息消费负载机制分析 2.1 RebalanceService 线程 从上面可以看出，MQClientInstance 持有一个 RebalanceService 线程并启动它。RebalanceService 线程的 run 方法比较简单，就是直接调用 mqClientFactory.</description></item><item><title>七、RocketMQ源码分析之消息消费重试机制</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/7/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/mq/rocketmq-advanced/7/</guid><description>主要关注业务方在消息消费失败后，返回 ConsumeConcurrentlyStatus.RECONSUME_LATER ,专业术语：业务方每条消息消费后要告诉 MQ 消费者一个结果(ack,message back)，触发 MQ 消息消费重试机制，然后 MQ 消费者需要反馈给 MQ(Broker)。
+备注：主要针对的还是非顺序消息，顺序消息在后续专题详细分析。
+1、消息消费处理 代码入口：ConsumeMessageConcurrentlyService ConsumeRequest run方法
+然后进入到结果处理：ConsumeMessageConcurrentlyService processConsumeResult
+如果返回结果是 CONSUME_SUCCESS，此时 ackIndex = msg.size() – 1,再看发送 sendMessageBack 循环的条件，for (int i = ackIndex + 1; i &amp;lt; msg.size() ;;) 从这里可以看出如果消息成功，则无需发送sendMsgBack 给 broker。
+如果返回结果是 RECONSUME_LATER， 此时 ackIndex = -1 ，则这批所有的消息都会发送消息给Broker,也就是这一批消息都得重新消费。如果发送 ack 失败，则会延迟5s后重新在消费端重新消费。
+消费者向 Broker 发送 ACK 消息，如果发送成功，重试机制由 broker 处理，如果发送 ack 消息失败，则将该任务直接在消费者这边，再次在本地处理该批消息，默认演出5s后在消费者重新消费,其关键总结如下：
+根据消费结果，设置ackIndex 的值 如果是消费失败，根据消费模式（集群消费还是广播消费），广播模式，直接丢弃，集群模式发送 sendMessageBack。 更新消息消费进度，不管消费成功与否，上述这些消息消费成功，其实就是修改消费偏移量。（失败的，会进行重试，会创建新的消息)。 然后我们重点跟踪 sendMessageBack 方法：
+DefaultMQPushConsumerImpl sendMessageBack
+核心实现要点如下：</description></item><item><title>三、RocketMQ源码分析之CommitLog消息存储机制</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/3/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/mq/rocketmq-advanced/3/</guid><description>本文重点分析 Broker 接收到生产者发送消息请求后如何存储在 Broker 上，本文暂不关注事务消息机制。
+本文前置篇:RocketMQ源码分析之Broker概述与同步消息发送原理与高可用设计及思考 。
+RocketMQ 的存储核心类为 DefaultMessageStore,存储消息的入口方法为：putMessage。
+在深入学习消息存储之前，我们先大概了解一下DefaultMessageStore的属性与构造方法。
+1、消息存储分析 1.1 DefaultMessageStore 概要 其核心属性如下：
+messageStoreConfig
+存储相关的配置，例如存储路径、commitLog文件大小，刷盘频次等等。 CommitLog commitLog
+comitLog 的核心处理类，消息存储在 commitlog 文件中。 ConcurrentMap&amp;lt;String/\* topic \*/, ConcurrentMap&amp;lt;Integer/* queueId */, ConsumeQueue&amp;raquo;` consumeQueueTable
+topic 的队列信息。 FlushConsumeQueueService flushConsumeQueueService
+ConsumeQueue 刷盘服务线程。 CleanCommitLogService cleanCommitLogService
+commitLog 过期文件删除线程。 CleanConsumeQueueService cleanConsumeQueueService
+consumeQueue 过期文件删除线程。、 IndexService indexService
+索引服务。 AllocateMappedFileService allocateMappedFileService
+MappedFile 分配线程，RocketMQ 使用内存映射处理 commitlog、consumeQueue文件。 ReputMessageService reputMessageService
+reput 转发线程（负责 Commitlog 转发到 Consumequeue、Index文件）。 HAService haService
+主从同步实现服务。 ScheduleMessageService scheduleMessageService
+定时任务调度器，执行定时任务。 StoreStatsService storeStatsService</description></item><item><title>三十、RocketMQ消息轨迹-设计篇</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/30/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/mq/rocketmq-advanced/30/</guid><description>本节目录 1、消息轨迹数据格式 2、 记录消息轨迹；
+3、 如何存储消息轨迹数据；
+RocketMQ消息轨迹主要包含两篇文章：设计篇与源码分析篇，本节将详细介绍RocketMQ消息轨迹-设计相关。
+RocketMQ消息轨迹，主要跟踪消息发送、消息消费的轨迹，即详细记录消息各个处理环节的日志，从设计上至少需要解决如下三个核心问题：
+消费轨迹数据格式 记录消息轨迹(消息日志) 消息轨迹数据存储在哪？ 1、消息轨迹数据格式 RocketMQ4.5版本消息轨迹主要记录如下信息：
+traceType
+跟踪类型，可选值：Pub(消息发送)、SubBefore(消息拉取到客户端，执行业务定义的消费逻辑之前)、SubAfter(消费后)。 timeStamp
+当前时间戳。 regionId
+broker所在的区域ID，取自BrokerConfig#regionId。 groupName
+组名称，traceType为Pub时为生产者组的名称；如果traceType为subBefore或subAfter时为消费组名称。 requestId
+traceType为subBefore、subAfter时使用，消费端的请求Id。 topic
+消息主题。 msgId
+消息唯一ID。 tags
+消息tag。 keys
+消息索引key，根据该key可快速检索消息。 storeHost
+跟踪类型为PUB时为存储该消息的Broker服务器IP；跟踪类型为subBefore、subAfter时为消费者IP。 bodyLength
+消息体的长度。 costTime
+耗时。 msgType
+消息的类型，可选值：Normal_Msg(普通消息),Trans_Msg_Half(预提交消息),Trans_msg_Commit(提交消息),Delay_Msg(延迟消息)。 offsetMsgId
+消息偏移量ID,该ID中包含了broker的ip以及偏移量。 success
+是发送成功。 contextCode
+消费状态码，可选值：SUCCESS,TIME_OUT,EXCEPTION,RETURNNULL,FAILED。 2、记录消息轨迹 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 消息中间件的两大核心主题：消息发送、消息消费，其核心载体就是消息，消息轨迹（消息的流转）主要是记录消息是何时发送到哪台Broker，发送耗时多少时间，在什么是被哪个消费者消费。记录消息的轨迹主要是集中在消息发送前后、消息消费前后，可以通过RokcetMQ的Hook机制。通过如下两个接口来定义钩子函数。
+通过实行上述两个接口，可以实现在消息发送、消息消费前后记录消息轨迹，为了不明显增加消息发送与消息消费的时延，记录消息轨迹最好使用异步发送模式。
+3、如何存储消息轨迹数据 消息轨迹需要存储什么消息以及在什么时候记录消息轨迹的问题都以及解决，那接下来就得思考将消息轨迹存储在哪里？存储在数据库中或其他媒介中，都会加重消息中间件，使其依赖外部组件，最佳的选择还是存储在Broker服务器中，将消息轨迹数据也当成一条消息存储到Broker服务器。
+既然把消息轨迹当成消息存储在Broker服务器，那存储消息轨迹的Topic如何确定呢？RocketMQ提供了两种方法来定义消息轨迹的Topic。
+系统默认Topic
+如果Broker的traceTopicEnable配置设置为true，表示在该Broker上创建topic名为：RMQ_SYS_TRACE_TOPIC，队列个数为1，默认该值为false，表示该Broker不承载系统自定义用于存储消息轨迹的topic。 自定义Topic
+在创建消息生产者或消息消费者时，可以通过参数自定义用于记录消息轨迹的Topic名称，不过要注意的是，rokcetmq控制台(rocketmq-console)中只支持配置一个消息轨迹Topic，故自定义Topic，在目前这个阶段或许还不是一个最佳实践，建议使用系统默认的Topic即可。 通常为了避免消息轨迹的数据与正常的业务数据混合在一起，官方建议，在Broker集群中，新增加一台机器，只在这台机器上开启消息轨迹跟踪，这样该集群内的消息轨迹数据只会发送到这一台Broker服务器上，并不会增加集群内原先业务Broker的负载压力。
+RocketMQ消息轨迹的设计细节就介绍到这里了，下一篇将从源码的角度对其实现细节进行详细的剖析；如果觉得本文对您有帮助的话，期待您的点赞，谢谢。</description></item><item><title>三十二、RocketMQ一个新的消费组初次启动时从何处开始消费呢？</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/32/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/mq/rocketmq-advanced/32/</guid><description>本文目录 1、抛出问题
+1.1 环境准备
+1.2 消息发送者代码
+1.3 消费端验证代码
+2、 探究CONSUME_FROM_MAX_OFFSET实现原理；
+2.1 CONSUME_FROM_LAST_OFFSET计算逻辑 2.2 CONSUME_FROM_FIRST_OFFSET 2.4 CONSUME_FROM_TIMESTAMP 3、 猜想与验证；
+4、 解决方案；
+1、抛出问题 一个新的消费组订阅一个已存在的Topic主题时，消费组是从该Topic的哪条消息开始消费呢？
+首先翻阅DefaultMQPushConsumer的API时，setConsumeFromWhere(ConsumeFromWhere consumeFromWhere)API映入眼帘，从字面意思来看是设置消费者从哪里开始消费，正是解开该问题的”钥匙“。ConsumeFromWhere枚举类图如下：
+CONSUME_FROM_MAX_OFFSET
+从消费队列最大的偏移量开始消费。 CONSUME_FROM_FIRST_OFFSET
+从消费队列最小偏移量开始消费。 CONSUME_FROM_TIMESTAMP
+从指定的时间戳开始消费，默认为消费者启动之前的30分钟处开始消费。可以通过DefaultMQPushConsumer#setConsumeTimestamp。 是不是点小激动，还不快试试。
+需求：新的消费组启动时，从队列最后开始消费，即只消费启动后发送到消息服务器后的最新消息。
+1.1 环境准备 本示例所用到的Topic路由信息如下：
+Broker的配置如下(broker.conf)
+1brokerClusterName = DefaultCluster 2brokerName = broker-a 3brokerId = 0 4deleteWhen = 04 5fileReservedTime = 48 6brokerRole = ASYNC_MASTER 7flushDiskType = ASYNC_FLUSH 8storePathRootDir=E:/SH2019/tmp/rocketmq_home/rocketmq4.5_simple/store 9storePathCommitLog=E:/SH2019/tmp/rocketmq_home/rocketmq4.5_simple/store/commitlog 10namesrvAddr=127.0.0.1:9876 11autoCreateTopicEnable=false 12mapedFileSizeCommitLog=10240 13mapedFileSizeConsumeQueue=2000 其中重点修改了如下两个参数：
+mapedFileSizeCommitLog
+单个commitlog文件的大小，这里使用10M，方便测试用。 mapedFileSizeConsumeQueue
+单个consumequeue队列长度，这里使用1000，表示一个consumequeue文件中包含1000个条目。 1.2 消息发送者代码 1public static void main(String[] args) throws MQClientException, InterruptedException { 2 DefaultMQProducer producer = new DefaultMQProducer(&amp;#34;please_rename_unique_group_name&amp;#34;); 3 producer.</description></item><item><title>三十六、RocketMQ 主题扩分片后遇到的坑</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/36/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/mq/rocketmq-advanced/36/</guid><description>消息组接到某项目组反馈，topic 在扩容后出现部分队列无法被消费者，导致消息积压，影响线上业务？
+考虑到该问题是发送在真实的线上环境，为了避免泄密，本文先在笔者的虚拟机中来重现问题。
+本节目录 1、 案情回顾；
+1.1 集群现状 1.2、RocketMQ 在线扩容队列 1.3 消息发送 2、 问题暴露；
+3、 问题分析；
+4、 问题复盘；
+1、案情回顾 1.1 集群现状 集群信息如下：
+例如业务主体名 topic_dw_test_by_order_01 的路由信息如图所示：
+当前的消费者信息：
+broker 的配置信息如下：
+1brokerClusterName = DefaultCluster 2brokerName = broker-a 3brokerId = 0 4deleteWhen = 04 5fileReservedTime = 48 6brokerRole = ASYNC_MASTER 7flushDiskType = ASYNC_FLUSH 8brokerIP1=192.168.0.220 9brokerIP2-192.168.0.220 10namesrvAddr=192.168.0.221:9876;192.168.0.220:9876 11storePathRootDir=/opt/application/rocketmq-all-4.5.2-bin-release/store 12storePathCommitLog=/opt/application/rocketmq-all-4.5.2-bin-release/store/commitlog 13autoCreateTopicEnable=false 14autoCreateSubscriptionGroup=false 备注：公司对 topic、消费组进行了严格的管控，项目组需要使用时需要向运维人员申请，故 broker 集群不允许自动创建主题与自动创建消费组。
+由于该业务量稳步提升，项目组觉得该主题的队列数太少，不利于增加消费者来提高其消费能力，故向运维人员提出增加队列的需求。
+1.2、RocketMQ 在线扩容队列 运维通过公司自研的消息运维平台，直接以指定集群的方式为 topic 扩容，该运维平台底层其实使用了RocketMQ 提供的 updateTopic 命令，其命令说明如下：</description></item><item><title>三十三、RocketMQ 多副本前置篇：初探raft协议</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/33/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/mq/rocketmq-advanced/33/</guid><description>Raft协议是分布式领域解决一致性的又一著名协议，主要包含Leader选举、日志复制两个部分。
+温馨提示：
+本文根据raft官方给出的raft动画进行学习，其动画展示地址：http://thesecretlivesofdata.com/raft/
+本节目录 1、Leader选举
+1.1 一轮投票中，只有一个节点发起投票的情况
+1.2 一轮投票中，超过一个节点发起投票的情况
+1.3 思考如何实现Raft选主
+2、 日志复制；
+1、Leader选举 1.1 一轮投票中，只有一个节点发起投票的情况 Raft协议中节点有3种状态（角色）：
+Follower
+跟随者。 Candidate
+候选者。 Leader
+领导者(Leader)，通常我们所说的的主节点。 首先3个节点初始状态为 Follower，每个节点会有一个超时时间(计时器)，其时间设置为150ms~300ms之间的随机值。当计时器到期后，节点状态从 Follower 变成 Candidate，如下图所示：
+通常情况下，三个节点中会有一个节点的计时器率先到期，节点状态变为 Candidate ，候选者状态下的节点会发起选举投票。我们先来考虑只有一个节点变为Candidate时是如何进行选主的。
+当节点状态为Candidate，将发起一轮投票，由于是第一轮投票，设置本轮投票轮次为1，并首先为自己投上一票，正如上图所示的NodeA节点，Team为1，Vote Count为1.
+当一个节点的定时器超时后，首先为自己投上一票，然后向该组内其他的节点发起投票(用拉票更加合适)，发送投票请求。
+当集群内的节点收到投票请求外，如果本轮未进行过投票，则赞同，否则反对，然后将结果返回，并重置计时器。
+当节点A收到的赞同票大于一半时，则升级为该集群的 Leader，然后定时向集群内的其他节点发送心跳，以便确定自己的领导地位，正如下图所示。
+Node A，集群中的 Leader正在向其他节点发送心跳包。
+节点在收到 Leader 的心跳包后，返回响应结果，并重置自身的计时器，如果 Flower 状态的节点在计时时间超时内没有收到Leader 的心跳包，就会从 Flower 节点变成 Candidate,该节点就会发起下一轮投票。
+例如NodeA节点宕机，停止向它的从发送心跳，我们来看一下集群如何重新选主。
+如果主节点宕机，则停止向集群内的节点发送心跳包。随着计时器的到期，节点B的先于节点C变成 Candidate，则节点B向集群内的其他节点发起投票，如下图所示。
+节点B，首先将投票轮次设置为2，然后首先为自己投上一篇，然后向其他节点发起投票请求。
+节点C收到请求，由于其投票轮次大于自己的投票轮次，并该轮次并未投票，投出赞成票并返回结果，然后重置计时器。节点B将顺理成章的成为新的Leader并定时发送心跳包。
+3个节点的选主就介绍到这里了，也许有网友会说，虽然各个节点的计时器是随机的，但也有可能同一时间，或一个节点在未收到另一个节点发起的投票请求之前变成 Candidate，即在一轮投票过程中，有大于1个的节点状态都是 Candidate，那该如何选主呢？
+下面以4个节点的集群为例，来阐述上述这种情况情况下，如何进行选主。
+1.2 一轮投票中，超过一个节点发起投票的情况 首先同时有两个节点进入Candidate状态，并开始新的一轮投票，当前投票编号为4，首先先为自己投上一票，然后向集群中的其他节点发起投票，如下图所示：
+然后各个节点收到投票请求，如下所示，进行投票：
+首先节点C、D在收到D、C节点的投票请求时，都会返回不同意，因为在本轮投票中，已经各自为自己投了一票，按照上图，节点A同意C节点、节点B同意D节点，那此时C、D都只获的两票，当然如果A,B都认为C或D成为主节点，则选择就可以结束了，上图显示，C、D都只获的2票，未超过半数，无法成为主节点，那接下来会发生什么呢？请看下图：
+此时A,B,C,D的定时器各自在倒计时，当节点成为Candidate时，或自身状态本身是Candidate并且定时器触发后，发起一轮新的投票，图中是节点B、节点D同时发起了新的一轮投票。
+投票结果如下：节点A,节点C同意节点B成为leader，但由于BD都发起了第5轮投票，最终的投票轮次更新为6，如图所示：
+关于Raft协议的选主就介绍到这里了，接下来我们来思考一下，如果自己实现 Raf t协议，至少要考虑哪些问题，为下一篇源码阅读Dleger(RocketMQ多副本)模块提供一些思路。
+1.3 思考如何实现Raft选主 1、 节点状态；</description></item><item><title>三十四、源码分析 RocketMQ DLedger 多副本之 Leader 选主</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/34/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/mq/rocketmq-advanced/34/</guid><description>温馨提示：《RocketMQ技术内幕》作者倾力打造的全新专栏：RocketMQ 多副本(主从切换)：
+1、《RocketMQ 多副本前置篇：初探raft协议》
+本文将按照《RocketMQ 多副本前置篇：初探raft协议》的思路来学习RocketMQ选主逻辑。首先先回顾一下关于Leader的一些思考：
+1、 节点状态；
+需要引入3种节点状态：Follower(跟随者)、Candidate(候选者)，该状态下的节点会发起投票请求，Leader(主节点)。
+2、 选举计时器；
+Follower、Candidate两个状态时，需要维护一个定时器，每次定时时间从150ms-300ms直接进行随机，即每个节点的定时过期不一样，Follower状态时，定时器到点后，触发一轮投票。节点在收到投票请求、Leader的心跳请求并作出响应后，需要重置定时器。
+3、 投票轮次Team；
+Candidate状态的节点，每发起一轮投票，Team加一。
+4、 投票机制；
+每一轮一个节点只能为一个节点投赞成票，例如节点A中维护的轮次为3，并且已经为节点B投了赞成票，如果收到其他节点，投票轮次为3，则会投反对票，如果收到轮次为4的节点，是又可以投赞成票的。
+5、 成为Leader的条件；
+必须得到集群中初始数量的大多数，例如如果集群中有3台，则必须得到两票，如果其中一台服务器宕机，剩下的两个节点，还能进行选主吗？答案是可以的，因为可以得到2票，超过初始集群中3的一半，所以通常集群中的机器各位尽量为奇数，因为4台的可用性与3台的一样。
+温馨提示：本文是从源码的角度分析 DLedger 选主实现原理，可能比较鼓噪，文末给出了选主流程图。
+本节目录 1、DLedger关于选主的核心类图
+1.1 DLedgerConfig
+1.2 MemberState
+1.3 raft协议相关
+1.3.1 DLedgerClientProtocol
+1.3.2 DLedgerProtocol
+1.3.3 协议处理Handler
+1.4 DLedgerRpcService
+1.5 DLedgerLeaderElector
+1.6 DLedgerServer
+2、 源码分析Leader选举；
+2.1 DLedgerLeaderElector 类图
+2.2 启动选举状态管理器
+2.3 选举状态机状态流转
+2.3.1 maintainAsCandidate 方法
+2.3.2 maintainAsLeader 方法
+2.3.3 maintainAsFollower方法
+2.4 投票与投票请求
+2.4.1 voteForQuorumResponses
+2.4.2 handleVote 方法
+2.5 心跳包与心跳包响应</description></item><item><title>三十五、源码分析 RocketMQ DLedger 多副本存储实现</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/35/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/mq/rocketmq-advanced/35/</guid><description>本节目录 1、 DLedger存储相关类图；
+1.1 DLedgerStore 1.2 DLedgerMemoryStore 1.3 DLedgerMmapFileStore 2、 DLedger存储对标RocketMQ存储；
+3、 DLedger数据存储格式；
+4、 DLedger索引存储格式；
+5、 思考；
+RocketMQ DLedger 的存储实现思路与 RocketMQ 的存储实现思路相似，本文就不再从源码角度详细剖析其实现，只是点出其实现关键点。我们不妨简单回顾一下 CommitLog 文件、ConsumeQueue 文件设计思想。
+其文件组成形式如下：
+正如上图所示，多个 commitlog 文件组成一个逻辑上的连续文件，使用 MappedFileQueue 表示，单个 commitlog 文件使用 MappedFile 表示。
+温馨提示：如果想详细了解 RocketMQ 关于存储部分的讲解，可以关注笔者的《RocketMQ 技术内幕》一书。
+1、DLedger 存储相关类图 1.1 DLedgerStore 存储抽象类，定义如下核心方法：
+public abstract DLedgerEntry appendAsLeader(DLedgerEntry entry)
+向主节点追加日志(数据)。 public abstract DLedgerEntry appendAsFollower(DLedgerEntry entry, long leaderTerm, String leaderId)
+向从节点同步日志。 public abstract DLedgerEntry get(Long index)
+根据日志下标查找日志。 public abstract long getCommittedIndex()</description></item><item><title>三十一、RocketMQ源码分析消息轨迹</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/31/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/mq/rocketmq-advanced/31/</guid><description>本文沿着《RocketMQ消息轨迹-设计篇》的思路，从如下3个方面对其源码进行解读：
+1、 发送消息轨迹；
+2、 消息轨迹格式；
+3、 存储消息轨迹数据；
+本节目录 1、发送消息轨迹流程
+1.1 DefaultMQProducer构造函数
+1.2 SendMessageTraceHookImpl钩子函数
+1.2.1 SendMessageTraceHookImpl类图
+1.2.2 源码分析SendMessageTraceHookImpl
+1.2.2.1 sendMessageBefore 1.2.2.2 sendMessageAfter 1.3 TraceDispatcher实现原理
+1.3.1 TraceDispatcher构造函数
+1.3.2 getAndCreateTraceProducer详解
+1.3.3 start
+1.3.4 AsyncRunnable
+1.3.5 AsyncAppenderRequest\#sendTraceData 1.3.6 TraceDataEncoder\#encoderFromContextBean 1.3.6.1 PUB(消息发送) 1.3.6.2 SubBefore(消息消费之前) 1.3.2.3 SubAfter（消息消费后） 2、 消息轨迹数据如何存储；
+2.1 使用系统默认的主题名称 2.2 用户自定义消息轨迹主题 1、发送消息轨迹流程 首先我们来看一下在消息发送端如何启用消息轨迹，示例代码如下：
+1public class TraceProducer { 2 public static void main(String[] args) throws MQClientException, InterruptedException { 3 DefaultMQProducer producer = new DefaultMQProducer(&amp;#34;ProducerGroupName&amp;#34;,true); // @1 4 producer.</description></item><item><title>十、RocketMQ源码分析之消费队列、Index索引文件存储结构与存储机制-下篇</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/10/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/mq/rocketmq-advanced/10/</guid><description>上篇主要是讲解 RocketMQ 运行过程中消息发送者发送一条消息，进入到 commitlog 文件,然后是如何被转发到consumequeue、index索引文件中的，本节主要剖析一下，在 RocketMQ 启动过程中，是如何根据 commitlog 重构consumeque,index的，因为毕竟 commitlog 文件中的消息与 consumequeue 中的文件内容并不能确保是一致的。
+入口：DefaultMessageStore#load
+1/** 2 * @throws IOException 3 */ 4 public boolean load() { 5 boolean result = true; 6 try { 7 boolean lastExitOK = !this.isTempFileExist(); // @1 8 log.info(&amp;#34;last shutdown {}&amp;#34;, lastExitOK ? &amp;#34;normally&amp;#34; : &amp;#34;abnormally&amp;#34;); 9 if (null != scheduleMessageService) { 10 result = result &amp;amp;&amp;amp; this.scheduleMessageService.load(); // @2 11 } 12 // load Commit Log 13 result = result &amp;amp;&amp;amp; this.</description></item><item><title>十八、源码研究RocketMQ主从同步机制(HA)</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/18/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/mq/rocketmq-advanced/18/</guid><description>关于主从同步最新理解：RocketMQ 主从同步若干问题答疑
+HA主从同步的核心类图如图所示：
+初始RocketMQ HA HAService：主从同步核心实现类。
+AtomicInteger connectionCount：Master维护的连接数。（Slave的个数）。 List&amp;lt; HAConnection&amp;gt; connectionList：具体连接信息。 AcceptSocketService acceptSocketService：服务端接收连接线程实现类。 DefaultMessageStore defaultMessageStore：Broker存储实现。 WaitNotifyObject waitNotifyObject：同步等待实现。 AtomicLong push2SlaveMaxOffset：该Master所有Slave中同步最大的偏移量。 GroupTransferService groupTransferService：判断主从同步复制是否完成。 HAClient haClient：HA客户端实现，Slave端网络的实现类。 HAConnection：HA Master-Slave 网络连接对象。
+private final HAService haService：关联的AService实现类。 SocketChannel socketChannel：网络通道。 String clientAddr：客户端地址。 WriteSocketService writeSocketService：HAConnection网络写封装。 ReadSocketService readSocketService：HAConnection网络写封装。 RocketMQ HA机制大体可以分为如下三个部分。
+Master启动并监听Slave的连接请求。 Slave启动，与Master建立链接。 Slave发送待拉取偏移量待Master返回数据，持续该过程。 2、HAService实现原理剖析 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 2.1 Master启动流程（HAService） 1public void start() throws Exception { 2 this.acceptSocketService.beginAccept(); 3 this.acceptSocketService.start(); 4 this.groupTransferService.start(); 5 this.haClient.start(); 6public void start() throws Exception { 7 this.</description></item><item><title>十二、RocketMQ源码分析消息过滤机制上篇—–消息消费服务端过滤与TAG模式过滤实现</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/12/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/mq/rocketmq-advanced/12/</guid><description>1、消息消费过滤机制 1.1 根据 tagcode 过滤 1.2 高级过滤 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 上述资源来源于 RocketMQ 官方文档。
+通过官方文档，我们基本可以知道，消息的过滤机制与服务端息息相关，更细一点的讲，与拉取消息实现过程脱离不了关系，事实上也的确如此，MessageFilter 的使用者也就是 DefaultMessageStore#getMessage 方法，为了弄清楚消息过滤机制，我们先看一下 MessageFilter 接口，然后详细再浏览一下消息拉取实现细节。
+MessageFilter 接口类：
+1boolean isMatchedByConsumeQueue(final Long tagsCode, final ConsumeQueueExt.CqExtUnit cqExtUnit); isMatchedByConsumeQueue 、isMatchedByCommitLog 的区别是什么？从字面上理解，一个过滤基于 ConsumeQueue，一个基于CommitLog 过滤，为什么需要这样呢？请带着上面的问题开始后面的探索。
+2、 DefaultMessageStore#getMessage 1public GetMessageResult getMessage(final String group, final String topic, final int queueId, final long offset, 2 final int maxMsgNums, 3 final MessageFilter messageFilter) { // @1 4 if (this.shutdown) { 5 log.warn(&amp;#34;message store has shutdown, so getMessage is forbidden&amp;#34;); 6 return null; 7 } 8 if (!</description></item><item><title>十九、RocketMQ 主从同步读写分离机制</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/19/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/mq/rocketmq-advanced/19/</guid><description>关于主从同步最新理解：RocketMQ 主从同步若干问题答疑
+RocketMQ在消息拉取时是如何根据消息消费队列MessageQueue来选择Broker的呢？消息消费队列如图所示：
+RocketMQ根据MessageQueue查找Broker地址的唯一依据便是brokerName，从RocketMQ的Broker组织实现来看，同一组Broker(M-S)服务器，其brokerName相同，主服务器的brokerId为0，从服务器的brokerId大于0，那RocketMQ根据brokerName如何定位到哪一台Broker上来呢？
+PullAPIWrapper#pullKernelImpl
+1FindBrokerResult findBrokerResult = 2 this.mQClientFactory.findBrokerAddressInSubscribe(mq.getBrokerName(), 3 this.recalculatePullFromWhichNode(mq), false); RocketMQ的MQClientInstance类提供了根据brokerName、brokerId查找Broker地址的方法，返回值如图：
+MQClientInstance#findBrokerAddressInSubscribe
+1public FindBrokerResult findBrokerAddressInSubscribe( 2 final String brokerName, 3 final long brokerId, 4 final boolean onlyThisBroker 5 ) { 6 String brokerAddr = null; 7 boolean slave = false; 8 boolean found = false; 9 HashMap&amp;lt;Long/* brokerId */, String/* address */&amp;gt; map = this.brokerAddrTable.get(brokerName); 10 if (map != null &amp;amp;&amp;amp; !map.isEmpty()) { 11 brokerAddr = map.</description></item><item><title>十六、RocketMQ源码分析顺序消息消费实现原理</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/16/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/mq/rocketmq-advanced/16/</guid><description>本节目录 1、 消息队列负载；
+2、 消息拉取；
+3、 消息顺序消息消费；
+3.1核心属性与构造函数 3.2 start方法 3.3 submitConsumeRequest 3.4 ConsumeMessageOrderlyService#ConsumeRequest 3.4 消息队列锁实现 所谓顺序消费，rocketmq 支持同一消费队列上的消息顺序消费。
+消息消费涉及3个点：
+1、 消息队列重新负载；
+2、 消息拉取；
+3、 消息消费；
+按照消息消费步骤来揭开 RocketMQ 顺序消息消费实现原理。
+1、消息队列负载 RocketMQ 在同一个 JVM 进程拥有一个 clientConfigId(客户端ID)，该JVM进程中不同的消息消费组的消息客户端ID相同，因为在JVM进程中对于每一个 ClientConfig 只会实例化一个 MQClientInstance。消息消费的第一个步骤是首先要为消费组内的所有消息者分配消息消费队列。RocetMQ 中通过RebalanceService线程实现消费队列负载。
+1RebalanceImpl#updateProcessQueueTableInRebalance 2List&amp;lt;PullRequest&amp;gt; pullRequestList = new ArrayList&amp;lt;PullRequest&amp;gt;(); 3for (MessageQueue mq : mqSet) { 4 if (!this.processQueueTable.containsKey(mq)) { 5 if (isOrder &amp;amp;&amp;amp; !this.lock(mq)) { // @1 6 log.warn(&amp;#34;doRebalance, {}, add a new mq failed, {}, because lock failed&amp;#34;, consumerGroup, mq); 7 continue; 8 } 9 this.</description></item><item><title>十七、RocketMQ源码分析文件清除机制</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/17/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/mq/rocketmq-advanced/17/</guid><description>由于RocketMQ操作CommitLog、ConsumeQueue文件，都是基于内存映射方法并在启动的时候，会加载commitlog、ConsumeQueue目录下的所有文件，为了避免内存与磁盘的浪费，不可能将消息永久存储在消息服务器上，所以需要一种机制来删除已过期的文件。
+RocketMQ顺序写Commitlog、ConsumeQueue文件，所有写操作全部落在最后一个CommitLog或ConsumeQueue文件上，之前的文件在下一个文件创建后，将不会再被更新。
+RocketMQ清除过期文件的方法是：如果非当前写文件在一定时间间隔内没有再次被更新，则认为是过期文件，可以被删除，RocketMQ不会管这个这个文件上的消息是否被全部消费。默认每个文件的过期时间为72小时。通过在Broker配置文件中设置fileReservedTime来改变过期时间，单位为小时。接下来详细分析RocketMQ是如何设计与实现上述机制的。
+DefaultMessageStore#addScheduleTask:
+1this.scheduledExecutorService.scheduleAtFixedRate(new Runnable() { 2 @Override 3 public void run() { 4 DefaultMessageStore.this.cleanFilesPeriodically(); 5 } 6 }, 1000 * 60, this.messageStoreConfig.getCleanResourceInterval(), TimeUnit.MILLISECONDS); RocketMQ 会每隔10s调度一次cleanFilesPeriodically，已检测是否需要清除过期文件。执行频率可以通过设置cleanResourceInterval，默认为10s。
+DefaultMessageStore#cleanFilesPeriodically
+1private void cleanFilesPeriodically() { 2 this.cleanCommitLogService.run(); 3 this.cleanConsumeQueueService.run(); 4 } 主要清除CommitLog、ConsumeQueue的过期文件。CommitLog 与 ConsumeQueue 对于过期文件的删除算法、逻辑大同小异，本文将以 CommitLog 过期文件为例来详细分析其实现原理。
+DefaultMessageStore$CleanCommitLogService#run
+1public void run() { 2 try { 3 this.deleteExpiredFiles(); 4 this.redeleteHangedFile(); 5 } catch (Throwable e) { 6 DefaultMessageStore.log.warn(this.getServiceName() + &amp;#34; service has 7 exception.</description></item><item><title>十三、RocketMQ源码分析消息过滤机制下篇-FilterServer、ClassFilter模式详解</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/13/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/mq/rocketmq-advanced/13/</guid><description>继上篇源码分析了 Tag 过滤机制实现原理，本文主要阐述 RocketMQ SQL92 表达式与 ClassFilte r过滤机制实现。
+1、RocketMQ SQL92实现原理分析 入口：PullMessageProcessor#processRequest
+1if (!ExpressionType.isTagType(subscriptionData.getExpressionType())) { 2consumerFilterData = ConsumerFilterManager.build( 3 requestHeader.getTopic(), requestHeader.getConsumerGroup(), requestHeader.getSubscription(), 4 requestHeader.getExpressionType(), requestHeader.getSubVersion() 5 ); 6 assert consumerFilterData != null; 首先构建ConsumeFilterData数据结构：
+consumeGroup: 消费组 topic ： 消息主题 expresstion:消息过滤表达式，例如SQL92表达式，或过滤类全路径名 expresseionType : 表达式类型，可取值TAG、SQL92 compiledExpression:编译后的表达式对象 bornTime: ConsumerFilterData 对象创建创建时间 deadTime: ConsumerFilterData 对象死亡时间，默认0，表示一直有效。 BloomFilterData bloomFilterData clientVersion:客户端版本 接下来我们先重点分析 ConsumerFilterManager#build方法：
+1/** 2 * Build consumer filter data.Be care, bloom filter data is not included. 3 * 4 * @return maybe null 5 */ 6 public static ConsumerFilterData build(final String topic, final String consumerGroup, 7 final String expression, final String type, 8 final long clientVersion) { // @1 9 if (ExpressionType.</description></item><item><title>十四、RocketMQ源码分析消息拉取拉模式PULL</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/14/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/mq/rocketmq-advanced/14/</guid><description>本节目录 1、 RocketMQ推拉模式简介；
+2、 DefaultMQPullConsumer核心属性；
+3、 消息消费者启动流程分析；
+1、RocketMQ 推拉模式简介 消费者与消息存储方 Broker一般有两种通信机制：推（PUSH）、拉(PULL)。
+推模式：消息发送者将消息发送到Broker，然后Broker主动推送给订阅了该消息的消费者。 拉模式：消息发送者将消息发送到Broker上，然后由消息消费者自发的向Broker拉取消息。 RocketMQ 推拉机制实现：严格意义上来讲，RocketMQ 并没有实现 PUSH 模式，而是对拉模式进行一层包装，在消费端开启一个线程 PullMessageService 循环向 Broke r拉取消息，一次拉取任务结束后马上又发起另一次拉取操作，实现准实时自动拉取，PUSH 模式的实现请参考如下博文：
+1、 推模式消息拉取机制；
+2、 推模式消息队列负载机制；
+本文重点在讨论RocketMQ拉模式DefaultMQPullConsumer实现。
+RocketMQ 拉模式，RocketMQ 消费者不自动向消息服务器拉取消息，而是将控制权移交给应用程序，RocketMQ消费者只是提供拉取消息API。
+为了对RocketMQ 拉模式有一个直观的了解，我们先大概浏览一下 MQPullConsumer 接口。
+从上面我们可以看到除了启动、关闭，注册消息监听器，其他的就是针对 MessageQueue 拉取消息，特别值得留意的是每一个拉取 pull 方法，都是直接针对消息消费队列。PUSH 模式可以说基于订阅与发布模式，而PULL模式可以说是基于消息队列模式。
+特别说明：PULL模式根据主题注册消息监听器，这里的消息监听器，不是用来消息消费的，而是在该主题的队列负载发生变化时，做一下通知。
+我们应该带着我们对 PUSH 模式的相关知识来认识一下 PULL 模式，对比学习.
+PUSH模式主要知识点：
+消息拉取机制：PullMessageServer线程 根据PullRequest拉取任务循环拉取。 消息队列负载机制，按照消费组，对主题下的消息队列，结合当前消费组内消费者数量动态负载。 按照上面API的描述，PULL模式应该无需考虑上面两个情形，我们带着上述疑问，开始我们今天的学习。
+2、DefaultMQPullConsumer 核心属性 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 1/** 2 * Do the same thing for the same Group, the application must be set,and 3 * guarantee Globally unique 4 */ 5 private String consumerGroup; 6 /** 7 * Long polling mode, the Consumer connection max suspend time, it is not 8 * recommended to modify 9 */ 10 private long brokerSuspendMaxTimeMillis = 1000 * 20; 11 /** 12 * Long polling mode, the Consumer connection timeout(must greater than 13 * brokerSuspendMaxTimeMillis), it is not recommended to modify 14 */ 15 private long consumerTimeoutMillisWhenSuspend = 1000 * 30; 16 /** 17 * The socket timeout in milliseconds 18 */ 19 private long consumerPullTimeoutMillis = 1000 * 10; 20 /** 21 * Consumption pattern,default is clustering 22 */ 23 private MessageModel messageModel = MessageModel.</description></item><item><title>十五、RocketMQ源码分析消息PULL-长轮询模式</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/15/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/mq/rocketmq-advanced/15/</guid><description>本节目录 1、 长轮询、短轮询概述；
+2、 RocketMQ拉轮询拉取任务创建；
+3、 源码分析PullRequestHoldService线程；
+3.1 PullRequestHoldService#suspendPullRequest 3.2 run方法详解 4、源码分析DefaultMessageStore#ReputMessageService
+4.1 run方法 4.2 doReput 1、长轮询、短轮询概述 消息拉取为了提高网络性能，在消息服务端根据拉取偏移量去物理文件查找消息时没有找到，并不立即返回消息未找到，而是会将该线程挂起一段时间，然后再次重试，直到重试。挂起分为长轮询或短轮询，在broker 端可以通过 longPollingEnable=true 来开启长轮询。
+短轮询：longPollingEnable=false，第一次未拉取到消息后等待 shortPollingTimeMills时间后再试。shortPollingTimeMills默认为1S。
+长轮询：longPollingEnable=true，会根据消费者端设置的挂起超时时间，受DefaultMQPullConsumer 的brokerSuspendMaxTimeMillis控制，默认20s,（brokerSuspendMaxTimeMillis），长轮询有两个线程来相互实现。
+PullRequestHoldService：每隔5s重试一次。 DefaultMessageStore#ReputMessageService，每当有消息到达后，转发消息，然后调用PullRequestHoldService 线程中的拉取任务，尝试拉取，每处理一次，Thread.sleep(1), 继续下一次检查。 2、RocketMQ拉轮询拉取任务创建 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 org.apache.rocketmq.broker.processor.PullMessageProcessor#processRequest
+首先看一下processRequest方法参数：
+1private RemotingCommand processRequest( 2 final Channel channel, 3 RemotingCommand request, 4 boolean brokerAllowSuspend) Channel channel：网络通道 RemotingCommand request：消息拉取请求 brokerAllowSuspend：是否允许挂起，也就是是否允许在未找到消息时暂时挂起线程。第一次调用时默认为true。 1case ResponseCode.PULL_NOT_FOUND: 2 if (brokerAllowSuspend &amp;amp;&amp;amp; hasSuspendFlag) { // @1 3 long pollingTimeMills = suspendTimeoutMillisLong; // @2 4 if (!</description></item><item><title>十一、RocketMQ源码分析刷盘机制</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/11/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/mq/rocketmq-advanced/11/</guid><description>RocketMQ 刷盘支持同步刷盘和异步刷盘。为了了解其具体实现，我们以 Commitlog 的存储为例来说明 RocketMQ 是如何进行磁盘读写。
+Comitlog#putMessage 首先将消息写入到 MappedFile,内存映射文件。然后根据刷盘策略刷写到磁盘，入口如下：
+CommitLog#handleDiskFlush
+1public void handleDiskFlush(AppendMessageResult result, PutMessageResult putMessageResult, MessageExt messageExt) { // @1 2 // Synchronization flush 3 if (FlushDiskType.SYNC_FLUSH == this.defaultMessageStore.getMessageStoreConfig().getFlushDiskType()) { // @2 4 final GroupCommitService service = (GroupCommitService) this.flushCommitLogService; 5 if (messageExt.isWaitStoreMsgOK()) { 6 GroupCommitRequest request = new GroupCommitRequest(result.getWroteOffset() + result.getWroteBytes()); 7 service.putRequest(request); 8 boolean flushOK = request.waitForFlush(this.defaultMessageStore.getMessageStoreConfig().getSyncFlushTimeout()); 9 if (!flushOK) { 10 log.error(&amp;#34;do groupcommit, wait for flush failed, topic: &amp;#34; + messageExt.</description></item><item><title>四、RocketMQ源码分析之消息消费概述</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/4/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/mq/rocketmq-advanced/4/</guid><description>1、消息消费概述 消息消费方式
+拉取、推送。 消费者组与消费模式
+多个消费者组成一个消费组，两种模式：集群（消息被其中任何一个消息者消费）、广播模式（全部消费者消费）。 ConsumeFromWhere consumeFromWhere
+从何处开始消费，可选值：
+1）CONSUME_FROM_LAST_OFFSET：上一次消费偏移量
+2）CONSUME_FROM_FIRST_OFFSET：从头开始
+3）CONSUME_FROM_TIMESTAMP：从某个时间点开始 消费进度存储
+其实现类为：OffsetStore offsetStore。消费者需要记录消息消费的进度：
+1）广播模式：广播模式由于每个消费者都需要消费消息，故消息的进度（最后消费的偏移量可以保存在本地）。
+2）集群模式：由于集群中的消费者只要一个消费消息即可，故消息的消费进度，需要保存在集中点，故 RocketMQ存储在Broker所在的服务器。 2、消息消费实现 首先看一下消费 Demo。
+使用推送模式，设置消费者所属组，订阅主题、定义消息消费回调接口，推送消息后消费方具体业务处理，并返回CONSUME_SUCCESS表示消费成功。
+消息消费者具体实现类：org.apache.rocketmq.client.impl.consumer.DefaultMQPushConsumerImpl。
+2.1 DefaultMQPushConsumerImpl 2.1.1 消费端初始化（构造方法） 然后开始重点从 star t方法深入研究 DefaultMQPushConsumerImpl 的内部机制。
+1public synchronized void start() throws MQClientException { 2 switch (this.serviceState) { 3 case CREATE_JUST: 4 log.info(&amp;#34;the consumer [{}] start beginning. messageModel={}, isUnitMode={}&amp;#34;, this.defaultMQPushConsumer.getConsumerGroup(), 5 this.defaultMQPushConsumer.getMessageModel(), this.defaultMQPushConsumer.isUnitMode()); 6 this.serviceState = ServiceState.START_FAILED; // @1 7 this.checkConfig(); //@2 8 this.copySubscription(); //@3 9 if (this.</description></item><item><title>五、RocketMQ源码分析消息消费机制—-消费者拉取消息机制</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/5/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/mq/rocketmq-advanced/5/</guid><description>1、 消息消费需要解决的问题；
+首先再次重复啰嗦一下RocketMQ消息消费的一些基本元素的关系
+主题—》 消息队列(MessageQueue) 1 对多
+主题—-》 消息生产者，，，一般主题会由多个生产者组成，生产者组
+主题—- 》 消息消费者，，一般一个主题也会被多个消费者消费
+那消息消费至少需要解决如下问题：
+1、 一个消费组中多个消费者是如何对消息队列（1个主题多个消息队列）进；
+行负载消费的。
+2、 一个消费者中多个线程又是如何协作（并发）的消费分配给该消费者的；
+消息队列中的消息呢？
+3、 消息消费进度如何保存，包括MQ是如何知道消息是否正常被消费了；
+4、 RocketMQ推拉模式实现机制；
+再提一个业界关于消费者与消息队列的消费规则
+1个消费者可以消费多个消息队列，但一个消息队列同一时间只能被一个消费者消费，这又是如何实现的呢？
+后续几篇文章都会围绕上述问题进行展开，读者朋友们，带上上述的问题，我们一起遨游在RocketMQ消息消费的世界中吧。
+2、 消费端拉取消息机制；
+2、 1消息消费端核心类介绍；
+DefaultMQPushConsumerImpl ：消息消息者默认实现类，应用程序中直接用该类的实例完成消息的消费，并回调业务方法。
+RebalanceImpl 字面上的意思（重新平衡）也就是消费端消费者与消息队列的重新分布，与消息应该分配给哪个消费者消费息息相关。
+MQClientInstance 消息客户端实例，负载与MQ服务器（Broker,Nameserver)交互的网络实现
+PullAPIWrapper pull与Push在RocketMQ中，其实就只有Pull模式，所以Push其实就是用pull封装一下
+MessageListenerInner 消费消费回调类，当消息分配给消费者消费时，执行的业务代码入口
+OffsetStore 消息消费进度保存
+ConsumeMessageService 消息消费逻辑
+消费端使用实例：
+2、 2消息消费者启动关键流程；
+1）构建 RebalanceImpl
+2）PullAPIWrapper 对象构建
+3）消费进度加载
+4）消费管理ConsumeMessageService
+5）MQClientInstance 启动，进入消息消费
+2、 2、1MQClientInstance；
+2、 2、1.1定时任务一览表；
+每隔2分钟尝试获取一次NameServer地址
+每隔30S尝试更新主题路由信息
+每隔30S 进行Broker心跳检测
+默认每隔5秒持久化ConsumeOffset
+默认每隔1S检查线程池适配
+上述定时任务，下文或后续文章会重点剖析一下【持久化ConsumeOffset】
+2、 2、1.2PullMesssageService；
+从上面感悟：一个应用程序，一个消费组，只需要一个DefaultMQPushConsumerImpl,，在一个应用中，使用多线程创建多个</description></item><item><title>一、RocketMQ源码分析之NameServer</title><link>https://www.shellio.cc/docs/mq/rocketmq-advanced/1/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/mq/rocketmq-advanced/1/</guid><description>1、RocketMQ组件概述 NameServer
+NameServer相当于配置中心，维护Broker集群、Broker信息、Broker存活信息、主题与队列信息等。NameServer彼此之间不通信，每个Broker与集群内所有的Nameserver保持长连接。 2、源码分析NameServer 本文不对 NameServer 与 Broker、Producer 集群、Consumer 集群的网络通信做详细解读（该系列后续专门进行讲解）
+本文重点关注 NameServer 作为 MQ 集群的配置中心存储什么信息。
+2.1 源码分析NamesrvController NameserController 是 NameServer 模块的核心控制类。
+2.1.1 NamesrvConfig NamesrvConfig,主要指定 nameserver 的相关配置属性：
+kvConfigPath(kvConfig.json)。 mqhome/namesrv/namesrv.properties。 orderMessageEnable，是否开启顺序消息功能，默认为false。 2.1.2 ScheduledExecutorService 1private final ScheduledExecutorService scheduledExecutorService = Executors. NameServer 定时任务执行线程池，默认定时执行两个任务：
+任务1、每隔 10s 扫描 broker ,维护当前存活的Broker信息。 任务2、每隔 10s 打印KVConfig 信息。 2.1.3 KVConfigManager 读取或变更NameServer的配置属性，加载 NamesrvConfig 中配置的配置文件到内存，此类一个亮点就是使用轻量级的非线程安全容器，再结合读写锁对资源读写进行保护。尽最大程度提高线程的并发度。
+2.1.4 RouteInfoManager NameServer 数据的载体，记录 Broker、Topic 等信息。
+1 private final static long BROKER_CHANNEL_EXPIRED_TIME = 1000 * 60 * 2; //@1 2 private final ReadWriteLock lock = new ReentrantReadWriteLock(); //@2 3 private final HashMap&amp;lt;String/* topic */, List&amp;lt;QueueData&amp;gt;&amp;gt; topicQueueTable; //@3 4 private final HashMap&amp;lt;String/* brokerName */, BrokerData&amp;gt; brokerAddrTable; //@4 5 private final HashMap&amp;lt;String/* clusterName */, Set&amp;lt;String/* brokerName */&amp;gt;&amp;gt; clusterAddrTable; //@5 6 private final HashMap&amp;lt;String/* brokerAddr */, BrokerLiveInfo&amp;gt; brokerLiveTable; //@6 代码@1，NameServer 与 Broker 空闲时长，默认2分钟，在2分钟内 Nameserver 没有收到 Broker 的心跳包，则关闭该连接。</description></item></channel></rss>

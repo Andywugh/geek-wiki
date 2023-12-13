@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Java9 新特性 on 程序员安仔</title><link>https://www.shellio.cc/docs/java/java9/</link><description>Recent content in Java9 新特性 on 程序员安仔</description><generator>Hugo -- gohugo.io</generator><language>zh-hans</language><copyright>个人技术博客</copyright><atom:link href="https://www.shellio.cc/docs/java/java9/index.xml" rel="self" type="application/rss+xml"/><item><title>八、Java 9 新特性 – 集合不可变实例工厂方法</title><link>https://www.shellio.cc/docs/java/java9/8/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java9/8/</guid><description>Java 9 为集合接口 ( List 、Set 、Map ) 提供了创建 不可变实例 的工厂方法。这些工厂方法为便利而生，以简介简单的方式创建这些集合
+老式的创建集合的方法 我们先来看看默认的老式的创建集合的方法，创建一个文件 CollectionFactoryMethodTester.java ，并输入以下内容
+1import java.util.ArrayList; 2import java.util.Collections; 3import java.util.HashMap; 4import java.util.HashSet; 5import java.util.List; 6import java.util.Map; 7import java.util.Set; 8public class CollectionFactoryMethodTester { 9 public static void main(String []args) { 10 Set&amp;lt;String&amp;gt; set = new HashSet&amp;lt;&amp;gt;(); 11 set.add(&amp;#34;A&amp;#34;); 12 set.add(&amp;#34;B&amp;#34;); 13 set.add(&amp;#34;C&amp;#34;); 14 set = Collections.unmodifiableSet(set); 15 System.out.println(set); 16 List&amp;lt;String&amp;gt; list = new ArrayList&amp;lt;&amp;gt;(); 17 list.add(&amp;#34;A&amp;#34;); 18 list.add(&amp;#34;B&amp;#34;); 19 list.add(&amp;#34;C&amp;#34;); 20 list = Collections.</description></item><item><title>二、Java 9 新特性 – 特性简介</title><link>https://www.shellio.cc/docs/java/java9/2/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java9/2/</guid><description>Java 9 ( 又称为 jdk 1.9 ) 是 Java 编程语言开发的主要版本。它的初始版本于 2017 年 9 月21 日发布
+按照今天的日期，也就是差不多一年前吧，但是，要知道，Java 10 都已经出来了…. 残废的 Java 9 ，大家还没用上，就开始过时了。
+Java 9 的目标 Java 9 版本的主要目标是
+1、 模块化JDK和Java标准版(JavaStandardEdition)，使得Java可以用在小型计算设备中；
+今天，我才牢牢记住了 Java SE 的全称，竟然是 Java Standard Edition
+2、 提高JDK和Java实现的整体安全性；
+3、 简化JAVASE和JavaEE平台上的Java代码库和大型应用程序的构建和维护过程；
+4、 设计和实现能够应用于JavaPlatform和JavaJDK上的标准模块系统；
+其实看这几个主要目标，Java 9 的最大的变更应该就是开始模块化…，
+这也导致了 Java 9 不突出的原因吧。毕竟 Java 开发人员日常使用 Java 9 的过程中，对模块化并没有明显的感知
+Java 9 新特性 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 Java 9 在以上 4 个目标的基础上做了大量的工作，可以对外称道的应该有 90+ 个，但是，大部分都是小修小改，不足道也。
+我们就介绍几个比较大一点的特性吧
+1、 模块化(Module)；</description></item><item><title>二十、Java 9 新特性 – 其它特性</title><link>https://www.shellio.cc/docs/java/java9/20/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java9/20/</guid><description>除了上面介绍的这些比较大的特性，Java 9 还存在着一些比较小的特性，我们就不一一展开了，只将它们罗列再此
+1、 对GC（垃圾收集器）改进；
+2、 堆遍历(Stack-Walking)API；
+3、 过滤输入的序列化数据；
+4、 废弃了AppletAPI；
+5、 IndifyStringConcatenation；
+6、 EnhancedMethodHandles；
+7、 Java平台日志记录API和服务器(Service)；
+8、 紧凑的字符串(CompactStrings)；
+9、 Nashorn的解析API；
+结束语 从这短短的十几篇讲解，我们可以看到 Java 9 的新特性并没有 Java 8 那么多
+大多数都是对 Java 8 的增强而已。所以，是一个被忽略的改版。
+因为在语法在没有大的更新，所以，其实，学习与不学习，都无关紧要了
+重要的是，用的时候会查询就可以了</description></item><item><title>九、Java 9 新特性 – 接口 ( interface ) 的私有方法</title><link>https://www.shellio.cc/docs/java/java9/9/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java9/9/</guid><description>在我的印象中，好像，从来没有，想过在 interface 中定义私有的方法。一来各种文档中的确没有这么介绍过，二来，好像从来没有谁这么做过，三来，好像定义了也不知道要怎么使用，毕竟，接口 interface 中的方法都会被具体的类重写一次，所以，似乎，私有方法都没啥大作用了。
+比如说，很简单的，我们的 Java 基础教程: Java 接口 中，就没有论述私有方法这回事。
+既然Java 9 添加了这项特性，那么，应该就有它的用途，我们一起来看看 Java 9 中的接口的私有方法是什么样的吧。
+JDK 7 / JDK 6 回忆一下，Java 8 之前 ，接口好像就只允许两种类型的数据，一个是常量、另一个就是公开 ( public ) 的虚方法 ( abstract )，而且是虚方法哦，就是没有任何实现的方法，因为这些方法要被类来实现。
+也就是说，Java 8 之前的版本不存在有着默认实现的方法
+我们来看看一个示例，在我们的工作区创建一个文件 InterfacePrivateMethodTester.java ，并输入一下内容
+1public class InterfacePrivateMethodTester { 2 public static void main(String []args) { 3 LogOracle log = new LogOracle(); 4 log.logInfo(&amp;#34;&amp;#34;); 5 log.logWarn(&amp;#34;&amp;#34;); 6 log.logError(&amp;#34;&amp;#34;); 7 log.logFatal(&amp;#34;&amp;#34;); 8 LogMySql log1 = new LogMySql(); 9 log1.</description></item><item><title>六、Java 9 新特性 – 改进 JavaDocs</title><link>https://www.shellio.cc/docs/java/java9/6/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java9/6/</guid><description>一直以来，Java 生成的文档 JavaDoc 一直使用的都是 HTML 4 格式，这次 Java 9 良心大大的发现，使用了 HTML 5 ，但还不是默认的，如果要输出 HTML 5 格式，还必须在命令行程序中添加 -html5 选项。
+旧的 JavaDoc 文档格式 我们先在当前工作区，例如我的是 D:\devops\java9 的 src 目录下创建一个文件 JavaDocTester.java ，内容如下
+1/** 2 * @author MahKumar 3 * @version 0.1 4*/ 5public class JavaDocTester { 6 /** 7 * 默认的方法用于输出 Hello World 8 * &amp;lt;p&amp;gt;Hello world&amp;lt;/p&amp;gt; 9 * @param args 命令行参数 10 */ 11 public static void main(String []args) { 12 System.out.println(&amp;#34;Hello World&amp;#34;); 13 } 然后我们就可以使用 javadoc 命令输出该类的文档</description></item><item><title>七、Java 9 新特性 – 多版本共存 JAR</title><link>https://www.shellio.cc/docs/java/java9/7/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java9/7/</guid><description>Java 9 之前的 JAR 格式中只能包含一个 Java 版本，显然，这是不符合 Java 这种开启了版本帝的发展线路了，想想，现在大多数 Java 还停留在 Java 6 7 8 的年代，Java 10 已经发布，如果要发布一个 JAR 格式的类库，意味着要编译多个版本的 JAR， 6 7 8 9 10 五个版本，看起来也太恐怖了。
+Java 9 突然间良心发现，开始支持多版本共存的 JAR 了。
+Java 9 引入了一个新的功能，其实也不算吧，就是增强了 JAR 格式，可以在同一个 JAR 中维护和使用不同版本的 java 类或资源
+JAR 多版本共存原理 首先在JAR 中，文件 MANIFEST.MF 文件的 main 节中有一个条目 Multi-Release:true ， 用于指定该 JAR 包是多 Java 版本共存的
+同时，JAR 目录下的子目录 META-INF 还包含一个 versions 子目录，其子目录 ( 从 9 开始，用于 Java 9 ) 存储特定于版本的类和资源文件</description></item><item><title>三、Java 9 新特性 – 环境配置</title><link>https://www.shellio.cc/docs/java/java9/3/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java9/3/</guid><description>Java 9 的环境安装和配置其实很简单，因为跟 Java 7 / Java 8 的安装差不多，我们就不做过多的介绍了。
+相关的安装教程，可以参考我们的 Java 基础教程：Java 开发环境配置
+因为Java 当前的最新大版本为 Java 10 ，所以，我们建议你安装 Java 10 ，它同时也包含了 Java 9 的新特性
+编辑器 顺便说一下，我们接下来的教程不会使用大型的 IDE ，比如 Idea 和 Netbeans 和 Eclipse 等，而只会使用一些较小的文本编辑器，比如 Sublime Text 3 和 Visual Studio Code
+关于这些文本编辑器，网上的使用教程很多，其实，下载安装就好，没啥大的配置。
+项目 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 既然不使用大型的、功能齐全的 IDE ，那么我们也不会建立大型的项目工程，一般情况下，我们直接单个文件解决所有问题，这样方便大家理解，也不会造成部分文件或代码缺失的问题。</description></item><item><title>十、Java 9 新特性 – 改进进程管理 API</title><link>https://www.shellio.cc/docs/java/java9/10/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java9/10/</guid><description>Java 9 这个版本对进程管理方面的改进也是相当大的。在为数不多的几次 Java 项目中，有偶尔用到多线程，但对多进程和进程方面的了解还真是太少。
+我想，大部分人应该跟我一样，在编程之外知道有进程的东西的存在，在 Java 中反而会忽视，因为多线程和并发 ( Concurrency ) 的存在感更强吧。
+这次Java 9 对进程管理的改进主要是提供了 ProcessHandle 类
+ProcessHandle 类 该类在java.lang 包中，且处于 java.base 模块中。
+ProcessHandle 可以用于获取进程信息，监听和检查进程的状态，并且可以监听进程的退出
+主要提供了以下几个方法
+方法 说明 static allProcesses() 返回当前进程可见的所有进程的快照 static current() 返回当前进程的 ProcessHandle 实例 static of(long pid) 返回现有本机进程的 Optional &amp;lt;ProcessHandle&amp;gt; children() 返回进程的当前直接子进程的快照 compareTo(ProcessHandle other) 比较两个进程 descendants() 返回当前进程后代的快照 destroy() 请求杀死当前进程 destroyForcibly() 强制杀死该进程 equals(Object other) 如果 other 对象为非 null，且具有相同的实现，并且表示相同的系统进程，则返回 true; 否则返回 false hashCode() 返回此 ProcessHandle 的哈希值 info() 返回有关该进程的信息的快照 isAlive() 测试此 ProcessHandle 表示的进程是否处于活动状态 onExit() 当进程终止时返回 CompletableFuture &amp;lt;ProcessHandle&amp;gt; parent() 返回当前进程的父进程 Optional&amp;lt;ProcessHandle&amp;gt; ，因为当前进程可能是初始进程，所以父进程不一定存在 pid() 返回当前进程的系统进程的 id supportsNormalTermination() 如果 destroy() 正常终止进程，则返回 true ProcessHandle 类用于标识并提供对 native 进程的控制，可以监控每个单独的进程的活跃度，列出其子进程 ( 线程 ) ，获取有关进程的信息或将其销毁。</description></item><item><title>十八、Java 9 新特性 – CompletableFuture API ( 中 )</title><link>https://www.shellio.cc/docs/java/java9/18/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java9/18/</guid><description>上一章节中我们提到，Java 9 添加了 CompletableFuture 类的子类化的支持。其实呢 ？ Java 9 对 CompletableFuture 类的子类化的支持也是新增了两个方法。
+一个是defaultExecutor() 方法，返回默认的执行器 ( Executor )，一个是 newIncompleteFuture() 返回一个 CompletableFuture 的新实例。下面，我们就一一介绍这两个方法吧。
+注意： 这个两个方法都是由 CompletableFuture 类提供的。
+defaultExecutor() 方法 defaultExecutor() 方法的原型如下
+1public Executor defaultExecutor() 这个方法没有任何参数，但可以返回一个默认的执行器 ( Executor )，这个执行器可以作为那些没有指定执行器的异步方法的执行器
+简单的说，就是为异步方法提供一个执行器
+子类中可以重写此方法，以返回一个最小化的独立线程作为执行器
+newIncompleteFuture() 方法 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 newIncompleteFuture() 方法的原型如下
+1public &amp;lt;U&amp;gt; CompletableFuture&amp;lt;U&amp;gt; newIncompleteFuture() 返回CompletionStage方法返回的的新的不完整 CompletableFuture，默认实现是返回 CompletableFuture 类的实例
+CompletableFuture 类的子类应覆盖此方法，以返回与此 CompletableFuture 相同的类的实例</description></item><item><title>十二、Java 9 新特性 – try-with-resources 语句</title><link>https://www.shellio.cc/docs/java/java9/12/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java9/12/</guid><description>如果你使用过 Python ，应该对 with 语句不陌生，with 语句会创建一个独立的上下文，当执行流程离开该上下文时，就会立刻释放该上下文中的所有资源
+这样的机制，我们都可以不用手动去关闭已经打开的资源，比如文件等，例如
+1with open(&amp;#39;hello.txt&amp;#39;) as f: 2 print(f.read() 在执行流程离开 with 语句块之后，f 这个文件资源就会自动销毁
+Java 9 为 java 也引入了这种机制，Java 9 称之为 「 try-with-resources 」
+其实应该说 Java 9 之前也能实现这样的机制，只不过有点复杂
+try-with-resources try-with-resources 首先是一个 try 语句，其次，该语句包含一个或多个正式声明的资源。这些资源是一个对象，当不再需要时就应该关闭它。
+try-with-resources 语句可以确保在需求完成后关闭每个资源，当然了，这些可以自动关闭的资源也是有条件的，那就是必须实现java.lang.AutoCloseable 或 java.io.Closeable 接口
+Java 9 之前，资源可以在 try 之前或 try 语句内部声明，正如下面的代码所示的那样。
+我们将使用 BufferedReader 作为资源来读取字符串，然后关闭 BufferedReader
+TryResourceTester.java 1import java.io.BufferedReader; 2import java.io.IOException; 3import java.io.Reader; 4import java.io.StringReader; 5public class TryResourceTester { 6 public static void main(String[] args) throws IOException { 7 System.</description></item><item><title>十九、Java 9 新特性 – CompletableFuture API ( 下 )</title><link>https://www.shellio.cc/docs/java/java9/19/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java9/19/</guid><description>Java 9 同时为 CompletableFuture 类添加了一些工厂方法
+completedFuture(U value) 工厂方法 completedFuture(U value) 工厂方法的原型如下
+1public static &amp;lt;U&amp;gt; CompletableFuture&amp;lt;U&amp;gt; completedFuture(U value) 此工厂方法返回一个已完成的、使用给定值的新 CompletableFuture 。
+completedStage(U value) 工厂方法 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 completedStage(U value) 工厂方法的原型如下
+1public static &amp;lt;U&amp;gt; CompletionStage&amp;lt;U&amp;gt; completedStage(U value) 此工厂方法返回一个新的使用给定值 value 的已完成的 CompletionStage，且仅支持接口 CompletionStage 中定义的那些方法
+failedStage(Throwable ex) 工厂方法 failedStage(Throwable ex) 工厂方法的原型如下
+1public static &amp;lt;U&amp;gt; CompletionStage&amp;lt;U&amp;gt; failedStage(Throwable ex) 此工厂方法返回一个新的 CompletionStage，使用给定异常的情况下异常完成，且仅支持接口 CompletionStage 中存在的那些方法</description></item><item><title>十六、Java 9 新特性 – 多分辨率图像 API</title><link>https://www.shellio.cc/docs/java/java9/16/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java9/16/</guid><description>Java 9 引入了一种新的多分辨率图像 API，它支持具有不同分辨率变体的多个图像
+这些API 允许将具有不同分辨率的一组图像用作单个多分辨率图像
+方法 说明 getResolutionVariant(double destImageWidth, double destImageHeight) 获取特定图像，该图像是表示指定大小的逻辑图像的最佳变体 getResolutionVariants() 以可读列表的形式返回所有分辨率变体 接下来我们就来看看两个 API 如何使用吧。
+假设存在三张图片
+它们的地址分别为
+1https://ddkk.com/static/upload/img/2018/09/03/20180903060845_4.png 2https://ddkk.com/static/upload/img/2018/09/03/20180903060900_4.png 3https://ddkk.com/static/upload/img/2018/09/03/20180903060914_4.png 在当前的工作区中创建一个文件 MultiResolutionTester.java 并输入以下内容
+1import java.io.IOException; 2import java.net.URL; 3import java.net.MalformedURLException; 4import java.util.ArrayList; 5import java.util.List; 6import java.awt.Image; 7import java.awt.image.MultiResolutionImage; 8import java.awt.image.BaseMultiResolutionImage; 9import javax.imageio.ImageIO; 10public class MultiResolutionTester { 11 public static void main(String[] args) throws IOException, MalformedURLException { 12 List&amp;lt;String&amp;gt; imgUrls = List.of(&amp;#34;https://ddkk.com/static/upload/img/2018/09/03/20180903060845_4.png&amp;#34;, 13 &amp;#34;https://ddkk.com/static/upload/img/2018/09/03/20180903060900_4.png&amp;#34;, 14 &amp;#34;https://ddkk.com/static/upload/img/2018/09/03/20180903060914_4.png&amp;#34;); 15 List&amp;lt;Image&amp;gt; images = new ArrayList&amp;lt;Image&amp;gt;(); 16 for (String url : imgUrls) { 17 images.</description></item><item><title>十七、Java 9 新特性 – CompletableFuture API ( 上 )</title><link>https://www.shellio.cc/docs/java/java9/17/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java9/17/</guid><description>CompletableFuture 类是在 Java 8 引入的。用于表示一个 Feture 的状态，可以通过设置其值或状态来明确表示 Feture 处于完成状态
+说起来特拗口，理解起来就简单了
+那个，Java 8 不是引入了并发编程了，对吧。并发编程里有一个概念就是并发执行是否完成了。这个是否完成了是由 java.util.concurrent.CompletionStage 来表示的。然后呢，CompletableFuture 是 CompletionStage 的父类。
+如果你对 Java 的并发编程熟悉，那么一定直到，当并发完成时可以支持一个回调，这个回调也是由 CompletableFuture 提供的。
+有时候会觉得，一个特性，应该在它出现的时候就比较完善了，直到别人提出了新的思维，才觉得原来还有改进的空间，就比如这个 CompletableFuture 吧
+Java 9 竟然还给它添加了一些东西：
+1、 支持延误和超时(timeout)机制；
+2、 支持子类化；
+3、 添加了一些新的工厂方法；
+支持延误和超时机制 这两个功能是通过新增两个方法来达成的
+方法 说明 completeOnTimeout(T value, long timeout, TimeUnit unit) 如果在指定时间内没完成，则返回一个指定的值 orTimeout(long timeout, TimeUnit unit) 如果在指定的时间内没完成，则抛出一个异常 TimeoutException 这两个方法的看起来是差不多的，都是在指定时间内没完成则执行一个动作，只不过前者是返回一个指定的值，后者则直接抛出异常
+这两个方法的原型如下
+1public CompletableFuture&amp;lt;T&amp;gt; completeOnTimeout(T value, long timeout, TimeUnit unit) 2public CompletableFuture&amp;lt;T&amp;gt; orTimeout(long timeout, TimeUnit unit) 范例 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 在我们的工作目录创建一个文件 CompletableFutureTimeoutTester.</description></item><item><title>十三、Java 9 新特性 – 增强 @Deprecated 注解</title><link>https://www.shellio.cc/docs/java/java9/13/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java9/13/</guid><description>@Deprecated 注解很早就存在了，如果我记得没错的话，好像是 Java 5 ( 后来我去查了资料，也的确是 Java 5 就引入了 ) 。
+一个使用 @Deprecated 注解的元素，无论是一个类或是一个方法，可能是由以下原因导致了不应该再使用它
+1、 使用它可能会导致错误；
+2、 在未来的版本中不被兼容；
+3、 在未来的版本中可能会被删除；
+4、 存在更好的更有效的替代方法；
+如果一个程序或代码片段使用了 @Deprecated 注解的元素，那么编译器就会生成一个警告信息，表明这个元素是不被推荐使用的。
+我们都一直延续了这样的习惯好久，直到 Java 9 的发布，我才发现 @Deprecated 注解还可以做的更好
+Java 9 对 @Deprecated 注解做了两项重要的增强。
+1、 forRemoval–指示在将来的版本中是否要删除带注解的元素默认值为false；
+2、 since–返回注解元素刚添加@Deprecated注解的版本；
+一看不知道，看了很吃惊，这两个属性，还是蛮有作用的
+@Deprecated 的 since 属性 对since 的使用，你可以查阅 Java 9 的官方文档中 Boolean 类型的文档，在该文档中演示了如何在 @Deprecated 注解上使用 since 属性
+文档地址 https://docs.oracle.com/javase/9/docs/api/java/lang/Boolean.html#Boolean-boolean-
+可以看到下图中粉色框框的内容
+@Deprecated 的 forRemoval 属性 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 关于@Deprecated 的 forRemoval 属性的使用，可以查看官方提供的文档中的有关 System 类的部分，该部分演示了 @Deprecated 注解使用 forRemoval 属性</description></item><item><title>十四、Java 9 新特性 – 内部类的方块操作符</title><link>https://www.shellio.cc/docs/java/java9/14/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java9/14/</guid><description>方块操作符 ( &amp;lt;&amp;gt; ) 在 Java 7 中就引入了，目的是为了使代码更可读。
+但是呢，这个操作符一直不能在匿名内部类中使用
+Java 9 修正了这个问题，就是可以在匿名内部类中使用方块操作符了，在匿名类大行其道的今天，这才叫优化了阅读体验…
+我们来看看一段 Java 9 之前的代码
+DiamondOperatorTester.java 1public class DiamondOperatorTester { 2 public static void main(String[] args) { 3 Handler&amp;lt;Integer&amp;gt; intHandler = new Handler&amp;lt;Integer&amp;gt;(1) { 4 @Override 5 public void handle() { 6 System.out.println(content); 7 } 8 }; 9 intHandler.handle(); 10 Handler&amp;lt;? extends Number&amp;gt; intHandler1 = new Handler&amp;lt;Number&amp;gt;(2) { 11 @Override 12 public void handle() { 13 System.out.println(content); 14 } 15 }; 16 intHandler1.</description></item><item><title>十五、Java 9 新特性 – Option 类</title><link>https://www.shellio.cc/docs/java/java9/15/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java9/15/</guid><description>其实Option 类在 Java 8 中就引入了，用于避免 null 检查和 NullPointerException 指针问题
+Java 9 中，又为该类添加了三个方法来改进它的功能
+方法 说明 stream() 返回包含值的流，如果值不存在，则返回空流 ifPresentOrElse() 如果值存在则对值执行一些操作，否则执行另一个操作 or() 如果值存在，则返回用于描述该值的 Option，如果不存在则生成一个值 steam() 方法 steam() 方法的原型如下
+1public Optional&amp;lt;T&amp;gt; or(Supplier&amp;lt;? extends Optional&amp;lt;? extends T&amp;gt;&amp;gt; supplier) 如果值存在，则返回包含值的有序的流，如果值不存在，则返回一个空流
+范例 在我们的工作目录，创建一个文件 OptionStreamTester.java 并输入以下内容
+1import java.util.Arrays; 2import java.util.List; 3import java.util.Optional; 4import java.util.stream.Collectors; 5import java.util.stream.Stream; 6public class OptionStreamTester { 7public static void main(String[] args) { 8 List&amp;lt;Optional&amp;lt;String&amp;gt;&amp;gt; list = Arrays.asList ( 9 Optional.empty(), 10 Optional.of(&amp;#34;A&amp;#34;), 11 Optional.empty(), 12 Optional.</description></item><item><title>十一、Java 9 新特性 – 增强流 ( Stream ) API</title><link>https://www.shellio.cc/docs/java/java9/11/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java9/11/</guid><description>Java 中引入了流 ( Stream ) 的概念，真的是大大方便了我们 java 程序员，我们可以使用流从一系列对象中执行聚合操作。
+其实，Java 8 中的流已经很强大了，而且只要涉及到 IO，只要涉及到对一系列数据进行操作，几乎都有流的影子。
+当然了，Java 9 还不忘对其继续增强，这次的改进主要是如何设置停止流的条件上。为此在流的实例上提供了四个方法 takeWhile(Predicate Interface) 、iterate 、ofNullable 和 dropWhile(Predicate Interface)
+takeWhile(Predicate Interface) takeWhile(Predicate Interface) 方法会处理流中所有的数据，直到条件 predicate 返回 false 为止
+该方法的原型如下
+1default Stream&amp;lt;T&amp;gt; takeWhile(Predicate&amp;lt;? super T&amp;gt; predicate) takeWhile() 方法会返回一个有序的流 ( stream ) ，返回的流中包含了原始流中于给定条件 predicate 相匹配的所有元素的最长前缀。
+注意： 并不是所有匹配的元素，而是最长匹配前缀，因为一旦某个元素的 pridicate 返回 false，就立刻停止了
+范例 在当前工作区创建一个文件 StreamTakeWhileTester.java ，并输入以下代码
+1import java.util.stream.Stream; 2public class StreamTakeWhileTester{ 3 public static void main(String[] args) 4 { 5 Stream.of(&amp;#34;I&amp;#34;,&amp;#34;love&amp;#34;,&amp;#34;you&amp;#34;,&amp;#34;&amp;#34;,&amp;#34;so&amp;#34;,&amp;#34;much&amp;#34;).takeWhile(s-&amp;gt;!s.isEmpty()) 6 .</description></item><item><title>四、Java 9 新特性 – 模块化</title><link>https://www.shellio.cc/docs/java/java9/4/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java9/4/</guid><description>Java 9 最大的特性就是模块化 ( Module ) 了。本章，我们就对这个 模块化 进行一些简单的讲解，包括 Java 9 模块化的概念、如何实现、如何使用等
+对于Java 9 来说，模块化 ( Module ) 是一个新引入的新型的编程组件 ( Component )
+因为是一个组件，所以也是一个自我完备的系统，是代码和数据的自描述的集合，而且有一个自我标识的名称，也就是模块名
+Java 9 模块化的特性 Java 9 为了引入新的模块化的编程方式，特意增强和改进了一些功能，也添加了一些新的特性
+1、 Java程序编译运行过程中，引入了一个新的可选的阶段「链接时间」(linktime)；
+这个阶段介于编译时和运行时之间
+在该阶段，可以组装和优化一组模块，可以使用 jlink 工具制作自定义运行时镜像 ( image )
+2、 javac、jlink和java三个命令都添加了一些可选项用于指定模块路径；
+这些选项用于指定模块的定义位置
+3、 增强JAR格式，更新JAR格式更新为模块化JAR，并且在JAR根目录下包含module-info.class文件；
+4、 引入了JMOD格式，这种一种类似于JAR的新的打包格式，这种格式中可以包含本地(native)代码和配置文件；
+5、 特意引入了module关键字，用于定义一个模块，不过这个关键字仅限于module-info.java中使用；
+模块化的概念 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 从Java 9 为模块化的改变来看，Java 9 中的模块化其实就是一个 JAR 或 JMOD 格式的归档文件，该归档文件里包含了一些代码和数据还有一些配置文件，其中一定包含了一个名为 module-info.class 的文件，在该文件中定义了模块的一些信息
+创建一个 Java 9 模块 接下来我们来看看如何定义一个 Java 9 模块，假设我们想要定义的模块名为 com.ddkk.module.greeting</description></item><item><title>五、Java 9 新特性 – REPL ( JShell )</title><link>https://www.shellio.cc/docs/java/java9/5/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java9/5/</guid><description>REPL ，全称 Read Eval Print Loop ,中文 「 交互式解释器 」，其实，就是一种代码所见即所得的即时编译器
+Java 9 引入了 REPL ，并将其命令为 「 JShell 」 ，这真是我们 Java 开发的福音，以后演示代码的时候再也不用搬着一个 IDE 到处跑了
+对于我们 Java 开发者来说，应该是 Java 9 带来的最大的个性吧。我们终于可以像 Python 、 Ruby 和 Node.js 那样在 Shell 可见即可得的运行一些范例代码了
+也就是说，使用 REPL，我们可以编写和测试基于 Java 的逻辑，无需使用 javac 进行编译，直接查看计算结果
+运行 JShell 打开命令行提示符 ( Window 7 / Window xp ) 或 PowerShell ( Window 8 / Window 10 ) 或终端 ( Linux / Mac OSX ) ，并输入 jshell 进入 JShell。启动过程有点缓慢</description></item><item><title>一、Java 9 新特性 – 介绍</title><link>https://www.shellio.cc/docs/java/java9/1/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/java/java9/1/</guid><description>Java 9 推出好长时间了，但是它有什么新的东西和废弃了什么东西，我一直没认真去了解过。
+本专栏，我一边收集各种资料，一边写一些基础的介绍文章。
+Java 9 Java 9 应该是当初最为期待的版本吧。当时因为 Java 8 带来了很多新特性，大家都以为 Java 9 会持续带来更多的新特性。结果呢 ？ 虽然说不上多惊艳，但还是马马虎虎过得去了。
+Java 9 是非常理论上应该是名利双收的，但实际上，夹在 Java 7 Java 8 和 Java 10 之间，其实大部分人都还停留在 Java 8 ，如果要升级，早就到了 Java 10 了…
+所以，其实，我这个专栏，应该算是介绍性的文章，以简单直观的方式解释了Java 9的基本到高级功能及其用法。如果可以，就深入一点。
+我是 Java 9 专栏的读者么 ？ 只要你会 Java，你就可以阅读这个专栏。
+本专栏对大多数 Java 开发人员非常有用，从初学者到专家
+完成阅读本专栏后，你将发现自己在 Java 9 中具有中等水平的专业知识，当然了，继续的提高还要你的继续努力实践
+阅读前提 在你继续阅读本专栏之前，我希望你有一定的 Java 语言基础，或者其它使用 Java Runtime 的语言基础，这样你将事半功倍。
+除此之外，别无要求</description></item></channel></rss>

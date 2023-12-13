@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Golang语言 on 程序员安仔</title><link>https://www.shellio.cc/docs/programing/golang/</link><description>Recent content in Golang语言 on 程序员安仔</description><generator>Hugo -- gohugo.io</generator><language>zh-hans</language><copyright>个人技术博客</copyright><atom:link href="https://www.shellio.cc/docs/programing/golang/index.xml" rel="self" type="application/rss+xml"/><item><title>八、Go 语言常量</title><link>https://www.shellio.cc/docs/programing/golang/8/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/8/</guid><description>常量是一个简单值的标识符，在程序运行时，不会被修改的量。
+常量中的数据类型只可以是布尔型、数字型（整数型、浮点型和复数）和字符串型。
+常量的定义格式：
+1const identifier [type] = value 我们可以省略类型说明符 [type]，因为编译器可以根据变量的值来推断其类型
+显式类型定义：const b string = &amp;ldquo;abc&amp;rdquo; 隐式类型定义：const b = &amp;ldquo;abc&amp;rdquo; 多个相同类型的声明可以简写为：
+1const c_name1, c_name2 = value1, value2 下面的范例演示了常量的使用
+1/** 2 * file: main.go 3 * author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 4 * Copyright © 2015-2065 ddkk.com. All rights reserved. 5 */ 6package main 7import &amp;#34;fmt&amp;#34; 8func main() { 9 const LENGTH int = 10 10 const WIDTH int = 5 11 var area int 12 const a, b, c = 1, false, &amp;#34;str&amp;#34; //多重赋值 13 area = LENGTH * WIDTH 14 fmt.</description></item><item><title>二、Go 语言 – 简介</title><link>https://www.shellio.cc/docs/programing/golang/2/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/2/</guid><description>Golang 是一种设计用来系统编程的通用语言
+Go语言最初在 2007 年由Google Griesemer，Rob Pike 和 Ken Thompson 在 Google 开发，并于 2009 年 11 月对外公布
+Go语言提供垃圾收集的内置支持，并支持并发编程
+Go 编程的特点 1、 支持类型推到功能，例如x：=0会自动判断x是int类型；
+2、 编译时间快；
+3、 内置并发支持：轻量级进程（通过goroutine），channel，select语句；
+4、 Go程序简单，简洁，安全；
+5、 支持接口和类型绑定；
+6、 生成没有外部依赖关系的静态链接的本机二进制可执行文件；
+Go 语言刻意避免的语法 为了保持语言简洁扼要，Go 语言删减了很多其它语言都有的功能
+1、 不支持类型继承；
+2、 不支持方法或操作符重载；
+3、 不支持包之间的循环依赖；
+4、 不支持指针运算；
+5、 不支持断言；
+6、 不支持泛型编程；</description></item><item><title>二十、Go 语言 – 哈希表(map)</title><link>https://www.shellio.cc/docs/programing/golang/20/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/20/</guid><description>map又称哈希表，是一种一种无序的键值对的集合
+map最重要特点是通过 key 来快速检索数据，key 类似于索引，指向数据的值
+Go语言中的 map 也是一种集合，所以我们可以像迭代数组和切片那样迭代它
+但在迭代时需要注意：map 是无序的，我们无法决定它的返回顺序，因为 map 是使用 hash 表来实现的
+定义 map 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 1.使用内建函数 make 来定义 map 1map_variable := make(map[key_data_type]value_data_type) 2. 使用 map 关键字来定义 map 这种方式声明的 map 默认是 nil
+1var map_variable map[key_data_type]value_data_type 如果不初始化 map，那么就会创建一个 nil map
+nilmap 不能用来存放键值对
+范例 下面的范例演示了如何定义 map 和如何通过 键(key) 访问 map 中的元素
+1/** 2 * file: main.go 3 * author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 4 * Copyright © 2015-2065 ddkk.com. All rights reserved. 5 */ 6package main 7import &amp;#34;fmt&amp;#34; 8func main() { 9 var countryCapitalmap map[string]string 10 /* 创建集合 */ 11 countryCapitalmap = make(map[string]string) 12 /* map 插入 key-value 对，各个国家对应的首都 */ 13 countryCapitalmap[&amp;#34;France&amp;#34;] = &amp;#34;Paris&amp;#34; 14 countryCapitalmap[&amp;#34;Italy&amp;#34;] = &amp;#34;Rome&amp;#34; 15 countryCapitalmap[&amp;#34;Japan&amp;#34;] = &amp;#34;Tokyo&amp;#34; 16 countryCapitalmap[&amp;#34;India&amp;#34;] = &amp;#34;New Delhi&amp;#34; 17 /* 使用 key 输出 map 值 */ 18 for country := range countryCapitalmap { 19 fmt.</description></item><item><title>二十八、Go 语言 – 多维数组</title><link>https://www.shellio.cc/docs/programing/golang/28/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/28/</guid><description>Go语言支持多维数组
+语法 Go语言声明多维数组的语法格式如下
+1var variable_name [SIZE1][SIZE2]...[SIZEN] variable_type 下面的代码声明了三维整形数组：
+1var threedim [5][10][4]int 二维数组 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 二维数组是最简单的多维数组
+二维数组本质上是由一维数组组成的
+语法 Go语言定义二维数组的语法格式如下
+1var arrayName [ x ][ y ] variable_type 其中
+variable_type 是数据类型，可以是基本数据类型，也可以是结构体或者 map 等数据类型 arrayName 为数组名 二维数组可认为是一个表格，x 为行，y 为列，下图演示了一个二维数组 a 为三行四列
+初始化二维数组 二维数组可通过大括号来初始值
+下面的代码初始化了一个 3 行 4 列的二维数组
+1a = [3][4]int{ 2 {0, 1, 2, 3} , /* 第一行索引为 0 */ 3 {4, 5, 6, 7} , /* 第二行索引为 1 */ 4 {8, 9, 10, 11} /* 第三行索引为 2 */ 访问二维数组 二维数组可以通过指定坐标来访问，如数组中的行索引与列索引 a[ i ][ j ]</description></item><item><title>二十二、Go 语言 – 关键字 delete</title><link>https://www.shellio.cc/docs/programing/golang/22/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/22/</guid><description>Go语言 delete 关键字用于删除哈希表 map 中的元素, 参数为 map 和其对应的 key
+语法 Go语言 delete 关键字语法格式如下
+1delete(map,key) 范例 1/** 2 * file: main.go 3 * author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 4 * Copyright © 2015-2065 ddkk.com. All rights reserved. 5 */ 6package main 7import &amp;#34;fmt&amp;#34; 8func main() { 9 /* 创建 map */ 10 countryCapitalMap := map[string] string {&amp;#34;France&amp;#34;:&amp;#34;Paris&amp;#34;,&amp;#34;Italy&amp;#34;:&amp;#34;Rome&amp;#34;,&amp;#34;Japan&amp;#34;:&amp;#34;Tokyo&amp;#34;,&amp;#34;India&amp;#34;:&amp;#34;New Delhi&amp;#34;} 11 fmt.Println(&amp;#34;原始 map&amp;#34;) 12 /* 打印 map */ 13 for country := range countryCapitalMap { 14 fmt.</description></item><item><title>二十九、Go 语言 break 语句</title><link>https://www.shellio.cc/docs/programing/golang/29/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/29/</guid><description>Go语言中的 break 语句既可以用于退出循环又可以跳出 case 语句
+语法 Go语言 break 语句语法格式如下
+1break; break 语句用于以下两方面：
+1、 用于在循环语句中跳出循环，并开始执行循环之后的语句；
+2、 用在switch中在执行一条case后跳出语句的作用；
+break 语句流程图 Go语言 break 语句执行流程如下
+范例 1/** 2 * file: main.go 3 * author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 4 * Copyright © 2015-2065 ddkk.com. All rights reserved. 5 */ 6package main 7import &amp;#34;fmt&amp;#34; 8func main() { 9 /* 定义局部变量 */ 10 var a int = 11 11 /* for 循环 */ 12 for a &amp;lt; 17 { 13 fmt.</description></item><item><title>二十六、Go 语言 – 开发工具</title><link>https://www.shellio.cc/docs/programing/golang/26/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/26/</guid><description>我们推荐使用下面四款 Go 语言开发工具，排名不分先后
+1. Sublime Text 3 Sublime Text 是一款具有代码高亮、语法提示、自动完成且反应快速的编辑器软件，不仅具有华丽的界面，还支持插件扩展机制，用她来写代码，绝对是一种享受
+相比于难于上手的 Vim，浮肿沉重的 Eclipse，VS，即便体积轻巧迅速启动的 Editplus、Notepad++，在 Sublime Text 面前大略显失色，无疑这款性感无比的编辑器是 Coding 和Writing 最佳的选择，没有之一
+Sublime Text 3 下载地址 http://www.sublimetext.com/3
+你可以选择合适的平台，然后下载安装即可
+更多Sublime Text 3 的内容，可以查看 如何优雅地使用Sublime Text
+2. Visual Studio Code 在Build 2015 大会上，微软推出免费跨平台的 Visual Studio Code 编辑器
+Visual Studio Code (简称 VS Code / VSC) 是一款免费开源的现代化轻量级代码编辑器，支持几乎所有主流的开发语言的语法高亮、智能代码补全、自定义热键、括号匹配、代码片段、代码对比 Diff、GIT 等特性，支持插件扩展，并针对网页开发和云端应用开发做了优化
+软件跨平台支持 Win、Mac 以及 Linux，运行流畅，可谓是微软的良心之作…
+Visual Studio Code 下载地址 https://code.visualstudio.com/
+3. LiteIDE LiteIDE 是一款开源、跨平台的轻量级 Go 语言集成开发环境（IDE）
+支持的操作系统 Windows x86 (32-bit or 64-bit) Linux x86 (32-bit or 64-bit) MacOS X10.</description></item><item><title>二十七、Go 语言 for 循环语句</title><link>https://www.shellio.cc/docs/programing/golang/27/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/27/</guid><description>Go语言 for 循环语句是一个循环控制结构，可以执行指定次数的循环
+语法 Go语言的 for循环有 3 种形式，但只有其中的一种使用分号
+1. 和 C 语言 的 for 一样 1for init; condition; post { } 2. 和 C 语言的 while 语句 一样 1for condition { } 3. 和 C 的 for(;;) 一样 1for { } 上面3 种 for 语句中
+init： 一般为赋值表达式，给控制变量赋初值 condition： 关系表达式或逻辑表达式，循环控制条件 post： 一般为赋值表达式，给控制变量增量或减量 for语句执行过程如下 1、 先对表达式1赋初值；
+2、 判断赋值表达式init是否满足给定条件：；
+11. 若其值为真，满足循环条件，则执行循环体内语句，然后执行 post，进入第二次循环，再判别 condition 22. 否则判断 condition 的值为假，不满足条件，就终止for循环，执行循环体外语句 for…range 语句 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 for循环的 range 语句可以对 slice、map、数组、字符串等进行迭代循环</description></item><item><title>二十三、Go 语言递归函数</title><link>https://www.shellio.cc/docs/programing/golang/23/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/23/</guid><description>程序调用自身的编程技巧称为递归（ recursion）
+一般来说，递归需要有边界条件、递归前进段和递归返回段
+当边界条件不满足时，递归前进；当边界条件满足时，递归返回
+Go语言支持递归调用
+语法 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 Go语言中递归调用的语法格式如下
+1func recursion() { 2 recursion() /* 函数调用自身 */ 3func main() { 4 recursion() 记住，在在使用递归时，需要设置退出条件，否则递归将陷入无限循环中
+递归函数对于解决数学上的问题是非常有用的，就像计算阶乘，生成斐波那契数列等
+范例： 阶乘 下面的范例通过 Go 语言的递归函数实例阶乘
+1/** 2 * file: main.go 3 * author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 4 * Copyright © 2015-2065 ddkk.com. All rights reserved. 5 */ 6package main 7import &amp;#34;fmt&amp;#34; 8func Factorial(x int) (result int) { 9 if x == 0 { 10 result = 1; 11 } else { 12 result = x * Factorial(x - 1); 13 } 14 return; 15func main() { 16 var i int = 15 17 fmt.</description></item><item><title>二十四、Go 语言 – 类型转换</title><link>https://www.shellio.cc/docs/programing/golang/24/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/24/</guid><description>类型转换就是将一种数据类型的变量转换成另一种数据类型的变量
+语法 Go语言类型转换语法格式如下
+1type_name(expression) 其中
+type_name 为数据类型 expression 为需要转换的表达式，可以是变量，常量或者结构体等 范例 下面的范例两个 int 类型的变量 sum 和 count 转换成 float32 型的变量
+1/** 2 * file: main.go 3 * author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 4 * Copyright © 2015-2065 ddkk.com. All rights reserved. 5 */ 6package main 7import &amp;#34;fmt&amp;#34; 8func main() { 9 var sum int = 17 10 var count int = 5 11 var mean float32 12 mean = float32(sum)/float32(count) 13 fmt.Printf(&amp;#34;mean 的值为: %f\n&amp;#34;,mean) 编译运行以上 Go 语言范例，输出结果如下</description></item><item><title>二十五、Go 语言 – 错误处理</title><link>https://www.shellio.cc/docs/programing/golang/25/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/25/</guid><description>Go语言通过内置的错误接口提供了非常简单的错误处理机制
+Go语言中的错误处理分为五个步骤
+1、 生成错误；
+2、 返回错误；
+3、 接收错误；
+4、 错误判断；
+5、 处理错误；
+看起来很多，但其实每个都是一句话的事
+1. 定义错误类型 Go语言提供了 error interface 类型来生成错误
+error 类型是一个接口类型，它的定义如下：
+1type error interface { 2 Error() string 我们可以在代码中通过实现 error 接口类型来生成错误信息
+1errors.New(&amp;#34;这里定义错误消息&amp;#34;) 2. 返回错误 Go语言没有其它语言那样的 try...catch...except..finall 的错误处理机制，它简单的直接返回错误给调用者，让调用者自己处理错误
+Go语言函数通常在最后的返回值中返回错误信息
+1func Sqrt(f float64) (float64, error) { 2 if f &amp;lt; 0 { 3 return 0, errors.New(&amp;#34;math: square root of negative number&amp;#34;) 4 } 5 // 实现 3. 接收错误 因为函数会返回错误，所以我们可以定义一个变量来接收错误，Go 社区推荐使用 err 作为变量名</description></item><item><title>二十一、Go 语言 – range 关键字</title><link>https://www.shellio.cc/docs/programing/golang/21/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/21/</guid><description>Go语言中 range 关键字用于 for 循环 中迭代数组(array)、切片(slice)、通道(channel)或集合(map)的元素
+range 在迭代数组和切片时返回元素的索引值，在集合中返回 key-value 对的 key 值
+范例 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 1/** 2 * file: main.go 3 * author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 4 * Copyright © 2015-2065 ddkk.com. All rights reserved. 5 */ 6package main 7import &amp;#34;fmt&amp;#34; 8func main() { 9 //这是我们使用range去求一个slice的和。使用数组跟这个很类似 10 nums := []int{2, 3, 4} 11 sum := 0 12 for _, num := range nums { 13 sum += num 14 } 15 fmt.</description></item><item><title>九、Go 语言运算符</title><link>https://www.shellio.cc/docs/programing/golang/9/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/9/</guid><description>运算符用于在程序运行时执行数学或逻辑运算
+Go 语言内置了如下几种运算符 算术运算符 关系运算符 逻辑运算符 位运算符 赋值运算符 其他运算符 算术运算符 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 下表列出了 Go 语言支持的所有算术运算符
+我们假定 A 值为 13，B 值为 7
+运算符 描述 范例 + 相加 A + B 输出结果 20 – 相减 A – B 输出结果 6 * 相乘 A * B 输出结果 91 / 相除 A / B 输出结果 2 % 求余 A % B 输出结果 6 ++ 自增 A++ 输出结果 14 — 自减 A– 输出结果 10 范例 1/** 2 * file: main.</description></item><item><title>六、Go 语言数据类型</title><link>https://www.shellio.cc/docs/programing/golang/6/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/6/</guid><description>数据类型用于声明函数和变量
+数据类型指的是用于声明不同类型的变量或函数的一个广泛的系统。
+变量的类型决定了变量存储占用的空间，以及如何解释存储的位模式
+Go 语言数据类别 Go语言按类别有以下几种数据类型：
+类型 描述 布尔型 布尔型的值只可以是常量 true 或者 false 数字类型 包括整型 int 和浮点型 float
+Go 语言支持整型和浮点型数字，并且原生支持复数 字符串类型 字符串就是一串固定长度的字符连接起来的字符序列
+Go 的字符串是由单个字节连接起来的
+Go 语言的字符串的字节使用 UTF-8编码标识 Unicode 文本 派生类型 包括：(a) 指针类型（Pointer）(b) 数组类型(c) 结构化类型(struct) (d) Channel 类型(e) 函数类型(f) 切片类型 (g) 接口类型（interface）(h) Map 类型 数字类型 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 1. 整形 类型 描述 uint8 无符号 8 位整型 (0 到 255) uint16 无符号 16 位整型 (0 到 65535) uint32 无符号 32 位整型 (0 到 4294967295) uint64 无符号 64 位整型 (0 到 18446744073709551615) int8 有符号 8 位整型 (-128 到 127) int16 有符号 16 位整型 (-32768 到 32767) int32 有符号 32 位整型 (-2147483648 到 2147483647) int64 有符号 64 位整型 (-9223372036854775808 到 9223372036854775807) 2.</description></item><item><title>七、Go 语言变量</title><link>https://www.shellio.cc/docs/programing/golang/7/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/7/</guid><description>变量是程序可操作的存储区的名称。Go 语言中 中每个变量都有特定的类型，类型决定了变量存储的大小和布局，该范围内的值都可以存储在内存中
+Go语言中的变量名是标准的标识符，由字母、数字、下划线组成，不能以数字开头
+变量声明 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 var 关键字用来声明变量
+1var identifier type 声明变量时可以指定变量类型，声明后若不赋值，Go 语言会使用默认值
+1var v_name v_type 2v_name = value 声明变量时同时初始化，则可以省去变量类型， Go 编译器会根据值自行判定变量类型
+1var v_name = value 声明变量时还可以省去 var 关键字，但要同时初始化，语法如下
+1v_name := value 注意:= 左侧的变量不能是已经声明过的，否则会导致编译错误
+例如
+1var a int = 10 2var b = 10 3c : = 10 范例 1package main 2var a = &amp;#34;DDKK.COM 弟弟快看，程序员编程资料站&amp;#34; 3var b string = &amp;#34;ddkk.com&amp;#34; 4var c bool 5func main(){ 6 println(a, b, c) 编译运行以上 Go 语言范例，输出结果如下</description></item><item><title>三、Go 语言环境配置</title><link>https://www.shellio.cc/docs/programing/golang/3/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/3/</guid><description>Go语言是垮平台的，它支持主流的操作系统，包括但不限于以下几种
+1、 Linux；
+2、 FreeBSD；
+3、 MacOSX（也称为Darwin）；
+4、 Window；
+Go语言安装包下载地址是 https://golang.org/dl/
+如果你访问不了上面的网址，也可以使用 [Go 语言中文网 – 下载][Go _ _]
+当前最新的版本是 1.9.2
+Go 语言各个系统对应的包名 操作系统 包名 Windows go1.9.2.windows-amd64.msi Linux go1.9.2.linux-amd64.tar.gz Mac go1.9.2darwin-amd64-osx10.8.pkg FreeBSD go1.9.2.freebsd-amd64.tar.gz UNIX/Linux/Mac OS X, 和 FreeBSD 安装 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 接下来我们介绍如何在 UNIX/Linux/Mac OS X 和 FreeBSD系统下配置 Golang 环境
+1、 下载go1.9.2.linux-amd64.tar.gz；
+2、 解压go1.9.2.linux-amd64.tar.gz到/usr/local目录；
+1 tar -C /usr/local -xzf go1.9.2.linux-amd64.tar.gz 3、 将/usr/local/go/bin目录添加至PATH环境变量；
+1 export PATH=$PATH:/usr/local/go/bin Mac 其它安装方法 1、 使用brew；
+1 brew installl go 2、 直接下载.</description></item><item><title>三十、Go 语言 – 指向指针的指针</title><link>https://www.shellio.cc/docs/programing/golang/30/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/30/</guid><description>如果一个指针变量存放的又是另一个指针变量的地址，则称这个指针变量为指向指针的指针变量
+好绕口啊，指向指针的指针呢就是一个指针的变量的值是另一个指针
+当定义一个指向指针的指针变量时，第一个指针存放第二个指针的地址，第二个指针存放变量的地址：
+语法 Go语言声明指向指针的指针变量的语法格式如下
+1var ptr **int; 上面的代码中指向指针的指针变量 ptr 为整型
+访问指向指针的指针变量 访问指向指针的指针变量值需要使用两个 * 号
+1println(**ptr) 范例 1/** 2 * file: main.go 3 * author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 4 * Copyright © 2015-2065 ddkk.com. All rights reserved. 5 */ 6package main 7import &amp;#34;fmt&amp;#34; 8func main() { 9 var a int 10 var ptr *int 11 var pptr **int 12 a = 3000 13 /* 指针 ptr 地址 */ 14 ptr = &amp;amp;a 15 /* 指向指针 ptr 地址 */ 16 pptr = &amp;amp;ptr 17 /* 获取 pptr 的值 */ 18 fmt.</description></item><item><title>三十八、Go 语言 select 语句</title><link>https://www.shellio.cc/docs/programing/golang/38/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/38/</guid><description>Go语言相比于其它语言多了 select 语句这种判断结构
+select 语句是 Go 语言的一个控制结构，类似于用于 channel 的 switch 语句
+select 语句中的每个 case 语句必须是一个 channel 操作，要么是发送要么是接收
+select 语句随机执行一个可运行的 case，如果没有 case 可运行，它将阻塞，直到有 case 可运行
+default 语句应该总是可运行的
+语法 Go语言 select 语句语法格式如下
+1select { 2 case communication clause : 3 statement(s); 4 case communication clause : 5 statement(s); 6 /* 你可以定义任意数量的 case */ 7 default : /* 可选 */ 8 statement(s); 1、 每个case都必须是一个channel；
+2、 所有channel表达式都会被求值；
+3、 所有被发送的表达式都会被求值；
+4、 如果任意某个channel可以进行，它就执行；其他被忽略；
+5、 如果多个case都可以运行，select语句会随机公平地选出一个执行，其他不会执行；
+1否则： 2 * 如果有 default 子句，则执行该语句 3 * 如果没有 default 子句，select 将阻塞，直到某个 channel 可以运行； 6、 select不会重新对channel或值进行求值；</description></item><item><title>三十二、Go 语言 goto 语句</title><link>https://www.shellio.cc/docs/programing/golang/32/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/32/</guid><description>Go语言的 goto 语句可以无条件地将执行流程转移到 label 指定的行
+goto 语句通常与条件语句配合使用，可用来实现条件转移， 构成循环，跳出循环体等功能
+但是，在结构化程序设计中一般不主张使用 goto 语句， 以免造成程序流程的混乱，使理解和调试程序都产生困难
+但是，Go 这么简洁的语言竟然还保留了 goto ，说明它还是很有用的，是不是很矛盾
+语法 Go语言 goto 语句语法格式如下
+1goto label; 2.. 3... 4label: statement; label 可以在 goto 语句之前，也可以在 goto 语句之后
+break 语句流程图 Go语言 break 语句执行流程如下
+范例 1/** 2 * file: main.go 3 * author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 4 * Copyright © 2015-2065 ddkk.com. All rights reserved. 5 */ 6package main 7import &amp;#34;fmt&amp;#34; 8func main() { 9 /* 定义局部变量 */ 10 var a int = 11 11 /* 循环 */ 12 LOOP: for a &amp;lt; 17 { 13 if a == 15 { 14 /* 跳过迭代 */ 15 a = a + 1 16 goto LOOP 17 } 18 fmt.</description></item><item><title>三十九、Go 语言 if…else 语句</title><link>https://www.shellio.cc/docs/programing/golang/39/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/39/</guid><description>Go语言 if 语句 后可以使用可选的 else 语句
+else 语句中的表达式在布尔表达式为 false 时执行
+语法 Go语言 if…else 语句语法格式如下：
+1if 布尔表达式 { 2 /* 在布尔表达式为 true 时执行 */ 3} else { 4 /* 在布尔表达式为 false 时执行 */ 在if 在布尔表达式为 true 时执行
+如果布尔表达式为 false 则执行 else 语句块
+Go 语言 if…else 语句流程图 Go语言 if…else 语句流程图如下
+范例 1/** 2 * file: main.go 3 * author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 4 * Copyright © 2015-2065 ddkk.com. All rights reserved. 5 */ 6package main 7import &amp;#34;fmt&amp;#34; 8func main() { 9 /* 局部变量定义 */ 10 var a int = 21; 11 /* 判断布尔表达式 */ 12 if a &amp;lt; 17 { 13 /* 如果条件为 true 则执行以下语句 */ 14 fmt.</description></item><item><title>三十六、Go 语言 – 向函数传递数组</title><link>https://www.shellio.cc/docs/programing/golang/36/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/36/</guid><description>Go语言的可以向函数传递数组作为参数
+如果想向函数传递数组参数，我们需要在函数定义时，声明形参为数组
+声明形参为数组的方法有两种
+1. 形参设定数组大小 1func myFunction(param [10]int) 2 // 函数体 2. 形参未设定数组大小 如果形参未设定数组大小，则需要额外的形参告知函数数组的大小
+1func myFunction(param []int, length int) 2 // 函数体 范例 1. 我们先定义一个 getAverage 函数 getAverage() 函数接收整型数组参数，另一个参数指定了数组元素的个数，并返回平均值
+1func getAverage(arr []int, size int) float32 2 var i int 3 var avg, sum float32 4 for i = 0; i &amp;lt; size; ++i { 5 sum += arr[i] 6 } 7 return sum / size 然后我们写一个范例调用上面定义的函数
+1/** 2 * file: main.</description></item><item><title>三十七、Go 语言 – 函数 – 引用传值</title><link>https://www.shellio.cc/docs/programing/golang/37/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/37/</guid><description>引用传值是指在调用函数时将实际参数的地址传递到函数中，那么在函数中对参数所进行的修改，将影响到实际参数
+范例 这个swap 函数，通过引用传值，交换两个变量的值
+1/* 定义交换值函数*/ 2func swap(x *int, y *int) { 3 var temp int 4 temp = *x /* 保持 x 地址上的值 */ 5 *x = *y /* 将 y 值赋给 x */ 6 *y = temp /* 将 temp 值赋给 y */ 以下我们通过使用引用传递来调用 swap() 函数：
+1/** 2 * file: main.go 3 * author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 4 * Copyright © 2015-2065 ddkk.com. All rights reserved. 5 */ 6package main 7import &amp;#34;fmt&amp;#34; 8func main() { 9 /* 定义局部变量 */ 10 var a int = 13 11 var b int= 17 12 fmt.</description></item><item><title>三十三、Go 语言 if 语句</title><link>https://www.shellio.cc/docs/programing/golang/33/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/33/</guid><description>Go语言 if 语句由布尔表达式后紧跟一个或多个语句组成。
+语法 Go语言中 if 语句语法格式如下
+1if 布尔表达式 { 2 /* 在布尔表达式为 true 时执行 */ if语句在布尔表达式为 true 时，执行大括号里的语句块，如果为 false 则跳过大括号里的语句
+Go 语言 if 语句流程图 范例 1/** 2 * file: main.go 3 * author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 4 * Copyright © 2015-2065 ddkk.com. All rights reserved. 5 */ 6package main 7import &amp;#34;fmt&amp;#34; 8func main() { 9 /* 定义局部变量 */ 10 var a int = 13 11 /* 使用 if 语句判断布尔表达式 */ 12 if a &amp;lt; 17 { 13 /* 如果条件为 true 则执行以下语句 */ 14 fmt.</description></item><item><title>三十四、Go 语言函数值传递调用</title><link>https://www.shellio.cc/docs/programing/golang/34/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/34/</guid><description>值传递是指在调用函数时将实际参数复制一份传递到函数中，这样在函数中如果对参数进行修改，将不会影响到实际参数
+Go语言默认使用值传递，即在调用过程中不会影响到实际参数
+范例 我们先定义一个 swap() 函数用来交换两个变量的值
+1/* 定义相互交换值的函数 */ 2func swap(x, y int) int { 3 var temp int 4 temp = x /* 保存 x 的值 */ 5 x = y /* 将 y 值赋给 x */ 6 y = temp /* 将 temp 值赋给 y*/ 7 return temp; 接下来我们使用值传递调用刚刚定义的 swap() 函数
+1/** 2 * file: main.go 3 * author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 4 * Copyright © 2015-2065 ddkk.com. All rights reserved.</description></item><item><title>三十五、Go 语言 for 循环嵌套</title><link>https://www.shellio.cc/docs/programing/golang/35/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/35/</guid><description>Go语言允许在 for 循环语句内再使用 for 循环语句
+语法 for语句嵌套 for 语句格式如下：
+1for [condition | ( init; condition; increment ) | Range] 2 for [condition | ( init; condition; increment ) | Range] 3 { 4 statement(s); 5 } 6 statement(s); 范例 我们使用 for 循环嵌套语句输出 2 到 50 之间所有的素数
+1/** 2 * file: main.go 3 * author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 4 * Copyright © 2015-2065 ddkk.com. All rights reserved. 5 */ 6package main 7import &amp;#34;fmt&amp;#34; 8func main() { 9 /* 定义局部变量 */ 10 var i, j int 11 for i=2; i &amp;lt; 50; i++ { 12 for j=2; j &amp;lt;= (i/j); j++ { 13 if(i%j==0) { 14 break; // 如果发现因子，则不是素数 15 } 16 } 17 if(j &amp;gt; (i/j)) { 18 fmt.</description></item><item><title>三十一、Go 语言 – 指针作为函数参数</title><link>https://www.shellio.cc/docs/programing/golang/31/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/31/</guid><description>Go语言允许向函数传递指针
+向函数传递指针只需要在函数定义是将参数上设置为指针类型即可
+例如下面的函数 swap 的 2 个形参就是指针类型
+1func swap(x *int, y *int) { 2 var temp int 3 temp = *x /* 保存 x 地址的值 */ 4 *x = *y /* 将 y 赋值给 x */ 5 *y = temp /* 将 temp 赋值给 y */ 范例 下面的范例演示了如何向函数传递指针，并在函数内部修改指针变量的值
+1/** 2 * file: main.go 3 * author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 4 * Copyright © 2015-2065 ddkk.com. All rights reserved. 5 */ 6package main 7import &amp;#34;fmt&amp;#34; 8func main() { 9 /* 定义局部变量 */ 10 var a int = 13 11 var b int= 7 12 fmt.</description></item><item><title>十、Go 语言条件语句</title><link>https://www.shellio.cc/docs/programing/golang/10/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/10/</guid><description>判断语句要求程序员指定一个或多个要评估或测试的条件，以及条件为真时要执行的语句（必需的）和条件为假时要执行的语句（可选的）
+Go语言把任何 非零 和 非空 的值假定为 true ，把 零 或 null 假定为 false
+下面是大多数编程语言中典型的判断结构的一般形式
+判断语句 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 Go语言提供了以下 5 种条件判断语句：
+语句 描述 if 语句 if 语句由一个布尔表达式后紧跟一个或多个语句组成 if…else 语句 if 语句后可以使用可选的else 语句
+else 语句中的表达式在布尔表达式为 false 时执行 if 嵌套语句 你可以在if或else if语句中嵌入一个或多个if或else if语句 switch 语句 switch语句用于基于不同条件执行不同动作 select 语句 select 会随机执行一个可运行的 case
+如果没有 case 可运行，它将阻塞，直到有 case 可运行</description></item><item><title>十八、Go 语言 – 数据类型 interface</title><link>https://www.shellio.cc/docs/programing/golang/18/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/18/</guid><description>很多教程都把 interface 翻译成接口，类似于 Java 但我觉得还是把它称之为一种数据类型，它类似于 Java 中的 Object
+interface 把所有的具有共性的方法定义在一起， 任何其他类型只要实现了这些方法就是实现了这个 interface
+我们可以这么理解， Go 语言没有基类，如果有那么就是
+1interface {} 任何一个 inteface 都是这个基类的子类，因为它们都可以向上一路转换到 interface{}
+比如说
+1interface add { 2 add() 是的子类
+语法 Go语言定义 interface 的语法格式如下
+1type interface_name interface { 2 method_name1 [return_type] 3 method_name2 [return_type] 4 method_name3 [return_type] 5 ... 6 method_namen [return_type] 如果一个 结构体 struct 实现了一个 interface 中所有的方法，那么我们就可以说这个结构体实现了这个 interface
+1/* 定义结构体 */ 2type struct_name struct { 3 /* variables */ 4/* 实现接口方法 */ 5func (struct_name_variable struct_name) method_name1() [return_type] { 6 /* 方法实现 */ 7.</description></item><item><title>十二、Go 语言函数</title><link>https://www.shellio.cc/docs/programing/golang/12/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/12/</guid><description>函数是代码块的包装，把一些完成指定任务的代码放到一起，起个名字，就成为了函数
+因此我们可以使用函数来划分不同功能，逻辑上每个函数执行的是指定的任务
+Go语言使用 func 关键字定义函数
+函数定义 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 Go语言函数定义语法格式如下：
+1func function_name( [parameter list] ) [return_types] { 2 //函数体 func ： 函数由 func 开始声明 **function_name ：**函数名称，函数名和参数列表一起构成了函数签名 parameter list： 参数列表 参数就像一个占位符，当函数被调用时，我们可以将值传递给参数，这个值被称为实际参数
+参数列表指定的是参数类型、顺序、及参数个数。参数是可选的，也就是说函数也可以不包含参数
+return_types： 返回类型 函数返回一列值，return_types 是该列值的数据类型
+有些功能不需要返回值，这种情况下 return_types 不是必须的
+函数体： 函数定义的代码集合 其它说明 Go语言至少有个 main() 函数
+函数声明告诉了编译器函数的名称，返回类型，和参数
+Go语言标准库提供了多种可动用的内置的函数
+例如，len() 函数可以接受不同类型参数并返回该类型的长度，例如我们传入的是字符串则返回字符串的长度，如果传入的是数组，则返回数组中包含的函数个数
+范例 下面的代码定义了一个 max 函数
+max函数传入两个整型参数 num1 和 num2，并返回这两个参数的最大值
+1/* 函数返回两个数的最大值 */ 2func max(num1, num2 int) int { 3 /* 声明局部变量 */ 4 var result int 5 if (num1 &amp;gt; num2) { 6 result = num1 7 } else { 8 result = num2 9 } 10 return result 函数调用 创建函数，就是定义了函数需要做什么</description></item><item><title>十九、Go 语言 – 切片(slice)</title><link>https://www.shellio.cc/docs/programing/golang/19/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/19/</guid><description>Go语言切片是对数组的抽象
+Go语言数组的长度不可改变，在特定场景中这样的集合就不太适用
+Go语言提供了一种灵活，功能强悍的内置类型切片(slice,”动态数组”)
+slice 的长度是不固定的，可以追加元素，在追加时可能使切片的容量增大
+定义切片 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 声明切片(slice) 的语法和声明数组的语法一样，除了不用在中括号内设置数组的长度
+1var identifier []type 切片不需要指定长度
+或者可以使用 make 关键字来创建切片
+1var slice1 []type = make([]type, len) 也可以简写为
+1slice1 := make([]type, len) 也可以指定容量，其中capacity为可选参数。
+1make([]T, length, capacity) 这里len 切片的初始长度
+切片初始化 可以在定义切片的同时初始化
+1s :=[] int {1,2,3 } []表示是切片类型，{1,2,3}初始化值依次是1,2,3
+其中cap=len=3
+可以使用对数组的应用来创建切片 语法如下
+1s := arr[startIndex:endIndex] 将arr 中从下标 startIndex 到 endIndex-1 下的元素创建为一个新的切片
+如果 startIndex 和 endIndex 都缺省，则表示引用数组的全部数据 1s := arr[:] 缺省endIndex时将表示一直到arr的最后一个元素 1s := arr[startIndex:] 缺省startIndex时将表示从arr的第一个元素开始 1s := arr[:endIndex] 可以通过切片 s 初始化切片 s1 1s1 := s[startIndex:endIndex] 通过内置函数make()初始化切片s,[]int 标识为其元素类型为 int 的切片 1s :=make([]int,len,cap) len() 和 cap() 函数 切片是可索引的，并且可以由 len() 方法获取长度</description></item><item><title>十六、Go 语言 – 指针</title><link>https://www.shellio.cc/docs/programing/golang/16/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/16/</guid><description>我们前面学习过，每一个变量都有一个内存位置，每一个内存位置都可使用取址运算符(&amp;amp;) 来访问的地址，它表示了在内存中的一个地址。
+Go语言支持指针，但只支持指针的取址运算符(&amp;amp;) 和解址运算符(*),不支持指针的算术运算
+因此Go 语言中指针是很容易学习的，Go 语言中使用指针可以更简单的执行一些任务
+下面的范例输出了变量 a 在内存中的地址
+1/** 2 * file: main.go 3 * author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 4 * Copyright © 2015-2065 ddkk.com. All rights reserved. 5 */ 6package main 7import &amp;#34;fmt&amp;#34; 8func main() { 9 var a int = 10 10 fmt.Printf(&amp;#34;变量的地址: %x\n&amp;#34;, &amp;amp;a ) 编译运行以上 Go 语言范例，输出结果如下
+1$ go run main.go 2变量的地址: c420014158 什么是指针 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 一个指针变量可以指向任何一个值的内存地址它指向那个值的内存地址
+指针类似于变量和常量，在使用指针前需要声明指针
+语法 声明一个指针的语法格式如下
+1var var_name *var-type var-type 为指针类型 var_name 为指针变量名 号用于指定变量是作为一个指针 一个指针变量通常缩写为 ptr</description></item><item><title>十七、Go 语言 – 结构体</title><link>https://www.shellio.cc/docs/programing/golang/17/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/17/</guid><description>Go语言中数组可以存储相同类型的数据， 结构 则是另一种允许用户自定义的可用的数据类型，它允许您存储不同类型的数据。
+结构通常用于表示一条记录，假设想要跟踪图书馆中书本的动态，我们可能需要跟踪每本书的下列属性：
+Title Author Subject Book ID 定义结构体 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 Go语言使用 type 和 struct 关键字定义结构体
+struct 语句定义了一个新的数据类型，结构体有中一个或多个成员
+type 语句设定了结构体的名称
+定义结构体语法 Go语言定义结构体的语法格式如下
+1type struct_variable_type struct { 2 member definition; 3 member definition; 4 ... 5 member definition; 一旦定义了结构体类型，我们就能用它来声明变量
+定义结构体变量语法 一旦定义了结构体类型，它就能用于变量的声明，语法格式如下
+1variable_name := structure_variable_type {value1, value2...valuen} 访问结构体成员 Go语言使用点号(.)操作符访问结构体成员
+格式为：”结构体.成员名”
+范例 下面的语句定义了一个结构体 Books
+1/** 2 * file: main.go 3 * author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 4 * Copyright © 2015-2065 ddkk.com. All rights reserved.</description></item><item><title>十三、Go 语言 – 变量作用域</title><link>https://www.shellio.cc/docs/programing/golang/13/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/13/</guid><description>通常来说，一段程序代码中所用到的变量并不总是有效/可用的，而限定这个变量的可用性的代码范围就是这个变量的作用域 简称变量作用域
+作用域标示了常量、类型、变量、函数或包在源代码中的作用范围
+Go语言中变量可以在三个地方声明
+1、 函数内定义的变量称为局部变量；
+2、 函数外定义的变量称为全局变量；
+3、 函数定义中的变量称为形式参数；
+局部变量 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 在函数体内声明的变量称之为局部变量，它们的作用域只在函数体内，参数和返回值变量也是局部变量
+下面的范例定义了三个局部变量 a, b, c
+1package main 2import &amp;#34;fmt&amp;#34; 3func main() { 4 /* 声明局部变量 */ 5 var a, b, c int 6 /* 初始化参数 */ 7 a = 10 8 b = 20 9 c = a + b 10 fmt.Printf (&amp;#34;结果： a = %d, b = %d and c = %d\n&amp;#34;, a, b, c) 编译运行以上 Go 语言范例，输出结果如下</description></item><item><title>十四、Go 语言 – 数组</title><link>https://www.shellio.cc/docs/programing/golang/14/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/14/</guid><description>数组是具有相同唯一类型的一组已编号且长度固定的数据项序列，这种类型可以是任意的原始类型例如整形、字符串或者自定义类型
+相对于去声明 number0, number1, …, and number99 的变量，使用数组形式 numbers[0], numbers[1] …, numbers[99] 更加方便且易于扩展
+数组元素可以通过索引（位置）来读取（或者修改），索引从0开始，第一个元素索引为 0，第二个索引为 1，以此类推
+Go语言提供了数组类型的数据结构，而且索引下表从 0 开始
+声明数组 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 Go语言数组声明需要指定元素类型及元素个数
+语法 Go语言声明数组的语法格式如下
+1var variable_name [SIZE] variable_type 上面是一维数组的定义语法
+数组长度必须是整数且大于 0
+下面的代码定义了一个长度为 10 的 float32 类型的数组
+1var balance [10] float32 初始化数组 Go语言的数组初始化和 C/C++ 语言一样，使用大括号 ( {} )
+1var balance = [5]float32{1000.0, 2.0, 3.4, 7.0, 50.0} 初始化数组时带括号 {} 中的元素个数不能大于中括号 [] 中的数字
+如果忽略 [] 中的数字不设置数组大小，Go 语言会根据元素的个数来设置数组的大小
+1var balance = [...]float32{1000.0, 2.0, 3.</description></item><item><title>十五、Go 语言 – 字符串</title><link>https://www.shellio.cc/docs/programing/golang/15/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/15/</guid><description>Strings, which are widely used in Go programming, are a readonly slice of bytes. In the Go programming language, strings are slices . The Go platform provides various libraries to manipulate strings. – unicode – regexp – strings
+Creating Strings 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 Themost direct way to create a string is to write −
+1var greeting = &amp;#34;Hello world!&amp;#34; Whenever it encounters a string literal in your code, the compiler creates a string object with its value in this case, “Hello world!</description></item><item><title>十一、Go 语言循环语句</title><link>https://www.shellio.cc/docs/programing/golang/11/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/11/</guid><description>一般情况下，语句是按顺序执行的：函数中的第一个语句先执行，接着是第二个语句，依此类推。但有的时候，我们可能需要多次执行同一块代码，C 语言提供的循环语句解决了我们的问题。
+循环语句和前面的条件语句，为编程语言提供了更为复杂执行路径的多种控制结构。
+循环语句允许我们多次执行一个语句或语句组。
+循环语句流程图 大多数编程语言循环语句的流程图如下：
+Go 语言循环语句 Go语言提供了以下几种循环处理语句
+循环类型 描述 for 循环语句 重复执行语句块 for 语句循环嵌套 在 for 循环中嵌套一个或多个 for 循环 循环控制语句 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 循环控制语句可以控制循环体内语句的执行过程
+Go语言提供了下几种循环控制语句
+控制语句 描述 break 语句 经常用于中断当前 for 循环或跳出 switch 语句 continue 语句 跳过当前循环的剩余语句，然后继续进行下一轮循环 goto 语句 将控制转移到被标记的语句 无限循环 如果for 循环中条件语句永远不为 false 则会进行无限循环
+我们可以通过 for 循环语句中只设置一个 true 条件表达式来执行无限循环
+1/** 2 * file: main.go 3 * author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 4 * Copyright © 2015-2065 ddkk.com. All rights reserved. 5 */ 6package main 7import &amp;#34;fmt&amp;#34; 8func main() { 9 for true { 10 fmt.</description></item><item><title>四、Go 语言结构</title><link>https://www.shellio.cc/docs/programing/golang/4/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/4/</guid><description>在前面的 Go 语言环境配置 我们运行了 hllo.go 范例，现在，我们就以这个范例来讲解 Go 语言的基本结构
+Go Hello World 范例 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 先来看看我们之前运行的 Hello World 范例
+1/** 2 * file: main.go 3 * author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 4 * Copyright © 2015-2065 ddkk.com. All rights reserved. 5 */ 6package main 7import &amp;#34;fmt&amp;#34; 8func main() { 9 /* 这是我的第一个简单的程序 */ 10 greet := &amp;#34;Hello World!&amp;#34; 11 fmt.Println( greet ) 这几乎是最短的 Golang 语言程序，但麻雀虽小，五脏俱全，它包括了一下几个部分
+包声明
+package main 定义了包名
+我们必须在源文件中非注释的第一行指明这个文件属于哪个包，如：package main
+package main 表示一个可独立执行的程序，每个 Go 应用程序都包含一个名为 main 的包</description></item><item><title>四十、Go 语言 switch 语句</title><link>https://www.shellio.cc/docs/programing/golang/40/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/40/</guid><description>Go语言 switch 语句 根据不同条件执行不同动作
+Go语言 switch 语句 中的每一个 case 分支都是唯一的，从上直下逐一测试，直到匹配为止
+switch 语句执行的过程从上至下，直到找到匹配项后停止匹配
+Go语言中的 switch 语句与其它语言不通，匹配项后不需要再加 break 语句
+语法 Go语言 switch 语句语法格式如下
+1switch var1 { 2 case val1: 3 ... 4 case val2: 5 ... 6 default: 7 ... 变量var1 可以是任何类型，而 val1 和 val2 则可以是同类型的任意值
+var1 val1 val2 类型不限于常量或整数，但必须是相同的类型或者最终结果为相同类型的表达式
+我们可以同时测试多个可能符合条件的值，使用逗号分割它们
+1switch var1 { 2 case val1,val2,val3: 3 ... 4 case val4: 5 ... 6 default: 7 ... Go 语言 switch 语句流程图 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 Go语言 switch 语句执行流程如下</description></item><item><title>四十二、Go 语言指针数组</title><link>https://www.shellio.cc/docs/programing/golang/42/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/42/</guid><description>指针数组就是数组里的每一个元素保存的都是其它变量的地址的数组
+一般情况下很少用到指针数组
+在我们继续学习指针数组前，我们先来看一个范例
+下面的范例定义了一个长度为 3 的整形数组
+1/** 2 * file: main.go 3 * author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 4 * Copyright © 2015-2065 ddkk.com. All rights reserved. 5 */ 6package main 7import &amp;#34;fmt&amp;#34; 8const MAX int = 3 9func main() { 10 a := []int{10,100,200} 11 var i int 12 for i = 0; i &amp;lt; MAX; i++ { 13 fmt.Printf(&amp;#34;a[%d] = %d\n&amp;#34;, i, a[i] ) 14 } 编译运行以上 Go 语言范例，输出结果如下
+1$ go run main.</description></item><item><title>四十六、Go 语言 continue 语句</title><link>https://www.shellio.cc/docs/programing/golang/46/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/46/</guid><description>Go语言 continue 语句用于跳过剩下的循环语句开始下一次循环
+continue 语句类似于 break 语句 但 continue 不是跳出循环，而是跳过当前循环执行下一次循环语句
+for循环 语句中的 continue 语句会触发 for 增量语句的执行
+语法 Go语言 continue 语句语法格式如下：
+1continue; continue 语句流程图 Go语言 continue 语句执行流程如下所示
+范例 1/** 2 * file: main.go 3 * author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 4 * Copyright © 2015-2065 ddkk.com. All rights reserved. 5 */ 6package main 7import &amp;#34;fmt&amp;#34; 8func main() { 9 /* 定义局部变量 */ 10 var a int = 11 11 /* for 循环 */ 12 for a &amp;lt; 17 { 13 if a == 15 { 14 /* 跳过此次循环 */ 15 a = a + 1; 16 continue; 17 } 18 fmt.</description></item><item><title>四十三、Go 语言 if 语句嵌套</title><link>https://www.shellio.cc/docs/programing/golang/43/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/43/</guid><description>Go语言允许在 if 或 else if 语句中嵌入一个或多个 if 或 else if 语句
+语法 Go语言 if…else 语句语法格式如下：
+1if 布尔表达式 1 { 2 /* 在布尔表达式 1 为 true 时执行 */ 3 if 布尔表达式 2 { 4 /* 在布尔表达式 2 为 true 时执行 */ 5 } 同样的，我们也可以用同样的方式在 if 语句中嵌套 else if…else 语句
+范例 1/** 2 * file: main.go 3 * author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 4 * Copyright © 2015-2065 ddkk.com. All rights reserved. 5 */ 6package main 7import &amp;#34;fmt&amp;#34; 8func main() { 9 /* 定义局部变量 */ 10 var a int = 13 11 var b int = 7 12 /* 判断条件 */ 13 if a == 13 { 14 /* if 条件语句为 true 执行 */ 15 if b == 7 { 16 /* if 条件语句为 true 执行 */ 17 fmt.</description></item><item><title>四十四、Go 语言 – 函数作为值</title><link>https://www.shellio.cc/docs/programing/golang/44/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/44/</guid><description>Go语言中函数是一等公民，我们可以把一个 匿名函数 赋值给一个变量，然后向另一个函数传递这个变量
+范例 下面的范例定义的函数中初始化一个变量，该函数仅仅是为了使用内置函数 math.sqrt()
+1/** 2 * file: main.go 3 * author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 4 * Copyright © 2015-2065 ddkk.com. All rights reserved. 5 */ 6package main 7import ( 8 &amp;#34;fmt&amp;#34; 9 &amp;#34;math&amp;#34; 10func main(){ 11 /* 声明函数变量 */ 12 getSquareRoot := func(x float64) float64 { 13 return math.Sqrt(x) 14 } 15 /* 使用函数 */ 16 fmt.Println(getSquareRoot(9)) 编译运行以上 Go 语言范例，输出结果如下
+1$ go run main.go</description></item><item><title>四十五、Go 语言函数方法</title><link>https://www.shellio.cc/docs/programing/golang/45/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/45/</guid><description>Go语言中既有函数又有方法，一个方法就是一个包含了接受者的函数，接受者可以是命名类型或者结构体类型的一个值或者是一个指针
+所有给定类型的方法属于该类型的方法集
+语法 Go语言中方法的语法格式如下
+1func (variable_name variable_data_type) function_name() [return_type]{ 2 /* 函数体*/ 范例 下面的范例为一个结构体类型 Circle 定义了一个 getArea() 方法
+1/** 2 * file: main.go 3 * author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 4 * Copyright © 2015-2065 ddkk.com. All rights reserved. 5 */ 6package main 7import ( 8 &amp;#34;fmt&amp;#34; 9/* 定义函数 */ 10type Circle struct { 11 radius float64 12func main() { 13 var c1 Circle 14 c1.radius = 10.00 15 fmt.Println(&amp;#34;Area of Circle(c1) = &amp;#34;, c1.</description></item><item><title>四十一、Go 语言 – 闭包函数</title><link>https://www.shellio.cc/docs/programing/golang/41/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/41/</guid><description>Go语言支持闭包函数，又称匿名函数
+匿名函数是一个 “内联” 语句或表达式
+匿名函数的优越性在于可以直接使用函数内的变量，不必申明
+Go语言使用 func() 定义匿名函数
+语法 Go语言中定义闭包函数的语法格式如下
+1func([parameter_list]) [return_type] { 2 // 函数体 与一般函数的区别就是，闭包函数没有 函数名
+范例 下面的范例，我们创建了一个函数 getSequence() 返回另外一个函数，该函数的目的是在闭包中递增 i 变量
+1/** 2 * file: main.go 3 * author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 4 * Copyright © 2015-2065 ddkk.com. All rights reserved. 5 */ 6package main 7import &amp;#34;fmt&amp;#34; 8func getSequence() func() int { 9 i:=0 10 return func() int { 11 i+=1 12 return i 13 } 14func main(){ 15 /* nextNumber 为一个函数，函数 i 为 0 */ 16 nextNumber := getSequence() 17 /* 调用 nextNumber 函数，i 变量自增 1 并返回 */ 18 fmt.</description></item><item><title>五、Go 语言基础语法</title><link>https://www.shellio.cc/docs/programing/golang/5/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/5/</guid><description>在上一章节中我们学习了 Go 语言程序的基本结构，现在我们继续学习 Go 语言的基础语法
+1. Go 标记 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 标记可以是 关键字，标识符，常量，字符串或符号
+Go程序可以由多个标记组成，例如下面的 GO 语句由 6 个标记组成
+1 fmt.Println(&amp;#34;Hello, World!&amp;#34;) 2//-- - ----- - ------------- - 3// 1 2 3 4 5 6 1、 fmt；
+2、 .；
+3、 Println；
+4、 (；
+5、 “Hello,World!”；
+6、 )；
+行分隔符 Go语言语法规定，每一行代表一个语句结束，比如下面是两个语句
+每个语句不需要像 C 家族中的其它语言一样以分号(;) 结尾，这些工作会由 Go 编译器自动完成
+1fmt.Println(&amp;#34;Hello, World!&amp;#34;) 2fmt.Println(&amp;#34;DDKK.COM 弟弟快看，程序员编程资料站：ddkk.com&amp;#34;) 如果我们打算将多个语句写在同一行，则必须使用分号(;) 人为区分
+当然实际开发中我们不会这么做，为啥要省个那么一两行，造成代码不可读
+注释 Go语言编译器会自动忽略注释
+单行注释是最常见的注释形式，我们可以在任何地方使用以 // 开头的单行注释
+多行注释也叫块注释，均已以 /* 开头，并以 */ 结尾</description></item><item><title>一、Go 语言基础教程</title><link>https://www.shellio.cc/docs/programing/golang/1/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.shellio.cc/docs/programing/golang/1/</guid><description>一、Go 语言基础教程 Go是一个开源的编程语言，它能让构造简单、可靠且高效的软件变得容易
+Go是 2007 年末由 Google 的 Robert Griesemer, Rob Pike, Ken Thompson 三位大神开发的，并于 2009年 11 月份正式对外开放
+Go语言是一种静态类型的语言，具有与 C 类似的语法
+Go语言提供垃圾收集，类型安全性，动态打字功能，许多高级内置类型，如可变长度数组和键值映射
+Go语言还提供了丰富的标准库
+Go 语言特色 1、 简洁、快速、安全；
+2、 并行、有趣、开源；
+3、 内存管理、v数组安全、编译迅速；
+Go 语言用途 1、 Go语言可以用于分布式系统开发，因为goroutime使得Go语言开发分布式系统变得简单；
+2、 Go语言可开发Web服务，内置的http模块可以很容易就搭建一个小Web应用程序；
+Go 语言 Hello World 创建一个文件 hello.go 并输入以下内容
+1/** 2 * file: hello.go 3 * author: DDKK.COM 弟弟快看，程序员编程资料站(ddkk.com) 4 * Copyright © 2015-2065 ddkk.com. All rights reserved. 5 */ 6package main 7import &amp;#34;fmt&amp;#34; 8func main() { 9 fmt.</description></item></channel></rss>
