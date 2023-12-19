@@ -1,1 +1,12 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>博客 on 程序员安仔</title><link>https://www.hotmindshare.com/blog/</link><description>Recent content in 博客 on 程序员安仔</description><generator>Hugo -- gohugo.io</generator><language>zh-hans</language><copyright>粤ICP备2023148789号</copyright><atom:link href="https://www.hotmindshare.com/blog/index.xml" rel="self" type="application/rss+xml"/></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>博客 on 程序员安仔</title><link>https://www.hotmindshare.com/blog/</link><description>Recent content in 博客 on 程序员安仔</description><generator>Hugo -- gohugo.io</generator><language>zh-hans</language><copyright>粤ICP备2023148789号</copyright><atom:link href="https://www.hotmindshare.com/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>Git 如何撤回已 Push 的代码</title><link>https://www.hotmindshare.com/blog/2023/12/git-%E5%A6%82%E4%BD%95%E6%92%A4%E5%9B%9E%E5%B7%B2-push-%E7%9A%84%E4%BB%A3%E7%A0%81/</link><pubDate>Tue, 19 Dec 2023 22:14:50 +0800</pubDate><guid>https://www.hotmindshare.com/blog/2023/12/git-%E5%A6%82%E4%BD%95%E6%92%A4%E5%9B%9E%E5%B7%B2-push-%E7%9A%84%E4%BB%A3%E7%A0%81/</guid><description>在日常的开发中，我们经常使用 Git 来进行版本控制。有时候，我们可能会不小心将错误的代码 Push 到远程仓库，或者想要在本地回退到之前的某个版本重新开发。
+或者像我一样，写了一些感觉以后很有用的优化方案 push 到线上，又接到了一个新的需求。但是呢，项目比较重要，没有经过测试的方案不能轻易上线，为了承接需求只能先把 push 上去的优化方案先下掉。
+现在我的分支是这样的，我想要在本地和远程仓库中都恢复到help 文档提交的部分。
+注意 在执行这些操作之前，请确保完全理解它们的影响，特别是在多人协作的项目中。 对于受保护的分支（如主分支或发布分支），可能无法执行强制推送。需要根据你的项目设置或团队规范来处理这种情况。 使用强制推送会改变远程仓库的历史，可能会给团队成员带来困扰。在这样做之前，最好与团队成员沟通。 最简单粗暴的方法 IntelliJ IDEA 方法 如果你的错误代码不是很多，那么你其实可以通过与你想要恢复到的 commit 进行对比，然后手动删除错误代码，然后删除不同的代码。
+按住 ctrl 选择想要对比的两个 commit，然后选择 Compare Versions 就能通过对比删除掉你想要删除的代码。
+这个方案在代码很简单时时非常有效的，甚至还能通过删除后最新 commit 和想要退回的 commit 在Compare一下保障代码一致。
+但是这个方法对于代码比较复杂的情况来说就不太好处理了，如果涉及到繁杂的配置文件，那更是让人头疼。
+而且，这样还会保留错误提交的记录，对于有强迫症的我来说，有点接受不能。对此，git 也有一套较为优雅的操作流程，同样能解决这个问题。
+Git 命令方法 在 Git 中，要比较两个 commit 之间的代码变动，可以使用 git diff 命令。这个命令允许你查看两个不同 commit 之间的差异。以下是一些常用的方法：
+基本用法:
+git diff &amp;lt;commit1&amp;gt; &amp;lt;commit2&amp;gt; 这里 &amp;lt;commit1&amp;gt; 和 &amp;lt;commit2&amp;gt; 分别代表你想要比较的两个 commit 的哈希值。
+这里注意一下，在使用 git diff 命令比较两个 commit 时，commit1 和 commit2 的顺序会影响显示的差异内容。命令 git diff &amp;lt;commit1&amp;gt; &amp;lt;commit2&amp;gt; 的作用是显示从 commit1 变化到 commit2 时代码发生的变动。</description></item></channel></rss>
