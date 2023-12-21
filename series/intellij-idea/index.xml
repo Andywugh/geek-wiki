@@ -1,4 +1,21 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>IntelliJ IDEA on 程序员安仔</title><link>https://www.hotmindshare.com/series/intellij-idea/</link><description>Recent content in IntelliJ IDEA on 程序员安仔</description><generator>Hugo -- gohugo.io</generator><language>zh-hans</language><copyright>粤ICP备2023148789号</copyright><lastBuildDate>Tue, 19 Dec 2023 22:14:50 +0800</lastBuildDate><atom:link href="https://www.hotmindshare.com/series/intellij-idea/index.xml" rel="self" type="application/rss+xml"/><item><title>Git 如何撤回已 Push 的代码</title><link>https://www.hotmindshare.com/blog/2023/12/git-%E5%A6%82%E4%BD%95%E6%92%A4%E5%9B%9E%E5%B7%B2-push-%E7%9A%84%E4%BB%A3%E7%A0%81/</link><pubDate>Tue, 19 Dec 2023 22:14:50 +0800</pubDate><guid>https://www.hotmindshare.com/blog/2023/12/git-%E5%A6%82%E4%BD%95%E6%92%A4%E5%9B%9E%E5%B7%B2-push-%E7%9A%84%E4%BB%A3%E7%A0%81/</guid><description>在日常的开发中，我们经常使用 Git 来进行版本控制。有时候，我们可能会不小心将错误的代码 Push 到远程仓库，或者想要在本地回退到之前的某个版本重新开发。
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>IntelliJ IDEA on 程序员安仔</title><link>https://www.hotmindshare.com/series/intellij-idea/</link><description>Recent content in IntelliJ IDEA on 程序员安仔</description><generator>Hugo -- gohugo.io</generator><language>zh-hans</language><copyright>粤ICP备2023148789号</copyright><lastBuildDate>Wed, 20 Dec 2023 13:16:47 +0800</lastBuildDate><atom:link href="https://www.hotmindshare.com/series/intellij-idea/index.xml" rel="self" type="application/rss+xml"/><item><title>这款新兴的 IDEA 插件封神了！</title><link>https://www.hotmindshare.com/blog/2023/12/%E8%BF%99%E6%AC%BE%E6%96%B0%E5%85%B4%E7%9A%84-idea-%E6%8F%92%E4%BB%B6%E5%B0%81%E7%A5%9E%E4%BA%86/</link><pubDate>Wed, 20 Dec 2023 13:16:47 +0800</pubDate><guid>https://www.hotmindshare.com/blog/2023/12/%E8%BF%99%E6%AC%BE%E6%96%B0%E5%85%B4%E7%9A%84-idea-%E6%8F%92%E4%BB%B6%E5%B0%81%E7%A5%9E%E4%BA%86/</guid><description>IDEA 是一款功能强大的集成开发环境（IDE）插件，它可以帮助开发人员更加高效地编写、调试和部署软件应用程序。
+我们在编写完接口代码后需要进行接口调试等操作，一般需要打开额外的调试工具。今天就给大家介绍一款 IDEA 插件：Apipost-Helper-2.0。用它，代码写完直接编辑器内调试、还支持生成接口文档、接口树等功能，并且完全无偿使用！超好用！
+这款插件由 Apipost 团队开发，官方介绍中提到：用于 IDEA 项目快速生成 API 文档，快速查询接口、接口代码功能，并支持在 IDEA 中进行 API 调试操作。
+插件安装&amp;amp;更新
+在 IDEA 编辑器插件中心输入 Apipost 搜索安装：Apipost-Helper-2.0 （支持版本：19.3 月—23.2 月 IDEA 版本 ）
+插件配置
+使用 Apipost IDEA 插件前需要在 IDEA 设置中进行配置，云端域名默认为：
+https://sync-project-ide.apipost.cn ，
+无需修改。
+请求 token 可以在Apipost 「项目设置」- 「对外能力」-「openAPI」
+中创建使用，也支持在 IDEA 中直接获取请求 token。
+无侵入生成 API 文档
+编写完代码后，只需右键 upload 同步接口即可快速将源码中包含的 API 以及注解自动生成 API 文档，并生成可以访问的链接。无需任何额外操作。
+快速调试（类似 Postman）
+因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 编写完代码后，点击右侧图标，可以进行快速调试。
+根据 API 搜索对应源码、接口树
+右侧接口调试栏新增搜索功能可以根据 API 搜索对应源码、接口树。
+· 根据 API 搜索对应源码：</description></item><item><title>Git 如何撤回已 Push 的代码</title><link>https://www.hotmindshare.com/blog/2023/12/git-%E5%A6%82%E4%BD%95%E6%92%A4%E5%9B%9E%E5%B7%B2-push-%E7%9A%84%E4%BB%A3%E7%A0%81/</link><pubDate>Tue, 19 Dec 2023 22:14:50 +0800</pubDate><guid>https://www.hotmindshare.com/blog/2023/12/git-%E5%A6%82%E4%BD%95%E6%92%A4%E5%9B%9E%E5%B7%B2-push-%E7%9A%84%E4%BB%A3%E7%A0%81/</guid><description>在日常的开发中，我们经常使用 Git 来进行版本控制。有时候，我们可能会不小心将错误的代码 Push 到远程仓库，或者想要在本地回退到之前的某个版本重新开发。
 或者像我一样，写了一些感觉以后很有用的优化方案 push 到线上，又接到了一个新的需求。但是呢，项目比较重要，没有经过测试的方案不能轻易上线，为了承接需求只能先把 push 上去的优化方案先下掉。
 现在我的分支是这样的，我想要在本地和远程仓库中都恢复到help 文档提交的部分。
 注意 在执行这些操作之前，请确保完全理解它们的影响，特别是在多人协作的项目中。 对于受保护的分支（如主分支或发布分支），可能无法执行强制推送。需要根据你的项目设置或团队规范来处理这种情况。 使用强制推送会改变远程仓库的历史，可能会给团队成员带来困扰。在这样做之前，最好与团队成员沟通。 最简单粗暴的方法 IntelliJ IDEA 方法 如果你的错误代码不是很多，那么你其实可以通过与你想要恢复到的 commit 进行对比，然后手动删除错误代码，然后删除不同的代码。
@@ -6,7 +23,7 @@
 这个方案在代码很简单时时非常有效的，甚至还能通过删除后最新 commit 和想要退回的 commit 在Compare一下保障代码一致。
 但是这个方法对于代码比较复杂的情况来说就不太好处理了，如果涉及到繁杂的配置文件，那更是让人头疼。
 而且，这样还会保留错误提交的记录，对于有强迫症的我来说，有点接受不能。对此，git 也有一套较为优雅的操作流程，同样能解决这个问题。
-Git 命令方法 在 Git 中，要比较两个 commit 之间的代码变动，可以使用 git diff 命令。这个命令允许你查看两个不同 commit 之间的差异。以下是一些常用的方法：
+Git 命令方法 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 在 Git 中，要比较两个 commit 之间的代码变动，可以使用 git diff 命令。这个命令允许你查看两个不同 commit 之间的差异。以下是一些常用的方法：
 基本用法:
 git diff &amp;lt;commit1&amp;gt; &amp;lt;commit2&amp;gt; 这里 &amp;lt;commit1&amp;gt; 和 &amp;lt;commit2&amp;gt; 分别代表你想要比较的两个 commit 的哈希值。
 这里注意一下，在使用 git diff 命令比较两个 commit 时，commit1 和 commit2 的顺序会影响显示的差异内容。命令 git diff &amp;lt;commit1&amp;gt; &amp;lt;commit2&amp;gt; 的作用是显示从 commit1 变化到 commit2 时代码发生的变动。</description></item></channel></rss>

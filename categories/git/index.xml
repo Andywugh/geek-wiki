@@ -6,7 +6,7 @@
 这个方案在代码很简单时时非常有效的，甚至还能通过删除后最新 commit 和想要退回的 commit 在Compare一下保障代码一致。
 但是这个方法对于代码比较复杂的情况来说就不太好处理了，如果涉及到繁杂的配置文件，那更是让人头疼。
 而且，这样还会保留错误提交的记录，对于有强迫症的我来说，有点接受不能。对此，git 也有一套较为优雅的操作流程，同样能解决这个问题。
-Git 命令方法 在 Git 中，要比较两个 commit 之间的代码变动，可以使用 git diff 命令。这个命令允许你查看两个不同 commit 之间的差异。以下是一些常用的方法：
+Git 命令方法 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 在 Git 中，要比较两个 commit 之间的代码变动，可以使用 git diff 命令。这个命令允许你查看两个不同 commit 之间的差异。以下是一些常用的方法：
 基本用法:
 git diff &amp;lt;commit1&amp;gt; &amp;lt;commit2&amp;gt; 这里 &amp;lt;commit1&amp;gt; 和 &amp;lt;commit2&amp;gt; 分别代表你想要比较的两个 commit 的哈希值。
 这里注意一下，在使用 git diff 命令比较两个 commit 时，commit1 和 commit2 的顺序会影响显示的差异内容。命令 git diff &amp;lt;commit1&amp;gt; &amp;lt;commit2&amp;gt; 的作用是显示从 commit1 变化到 commit2 时代码发生的变动。</description></item><item><title>八、Git 创建仓库 – git init</title><link>https://www.hotmindshare.com/docs/git/8/</link><pubDate>Sat, 21 Oct 2023 12:22:54 +0800</pubDate><guid>https://www.hotmindshare.com/docs/git/8/</guid><description>Git使用 git init 命令初始化一个 Git 仓库

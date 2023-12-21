@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>IntelliJ IDEA on 程序员安仔</title><link>https://www.hotmindshare.com/tags/intellij-idea/</link><description>Recent content in IntelliJ IDEA on 程序员安仔</description><generator>Hugo -- gohugo.io</generator><language>zh-hans</language><copyright>粤ICP备2023148789号</copyright><lastBuildDate>Wed, 20 Dec 2023 13:16:47 +0800</lastBuildDate><atom:link href="https://www.hotmindshare.com/tags/intellij-idea/index.xml" rel="self" type="application/rss+xml"/><item><title>这款新兴的 IDEA 插件封神了！</title><link>https://www.hotmindshare.com/blog/2023/12/%E8%BF%99%E6%AC%BE%E6%96%B0%E5%85%B4%E7%9A%84-idea-%E6%8F%92%E4%BB%B6%E5%B0%81%E7%A5%9E%E4%BA%86/</link><pubDate>Wed, 20 Dec 2023 13:16:47 +0800</pubDate><guid>https://www.hotmindshare.com/blog/2023/12/%E8%BF%99%E6%AC%BE%E6%96%B0%E5%85%B4%E7%9A%84-idea-%E6%8F%92%E4%BB%B6%E5%B0%81%E7%A5%9E%E4%BA%86/</guid><description>IDEA 是一款功能强大的集成开发环境（IDE）插件，它可以帮助开发人员更加高效地编写、调试和部署软件应用程序。
+我们在编写完接口代码后需要进行接口调试等操作，一般需要打开额外的调试工具。今天就给大家介绍一款 IDEA 插件：Apipost-Helper-2.0。用它，代码写完直接编辑器内调试、还支持生成接口文档、接口树等功能，并且完全无偿使用！超好用！
+这款插件由 Apipost 团队开发，官方介绍中提到：用于 IDEA 项目快速生成 API 文档，快速查询接口、接口代码功能，并支持在 IDEA 中进行 API 调试操作。
+插件安装&amp;amp;更新
+在 IDEA 编辑器插件中心输入 Apipost 搜索安装：Apipost-Helper-2.0 （支持版本：19.3 月—23.2 月 IDEA 版本 ）
+插件配置
+使用 Apipost IDEA 插件前需要在 IDEA 设置中进行配置，云端域名默认为：
+https://sync-project-ide.apipost.cn ，
+无需修改。
+请求 token 可以在Apipost 「项目设置」- 「对外能力」-「openAPI」
+中创建使用，也支持在 IDEA 中直接获取请求 token。
+无侵入生成 API 文档
+编写完代码后，只需右键 upload 同步接口即可快速将源码中包含的 API 以及注解自动生成 API 文档，并生成可以访问的链接。无需任何额外操作。
+快速调试（类似 Postman）
+因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 编写完代码后，点击右侧图标，可以进行快速调试。
+根据 API 搜索对应源码、接口树
+右侧接口调试栏新增搜索功能可以根据 API 搜索对应源码、接口树。
+· 根据 API 搜索对应源码：</description></item></channel></rss>
