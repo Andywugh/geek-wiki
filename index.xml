@@ -1,4 +1,35 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>程序员安仔的技术文档/博客 on 程序员安仔</title><link>https://www.hotmindshare.com/</link><description>Recent content in 程序员安仔的技术文档/博客 on 程序员安仔</description><generator>Hugo -- gohugo.io</generator><language>zh-hans</language><copyright>粤ICP备2023148789号</copyright><atom:link href="https://www.hotmindshare.com/index.xml" rel="self" type="application/rss+xml"/><item><title>10年老程序员的技术来源推荐</title><link>https://www.hotmindshare.com/blog/2023/12/pdks_20231221/</link><pubDate>Thu, 21 Dec 2023 16:47:06 +0800</pubDate><guid>https://www.hotmindshare.com/blog/2023/12/pdks_20231221/</guid><description>作为一个10 年左右的老程序员，今天来现身说法一下。平常看到社区上好多的文章或者回答都列出了详尽的各种分类的技术社区网站或 APP，我心里其实就在想，真的有人会全部都用起来吗？我可以保证的跟你们说，不可能，跟技术的本质是一样的，技术是重质不重量的。
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>程序员安仔的技术文档/博客 on 程序员安仔</title><link>https://www.hotmindshare.com/</link><description>Recent content in 程序员安仔的技术文档/博客 on 程序员安仔</description><generator>Hugo -- gohugo.io</generator><language>zh-hans</language><copyright>粤ICP备2023148789号</copyright><atom:link href="https://www.hotmindshare.com/index.xml" rel="self" type="application/rss+xml"/><item><title>4个程序员必备的终端工具</title><link>https://www.hotmindshare.com/blog/2023/12/4_awesome_terminal_tools_20231224/</link><pubDate>Sun, 24 Dec 2023 22:57:03 +0800</pubDate><guid>https://www.hotmindshare.com/blog/2023/12/4_awesome_terminal_tools_20231224/</guid><description>使用你熟悉的工具是成为高效开发人员的重要部分。不过有时候，这也是一个比较奇怪的技术延伸的方式，但结果毕竟都是能大大提高我们的工作效率，何乐而不为呢？
+今天就让我来分享下我平常必定会用到的 4 个终端工具，希望能给你带来一些启发。(我是一个苹果控，可能有些工具只有 Mac 版本，但是我相信 Windows 也有类似的工具，大家可以自行搜索:P)
+那我们开始吧！
+1. thefuck 这是一个很伟大的工具，尤其是针对经常打错命令的我，有时手抖了或者贪快的确很容易就打错一串命令，然后心里就想!@#￥%(说文明语)只能再重新打一次，正如这个工具名称一样(The Fxxk!)。而有了这个工具，如果你不是 100% 正确的输入命令的话，它都能帮助你纠正并输出正确的输入命令。
+安装它就那么简单：
+1brew install thefuck 然后，当你意识到你输错了一个命令，只要输入 fuck，它就会自动更正并为你运行它！
+你可以看到我是如何故意输入 pithin3 并反馈给我它不存在的。然后输入 fuck，它就显示给我正确的选项，我可以选择按回车来运行这个命令，也可以运行 cntrl + c 来放弃它。
+就是这样简单但有趣！
+2. btop 为了监视操作系统性能并了解正在发生的情况，有一个名为 top 的官方自带默认工具，我想大家必定也都用过。只需要在你的终端输入并运行：
+1top 输出就如下图所示：
+这里监控将显示基本的系统状态、进程数量等等的数据，好像够用但不够直观。
+但是最近我发现这个工具有一个更好的版本，让我们先安装它：
+1brew install btop 2 3# 在命令成功安装后执行 4btop 接下来，你就会看到以下输出：
+是不是就直观好看很多了？
+但是等一下，这不仅仅是直观好看的，它也是很实用的。比如，你可以看到给出的快捷键并使用它，当然你也可以使用鼠标或键盘导航来查看或删除不必要的进程等。
+3. fzf 这是一个在查找文件夹中所有内容时十分有用的工具。它将根据你的条件搜索特定文件夹中的所有文件和目录，这些的这些都只需要用命令行交互就可以实现。
+让我们先来安装：
+1brew install fzf 然后，进入你想要的文件夹。例如，我要进入文档文件夹：
+1cd documentation 若要启用fzf模糊查找器，只需要运行：
+1fzf 如下图所示，现在，你就可以输入所需文件的名称，并且可以超快速地找到该文件：
+比如这里，我正在搜索具有 app.tsx 的文件和路径。
+在这里，它就列出了所有与我正在搜索的内容匹配的文件或路径出来，相当的强大。
+4. tldr 我之前其实看的国外文档总是会在一些文章开头会看到这个单词缩写tldr, 就是不知道它是什么意思，直到用到了这个工具，我才明白它的意思是too long, didn't read，也就是说这个工具就是为了解决文档太长，我不想看的问题而生的，即它会为你提供简短的命令行帮助。</description></item><item><title>2024年8大AI发展趋势</title><link>https://www.hotmindshare.com/blog/2023/12/top_8_ai_trends_in_2024_20231222/</link><pubDate>Fri, 22 Dec 2023 16:04:52 +0800</pubDate><guid>https://www.hotmindshare.com/blog/2023/12/top_8_ai_trends_in_2024_20231222/</guid><description>你知道吗? 到 2025 年，全球人工智能市场预计将达到惊人的 1906.1 亿美元，复合年增长率为 36.62%。
+人工智能各种应用正在迅速改变着我们的世界，这种趋势在未来几年只会加速。所以，作为普通人的我们，AI 辅助任务、AI 提效已经是不可避免的趋势了，那我们该如何把握这个机遇呢？
+接下来，让我们来看看 2024 年人工智能的 8 大发展趋势，从生成式 AI 的兴起到 BYOAI 。本文主要是参考了一些国内外的技术资讯总结出来的，希望在未来2024新的一年里，大家可以更好地减少技术追赶的焦虑，同时也让 AI 为己所用，提升自我综合竞争力。
+1. 生成式 AI(Gen AI): 十年来最具颠覆性的趋势 生成式人工智能(Generative AI，GenAI)是一种能够生成新的创造性内容的人工智能，如文本、代码、脚本、音乐片段、电子邮件、信件等。GenAI 模型基于大量数据进行训练，它们能够学习数据中的模式，并使用这些模式生成新的输出。
+举个很形象的例子，现在本文中几乎所有的图片都是使用 OpenAI ChatGPT 的聊天工具 GPT-4 + DALL-E3 生成的，效果如何，看来大家也见仁见智了。
+生成式人工智能不会取代作家和平面设计师(DALL-E3 仍然不能在它生成的图像中正确地使用文字); 然而，它通过生成图像和文本、重新组织措辞、使其更短、更长或更简单，以及通过事实和语法检查，极大地加速了整个过程。
+如果是这个逻辑的话，很容易就联想到生成式 AI 加速工作的趋势适用于任何工作和活动。它提供了自动化任务、提高生产力、降低成本和提供新的增长潜力。
+这就是为什么人工智能内容创建工具的百花齐放，随之带来越来越广泛的使用，使得获取信息和技能的渠道大众化，成为本世纪最具破坏性的趋势之一。
+Gartner 机构预测预测: 到 2026 年，生成式人工智能的采用率有望突飞猛进，超过 80% 的企业将生成式人工智能的 API、模型和应用程序纳入运营，而目前这一比例不到 5%。
+2. 工作提效，BYOAI 和 Shadow AI BYOAI (Bring Your Own Artificial Intelligence，自带人工智能)是一种新的工作场所趋势，员工可以自带人工智能工具和应用程序来工作。人们越来越多地获得负担得起且易于使用的人工智能工具，以及劳动力对人工智能技能的需求日益增长，推动了这一趋势。弗雷斯特报告说，60% 的工人将利用自己的人工智能来执行任务。先不说其他行业，就说说程序员的我们，现在大家编码或者写文档的时候，都已经多了很多 AI 工具的加持了，比如 GitHub Copilot、ChatGPT 等，很多重复性的编码工作都可以交给 AI 来完成，这样我们就可以把更多的精力放在更有价值的事情上。</description></item><item><title>10年老程序员的技术来源推荐</title><link>https://www.hotmindshare.com/blog/2023/12/pdks_20231221/</link><pubDate>Thu, 21 Dec 2023 16:47:06 +0800</pubDate><guid>https://www.hotmindshare.com/blog/2023/12/pdks_20231221/</guid><description>作为一个10 年左右的老程序员，今天来现身说法一下。平常看到社区上好多的文章或者回答都列出了详尽的各种分类的技术社区网站或 APP，我心里其实就在想，真的有人会全部都用起来吗？我可以保证的跟你们说，不可能，跟技术的本质是一样的，技术是重质不重量的。
 大部分的人，看到那么详尽的回答或文章，第一感觉往往是：&amp;ldquo;哇，这个好，先收藏了，以后再慢慢看。&amp;ldquo;然后就在你的收藏库雪藏了，很少再翻出来。不用看，说的就是我哈哈，或许你也是，所以今天我就来说说我那么多年以来，还一直每天在用的一些国内外技术平台/技术社区/APP，如何让你在不落下各种技术的前沿发展之余也可以深耕自己的技术深度。
 极客时间 毋容置疑，极客时间 app 是我刚应届出来工作不久就发布的一个技术教程 APP。我可是第一批刚发布就使用到现在的老客户(5 年多资深知识付费码农)了：
 无论是前端、后端、人工智能，还是产品管理、项目管理，甚至是个人提升，它都能提供丰富的课程资源。 **这些课程大多来自业界的一线专家，这意味着你能从实战出发，学习到最前沿、最实用的知识。**而且，这些课程通常结构清晰，深入浅出，适合不同层次的学习者。
@@ -17,7 +48,7 @@ IT 行业资讯：提供行业新闻、技术会议、专家访谈、技术社�
 我的话经常有空也会逛一下这个网站，毕竟它算是代表了国内比较权威的技术社区了，而且它的内容也是比较全面的，不仅仅是技术，还有一些管理方面的内容，比如敏捷开发、项目管理等等。
 你会发现，上面的文章有不少还是从国外的一些知名技术社区翻译过来的，这顺带提供了不少国外的前沿技术研究和实践。
 除此以外，你时不时还可以在这里看到一些某技术的深度文章，对于自己技术的提升有很大帮助。
-Daily.dev Daily.dev 是一个专为开发者设计的工具，它主要作为一个**内容聚合平台，收集来自互联网各个角落的开发相关的新闻、文章和博客帖子。**这个工具一般是直接安装到我的 Chrome 浏览器上作为插件，让我每次一打开新空白页，就自自然然可以看到国外一些最新的技术咨询，方便我自己去了解和深入技术细节。不过有个缺点是，它主要是英文为主，所以如果你英文不好的话，可能就不太适合你了。(学技术嘛，英文还是很重要的其实&amp;hellip;)
+Daily.dev 因初次访问，为防止爬虫和人机识别，请关注微信公众号，回复:‘验证码‘获取验证码来解锁全文 解锁内容 Daily.dev 是一个专为开发者设计的工具，它主要作为一个**内容聚合平台，收集来自互联网各个角落的开发相关的新闻、文章和博客帖子。**这个工具一般是直接安装到我的 Chrome 浏览器上作为插件，让我每次一打开新空白页，就自自然然可以看到国外一些最新的技术咨询，方便我自己去了解和深入技术细节。不过有个缺点是，它主要是英文为主，所以如果你英文不好的话，可能就不太适合你了。(学技术嘛，英文还是很重要的其实&amp;hellip;)
 以下是对 Daily.dev 主要特点和功能的介绍：
 内容聚合：Daily.dev 从多个来源汇聚信息，包括知名的技术博客、新闻站点、社区论坛等，确保提供广泛而深入的行业视角；
 个性化推荐：用户可以根据自己的兴趣和专业领域定制内容流。随着用户与平台的互动，Daily.dev 可以更精准地推荐相关内容；
@@ -9180,4 +9211,4 @@ Executors.newFixedThreadPool() 工厂方法创建 ExecutorService 实例 创建E
 2、 对于那些经验不足的开发人员，学习设计模式有助于通过一种简单快捷的方式来学习软件设计；
 总的来说，不推荐刚入门的开发者学习，哪怕把代码搞的一塌糊涂，也要先将功能完成，初学者，迈过坑是必然的，只有对自己编写的代码不满意，你才会体会到设计模式的重要性，也才能更加理解
 阅读本教程前，我们希望需要了解的知识： 因为本教程的范例都是基于 Java 语言，所以我们希望你有一定的 Java 基础知识
-如果你还不了解 Java 可以通过我们的 Java 基础教程 学习</description></item><item><title>简介</title><link>https://www.hotmindshare.com/docs/introduction/</link><pubDate>Sun, 06 Mar 2022 22:42:23 +0800</pubDate><guid>https://www.hotmindshare.com/docs/introduction/</guid><description>一个技术人必备的教程系列，涵盖了从基础到进阶的各种技术教程。</description></item><item><title>标签</title><link>https://www.hotmindshare.com/tags/_index.zh-han/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://www.hotmindshare.com/tags/_index.zh-han/</guid><description/></item></channel></rss>
+如果你还不了解 Java 可以通过我们的 Java 基础教程 学习</description></item><item><title>简介</title><link>https://www.hotmindshare.com/docs/introduction/</link><pubDate>Sun, 06 Mar 2022 22:42:23 +0800</pubDate><guid>https://www.hotmindshare.com/docs/introduction/</guid><description>一个技术人必备的教程系列，涵盖了从基础到进阶的各种技术教程。</description></item></channel></rss>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>AI on 程序员安仔</title><link>https://www.hotmindshare.com/tags/ai/</link><description>Recent content in AI on 程序员安仔</description><generator>Hugo -- gohugo.io</generator><language>zh-hans</language><copyright>粤ICP备2023148789号</copyright><lastBuildDate>Fri, 22 Dec 2023 16:04:52 +0800</lastBuildDate><atom:link href="https://www.hotmindshare.com/tags/ai/index.xml" rel="self" type="application/rss+xml"/><item><title>2024年8大AI发展趋势</title><link>https://www.hotmindshare.com/blog/2023/12/top_8_ai_trends_in_2024_20231222/</link><pubDate>Fri, 22 Dec 2023 16:04:52 +0800</pubDate><guid>https://www.hotmindshare.com/blog/2023/12/top_8_ai_trends_in_2024_20231222/</guid><description>你知道吗? 到 2025 年，全球人工智能市场预计将达到惊人的 1906.1 亿美元，复合年增长率为 36.62%。
+人工智能各种应用正在迅速改变着我们的世界，这种趋势在未来几年只会加速。所以，作为普通人的我们，AI 辅助任务、AI 提效已经是不可避免的趋势了，那我们该如何把握这个机遇呢？
+接下来，让我们来看看 2024 年人工智能的 8 大发展趋势，从生成式 AI 的兴起到 BYOAI 。本文主要是参考了一些国内外的技术资讯总结出来的，希望在未来2024新的一年里，大家可以更好地减少技术追赶的焦虑，同时也让 AI 为己所用，提升自我综合竞争力。
+1. 生成式 AI(Gen AI): 十年来最具颠覆性的趋势 生成式人工智能(Generative AI，GenAI)是一种能够生成新的创造性内容的人工智能，如文本、代码、脚本、音乐片段、电子邮件、信件等。GenAI 模型基于大量数据进行训练，它们能够学习数据中的模式，并使用这些模式生成新的输出。
+举个很形象的例子，现在本文中几乎所有的图片都是使用 OpenAI ChatGPT 的聊天工具 GPT-4 + DALL-E3 生成的，效果如何，看来大家也见仁见智了。
+生成式人工智能不会取代作家和平面设计师(DALL-E3 仍然不能在它生成的图像中正确地使用文字); 然而，它通过生成图像和文本、重新组织措辞、使其更短、更长或更简单，以及通过事实和语法检查，极大地加速了整个过程。
+如果是这个逻辑的话，很容易就联想到生成式 AI 加速工作的趋势适用于任何工作和活动。它提供了自动化任务、提高生产力、降低成本和提供新的增长潜力。
+这就是为什么人工智能内容创建工具的百花齐放，随之带来越来越广泛的使用，使得获取信息和技能的渠道大众化，成为本世纪最具破坏性的趋势之一。
+Gartner 机构预测预测: 到 2026 年，生成式人工智能的采用率有望突飞猛进，超过 80% 的企业将生成式人工智能的 API、模型和应用程序纳入运营，而目前这一比例不到 5%。
+2. 工作提效，BYOAI 和 Shadow AI BYOAI (Bring Your Own Artificial Intelligence，自带人工智能)是一种新的工作场所趋势，员工可以自带人工智能工具和应用程序来工作。人们越来越多地获得负担得起且易于使用的人工智能工具，以及劳动力对人工智能技能的需求日益增长，推动了这一趋势。弗雷斯特报告说，60% 的工人将利用自己的人工智能来执行任务。先不说其他行业，就说说程序员的我们，现在大家编码或者写文档的时候，都已经多了很多 AI 工具的加持了，比如 GitHub Copilot、ChatGPT 等，很多重复性的编码工作都可以交给 AI 来完成，这样我们就可以把更多的精力放在更有价值的事情上。</description></item></channel></rss>

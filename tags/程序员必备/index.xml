@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>程序员必备 on 程序员安仔</title><link>https://www.hotmindshare.com/tags/%E7%A8%8B%E5%BA%8F%E5%91%98%E5%BF%85%E5%A4%87/</link><description>Recent content in 程序员必备 on 程序员安仔</description><generator>Hugo -- gohugo.io</generator><language>zh-hans</language><copyright>粤ICP备2023148789号</copyright><lastBuildDate>Sun, 24 Dec 2023 22:57:03 +0800</lastBuildDate><atom:link href="https://www.hotmindshare.com/tags/%E7%A8%8B%E5%BA%8F%E5%91%98%E5%BF%85%E5%A4%87/index.xml" rel="self" type="application/rss+xml"/><item><title>4个程序员必备的终端工具</title><link>https://www.hotmindshare.com/blog/2023/12/4_awesome_terminal_tools_20231224/</link><pubDate>Sun, 24 Dec 2023 22:57:03 +0800</pubDate><guid>https://www.hotmindshare.com/blog/2023/12/4_awesome_terminal_tools_20231224/</guid><description>使用你熟悉的工具是成为高效开发人员的重要部分。不过有时候，这也是一个比较奇怪的技术延伸的方式，但结果毕竟都是能大大提高我们的工作效率，何乐而不为呢？
+今天就让我来分享下我平常必定会用到的 4 个终端工具，希望能给你带来一些启发。(我是一个苹果控，可能有些工具只有 Mac 版本，但是我相信 Windows 也有类似的工具，大家可以自行搜索:P)
+那我们开始吧！
+1. thefuck 这是一个很伟大的工具，尤其是针对经常打错命令的我，有时手抖了或者贪快的确很容易就打错一串命令，然后心里就想!@#￥%(说文明语)只能再重新打一次，正如这个工具名称一样(The Fxxk!)。而有了这个工具，如果你不是 100% 正确的输入命令的话，它都能帮助你纠正并输出正确的输入命令。
+安装它就那么简单：
+1brew install thefuck 然后，当你意识到你输错了一个命令，只要输入 fuck，它就会自动更正并为你运行它！
+你可以看到我是如何故意输入 pithin3 并反馈给我它不存在的。然后输入 fuck，它就显示给我正确的选项，我可以选择按回车来运行这个命令，也可以运行 cntrl + c 来放弃它。
+就是这样简单但有趣！
+2. btop 为了监视操作系统性能并了解正在发生的情况，有一个名为 top 的官方自带默认工具，我想大家必定也都用过。只需要在你的终端输入并运行：
+1top 输出就如下图所示：
+这里监控将显示基本的系统状态、进程数量等等的数据，好像够用但不够直观。
+但是最近我发现这个工具有一个更好的版本，让我们先安装它：
+1brew install btop 2 3# 在命令成功安装后执行 4btop 接下来，你就会看到以下输出：
+是不是就直观好看很多了？
+但是等一下，这不仅仅是直观好看的，它也是很实用的。比如，你可以看到给出的快捷键并使用它，当然你也可以使用鼠标或键盘导航来查看或删除不必要的进程等。
+3. fzf 这是一个在查找文件夹中所有内容时十分有用的工具。它将根据你的条件搜索特定文件夹中的所有文件和目录，这些的这些都只需要用命令行交互就可以实现。
+让我们先来安装：
+1brew install fzf 然后，进入你想要的文件夹。例如，我要进入文档文件夹：
+1cd documentation 若要启用fzf模糊查找器，只需要运行：
+1fzf 如下图所示，现在，你就可以输入所需文件的名称，并且可以超快速地找到该文件：
+比如这里，我正在搜索具有 app.tsx 的文件和路径。
+在这里，它就列出了所有与我正在搜索的内容匹配的文件或路径出来，相当的强大。
+4. tldr 我之前其实看的国外文档总是会在一些文章开头会看到这个单词缩写tldr, 就是不知道它是什么意思，直到用到了这个工具，我才明白它的意思是too long, didn't read，也就是说这个工具就是为了解决文档太长，我不想看的问题而生的，即它会为你提供简短的命令行帮助。</description></item></channel></rss>
