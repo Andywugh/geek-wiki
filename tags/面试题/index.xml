@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>面试题 on 程序员安仔</title><link>https://www.hotmindshare.com/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/</link><description>Recent content in 面试题 on 程序员安仔</description><generator>Hugo -- gohugo.io</generator><language>zh-hans</language><copyright>粤ICP备2023148789号</copyright><lastBuildDate>Sun, 10 Dec 2023 16:04:57 +0800</lastBuildDate><atom:link href="https://www.hotmindshare.com/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/index.xml" rel="self" type="application/rss+xml"/><item><title>Dubbo</title><link>https://www.hotmindshare.com/interview/v4/dubbo/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/dubbo/</guid><description>Dubbo 面试题 一、基础知识 1. 为什么要用 Dubbo？ 随着服务化的进一步发展，服务越来越多，服务之间的调用和依赖关系也越来越复杂，诞生了面向服务的架构体系(SOA)，也因此衍生出了一系列相应的技术，如对服务提供、服务调用、连接处理、通信协议、序列化方式、服务发现、服务路由、日志输出等行为进行封装的服务框架。就这样为分布式系统的服务治理框架就出现了，Dubbo 也就这样产生了。
+2. Dubbo 是什么？ Dubbo 是一款高性能、轻量级的开源 RPC 框架，提供服务自动注册、自动发现等高效服务治理方案， 可以和 Spring 框架无缝集成。
+3. Dubbo 的使用场景有哪些？ 透明化的远程方法调用：就像调用本地方法一样调用远程方法，只需简单配置，没有任何 API 侵入。
+软负载均衡及容错机制：可在内网替代 F5 等硬件负载均衡器，降低成本，减少单点。
+服务自动注册与发现：不再需要写死服务提供方地址，注册中心基于接口名查询服务提供者的 IP 地址，并且能够平滑添加或删除服务提供者。
+4. Dubbo 核心功能有哪些？ Remoting：网络通信框架，提供对多种 NIO 框架抽象封装，包括“同步转异步”和“请求-响应”模式的信息交换方式。
+Cluster：服务框架，提供基于接口方法的透明远程过程调用，包括多协议支持，以及软负载均衡，失败容错，地址路由，动态配置等集群支持。
+Registry：服务注册，基于注册中心目录服务，使服务消费方能动态的查找服务提供方，使地址透明，使服务提供方可以平滑增加或减少机器。
+5. Dubbo 核心组件有哪些？ Provider：暴露服务的服务提供方
+Consumer：调用远程服务消费方
+Registry：服务注册与发现注册中心
+Monitor：监控中心和访问调用统计
+Container：服务运行容器
+6. Dubbo 服务器注册与发现的流程？ 服务容器 Container 负责启动，加载，运行服务提供者。
+服务提供者 Provider 在启动时，向注册中心注册自己提供的服务。
+服务消费者 Consumer 在启动时，向注册中心订阅自己所需的服务。
+注册中心 Registry 返回服务提供者地址列表给消费者，如果有变更，注册中心将基于长连接推送变更数据给消费者。
+服务消费者 Consumer，从提供者地址列表中，基于软负载均衡算法，选一台提供者进行调用，如果调用失败，再选另一台调用。
+服务消费者 Consumer 和提供者 Provider，在内存中累计调用次数和调用时间，定时每分钟发送一次统计数据到监控中心 Monitor。架构设计
+二、架构设计 7. Dubbo 的整体架构设计有哪些分层?</description></item><item><title>ElasticSearch 基础</title><link>https://www.hotmindshare.com/interview/v4/elasticsearch/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/elasticsearch/</guid><description>ElasticSearch 面试题 1. elasticsearch 了解多少，说说你们公司 es 的集群架构，索引数据大小，分片有多少，以及一些调优手段 。 面试官：想了解应聘者之前公司接触的 ES 使用场景、规模，有没有做过比较大规模的索引设计、规划、调优。
+解答：如实结合自己的实践场景回答即可。
+比如：ES 集群架构 13 个节点，索引根据通道不同共 20+索引，根据日期，每日递增 20+，索引：10
+分片，每日递增 1 亿+数据，每个通道每天索引大小控制：150GB 之内。
+仅索引层面调优手段：
+1.1 设计阶段调优 1、根据业务增量需求，采取基于日期模板创建索引，通过 roll over API 滚动索引；
+2、使用别名进行索引管理；
+3、每天凌晨定时对索引做 force_merge 操作，以释放空间；
+4、采取冷热分离机制，热数据存储到 SSD，提高检索效率；冷数据定期进行 shrink 操作，以缩减存储；
+5、采取 curator 进行索引的生命周期管理；
+6、仅针对需要分词的字段，合理的设置分词器；
+7、Mapping 阶段充分结合各个字段的属性，是否需要检索、是否需要存储等。………
+1.2 写入调优 1、写入前副本数设置为 0；
+2、写入前关闭 refresh_interval 设置为-1，禁用刷新机制；
+3、写入过程中：采取 bulk 批量写入；
+4、写入后恢复副本数和刷新间隔；
+5、尽量使用自动生成的 id。
+1.3 查询调优 1、禁用 wildcard；
+2、禁用批量 terms（成百上千的场景）；
+3、充分利用倒排索引机制，能 keyword 类型尽量 keyword；
+4、数据量大时候，可以先基于时间敲定索引再检索；
+5、设置合理的路由机制。
+1.4 其他调优 部署调优，业务调优等。上面的提及一部分，面试者就基本对你之前的实践或者运维经验有所评估了。</description></item><item><title>Git</title><link>https://www.hotmindshare.com/interview/v4/git/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/git/</guid><description>Git 面试题 一、配置操作 1. 全局配置 1git config --global user.name &amp;#39;你的名字&amp;#39; 2git config --global user.email &amp;#39;你的邮箱&amp;#39; 2. 当前仓库配置 1git config --local user.name &amp;#39;你的名字&amp;#39; 2git config --local user.email &amp;#39;你的邮箱&amp;#39; 3.查看 global 配置 1 git config --global --list 4. 查看当前仓库配置 1 git config --local --list 5. 删除 global 配置 1 git config --unset --global 要删除的配置项 6. 删除当前仓库配置 1 git config --unset --local 要删除的配置项 二、本地操作 1. 查看变更情况 1 git status 2. 将当前目录及其子目录下所有变更都加入到暂存区 1 git add .</description></item><item><title>Hadoop 异常</title><link>https://www.hotmindshare.com/interview/v4/hadoop/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/hadoop/</guid><description>Hadoop 面试题 Hadoop 中常问的就三块，第一：分布式存储(HDFS)；第二：分布式计算框架(MapReduce)；第三：资源调度框架(YARN)。
+1.请说下HDFS读写流程； HDFS（Hadoop Distributed File System），它是一个文件系统，用于存储文件，通过目录树来定位文件；其次，它是分布式的，由很多服务器联合起来实现其功能，集群中的服务器有各自的角色。
+适合一次写入，多次读出的场景。一个文件经过创建、写入和关闭之后就不需要改变。
+HDFS 写流程：
+1、 客户端发送上传请求，并通过RPC与NameNode建立通信NameNode检查用户是否有上传权限，上传的文件在HDFS对应的目录下是否同名如果其中任何一个不满足，就会直接报错如果两者都满足，将向客户端返回一个可以上传的消息；
+2、 客户端根据文件大小划分文件，默认为128M，向NameNode发送请求，请求将第一块上传到哪些服务器；
+3、 收到请求后，NameNode根据网络拓扑、机架感知和副本机制分配文件，并返回可用DataNode的地址；
+4、 接收到地址后，客户端与服务器地址列表中的一个节点进行通信，比如A，本质上是RPC调用建立管道a收到请求后会继续调用B，B会调用C来完成整个管道的建立，并逐步返回给客户端；
+5、 客户端开始向A发送第一个块(先从磁盘读取数据，然后放入本地内存缓存)，这个块是基于包的(64kb)，A收到一个包就会发送；
+发送给B，然后B发送给c，A在发送完一个包后会将其放入一个响应队列中等待响应；
+6、 数据被分成数据包，依次在流水线上传输在管道反向传输中，逐个发送ack(命令回答正确)，最后管道中第一个DataNode节点A向客户端发送pipelineack；7.当一个块传输完成后，客户端请求NameNode再次上传第二个块，NameNode为客户端重新选择三个DataNode；
+HDFS 读流程：
+1、 客户端向NameNode发送RPC请求请求文件块的位置；
+2、 NameNode收到请求后会检查用户权限以及是否有这个文件如果它们都匹配，它将根据需要返回部分或全部阻止列表对于每个块，NameNode将返回包含该块副本的DataNode地址；这些返回的DataNode地址会根据集群拓扑得到DataNode到客户端的距离，然后按照两个规则进行排序:网络拓扑中离客户端最近的排在第一位；心跳机制中超上报的DataNode状态陈旧，较低；
+3、 客户端选择排名最高的DataNode来读取该块如果客户端本身是DataNode，则直接从本地获取数据(短路读取功能)；
+4、 在底层，本质是建立一个Socket流(FSDataInputStream)，反复调用父类DataInputStream的read方法，直到读取完这个块上的数据；
+5、 读取完列表的块后，如果文件读取还没有完成，客户端会继续从NameNode获取下一个块列表；
+6、 读取一个块后，将进行校验和验证如果读取DataNode时出现错误，客户端会通知NameNode，然后用块的副本从下一个DataNode继续读取；
+7、 读取方法是并行读取块信息，而不是逐个读取；NameNode只返回客户端请求中包含的块的DataNode地址，不返回请求块的数据；
+8、 所有读取的块将被合并成一个完整的最终文件；
+视频讲解：
+https://www.bilibili.com/video/BV1ge411s7UY?p=12
+详细读写流程讲解：
+https://www.bilibili.com/video/BV12h411t7jB?p=2
+2. HDFS 在读取文件的时候，如果其中一个块突然损坏了怎么办 读取DataNode上的数据块后，客户端将验证校验和，即使用HDFS上的原始数据块检查客户端读取的本地数据块。如果检查结果不一致，客户端将通知NameNode，然后继续从下一个DataNode读取块的副本。
+3. HDFS 在上传文件的时候，如果其中一个 DataNode 突然挂掉了怎么办 当客户端上传文件时，它与DataNode建立管道。流水线的正方向是客户端向DataNode发送数据包，流水线的反方向是DataNode向客户端发送ack确认，即正确接收数据包后发送确认。
+当DataNode突然挂起，客户端无法收到这个DataNode发送的ack确认时，客户端会通知NameNode，NameNode会检查这个块的副本不符合规定，NameNode会通知DataNode复制副本，并会对挂起的DataNode进行离线处理，使其不再参与文件上传和下载。
+4. NameNode 在启动的时候会做哪些操作 NameNode数据存储在内存和本地磁盘中，而本地磁盘数据存储在fsimage镜像文件和编辑日志文件中。
+首次启动NameNode:
+1、 格式化文件系统，以生成fsimage映像文件；
+2、 开始命名节点:；
+读取fsimage文件并将文件内容加载到内存中。
+等待DataNade注册并发送阻止报告
+3、 启动DataNode:；</description></item><item><title>Java 并发编程</title><link>https://www.hotmindshare.com/interview/v4/javaconcurrency/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/javaconcurrency/</guid><description>Java 并发编程面试题 一、基础知识 1. 为什么要使用并发编程 提升多核 CPU 的利用率：一般来说一台主机上的会有多个 CPU 核心，我们可以创建多个线程，理论上讲操作系统可以将多个线程分配给不同的 CPU 去执行，每个 CPU 执行一个线程，这样就提高了 CPU 的使用效率，如果使用单线程就只能有一个 CPU 核心被使用。 比如当我们在网上购物时，为了提升响应速度，需要拆分，减库存，生成订单等等这些操作，就可以进行拆分利用多线程的技术完成。面对复杂业务模型，并行程序会比串行程序更适应业务需求，而并发编程更能吻合这种业务拆分 。 简单来说就是：
+充分利用多核 CPU 的计算能力； 方便进行业务拆分，提升应用性能 2. 多线程应用场景 例如: 迅雷多线程下载、数据库连接池、分批发送短信等。 3. 并发编程有什么缺点 并发编程的目的就是为了能提高程序的执行效率，提高程序运行速度，但是并发编程并不总是能提高程序运行速度的，而且并发编程可能会遇到很多问题，比如：内存泄漏、上下文切换、线程安全、死锁等问题。 4. 并发编程三个必要因素是什么？ 原子性：原子，即一个不可再被分割的颗粒。原子性指的是一个或多个操作要么全部执行成功要么全部执行失败。 可见性：一个线程对共享变量的修改,另一个线程能够立刻看到。（synchronized,volatile） 有序性：程序执行的顺序按照代码的先后顺序执行。（处理器可能会对指令进行重排序） 5. Java 程序中怎么保证多线程的运行安全？ 出现线程安全问题的原因一般都是三个原因：
+线程切换带来的原子性问题 解决办法：使用多线程之间同步 synchronized 或使用锁(lock)。
+缓存导致的可见性问题 解决办法：synchronized、volatile、LOCK，可以解决可见性问题
+编译优化带来的有序性问题 解决办法：Happens-Before 规则可以解决有序性问题
+6. 并行和并发有什么区别？ 并发：多个任务在同一个 CPU 核上，按细分的时间片轮流(交替)执行，从逻辑上来看那些任务是同时执行。 并行：单位时间内，多个处理器或多核处理器同时处理多个任务，是真正意义上的“同时进行”。 串行：有 n 个任务，由一个线程按顺序执行。由于任务、方法都在一个线程执行所以不存在线程不安全情况，也就不存在临界区的问题。 做一个形象的比喻：
+并发 = 俩个人用一台电脑。 并行 = 俩个人分配了俩台电脑。 串行 = 俩个人排队使用一台电脑。 7. 什么是多线程 多线程：多线程是指程序中包含多个执行流，即在一个程序中可以同时运行多个不同的线程来执行不同的任务。 8.</description></item><item><title>Java 多线程</title><link>https://www.hotmindshare.com/interview/v4/javathread/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/javathread/</guid><description>Java 多线程 面试题 1. 多线程有什么用？ 1、发挥多核 CPU 的优势随着工业的进步，现在的笔记本、台式机乃至商用的应用服务器至少也都是双核的，4 核、8 核甚至 16 核的也都不少见，如果是单线程的程序，那么在双核 CPU 上就浪费了 50%， 在 4 核 CPU 上就浪费了 75%。单核 CPU 上所谓的&amp;quot;多线程&amp;quot;那是假的多线程，同一时间处理器只会处理一段逻辑，只不过线程之间切换得比较快，看着像多个线程&amp;quot;同时&amp;quot;运行罢了。多核 CPU 上的多线程才是真正的多线程，它能让你的多段逻辑同时工作，多线程，可以真正发挥出多核 CPU 的优势来，达到充分利用 CPU 的目的。
+2、防止阻塞从程序运行效率的角度来看，单核 CPU 不但不会发挥出多线程的优势，反而会因为在单核 CPU 上运行多线程导致线程上下文的切换，而降低程序整体的效率。但是单核 CPU 我们还是要应用多线程，就是为了防止阻塞。试想，如果单核 CPU 使用单线程，那么只要这个线程阻塞了，比方说远程读取某个数据吧，对端迟迟未返回又没有设置超时时间，那么你的整个程序在数据返回回来之前就停止运行了。多线程可以防止这个问题，多条线程同时运行，哪怕一条线程的代码执行读取数据阻塞，也不会影响其它任务的执行。
+3、便于建模这是另外一个没有这么明显的优点了。假设有一个大的任务 A，单线程编程，那么就要考虑很多，建立整个程序模型比较麻烦。但是如果把这个大的任务 A 分解成几个小任务，任务 B、任务 C、任务 D，分别建立程序模型，并通过多线程分别运行这几个任务，那就简单很多了。
+2. 线程和进程的区别是什么？ 进程和线程的主要差别在于它们是不同的操作系统资源管理方式。进程有独立的地址空间，一个进程崩溃后，在保护模式下不会对其它进程产生影响，而线程只是一个进程中的不同执行路径。线程有自己的堆栈和局部变量，但线程之间没有单独的地址空间，一个线程死掉就等于整个进程死掉，所以多进程的程序要比多线程的程序健壮，但在进程切换时，耗费资源较大，效率要差一些。但对于一些要求同时进行并且又要共享某些变量的并发操作，只能用线程，不能用进程。
+3. Java 实现线程有哪几种方式？ 1、继承 Thread 类实现多线程
+2、实现 Runnable 接口方式实现多线程
+3、使用 ExecutorService、Callable、Future 实现有返回结果的多线程
+4. 启动线程方法 start()和 run()有什么区别？ 只有调用了 start()方法，才会表现出多线程的特性，不同线程的 run()方法里面的代码交替执行。如果只是调用 run()方法，那么代码还是同步执行的，必须等待一个线程的 run()方法里面的代码全部执行完毕之后，另外一个线程才可以执行其 run()方法里面的代码。</description></item><item><title>Java 基础</title><link>https://www.hotmindshare.com/interview/v4/javabase/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/javabase/</guid><description>Java 基础面试题 一、Java 概述 1. 何为编程 编程就是让计算机为解决某个问题而使用某种程序设计语言编写程序代码，并最终得到结果的过程。
+为了使计算机能够理解人的意图，人类就必须要将需解决的问题的思路、方法、和手段通过计算机能够理解的形式告诉计算机，使得计算机能够根据人的指令一步一步去工作，完成某种特定的任务。这种人和计算机之间交流的过程就是编程。
+2. 什么是 Java Java 是一门面向对象编程语言，不仅吸收了 C++语言的各种优点，还摒弃了 C++里难以理解的多继承、指针等概念，因此 Java 语言具有功能强大和简单易用两个特征。Java 语言作为静态面向对象编程语言的代表，极好地实现了面向对象理论，允许程序员以优雅的思维方式进行复杂的编程 。
+3. jdk1.5 之后的三大版本 Java SE（J2SE，Java 2 Platform Standard Edition，标准版）Java SE 以前称为 J2SE。它允许开发和部署在桌面、服务器、嵌入式环境和实时环境中使用的 Java 应用程序。Java SE 包含了支持 Java Web 服务开发的类，并为 Java EE 和 Java ME 提供基础。
+Java EE（J2EE，Java 2 Platform Enterprise Edition，企业版）Java EE 以前称为 J2EE。企业版本帮助开发和部署可移植、健壮、可伸缩且安全的服务器端 Java 应用程序。Java EE 是在 Java SE 的基础上构建的，它提供 Web 服务、组件模型、管理和通信 API，可以用来实现企业级的面向服务体系结构（service-oriented architecture，SOA）和 Web2.0 应用程序。2018 年 2 月，Eclipse 宣布正式将 JavaEE 更名为 JakartaEE</description></item><item><title>Java 集合</title><link>https://www.hotmindshare.com/interview/v4/javaset/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/javaset/</guid><description>Java 集合面试题 一、集合容器概述 1. 什么是集合 集合就是一个放数据的容器，准确的说是放数据对象引用的容器 集合类存放的都是对象的引用，而不是对象的本身 集合类型主要有 3 种：set(集）、list(列表）和 map(映射)。 2. 集合的特点 集合的特点主要有如下两点：
+集合用于存储对象的容器，对象是用来封装数据，对象多了也需要存储集中式管理。
+和数组对比对象的大小不确定。因为集合是可变长度的。数组需要提前定义大小
+3. 集合和数组的区别 数组是固定长度的；集合可变长度的。 数组可以存储基本数据类型，也可以存储引用数据类型；集合只能存储引用数据类型。 数组存储的元素必须是同一个数据类型；集合存储的对象可以是不同数据类型。 4. 使用集合框架的好处 1、 容量自增长；
+2、 提供了高性能的数据结构和算法，使编码更轻松，提高了程序速度和质量；
+3、 可以方便地扩展或改写集合，提高代码复用性和可操作性；
+4、 通过使用 JDK 自带的集合类，可以降低代码维护和学习新 API 成本；
+5. 常用的集合类有哪些？ Map 接口和 Collection 接口是所有集合框架的父接口： 1、 Collection 接口的子接口包括：Set 接口和 List 接口；
+2、 Map 接口的实现类主要有：HashMap、TreeMap、Hashtable、ConcurrentHashMap 以及 Properties 等；
+3、 Set 接口的实现类主要有：HashSet、TreeSet、LinkedHashSet 等；
+4、 List 接口的实现类主要有：ArrayList、LinkedList、Stack 以及 Vector 等；
+6. List，Set，Map 三者的区别？ Java 容器分为 Collection 和 Map 两大类，Collection 集合的子接口有 Set、List、Queue 三种子接口。我们比较常用的是 Set、List，Map 接口不是 collection 的子接口。</description></item><item><title>Java 设计模式</title><link>https://www.hotmindshare.com/interview/v4/javadesign/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/javadesign/</guid><description>Java 设计模式 1.什么是设计模式 设计模式，是一套被反复使用、多数人知晓的、经过分类编目的、代码设计经验的总结。使用设计 模式是为了可重用代码、让代码更容易被他人理解、保证代码可靠性、程序的重用性。
+2.为什么要学习设计模式 看懂源代码：如果你不懂设计模式去看 Jdk、Spring、SpringMVC、IO 等等等等的源码，你会很迷 茫，你会寸步难行
+看看前辈的代码：你去个公司难道都是新项目让你接手？很有可能是接盘的，前辈的开发难道不用设计模式？
+编写自己的理想中的好代码：我个人反正是这样的，对于我自己开发的项目我会很认真，我对他比 对我女朋友还好，把项目当成自己的儿子一样
+3.设计模式分类 创建型模式，共五种：工厂方法模式、抽象工厂模式、单例模式、建造者模式、原型模式。
+结构型模式，共七种：适配器模式、装饰器模式、代理模式、外观模式、桥接模式、组合模式、享 元模式。
+行为型模式，共十一种：策略模式、模板方法模式、观察者模式、迭代子模式、责任链模式、命令模式、备忘录模式、状态模式、访问者模式、中介者模式、解释器模式。
+4.设计模式的六大原则 开放封闭原则（Open Close Principle）
+原则思想：尽量通过扩展软件实体来解决需求变化，而不是通过修改已有的代码来完成变化
+描述：一个软件产品在生命周期内，都会发生变化，既然变化是一个既定的事实，我们就应该在设 计的时候尽量适应这些变化，以提高项目的稳定性和灵活性。
+优点：单一原则告诉我们，每个类都有自己负责的职责，里氏替换原则不能破坏继承关系的体系。
+里氏代换原则（Liskov Substitution Principle）
+原则思想：使用的基类可以在任何地方使用继承的子类，完美的替换基类。
+大概意思是：子类可以扩展父类的功能，但不能改变父类原有的功能。子类可以实现父类的抽象方 法，但不能覆盖父类的非抽象方法，子类中可以增加自己特有的方法。
+优点：增加程序的健壮性，即使增加了子类，原有的子类还可以继续运行，互不影响。
+依赖倒转原则（Dependence Inversion Principle）
+依赖倒置原则的核心思想是面向接口编程.
+依赖倒转原则要求我们在程序代码中传递参数时或在关联关系中，尽量引用层次高的抽象层类，
+这个是开放封闭原则的基础，具体内容是：对接口编程，依赖于抽象而不依赖于具体。
+接口隔离原则（Interface Segregation Principle）
+这个原则的意思是：使用多个隔离的接口，比使用单个接口要好。还是一个降低类之间的耦合度的 意思，从这儿我们看出，其实设计模式就是一个软件的设计思想，从大型软件架构出发，为了升级 和维护方便。所以上文中多次出现：降低依赖，降低耦合。
+例如：支付类的接口和订单类的接口，需要把这俩个类别的接口变成俩个隔离的接口
+迪米特法则（最少知道原则）（Demeter Principle）
+原则思想：一个对象应当对其他对象有尽可能少地了解，简称类间解耦
+大概意思就是一个类尽量减少自己对其他对象的依赖，原则是低耦合，高内聚，只有使各个模块之间的耦合尽量的低，才能提高代码的复用率。
+优点：低耦合，高内聚。
+单一职责原则（Principle of single responsibility）
+原则思想：一个方法只负责一件事情。
+描述：单一职责原则很简单，一个方法 一个类只负责一个职责，各个职责的程序改动，不影响其 它程序。 这是常识，几乎所有程序员都会遵循这个原则。
+优点：降低类和类的耦合，提高可读性，增加可维护性和可拓展性，降低可变性的风险。
+5.单例模式 1.什么是单例 保证一个类只有一个实例，并且提供一个访问该全局访问点 2.那些地方用到了单例模式 1、 网站的计数器，一般也是采用单例模式实现，否则难以同步；
+2、 应用程序的日志应用，一般都是单例模式实现，只有一个实例去操作才好，否则内容不好追加显； 示。</description></item><item><title>Java 随机</title><link>https://www.hotmindshare.com/interview/v4/java_unknown/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/java_unknown/</guid><description>1、JDK 和 JRE 有什么区别？ JDK（Java Development Kit），Java 开发工具包
+JRE（Java Runtime Environment），Java 运行环境
+JDK 中包含 JRE，JDK 中有一个名为 jre 的目录，里面包含两个文件夹 bin 和 lib，bin 就是 JVM，lib 就是 JVM 工作所需要的类库。
+2、== 和 equals 的区别是什么？ 1、 对于基本类型，==比较的是值；
+2、 对于引用类型，==比较的是地址；
+3、 equals 不能用于基本类型的比较；
+4、 如果没有重写 equals，equals 就相当于==；
+5、 如果重写了 equals 方法，equals 比较的是对象的内容；
+3、final 在 java 中有什么作用？ （1）用来修饰一个引用
+1、 如果引用为基本数据类型，则该引用为常量，该值无法修改；
+2、 如果引用为引用数据类型，比如对象、数组，则该对象、数组本身可以修改，但指向该对象或数组的地址的引用不能修改；
+3、 如果引用时类的成员变量，则必须当场赋值，否则编译会报错；
+（2）用来修饰一个方法
+当使用 final 修饰方法时，这个方法将成为最终方法，无法被子类重写。但是，该方法仍然可以被继承。
+（3）用来修饰类
+当用 final 修改类时，该类成为最终类，无法被继承。
+比如常用的 String 类就是最终类。
+4、java 中的 Math.</description></item><item><title>Java 异常</title><link>https://www.hotmindshare.com/interview/v4/javaexception/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/javaexception/</guid><description>Java 异常面试题 一、Java 异常架构与异常关键字 1. Java 异常简介 Java 异常是 Java 提供的一种识别及响应错误的一致性机制。Java 异常机制可以使程序中异常处理代码和正常业务代码分离，保证程序代码更加优雅，并提高程序健壮性。在有效使用异常的情况下，异常能清晰的回答 what, where, why 这 3 个问题：异常类型回答了“什么”被抛出，异常堆栈跟踪回答了“在哪”抛出，异常信息回答了“为什么”会抛出。 2. Java 异常架构 1.Throwable Throwable 是 Java 语言中所有错误与异常的超类。 Throwable 包含两个子类：Error（错误）和 Exception（异常），它们通常用于指示发生了异常情况。 Throwable 包含了其线程创建时线程执行堆栈的快照，它提供了 printStackTrace() 等接口用于获取堆栈跟踪数据等信息。 2. Error（错误） 定义：Error 类及其子类。程序中无法处理的错误，表示运行应用程序中出现了严重的错误。 特点：此类错误一般表示代码运行时 JVM 出现问题。通常有 Virtual MachineError（虚拟机运行错误）、NoClassDefFoundError（类定义错误）等。比如 OutOfMemoryError：内存不足错误；StackOverflowError：栈溢出错误。此类错误发生时，JVM 将终止线程。 这些错误是不受检异常，非代码性错误。因此，当此类错误发生时，应用程序不应该去处理此类错误。按照 Java 惯例，我们是不应该实现任何新的 Error 子类的！ 3. Exception（异常） 程序本身可以捕获并且可以处理的异常。Exception 这种异常又分为两类：运行时异常和编译时异常。 运行时异常 定义：RuntimeException 类及其子类，表示 JVM 在运行期间可能出现的异常。 特点：Java 编译器不会检查它。也就是说，当程序中可能出现这类异常时，倘若既&amp;quot;没有通过 throws 声明抛出它&amp;quot;，也&amp;quot;没有用 try-catch 语句捕获它&amp;quot;，还是会编译通过。比如 NullPointerException 空指针异常、ArrayIndexOutBoundException 数组下标越界异常、ClassCastException 类型转换异常、ArithmeticExecption 算术异常。此类异常属于不受检异常，一般是由程序逻辑错误引起的，在程序中可以选择捕获处理，也可以不处理。虽然 Java 编译器不会检查运行时异常，但是我们也可以通过 throws 进行声明抛出，也可以通过 try-catch 对它进行捕获处理。如果产生运行时异常，则需要通过修改代码来进行避免。例如，若会发生除数为零的情况，则需要通过代码避免该情况的发生！ RuntimeException 异常会由 Java 虚拟机自动抛出并自动捕获（就算我们没写异常捕获语句运行时也会抛出错误！！），此类异常的出现绝大数情况是代码本身有问题应该从逻辑上去解决并改进代码。 编译时异常 定义: Exception 中除 RuntimeException 及其子类之外的异常。 特点: Java 编译器会检查它。如果程序中出现此类异常，比如 ClassNotFoundException（没有找到指定的类异常），IOException（IO 流异常），要么通过 throws 进行声明抛出，要么通过 trycatch 进行捕获处理，否则不能通过编译。在程序中，通常不会自定义该类异常，而是直接使用系统提供的异常类。该异常我们必须手动在代码里添加捕获语句来处理该异常。 1、 受检异常与非受检异常；</description></item><item><title>JVM系列1</title><link>https://www.hotmindshare.com/interview/v4/jvm1/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/jvm1/</guid><description>JVM 初级面试题 1、对象在哪块内存分配？ 数组和对象在堆内存分配；某些对象没有逃逸出方法，可能被优化为在栈上分配
+2、谈谈 JVM 中的常量池 JDK 1.8 开始
+字符串常量池：存放在堆中，包括 String 对象执行 intern() 方法后存的地方、双引号直接引用的字符串
+运行时常量池：存放在方法区，属于元空间，是类加载后的一些存储区域，大多数是类中 constant_pool 的内容
+类文件常量池：constant_pool，JVM 定义的概念
+3、谈谈动态年龄判断 这里涉及到 -XX:TargetSurvivorRatio 参数，Survivor 区的目标使用率默认 50，即 Survivor 区对象目标使用率为 50%。
+Survivor 区相同年龄所有对象大小的总和 &amp;gt; (Survivor 区内存大小 * 这个目标使用率)时，大于或等于该年龄的对象直接进入老年代。
+当然，这里还需要考虑参数 -XX:MaxTenuringThreshold 晋升年龄最大阈值
+4、谈谈永久代 JDK 8 之前，Hotspot 中方法区的实现是永久代（Perm）
+JDK 7 开始把原本放在永久代的字符串常量池、静态变量等移出到堆，JDK 8 开始去除永久代，使用元空间（Metaspace），永久代剩余内容移至元空间，元空间直接在本地内存分配。
+5、JVM 有哪些运行时内存区域？ Java 8
+The pc Register，程序计数器
+Java Virtual Machine Stacks，Java 虚拟机栈
+Heap，堆
+Method Area，方法区
+Run-Time Constant Pool，运行时常量池
+Native Method Stacks，本地方法栈</description></item><item><title>JVM系列2</title><link>https://www.hotmindshare.com/interview/v4/jvm2/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/jvm2/</guid><description>JVM 高级面试题 一、Java 内存模型 1. 我们开发人员编写的 Java 代码是怎么让电脑认识的 首先先了解电脑是二进制的系统，他只认识 01010101 比如我们经常要编写 HelloWord.java 电脑是怎么认识运行的 HelloWord.java 是我们程序员编写的，我们人可以认识，但是电脑不认识 Java 文件编译的过程
+1、 程序员编写的.java 文件；
+2、 由 javac 编译成字节码文件.class：（为什么编译成 class 文件，因为 JVM 只认识.class 文件）；
+3、 在由 JVM 编译成电脑认识的文件（对于电脑系统来说文件代表一切）；
+（这是一个大概的观念 抽象画的概念）
+2. 为什么说 java 是跨平台语言 这个夸平台是中间语言（JVM）实现的夸平台 Java 有 JVM 从软件层面屏蔽了底层硬件、指令层面的细节让他兼容各种系统 难道 C 和 C++ 不能夸平台吗 其实也可以 C 和 C++需要在编译器层面去兼容不同操作系统的不同层面，写过 C 和 C++的就知道不同操作系统的有些代码是不一样
+3. Jdk 和 Jre 和 JVM 的区别 Jdk 包括了 Jre 和 Jvm，Jre 包括了 Jvm Jdk 是我们编写代码使用的开发工具包 Jre 是 Java 的运行时环境，他大部分都是 C 和 C++ 语言编写的，他是我们在编译 java 时所需要的基础的类库 Jvm 俗称 Java 虚拟机，他是 java 运行环境的一部分，它虚构出来的一台计算机，在通过在实际的计算机上仿真模拟各种计算机功能来实现 Java 应用程序 看 Java 官方的图片，Jdk 中包括了 Jre，Jre 中包括了 JVM!</description></item><item><title>Kafka 异常</title><link>https://www.hotmindshare.com/interview/v4/kafka/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/kafka/</guid><description>Kafka 面试题 1.什么是消息中间件？ 消息中间件是基于队列与消息传递技术，在网络环境中为应用系统提供同步或异步、可靠的消息传输的支撑性软件系统。
+消息中间件利用高效可靠的消息传递机制进行平台无关的数据交流，并基于数据通信来进行分布式系统的集成。通过提供消息传递和消息排队模型，它可以在分布式环境下扩展进程间的通信。
+2.kafka 是什么？有什么作用？ Kafka 是一个分布式的流式处理平台，它以高吞吐、可持久化、可水平扩展、支持流数据处理等多种特性而被广泛使用
+主要功能体现于三点：
+消息系统：kafka 与传统的消息中间件都具备系统解耦、冗余存储、流量削峰、缓冲、异步通信、扩展性、可恢复性等功能。与此同时，kafka 还提供了大多数消息系统难以实现的消息顺序性保障及回溯性消费的功能。 存储系统：kafka 把消息持久化到磁盘，相比于其他基于内存存储的系统而言，有效的降低了消息丢失的风险。这得益于其消息持久化和多副本机制。也可以将 kafka 作为长期的存储系统来使用，只需要把对应的数据保留策略设置为“永久”或启用主题日志压缩功能。 流式处理平台：kafka 为流行的流式处理框架提供了可靠的数据来源，还提供了一个完整的流式处理框架，比如窗口、连接、变换和聚合等各类操作。 3.kafka 的架构是怎么样的？ 一个典型的 kafka 体系架构包括若干 Producer、若干 Consumer、以及一个 Zookeeper 集群（在 2.8.0 版本中移，除了 Zookeeper,通过 KRaft 进行自己的集群管理）
+Producer 将消息发送到 Broker，Broker 负责将受到的消息存储到磁盘中，而 Consumer 负责从 Broker 订阅并消费消息。
+Kafka 基本概念：
+Producer ：生产者，负责将消息发送到 Broker Consumer ：消费者，从 Broker 接收消息 Consumer Group ：消费者组，由多个 Consumer 组成。消费者组内每个消费者负责消费不同分区的数据，一个分区只能由一个组内消费者消费；消费者组之间互不影响。所有的消费者都属于某个消费者组，即消费者组是逻辑上的一个订阅者。 Broker ：可以看做一个独立的 Kafka 服务节点或 Kafka 服务实例。如果一台服务器上只部署了一个 Kafka 实例，那么我们也可以将 Broker 看做一台 Kafka 服务器。 Topic ：一个逻辑上的概念，包含很多 Partition，同一个 Topic 下的 Partiton 的消息内容是不相同的。 Partition ：为了实现扩展性，一个非常大的 topic 可以分布到多个 broker 上，一个 topic 可以分为多个 partition，每个 partition 是一个有序的队列。 Replica ：副本，同一分区的不同副本保存的是相同的消息，为保证集群中的某个节点发生故障时，该节点上的 partition 数据不丢失，且 kafka 仍然能够继续工作，kafka 提供了副本机制，一个 topic 的每个分区都有若干个副本，一个 leader 和若干个 follower。 Leader ：每个分区的多个副本中的&amp;quot;主副本&amp;quot;，生产者以及消费者只与 Leader 交互。 Follower ：每个分区的多个副本中的&amp;quot;从副本&amp;quot;，负责实时从 Leader 中同步数据，保持和 Leader 数据的同步。Leader 发生故障时，从 Follower 副本中重新选举新的 Leader 副本对外提供服务。 4.</description></item><item><title>Linux</title><link>https://www.hotmindshare.com/interview/v4/linux/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/linux/</guid><description>Linux 面试题 一、Linux 概述 1. 什么是 Linux Linux 是一套免费使用和自由传播的类似 Unix 操作系统，一般的 WEB 项目都是部署都是放在 Linux 操作系统上面。 Linux 是一个基于 POSIX 和 Unix 的多用户、多任务、支持多线程和多 CPU 的操作系统。它能运行主要的 Unix 工具软件、应用程序和网络协议。它支持 32 位和 64 位硬件。Linux 继承了 Unix 以网络为核心的设计思想，是一个性能稳定的多用户网络操作系统。
+2. Windows 和 Linux 的区别 Windows 是微软开发的操作系统，民用操作系统，可用于娱乐、影音、上网。 Windows 操作系统具有强大的日志记录系统和强大的桌面应用。好处是它可以帮我们实现非常多绚丽多彩的效果，可以非常方便去进行娱乐、影音、上网。
+Linux 的应用相对单纯很多，没有什么绚丽多彩的效果，因此 Linux 的性能是非常出色的，可以完全针对机器的配置有针对性的优化，
+简单来说 Windows 适合普通用户进行娱乐办公使用，Linux 适合软件开发部署
+3. Unix 和 Linux 有什么区别？ Linux 和 Unix 都是功能强大的操作系统，都是应用广泛的服务器操作系统，有很多相似之处，甚至有一部分人错误地认为 Unix 和 Linux 操作系统是一样的，然而，事实并非如此，以下是两者的区别。
+1、 开源性；Linux 是一款开源操作系统，不需要付费，即可使用；Unix 是一款对源码实行知识产权保护的传统商业软件，使用需要付费授权使用。
+2、 跨平台性；Linux 操作系统具有良好的跨平台性能，可运行在多种硬件平台上；Unix 操作系统跨平台性能较弱，大多需与硬件配套使用。</description></item><item><title>Memcache</title><link>https://www.hotmindshare.com/interview/v4/memcache/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/memcache/</guid><description>Memcache 面试题 1. Memcached 是什么，有什么作用？ Memcached 是一个开源的，高性能的内存绶存软件，从名称上看 Mem 就是内存的意思，而 Cache 就是缓存的意思。Memcached 的作用：通过在事先规划好的内存空间中临时绶存数据库中的各类数据，以达到减少业务对数据库的直接高并发访问，从而达到提升数据库的访问性能，加速网站集群动态应用服务的能力。
+Memcached 服务在企业集群架构中有哪些应用场景？ 作为数据库的前端缓存应用 a、完整缓存（易），静态缓存例如：商品分类（京东），以及商品信息，可事先放在内存里，然后再对外提供数据访问，这种先放到内存，我们称之为预热，（先把数据存缓存中），用户访问时可以只读取 memcached)缓存，不读取数据库了。
+b、执点缓存（难）需要前端 web 程序配合，只缓存热点的数据，即缓存经常被访问的数据。先预热数据库里的基础数据，然后在动态更新，选读取缓存，如果缓存里没有对应的数据，程序再去读取数据库，然后程序把读取的新数据放入缓存存储。
+特殊说明 ：
+如果碰到电商秒杀等高并发的业务，一定要事先预热，或者其它思想实现，例如：称杀只是获取资格，而不是瞬间秒杀到手商品。那么什么是获取资格？就是在数据库中，把 0 标成 1.就有资格啦。再慢慢的去领取商品订单。因为秒杀过程太长会占用服务器资源。
+如果数据更新，同时触发缓存更新，防止给用户过期数据。
+c、对于持久化缓存存储系统，例如：redis，可以替代一部分数据库的存储，一些简单的数据业务，投票，统计，好友关注，商品分类等。nosql= not only sql
+二、作业集群的 session 会话共享存储。
+Memcached 服务在不同企业业务应用场景中的工作流程；a、当 web 程序需要访问后端数据库获取数据时会优先访问 Memcached 内存缓存，如果缓存中有数据就直接获取返回前端服务及用户，如果没有数据（没有命中），在由程序请求后端的数据库服务器，获取到对应的数据后，除了返回给前端服务及用户数据外，还会把数据放到 Memcached 内存中进行缓存，等待下次请求被访问，Memcache 内存始终是数据库的挡箭牌，从而大大的减轻数据库的访问压力，提高整个网站架构的响应速度，提升了用户体验。b、当程序更新，修改或删除数据库中已有的数据时，会同时发送请求通知 Memcached 已经缓存的同一个 ID 内容的旧数据失效，从而保证 Memcache 中数据和数据库中的数据一致。如果在高并发场合，除了通知 Memcached 过程的缓存失效外，还会通过相关机制，使得在用户访问新数据前，通过程序预先把更新过的数据推送到 memcache 中缓存起来，这样可以减少数据库的访问压力，提升 Memcached 中缓存命中率。c、数据库插件可以再写入更新数据库后，自动抛给 MC 缓存起来，自身不 Cache.
+2.Memcached 服务分布式集群如何实现？ 特殊说明：Memcached 集群和 web 服务集群是不一样的，所有 Memcached 的数据总和才是数据库的数据。每台 Memcached 都是部分数据。（一台 memcached 的数据，就是一部分 mysql 数据库的数据）</description></item><item><title>MongoDB</title><link>https://www.hotmindshare.com/interview/v4/mongodb/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/mongodb/</guid><description>MongoDB 面试题 1. 什么是 MongoDB？ MongoDB 是一种非关系型数据库，被广泛用于大型数据存储和分布式系统的构建。MongoDB 支持的数据模型比传统的关系型数据库更加灵活，支持动态查询和索引，也支持 BSON 格式的数据存储，这种格式可以支持读取和写入大量的数据。
+2. MongoDB 的优势是什么？ MongoDB 的优势主要包括：
+灵活的数据模型：MongoDB 支持动态查询和索引，可以支持更大的数据集。
+分布式扩展：MongoDB 可以轻松地横向扩展，支持跨多个服务器分布数据，实现高可用性和负载均衡。
+大规模数据存储：MongoDB 支持海量数据存储，提供非常高的性能和可扩展性。
+易于使用：MongoDB 提供简单的命令行工具和可视化界面，支持多种编程语言，易于使用和自定义。
+3. MongoDB 的工作原理是什么？ MongoDB 基于 JSON 格式存储数据，并使用 BSON 格式处理数据。它支持多个数据节点的分布式存储，每个数据节点都可以独立扩展。MongoDB 可以自动化控制数据的复制和故障转移。需要注意的是，MongoDB 不支持跨节点的事务。
+4. MongoDB 的数据存储格式是什么？ MongoDB 将数据存储为对应的 BSON 格式文件，这个文件是二进制的，可以通过 MongoDB 提供的命令行工具进行读取和写入。BSON 是 Binary JSON 的缩写，是 JSON 的一种扩展，能够更快地将数据存储和读取到 MongoDB 数据库中。
+5. 什么是 MongoDB 索引？ MongoDB 索引是为一个或者多个文档字段创建的数据结构，能够帮助 MongoDB 更加快速地执行查询操作。索引可以被定义为唯一的，如果这样定义，MongoDB 将确保所有的值都不同。MongoDB 支持单边和多边索引，可以深度嵌套和数组字段的嵌套索引。
+1使用db.collection.createIndex()在集合中创建一个索引 6. 如何优化 MongoDB 查询性能？ MongoDB 查询性能可以优化的方法包括：
+为查询字段创建索引：在查询频繁的字段上创建索引，能够提高查询速度。
+限制查询结果的数量：可以使用 skip()和 limit()方法分页，减少查询结果大小。</description></item><item><title>MyBatis</title><link>https://www.hotmindshare.com/interview/v4/mybatis/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/mybatis/</guid><description>MyBatis 面试题 一、MyBatis 简介 1. MyBatis 是什么？ Mybatis 是一个半 ORM（对象关系映射）框架，它内部封装了 JDBC，开发时只需要关注 SQL 语句本身，不需要花费精力去处理加载驱动、创建连接、创建 statement 等繁杂的过程。程序员直接编写原生态 sql，可以严格控制 sql 执行性能，灵活度高。
+MyBatis 可以使用 XML 或注解来配置和映射原生信息，将 POJO 映射成数据库中的记录，避免了几乎所有的 JDBC 代码和手动设置参数以及获取结果集。
+2. Mybatis 优缺点 优点 与传统的数据库访问技术相比，ORM 有以下优点：
+基于 SQL 语句编程，相当灵活，不会对应用程序或者数据库的现有设计造成任何影响，SQL 写在 XML 里，解除 sql 与程序代码的耦合，便于统一管理；提供 XML 标签，支持编写动态 SQL 语句，并可重用 与 JDBC 相比，减少了 50%以上的代码量，消除了 JDBC 大量冗余的代码，不需要手动开关连接 很好的与各种数据库兼容（因为 MyBatis 使用 JDBC 来连接数据库，所以只要 JDBC 支持的数据库 MyBatis 都支持） 提供映射标签，支持对象与数据库的 ORM 字段关系映射；提供对象关系映射标签，支持对象关系组件维护 能够与 Spring 很好的集成 缺点
+SQL 语句的编写工作量较大，尤其当字段多、关联表多时，对开发人员编写 SQL 语句的功底有一定要求 SQL 语句依赖于数据库，导致数据库移植性差，不能随意更换数据库 3.</description></item><item><title>MySQL</title><link>https://www.hotmindshare.com/interview/v4/mysql/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/mysql/</guid><description>MySQL 面试题 1、MySQL 中有哪几种锁？ 1、 表级锁：开销小，加锁快；不会出现死锁；锁定粒度大，发生锁冲突的概率最高，并发度最低；
+2、 行级锁：开销大，加锁慢；会出现死锁；锁定粒度最小，发生锁冲突的概率最低，并发度也最高；
+3、 页面锁：开销和加锁时间界于表锁和行锁之间；会出现死锁；锁定粒度界于表锁和行锁之间，并；发度一般。
+2、MySQL 中有哪些不同的表格？ 共有 5 种类型的表格：
+1、MyISAM
+2、Heap
+3、Merge
+4、INNODB
+5、MISAM
+3、简述在 MySQL 数据库中 MyISAM 和 InnoDB 的区别 MyISAM： 不支持事务， 但是每次查询都是原子的； 支持表级锁， 即每次操作是对整个表加锁； 存储表的总行数；
+一个 MYISAM 表有三个文件： 索引文件、表结构文件、数据文件；采用菲聚集索引， 索引文件的数据域存储指向数据文件的指针。辅索引与主索引基本一致， 但是辅索引不用保证唯一性。**InnoDb：**支持 ACID 的事务， 支持事务的四种隔离级别； 支持行级锁及外键约束： 因此可以支持写并发； 不存储总行数：一个 InnoDb 引擎存储在一个文件空间（ 共享表空间， 表大小不受操作系统控制，一个表可能分布在多个文件里）， 也有可能为多个（ 设置为独立表空， 表大小受操作系统文件大小限制，一般为 2G）， 受操作系统文件大小的限制；主键索引采用聚集索引（ 索引的数据域存储数据文件本身）， 辅索引的数据域存储主键的值； 因此从辅索引查找数据， 需要先通过辅索引找到主键值， 再访问辅索引； 最好使用自增主键， 防止插入数据时，为维持 B+树结构， 文件的大调整。
+4、MySQL 中 InnoDB 支持的四种事务隔离级别名称，以及逐级之间的区别？ SQL 标准定义的四个隔离级别为：
+1、 readuncommited：读到未提交数据；</description></item><item><title>Netty</title><link>https://www.hotmindshare.com/interview/v4/netty/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/netty/</guid><description>Netty 面试题 1. Netty 最流行的 NIO 框架，由 JBOSS 提供的，整合了 FTP,SMTP,HTTP 协议
+1、 API 简单；
+2、 成熟稳定；
+3、 社区活跃·；
+4、 经过大规模验证（互联网、大数据、网络游戏、电信通信）；
+Elasticsearch、Hadoop 子项目 avro 项目、阿里开源框架 Dubbo、使用 Netty
+2. BIO 优点：模型简单，编码简单缺点：性能瓶颈，请求数和线程数 N:N 关系高并发情况下 ,CPU 切换线程上下文损耗大案例：Tomcat 7 之前，都是 BIO，7 之后是 NIO 改进：伪 NIO，使用线程池去处理逻辑
+3. IO 模式 同步阻塞：丢衣服-&amp;gt;等洗衣机洗完-&amp;gt;再去晾衣服同步非阻塞：丢衣服-&amp;gt;去做其他事情，定时去看衣服是否洗完-&amp;gt;洗完后自己去晾衣服异步非阻塞：丢衣服-&amp;gt; 去做其他事情不管了，衣服洗好会自动晾好，并且通知你晾好了
+4. 五种 I/O 模型 五种 I/O 模型：阻塞 IO、非阻塞 IO、多路复用 IO、信号驱动 IO、异步 IO，前 4 种是同步 IO，在内核数据 copy 到用户空间时是阻塞的
+5. 阻塞 IO 6. 非阻塞 IO 7. IO 多路复用 核心：可以同时处理多个 connection，调用系统 select 和 recvfrom 函数每一个 socket 设置为 nonblocking 阻塞是被 select 这个函数 block 而不是 socket 阻塞缺点：连接数不高的情况下，性能不一定比多线程+ 阻塞 IO 好（多调用一个 select 函数）</description></item><item><title>Nginx</title><link>https://www.hotmindshare.com/interview/v4/nginx/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/nginx/</guid><description>Nginx 面试题 1. 什么是 Nginx？ Nginx 是一个 轻量级/高性能的反向代理 Web 服务器，他实现非常高效的反向代理、负载平衡，他可以处理 2-3 万并发连接数，官方监测能支持 5 万并发，现在中国使用 nginx 网站用户有很多，例如：新浪、网易、 腾讯等。
+2. 为什么要用 Nginx？ 跨平台、配置简单、方向代理、高并发连接：处理 2-3 万并发连接数，官方监测能支持 5 万并发，内存消耗小：开启 10 个 nginx 才占 150M 内存 ，nginx 处理静态文件好，耗费内存少， 而且 Nginx 内置的健康检查功能：如果有一个服务器宕机，会做一个健康检查，再发送的请求就不会发送到宕机的服务器了。重新将请求提交到其他的节点上。 使用 Nginx 的话还能：
+1、 节省宽带：支持 GZIP 压缩，可以添加浏览器本地缓存；
+2、 稳定性高：宕机的概率非常小；
+3、 接收用户请求是异步的；
+3. 为什么 Nginx 性能这么高？ 因为他的事件处理机制：异步非阻塞事件处理机制：运用了 epoll 模型，提供了一个队列，排队解决
+4. Nginx 怎么处理请求的？ nginx 接收一个请求后，首先由 listen 和 server_name 指令匹配 server 模块，再匹配 server 模块里的 location，location 就是实际地址
+1server { 2 3第一个Server区块开始，表示一个独立的虚拟主机站点 4	listen 80； 提供服务的端口，默认80 5	server_name localhost； 提供服务的域名主机名 6	location / { 7 8第一个location区块开始 9	root html； 站点的根目录，相当于Nginx的安装目录 10	index index.</description></item><item><title>NIO</title><link>https://www.hotmindshare.com/interview/v4/nio/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/nio/</guid><description>NIO 面试题 1. 什么是 IO Java 中 I/O 是以流为基础进行数据的输入输出的，所有数据被串行化(所谓串行化就是数据要按顺序进行输入输出)写入输出流。简单来说就是 java 通过 io 流方式和外部设备进行交互。
+在 Java 类库中，IO 部分的内容是很庞大的，因为它涉及的领域很广泛：标准输入输出，文件的操作，网络上的数据传输流，字符串流，对象流等等等。
+比如程序从服务器上下载图片，就是通过流的方式从网络上以流的方式到程序中，在到硬盘中
+2. 在了解不同的 IO 之前先了解：同步与异步，阻塞与非阻塞的区别 同步，一个任务的完成之前不能做其他操作，必须等待（等于在打电话）异步，一个任务的完成之前，可以进行其他操作（等于在聊 QQ）阻塞，是相对于 CPU 来说的， 挂起当前线程，不能做其他操作只能等待非阻塞,，无须挂起当前线程，可以去执行其他操作
+3. 什么是 BIO BIO：同步并阻塞，服务器实现一个连接一个线程，即客户端有连接请求时服务器端就需要启动一个线程进行处理，没处理完之前此线程不能做其他操作（如果是单线程的情况下，我传输的文件很大呢？），当然可以通过线程池机制改善。BIO 方式适用于连接数目比较小且固定的架构，这种方式对服务器资源要求比较高，并发局限于应用中，JDK1.4 以前的唯一选择，但程序直观简单易理解。
+4. 什么是 NIO NIO:同步非阻塞，服务器实现一个连接一个线程，即客户端发送的连接请求都会注册到多路复用器上，多路复用器轮询到连接有 I/O 请求时才启动一个线程进行处理。NIO 方式适用于连接数目多且连接比较短（轻操作）的架构，比如聊天服务器，并发局限于应用中，编程比较复杂，JDK1.4 之后开始支持。
+5. 什么是 AIO AIO：异步非阻塞，服务器实现模式为一个有效请求一个线程，客户端的 I/O 请求都是由操作系统先完成了再通知服务器应用去启动线程进行处理，AIO 方式使用于连接数目多且连接比较长（重操作）的架构，比如相册服务器，充分调用操作系统参与并发操作，编程比较复杂，JDK1.7 之后开始支持。.
+AIO 属于 NIO 包中的类实现，其实 IO 主要分为 BIO 和 NIO，AIO 只是附加品，解决 IO 不能异步的实现
+在以前很少有 Linux 系统支持 AIO，Windows 的 IOCP 就是该 AIO 模型。但是现在的服务器一般都是支持 AIO 操作</description></item><item><title>Oracle</title><link>https://www.hotmindshare.com/interview/v4/oracle/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/oracle/</guid><description>Oracle 面试题 1.解释冷备份和热备份的不同点以及各自的优点 冷备份
+发生在数据库已经正常关闭的情况下，将关键性文件拷贝到另外位置的一种说法。适用于所有模式的数据库。
+优点
+是非常快速的备份方法（只需拷贝文件） 容易归档（简单拷贝即可） 容易恢复到某个时间点上(只需将文件再拷贝回去) 能与归档方法相结合，作数据库“最新状态”的恢复 低度维护，高度安全。 缺点
+单独使用时，只能提供到“某一时间点上”的恢复。 在实施备份的全过程中，数据库必须要作备份而不能作其它工作。也就是说，在冷备份过程中，数据库必须是关闭状态。 若磁盘空间有限，只能拷贝到磁带等其它外部存储设备上，速度会很慢。 不能按表或按用户恢复。 热备份
+是在数据库仍旧处于工作状态时进行备份，采用的是归档方式备份数据的方法。
+优点
+可在表空间或数据库文件级备份，备份的时间短。 备份时数据库仍可使用。 可达到秒级恢复(恢复到某一时间点上)。 可对几乎所有数据库实体做恢复。 恢复是快速的，在大多数情况下在数据库仍工作时恢复。 缺点
+不能出错，否则后果严重。 若热备份不成功，所得结果不可用于时间点的恢复。 因难于维护，所以要非凡仔细小心，不答应“以失败告终”。 不同点
+热备份针对归档模式的数据库，在数据库仍旧处于工作状态时进行备份。而冷备份指在数据库关闭后，进行备份，适用于所有模式的数据库。
+2.你必须利用备份恢复数据库，但是你没有控制文件，该如何解决问题呢？ 重建控制文件，用带 backup control file 子句的 recover 命令恢复数据库。
+3.如何转换 init.ora 到 spfile ? 使用 create spfile from pfile 命令
+4.解释 data block ，extend 和 segment 的区别（这里建议用英文术语） data block 是数据库中最小的逻辑存储单元。当数据库的对象需要更多的物理存储空间时，连续的 data block 就组成了 extend. 一个数据库对象拥有的所有 extents 被称为该对象的 segment
+5.给出两个查询表结构的方法 DESCRIBE 命令 DBMS_METADATA.</description></item><item><title>RabbitMQ</title><link>https://www.hotmindshare.com/interview/v4/rabbitmq/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/rabbitmq/</guid><description>RabbitMQ 面试题 1. 什么是 MQ MQ 就是消息队列。是软件和软件进行通信的中间件产品
+2. MQ 的优点 异步处理 - 相比于传统的串行、并行方式，提高了系统吞吐量。
+应用解耦 - 系统间通过消息通信，不用关心其他系统的处理。
+流量削锋 - 可以通过消息队列长度控制请求量；可以缓解短时间内的高并发请求。
+日志处理 - 解决大量日志传输。
+消息通讯 - 消息队列一般都内置了高效的通信机制，因此也可以用在纯的消息通讯。比如实现点对点消息队列，或者聊天室等。
+3. 解耦、异步、削峰是什么？。 解耦：A 系统发送数据到 BCD 三个系统，通过接口调用发送。如果 E 系统也要这个数据呢？那如果 C 系统现在不需要了呢？A 系统负责人几乎崩溃…A 系统跟其它各种乱七八糟的系统严重耦合，A 系统产生一条比较关键的数据，很多系统都需要 A 系统将这个数据发送过来。如果使用 MQ，A 系统产生一条数据，发送到 MQ 里面去，哪个系统需要数据自己去 MQ 里面消费。如果新系统需要数据，直接从 MQ 里消费即可；如果某个系统不需要这条数据了，就取消对 MQ 消息的消费即可。这样下来，A 系统压根儿不需要去考虑要给谁发送数据，不需要维护这个代码，也不需要考虑人家是否调用成功、失败超时等情况。就是一个系统或者一个模块，调用了多个系统或者模块，互相之间的调用很复杂，维护起来很麻烦。但是其实这个调用是不需要直接同步调用接口的，如果用 MQ 给它异步化解耦。
+异步：A 系统接收一个请求，需要在自己本地写库，还需要在 BCD 三个系统写库，自己本地写库要 3ms，BCD 三个系统分别写库要 300ms、450ms、200ms。最终请求总延时是 3 + 300 + 450+ 200 = 953ms，接近 1s，用户感觉搞个什么东西，慢死了慢死了。用户通过浏览器发起请求。如果使用 MQ，那么 A 系统连续发送 3 条消息到 MQ 队列中，假如耗时 5ms，A 系统从接受一个请求到返回响应给用户，总时长是 3 + 5 = 8ms。</description></item><item><title>Redis</title><link>https://www.hotmindshare.com/interview/v4/redis/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/redis/</guid><description>Redis 面试题 一、概述 1. 什么是 Redis？ Redis 是一个使用 C 语言写成的，开源的高性能 key-value 非关系缓存数据库。它支持存储的 value 类型相对更多，包括 string(字符串)、list(链表)、set(集合)、zset(sorted set &amp;ndash;有序集合)和 hash（哈希类型）。Redis 的数据都基于缓存的，所以很快，每秒可以处理超过 10 万次读写操作，是已知性能最快的 Key-Value DB。Redis 也可以实现数据写入磁盘中，保证了数据的安全不丢失，而且 Redis 的操作是原子性的。
+2. Redis 有哪些优缺点？ 优点
+读写性能优异， Redis 能读的速度是 110000 次/s，写的速度是 81000 次/s。 支持数据持久化，支持 AOF 和 RDB 两种持久化方式。 支持事务，Redis 的所有操作都是原子性的，同时 Redis 还支持对几个操作合并后的原子性执行。 数据结构丰富，除了支持 string 类型的 value 外还支持 hash、set、zset、list 等数据结构。 支持主从复制，主机会自动将数据同步到从机，可以进行读写分离。 缺点
+数据库容量受到物理内存的限制，不能用作海量数据的高性能读写，因此 Redis 适合的场景主要局限在较小数据量的高性能操作和运算上。 Redis 不具备自动容错和恢复功能，主机从机的宕机都会导致前端部分读写请求失败，需要等待机器重启或者手动切换前端的 IP 才能恢复。 主机宕机，宕机前有部分数据未能及时同步到从机，切换 IP 后还会引入数据不一致的问题，降低了系统的可用性。 Redis 较难支持在线扩容，在集群容量达到上限时在线扩容会变得很复杂。为避免这一问题，运维人员在系统上线时必须确保有足够的空间，这对资源造成了很大的浪费。 3. 使用 redis 有哪些好处？ (1)速度快，因为数据存在内存中，类似于 HashMap，HashMap 的优势就是查找和操作的时间复杂度都很低(2)支持丰富数据类型，支持 string，list，set，sorted set，hash(3)支持事务，操作都是原子性，所谓的原子性就是对数据的更改要么全部执行，要么全部不执行(4)丰富的特性：可用于缓存，消息，按 key 设置过期时间，过期后将会自动删除</description></item><item><title>RocketMQ</title><link>https://www.hotmindshare.com/interview/v4/rocketmq/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/rocketmq/</guid><description>RocketMQ 面试题 1、说说你们公司线上生产环境用的是什么消息中间件? 见【2、多个 mq 如何选型？】
+2、多个 mq 如何选型？ MQ 描述 RabbitMQ erlang开发，对消息堆积的支持并不好，当大量消息积压的时候，会导致 RabbitMQ 的性能急剧下降。每秒钟可以处理几万到十几万条消息。 RocketMQ java开发，面向互联网集群化功能丰富，对在线业务的响应时延做了很多的优化，大多数情况下可以做到毫秒级的响应，每秒钟大概能处理几十万条消息。 Kafka Scala开发，面向日志功能丰富，性能最高。当你的业务场景中，每秒钟消息数量没有那么多的时候，Kafka 的时延反而会比较高。所以，Kafka 不太适合在线业务场景。 ActiveMQ java开发，简单，稳定，性能不如前面三个。小型系统用也ok，但是不推荐。推荐用互联网主流的。 3、为什么要使用 MQ？ 因为项目比较大，做了分布式系统，所有远程服务调用请求都是同步执行经常出问题，所以引入了 mq
+作用 描述 解耦 系统耦合度降低，没有强依赖关系 异步 不需要同步执行的远程调用可以有效提高响应时间 削峰 请求达到峰值后，后端service还可以保持固定消费速率消费，不会被压垮 4、RocketMQ 由哪些角色组成，每个角色作用和特点是什么？ 角色 作用 Nameserver 无状态，动态列表；这也是和zookeeper的重要区别之一。zookeeper是有状态的。 Producer 消息生产者，负责发消息到Broker。 Broker 就是MQ本身，负责收发消息、持久化消息等。 Consumer 消息消费者，负责从Broker上拉取消息进行消费，消费完进行ack。 5、RocketMQ 中的 Topic 和 JMS 的 queue 有什么区别？ queue 就是来源于数据结构的 FIFO 队列。而 Topic 是个抽象的概念，每个 Topic 底层对应 N 个 queue，而数据也真实存在 queue 上的。
+6、RocketMQ Broker 中的消息被消费后会立即删除吗？ 不会，每条消息都会持久化到 CommitLog 中，每个 Consumer 连接到 Broker 后会维持消费进度信息，当有消息消费后只是当前 Consumer 的消费进度（CommitLog 的 offset）更新了。</description></item><item><title>Spring</title><link>https://www.hotmindshare.com/interview/v4/spring/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/spring/</guid><description>Spring 面试题 一、Spring 概述 1. 什么是 spring？ Spring 是一个轻量级 Java 开发框架，最早有 Rod Johnson 创建，目的是为了解决企业级应用开发的业务逻辑层和其他各层的耦合问题。它是一个分层的 JavaSE/JavaEE full-stack（一站式）轻量级开源框架，为开发 Java 应用程序提供全面的基础架构支持。Spring 负责基础架构，因此 Java 开发者可以专注于应用程序的开发。
+Spring 最根本的使命是解决企业级应用开发的复杂性，即简化 Java 开发。
+Spring 可以做很多事情，它为企业级开发提供给了丰富的功能，但是这些功能的底层都依赖于它的两个核心特性，也就是依赖注入（dependency injection，DI）和面向切面编程（aspect-oriented programming，AOP）。
+为了降低 Java 开发的复杂性，Spring 采取了以下 4 种关键策略
+基于 POJO 的轻量级和最小侵入性编程； 通过依赖注入和面向接口实现松耦合； 基于切面和惯例进行声明式编程； 通过切面和模板减少样板式代码。 2. Spring 框架的设计目标，设计理念，和核心是什么？ Spring 设计目标：Spring 为开发者提供一个一站式轻量级应用开发平台；
+Spring 设计理念：在 JavaEE 开发中，支持 POJO 和 JavaBean 开发方式，使应用面向接口开发，充分支持 OO（面向对象）设计方法；Spring 通过 IoC 容器实现对象耦合关系的管理，并实现依赖反转，将对象之间的依赖关系交给 IoC 容器，实现解耦；
+Spring 框架的核心：IoC 容器和 AOP 模块。通过 IoC 容器管理 POJO 对象以及他们之间的耦合关系；通过 AOP 以动态非侵入的方式增强服务。</description></item><item><title>Spring Boot</title><link>https://www.hotmindshare.com/interview/v4/springboot/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/springboot/</guid><description>Spring Boot 面试题 1. 什么是 Spring Boot？ Spring Boot 是 Spring 开源组织下的子项目，是 Spring 组件一站式解决方案，主要是简化了使用 Spring 的难度，简省了繁重的配置，提供了各种启动器，使开发者能快速上手。
+2. 为什么要用 SpringBoot 快速开发，快速整合，配置简化、内嵌服务容器
+3. SpringBoot 与 SpringCloud 区别 SpringBoot 是快速开发的 Spring 框架，SpringCloud 是完整的微服务框架，SpringCloud 依赖于 SpringBoot。
+4. Spring Boot 有哪些优点？ Spring Boot 主要有如下优点：
+1、 容易上手，提升开发效率，为 Spring 开发提供一个更快、更简单的开发框架；
+2、 开箱即用，远离繁琐的配置；
+3、 提供了一系列大型项目通用的非业务性功能，例如：内嵌服务器、安全管理、运行数据监；控、运行状况检查和外部化配置等。
+4、 SpringBoot 总结就是使编码变简单、配置变简单、部署变简单、监控变简单等等；
+5. Spring Boot 的核心注解是哪个？它主要由哪几个注解组成的？ 启动类上面的注解是@SpringBootApplication，它也是 Spring Boot 的核心注解，主要组合包含了以下 3 个注解：
+@SpringBootConfiguration：组合了 @Configuration 注解，实现配置文件的功能。
+@EnableAutoConfiguration：打开自动配置的功能，也可以关闭某个自动配置的选项， 例如： java 如关闭数据源自动配置功能： @SpringBootApplication(exclude = { DataSourceAutoConfiguration.</description></item><item><title>Spring Cloud</title><link>https://www.hotmindshare.com/interview/v4/springcloud/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/springcloud/</guid><description>Spring Cloud 面试题 Spring Cloud 1. 什么是微服务架构 微服务架构就是将单体的应用程序分成多个应用程序，这多个应用程序就成为微服务，每个微服务 运行在自己的进程中，并使用轻量级的机制通信。这些服务围绕业务能力来划分，并通过自动化部 署机制来独立部署。这些服务可以使用不同的编程语言，不同数据库，以保证最低限度的集中式管 理。
+2. 为什么需要学习 Spring Cloud 首先 springcloud 基于 spingboot 的优雅简洁，可还记得我们被无数 xml 支配的恐惧？可还记得 springmvc，mybatis 错综复杂的配置，有了 spingboot，这些东西都不需要了，spingboot 好处不再赘诉，springcloud 就基于 SpringBoot 把市场上优秀的服务框架组合起来，通过 Spring Boot 风格进行再封装屏蔽掉了复杂的配置和实现原理
+什么叫做开箱即用？即使是当年的黄金搭档 dubbo+zookeeper 下载配置起来也是颇费心神的！而 springcloud 完成这些只需要一个 jar 的依赖就可以了！
+springcloud 大多数子模块都是直击痛点，像 zuul 解决的跨域，fegin 解决的负载均衡，hystrix 的熔断机制等等等等
+3. Spring Cloud 是什么 Spring Cloud 是一系列框架的有序集合。它利用 Spring Boot 的开发便利性巧妙地简化了分布式系统基础设施的开发，如服务发现注册、配置中心、智能路由、消息总线、负载均衡、断路器、数据监控等，都可以用 Spring Boot 的开发风格做到一键启动和部署。
+Spring Cloud 并没有重复制造轮子，它只是将各家公司开发的比较成熟、经得起实际考验的服务框架组合起来，通过 Spring Boot 风格进行再封装屏蔽掉了复杂的配置和实现原理，最终给开发者留出了一套简单易懂、易部署和易维护的分布式系统开发工具包。
+4. SpringCloud 的优缺点 优点：
+1.耦合度比较低。不会影响其他模块的开发。&amp;gt;2.减轻团队的成本，可以并行开发，不用关注其他人怎么开发，先关注自己的开发。&amp;gt;3.配置比较简单，基本用注解就能实现，不用使用过多的配置文件。&amp;gt;4.微服务跨平台的，可以用任何一种语言开发。&amp;gt;5.每个微服务可以有自己的独立的数据库也有用公共的数据库。&amp;gt;6.直接写后端的代码，不用关注前端怎么开发，直接写自己的后端代码即可，然后暴露接口，通过组件进行 服务通信。</description></item><item><title>Spring MVC</title><link>https://www.hotmindshare.com/interview/v4/springmvc/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/springmvc/</guid><description>Spring MVC 面试题 1. 概述 1.1 什么是 Spring MVC？简单介绍下你对 Spring MVC 的理解？ Spring MVC 是一个基于 Java 的实现了 MVC 设计模式的请求驱动类型的轻量级 Web 框架，通过把模型-视图-控制器分离，将 web 层进行职责解耦，把复杂的 web 应用分成逻辑清晰的几部分，简化开发，减少出错，方便组内开发人员之间的配合。
+1.2 Spring MVC 的优点 1、可以支持各种视图技术,而不仅仅局限于 JSP；
+2、与 Spring 框架集成（如 IoC 容器、AOP 等）；
+3、清晰的角色分配：前端控制器(dispatcherServlet) , 请求到处理器映射（handlerMapping),理器适配器（HandlerAdapter), 视图解析器（ViewResolver）。
+4、支持各种请求资源的映射策略。
+2. 核心组件 2.1 Spring MVC 的主要组件？ （1）前端控制器 DispatcherServlet（不需要程序员开发）作用：接收请求、响应结果，相当于转发器，有了 DispatcherServlet 就减少了其它组件之间的耦合度。（2）处理器映射器 HandlerMapping（不需要程序员开发）作用：根据请求的 URL 来查找 Handler（3）处理器适配器 HandlerAdapter 注意：在编写 Handler 的时候要按照 HandlerAdapter 要求的规则去编写，这样适配器 HandlerAdapter 才可以正确的去执行 Handler。（4）处理器 Handler（需要程序员开发）（5）视图解析器 ViewResolver（不需要程序员开发）作用：进行视图的解析，根据视图逻辑名解析成真正的视图（view）（6）视图 View（需要程序员开发 jsp）View 是一个接口， 它的实现类支持不同的视图类型（jsp，freemarker，pdf 等等）</description></item><item><title>Tomcat</title><link>https://www.hotmindshare.com/interview/v4/tomcat/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/tomcat/</guid><description>Tomcat 面试题 1. Tomcat 的缺省端口是多少，怎么修改？ 11）找到Tomcat目录下的conf文件夹 22）进入conf文件夹里面找到server.xml文件 33）打开server.xml文件 44）在server.xml文件里面找到下列信息 5&amp;lt;Connector connectionTimeout=&amp;#34;20000&amp;#34; port=&amp;#34;8080&amp;#34; protocol=&amp;#34;HTTP/1.1&amp;#34; redirectPort=&amp;#34;8443&amp;#34; uriEncoding=&amp;#34;utf-8&amp;#34;/&amp;gt; 6port=&amp;#34;8080&amp;#34;改成你想要的端口 2. tomcat 有哪几种 Connector 运行模式(优化)？ 1bio：传统的Java I/O操作，同步且阻塞IO。 2maxThreads=&amp;#34;150&amp;#34;//Tomcat使用线程来处理接收的每个请求。这个值表示Tomcat可创建的最大的线程 3数。默认值200。可以根据机器的时期性能和内存大小调整，一般可以在400-500。最大可以在800左右。 4minSpareThreads=&amp;#34;25&amp;#34;---Tomcat初始化时创建的线程数。默认值4。如果当前没有空闲线程，且没有超 5过maxThreads，一次性创建的空闲线程数量。Tomcat初始化时创建的线程数量也由此值设置。 6maxSpareThreads=&amp;#34;75&amp;#34;--一旦创建的线程超过这个值，Tomcat就会关闭不再需要的socket线程。默认 7值50。一旦创建的线程超过此数值，Tomcat会关闭不再需要的线程。线程数可以大致上用 “同时在线人数* 8每秒用户操作次数*系统平均操作时间” 来计算。 9acceptCount=&amp;#34;100&amp;#34;----指定当所有可以使用的处理请求的线程数都被使用时，可以放到处理队列中的请 10求数，超过这个数的请求将不予处理。默认值10。如果当前可用线程数为0，则将请求放入处理队列中。这个 11值限定了请求队列的大小，超过这个数值的请求将不予处理。 12connectionTimeout=&amp;#34;20000&amp;#34; --网络连接超时，默认值20000，单位：毫秒。设置为0表示永不超时， 13这样设置有隐患的。通常可设置为30000毫秒。 14nio：JDK1.4开始支持，同步阻塞或同步非阻塞IO。 15指定使用NIO模型来接受HTTP请求 16protocol=&amp;#34;org.apache.coyote.http11.Http11NioProtocol&amp;#34; 指定使用NIO模型来接受HTTP请 17求。默认是BlockingIO，配置为protocol=&amp;#34;HTTP/1.1&amp;#34; 18acceptorThreadCount=&amp;#34;2&amp;#34; 使用NIO模型时接收线程的数目 19aio(nio.2)：JDK7开始支持，异步非阻塞IO。 20apr：Tomcat将以JNI的形式调用Apache HTTP服务器的核心动态链接库来处理文件读取或网络传输操作， 21从而大大地 提高Tomcat对静态文件的处理性能。 22&amp;lt;!-- 23&amp;lt;Connector connectionTimeout=&amp;#34;20000&amp;#34; port=&amp;#34;8000&amp;#34; protocol=&amp;#34;HTTP/1.1&amp;#34; 24redirectPort=&amp;#34;8443&amp;#34; uriEncoding=&amp;#34;utf-8&amp;#34;/&amp;gt; 25--&amp;gt; 26&amp;lt;!-- protocol 启用 nio模式，(tomcat8默认使用的是nio)(apr模式利用系统级异步io) --&amp;gt; 27&amp;lt;!-- minProcessors最小空闲连接线程数--&amp;gt; 28&amp;lt;!-- maxProcessors最大连接线程数--&amp;gt; 29&amp;lt;!-- acceptCount允许的最大连接数，应大于等于maxProcessors--&amp;gt; 30&amp;lt;!-- enableLookups 如果为true,requst.</description></item><item><title>Zookeeper</title><link>https://www.hotmindshare.com/interview/v4/zookeeper/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/zookeeper/</guid><description>Zookeeper 面试题 目录 1. ZooKeeper 是什么？ ZooKeeper 是一个开放源码的分布式协调服务，它是集群的管理者，监视着集群中各个节点的状态根据节点提交的反馈进行下一步合理操作。最终，将简单易用的接口和性能高效、功能稳定的系统提供给用户。
+分布式应用程序可以基于 Zookeeper 实现诸如数据发布/订阅、负载均衡、命名服务、分布式协调/通知、集群管理、Master 选举、分布式锁和分布式队列等功能。
+Zookeeper 保证了如下分布式一致性特性：
+（1）顺序一致性
+（2）原子性
+（3）单一视图
+（4）可靠性
+（5）实时性（最终一致性）
+客户端的读请求可以被集群中的任意一台机器处理，如果读请求在节点上注册了监听器，这个监听器也是由所连接的 zookeeper 机器来处理。对于写请求，这些请求会同时发给其他 zookeeper 机器并且达成一致后，请求才会返回成功。因此，随着 zookeeper 的集群机器增多，读请求的吞吐会提高但是写请求的吞吐会下降。
+有序性是 zookeeper 中非常重要的一个特性，所有的更新都是全局有序的，每个更新都有一个唯一的时间戳，这个时间戳称为 zxid（Zookeeper Transaction Id）。而读请求只会相对于更新有序，也就是读请求的返回结果中会带有这个 zookeeper 最新的 zxid。
+2. ZooKeeper 提供了什么？ （1）文件系统
+（2）通知机制
+3.Zookeeper 文件系统 Zookeeper 提供一个多层级的节点命名空间（节点称为 znode）。与文件系统不同的是，这些节点都可以设置关联的数据，而文件系统中只有文件节点可以存放数据而目录节点不行。
+Zookeeper 为了保证高吞吐和低延迟，在内存中维护了这个树状的目录结构，这种特性使得 Zookeeper 不能用于存放大量的数据，每个节点的存放数据上限为 1M。
+4. ZAB 协议？ ZAB 协议是为分布式协调服务 Zookeeper 专门设计的一种支持崩溃恢复的原子广播协议。ZAB 协议包括两种基本的模式：崩溃恢复和消息广播。
+当整个 zookeeper 集群刚刚启动或者 Leader 服务器宕机、重启或者网络故障导致不存在过半的服务器与 Leader 服务器保持正常通信时，所有进程（服务器）进入崩溃恢复模式，首先选举产生新的 Leader 服务器，然后集群中 Follower 服务器开始与新的 Leader 服务器进行数据同步，当集群中超过半数机器与该 Leader 服务器完成数据同步之后，退出恢复模式进入消息广播模式，Leader 服务器开始接收客户端的事务请求生成事物提案来进行事务请求处理。</description></item><item><title>网络编程</title><link>https://www.hotmindshare.com/interview/v4/network/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/network/</guid><description>NetWork 面试题 1. 什么是网络编程 网络编程的本质是多台计算机之间的数据交换。数据传递本身没有多大的难度，不就是把一个设备中的数据发送给其他设备，然后接受另外一个设备反馈的数据。现在的网络编程基本上都是基于请求/响应方式的，也就是一个设备发送请求数据给另外一个，然后接收另一个设备的反馈。在网络编程中，发起连接程序，也就是发送第一次请求的程序，被称作客户端(Client)，等待其他程序连接的程序被称作服务器(Server)。客户端程序可以在需要的时候启动，而服务器为了能够时刻相应连接，则需要一直启动。
+例如以打电话为例，首先拨号的人类似于客户端，接听电话的人必须保持电话畅通类似于服务器。连接一旦建立以后，就客户端和服务器端就可以进行数据传递了，而且两者的身份是等价的。在一些程序中，程序既有客户端功能也有服务器端功能，最常见的软件就是 QQ、微信这类软件了。
+2. 网络编程中两个主要的问题 1、 一个是如何准确的定位网络上一台或多台主机，；
+2、 另一个就是找到主机后如何可靠高效的进行数据传输；
+在 TCP/IP 协议中 IP 层主要负责网络主机的定位，数据传输的路由，由 IP 地址可以唯一地确定 Internet 上的一台主机。
+而 TCP 层则提供面向应用的可靠（TCP）的或非可靠（UDP）的数据传输机制，这是网络编程的主要对象，一般不需要关心 IP 层是如何处理数据的。
+目前较为流行的网络编程模型是客户机/服务器（C/S）结构。即通信双方一方作为服务器等待客户提出请求并予以响应。客户则在需要服务时向服务器提 出申请。服务器一般作为守护进程始终运行，监听网络端口，一旦有客户请求，就会启动一个服务进程来响应该客户，同时自己继续监听服务端口，使后来的客户也 能及时得到服务。
+3. 网络协议是什么 在计算机网络要做到井井有条的交换数据，就必须遵守一些事先约定好的规则，比如交换数据的格式、是否需要发送一个应答信息。这些规则被称为网络协议。
+4. 为什么要对网络协议分层 简化问题难度和复杂度。由于各层之间独立，我们可以分割大问题为小问题。
+灵活性好。当其中一层的技术变化时，只要层间接口关系保持不变，其他层不受影响。
+易于实现和维护。
+促进标准化工作。分开后，每层功能可以相对简单地被描述
+5. 计算机网络体系结构 OSI 参考模型
+OSI（Open System Interconnect），即开放式系统互联。一般都叫 OSI 参考模型，是 ISO（国际标准化组织）组织在 1985 年研究的网络互连模型。ISO 为了更好的使网络应用更为普及，推出了 OSI 参考模型，这样所有的公司都按照统一的标准来指定自己的网络，就可以互通互联了。
+OSI 定义了网络互连的七层框架（物理层、数据链路层、网络层、传输层、会话层、表示层、应用层）。
+TCP/IP 参考模型
+TCP/IP 四层协议（数据链路层、网络层、传输层、应用层）
+1、 应用层应用层最靠近用户的一层，是为计算机用户提供应用接口，也为用户直接提供各种网；络服务。我们常见应用层的网络服务协议有：HTTP，HTTPS，FTP，TELNET 等。
+2、 传输层建立了主机端到端的链接，传输层的作用是为上层协议提供端到端的可靠和透明的数；据传输服务，包括处理差错控制和流量控制等问题。该层向高层屏蔽了下层数据通信的细节，使高层用户看到的只是在两个传输实体间的一条主机到主机的、可由用户控制和设定的、可靠的数据通路。我们通常说的，TCP UDP 就是在这一层。端口号既是这里的“端”。
+3、 网络层本层通过 IP 寻址来建立两个节点之间的连接，为源端的运输层送来的分组，选择合适；的路由和交换节点，正确无误地按照地址传送给目的端的运输层。就是通常说的 IP 层。这一层就是我们经常说的 IP 协议层。IP 协议是 Internet 的基础。</description></item></channel></rss>

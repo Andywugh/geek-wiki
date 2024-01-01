@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>oracle on 程序员安仔</title><link>https://www.hotmindshare.com/tags/oracle/</link><description>Recent content in oracle on 程序员安仔</description><generator>Hugo -- gohugo.io</generator><language>zh-hans</language><copyright>粤ICP备2023148789号</copyright><lastBuildDate>Sun, 10 Dec 2023 16:04:57 +0800</lastBuildDate><atom:link href="https://www.hotmindshare.com/tags/oracle/index.xml" rel="self" type="application/rss+xml"/><item><title>Oracle</title><link>https://www.hotmindshare.com/interview/v4/oracle/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/oracle/</guid><description>Oracle 面试题 1.解释冷备份和热备份的不同点以及各自的优点 冷备份
+发生在数据库已经正常关闭的情况下，将关键性文件拷贝到另外位置的一种说法。适用于所有模式的数据库。
+优点
+是非常快速的备份方法（只需拷贝文件） 容易归档（简单拷贝即可） 容易恢复到某个时间点上(只需将文件再拷贝回去) 能与归档方法相结合，作数据库“最新状态”的恢复 低度维护，高度安全。 缺点
+单独使用时，只能提供到“某一时间点上”的恢复。 在实施备份的全过程中，数据库必须要作备份而不能作其它工作。也就是说，在冷备份过程中，数据库必须是关闭状态。 若磁盘空间有限，只能拷贝到磁带等其它外部存储设备上，速度会很慢。 不能按表或按用户恢复。 热备份
+是在数据库仍旧处于工作状态时进行备份，采用的是归档方式备份数据的方法。
+优点
+可在表空间或数据库文件级备份，备份的时间短。 备份时数据库仍可使用。 可达到秒级恢复(恢复到某一时间点上)。 可对几乎所有数据库实体做恢复。 恢复是快速的，在大多数情况下在数据库仍工作时恢复。 缺点
+不能出错，否则后果严重。 若热备份不成功，所得结果不可用于时间点的恢复。 因难于维护，所以要非凡仔细小心，不答应“以失败告终”。 不同点
+热备份针对归档模式的数据库，在数据库仍旧处于工作状态时进行备份。而冷备份指在数据库关闭后，进行备份，适用于所有模式的数据库。
+2.你必须利用备份恢复数据库，但是你没有控制文件，该如何解决问题呢？ 重建控制文件，用带 backup control file 子句的 recover 命令恢复数据库。
+3.如何转换 init.ora 到 spfile ? 使用 create spfile from pfile 命令
+4.解释 data block ，extend 和 segment 的区别（这里建议用英文术语） data block 是数据库中最小的逻辑存储单元。当数据库的对象需要更多的物理存储空间时，连续的 data block 就组成了 extend. 一个数据库对象拥有的所有 extents 被称为该对象的 segment
+5.给出两个查询表结构的方法 DESCRIBE 命令 DBMS_METADATA.</description></item></channel></rss>

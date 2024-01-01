@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Dubbo on 程序员安仔</title><link>https://www.hotmindshare.com/tags/dubbo/</link><description>Recent content in Dubbo on 程序员安仔</description><generator>Hugo -- gohugo.io</generator><language>zh-hans</language><copyright>粤ICP备2023148789号</copyright><lastBuildDate>Sun, 10 Dec 2023 16:04:57 +0800</lastBuildDate><atom:link href="https://www.hotmindshare.com/tags/dubbo/index.xml" rel="self" type="application/rss+xml"/><item><title>Dubbo</title><link>https://www.hotmindshare.com/interview/v4/dubbo/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/dubbo/</guid><description>Dubbo 面试题 一、基础知识 1. 为什么要用 Dubbo？ 随着服务化的进一步发展，服务越来越多，服务之间的调用和依赖关系也越来越复杂，诞生了面向服务的架构体系(SOA)，也因此衍生出了一系列相应的技术，如对服务提供、服务调用、连接处理、通信协议、序列化方式、服务发现、服务路由、日志输出等行为进行封装的服务框架。就这样为分布式系统的服务治理框架就出现了，Dubbo 也就这样产生了。
+2. Dubbo 是什么？ Dubbo 是一款高性能、轻量级的开源 RPC 框架，提供服务自动注册、自动发现等高效服务治理方案， 可以和 Spring 框架无缝集成。
+3. Dubbo 的使用场景有哪些？ 透明化的远程方法调用：就像调用本地方法一样调用远程方法，只需简单配置，没有任何 API 侵入。
+软负载均衡及容错机制：可在内网替代 F5 等硬件负载均衡器，降低成本，减少单点。
+服务自动注册与发现：不再需要写死服务提供方地址，注册中心基于接口名查询服务提供者的 IP 地址，并且能够平滑添加或删除服务提供者。
+4. Dubbo 核心功能有哪些？ Remoting：网络通信框架，提供对多种 NIO 框架抽象封装，包括“同步转异步”和“请求-响应”模式的信息交换方式。
+Cluster：服务框架，提供基于接口方法的透明远程过程调用，包括多协议支持，以及软负载均衡，失败容错，地址路由，动态配置等集群支持。
+Registry：服务注册，基于注册中心目录服务，使服务消费方能动态的查找服务提供方，使地址透明，使服务提供方可以平滑增加或减少机器。
+5. Dubbo 核心组件有哪些？ Provider：暴露服务的服务提供方
+Consumer：调用远程服务消费方
+Registry：服务注册与发现注册中心
+Monitor：监控中心和访问调用统计
+Container：服务运行容器
+6. Dubbo 服务器注册与发现的流程？ 服务容器 Container 负责启动，加载，运行服务提供者。
+服务提供者 Provider 在启动时，向注册中心注册自己提供的服务。
+服务消费者 Consumer 在启动时，向注册中心订阅自己所需的服务。
+注册中心 Registry 返回服务提供者地址列表给消费者，如果有变更，注册中心将基于长连接推送变更数据给消费者。
+服务消费者 Consumer，从提供者地址列表中，基于软负载均衡算法，选一台提供者进行调用，如果调用失败，再选另一台调用。
+服务消费者 Consumer 和提供者 Provider，在内存中累计调用次数和调用时间，定时每分钟发送一次统计数据到监控中心 Monitor。架构设计
+二、架构设计 7. Dubbo 的整体架构设计有哪些分层?</description></item></channel></rss>

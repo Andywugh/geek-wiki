@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Hadoop on 程序员安仔</title><link>https://www.hotmindshare.com/tags/hadoop/</link><description>Recent content in Hadoop on 程序员安仔</description><generator>Hugo -- gohugo.io</generator><language>zh-hans</language><copyright>粤ICP备2023148789号</copyright><lastBuildDate>Sun, 10 Dec 2023 16:04:57 +0800</lastBuildDate><atom:link href="https://www.hotmindshare.com/tags/hadoop/index.xml" rel="self" type="application/rss+xml"/><item><title>Hadoop 异常</title><link>https://www.hotmindshare.com/interview/v4/hadoop/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/hadoop/</guid><description>Hadoop 面试题 Hadoop 中常问的就三块，第一：分布式存储(HDFS)；第二：分布式计算框架(MapReduce)；第三：资源调度框架(YARN)。
+1.请说下HDFS读写流程； HDFS（Hadoop Distributed File System），它是一个文件系统，用于存储文件，通过目录树来定位文件；其次，它是分布式的，由很多服务器联合起来实现其功能，集群中的服务器有各自的角色。
+适合一次写入，多次读出的场景。一个文件经过创建、写入和关闭之后就不需要改变。
+HDFS 写流程：
+1、 客户端发送上传请求，并通过RPC与NameNode建立通信NameNode检查用户是否有上传权限，上传的文件在HDFS对应的目录下是否同名如果其中任何一个不满足，就会直接报错如果两者都满足，将向客户端返回一个可以上传的消息；
+2、 客户端根据文件大小划分文件，默认为128M，向NameNode发送请求，请求将第一块上传到哪些服务器；
+3、 收到请求后，NameNode根据网络拓扑、机架感知和副本机制分配文件，并返回可用DataNode的地址；
+4、 接收到地址后，客户端与服务器地址列表中的一个节点进行通信，比如A，本质上是RPC调用建立管道a收到请求后会继续调用B，B会调用C来完成整个管道的建立，并逐步返回给客户端；
+5、 客户端开始向A发送第一个块(先从磁盘读取数据，然后放入本地内存缓存)，这个块是基于包的(64kb)，A收到一个包就会发送；
+发送给B，然后B发送给c，A在发送完一个包后会将其放入一个响应队列中等待响应；
+6、 数据被分成数据包，依次在流水线上传输在管道反向传输中，逐个发送ack(命令回答正确)，最后管道中第一个DataNode节点A向客户端发送pipelineack；7.当一个块传输完成后，客户端请求NameNode再次上传第二个块，NameNode为客户端重新选择三个DataNode；
+HDFS 读流程：
+1、 客户端向NameNode发送RPC请求请求文件块的位置；
+2、 NameNode收到请求后会检查用户权限以及是否有这个文件如果它们都匹配，它将根据需要返回部分或全部阻止列表对于每个块，NameNode将返回包含该块副本的DataNode地址；这些返回的DataNode地址会根据集群拓扑得到DataNode到客户端的距离，然后按照两个规则进行排序:网络拓扑中离客户端最近的排在第一位；心跳机制中超上报的DataNode状态陈旧，较低；
+3、 客户端选择排名最高的DataNode来读取该块如果客户端本身是DataNode，则直接从本地获取数据(短路读取功能)；
+4、 在底层，本质是建立一个Socket流(FSDataInputStream)，反复调用父类DataInputStream的read方法，直到读取完这个块上的数据；
+5、 读取完列表的块后，如果文件读取还没有完成，客户端会继续从NameNode获取下一个块列表；
+6、 读取一个块后，将进行校验和验证如果读取DataNode时出现错误，客户端会通知NameNode，然后用块的副本从下一个DataNode继续读取；
+7、 读取方法是并行读取块信息，而不是逐个读取；NameNode只返回客户端请求中包含的块的DataNode地址，不返回请求块的数据；
+8、 所有读取的块将被合并成一个完整的最终文件；
+视频讲解：
+https://www.bilibili.com/video/BV1ge411s7UY?p=12
+详细读写流程讲解：
+https://www.bilibili.com/video/BV12h411t7jB?p=2
+2. HDFS 在读取文件的时候，如果其中一个块突然损坏了怎么办 读取DataNode上的数据块后，客户端将验证校验和，即使用HDFS上的原始数据块检查客户端读取的本地数据块。如果检查结果不一致，客户端将通知NameNode，然后继续从下一个DataNode读取块的副本。
+3. HDFS 在上传文件的时候，如果其中一个 DataNode 突然挂掉了怎么办 当客户端上传文件时，它与DataNode建立管道。流水线的正方向是客户端向DataNode发送数据包，流水线的反方向是DataNode向客户端发送ack确认，即正确接收数据包后发送确认。
+当DataNode突然挂起，客户端无法收到这个DataNode发送的ack确认时，客户端会通知NameNode，NameNode会检查这个块的副本不符合规定，NameNode会通知DataNode复制副本，并会对挂起的DataNode进行离线处理，使其不再参与文件上传和下载。
+4. NameNode 在启动的时候会做哪些操作 NameNode数据存储在内存和本地磁盘中，而本地磁盘数据存储在fsimage镜像文件和编辑日志文件中。
+首次启动NameNode:
+1、 格式化文件系统，以生成fsimage映像文件；
+2、 开始命名节点:；
+读取fsimage文件并将文件内容加载到内存中。
+等待DataNade注册并发送阻止报告
+3、 启动DataNode:；</description></item></channel></rss>

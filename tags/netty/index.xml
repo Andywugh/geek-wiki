@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>netty on 程序员安仔</title><link>https://www.hotmindshare.com/tags/netty/</link><description>Recent content in netty on 程序员安仔</description><generator>Hugo -- gohugo.io</generator><language>zh-hans</language><copyright>粤ICP备2023148789号</copyright><lastBuildDate>Sun, 10 Dec 2023 16:04:57 +0800</lastBuildDate><atom:link href="https://www.hotmindshare.com/tags/netty/index.xml" rel="self" type="application/rss+xml"/><item><title>Netty</title><link>https://www.hotmindshare.com/interview/v4/netty/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/netty/</guid><description>Netty 面试题 1. Netty 最流行的 NIO 框架，由 JBOSS 提供的，整合了 FTP,SMTP,HTTP 协议
+1、 API 简单；
+2、 成熟稳定；
+3、 社区活跃·；
+4、 经过大规模验证（互联网、大数据、网络游戏、电信通信）；
+Elasticsearch、Hadoop 子项目 avro 项目、阿里开源框架 Dubbo、使用 Netty
+2. BIO 优点：模型简单，编码简单缺点：性能瓶颈，请求数和线程数 N:N 关系高并发情况下 ,CPU 切换线程上下文损耗大案例：Tomcat 7 之前，都是 BIO，7 之后是 NIO 改进：伪 NIO，使用线程池去处理逻辑
+3. IO 模式 同步阻塞：丢衣服-&amp;gt;等洗衣机洗完-&amp;gt;再去晾衣服同步非阻塞：丢衣服-&amp;gt;去做其他事情，定时去看衣服是否洗完-&amp;gt;洗完后自己去晾衣服异步非阻塞：丢衣服-&amp;gt; 去做其他事情不管了，衣服洗好会自动晾好，并且通知你晾好了
+4. 五种 I/O 模型 五种 I/O 模型：阻塞 IO、非阻塞 IO、多路复用 IO、信号驱动 IO、异步 IO，前 4 种是同步 IO，在内核数据 copy 到用户空间时是阻塞的
+5. 阻塞 IO 6. 非阻塞 IO 7. IO 多路复用 核心：可以同时处理多个 connection，调用系统 select 和 recvfrom 函数每一个 socket 设置为 nonblocking 阻塞是被 select 这个函数 block 而不是 socket 阻塞缺点：连接数不高的情况下，性能不一定比多线程+ 阻塞 IO 好（多调用一个 select 函数）</description></item></channel></rss>

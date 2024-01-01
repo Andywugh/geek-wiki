@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>JVM on 程序员安仔</title><link>https://www.hotmindshare.com/tags/jvm/</link><description>Recent content in JVM on 程序员安仔</description><generator>Hugo -- gohugo.io</generator><language>zh-hans</language><copyright>粤ICP备2023148789号</copyright><lastBuildDate>Sun, 10 Dec 2023 16:04:57 +0800</lastBuildDate><atom:link href="https://www.hotmindshare.com/tags/jvm/index.xml" rel="self" type="application/rss+xml"/><item><title>JVM系列1</title><link>https://www.hotmindshare.com/interview/v4/jvm1/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/jvm1/</guid><description>JVM 初级面试题 1、对象在哪块内存分配？ 数组和对象在堆内存分配；某些对象没有逃逸出方法，可能被优化为在栈上分配
+2、谈谈 JVM 中的常量池 JDK 1.8 开始
+字符串常量池：存放在堆中，包括 String 对象执行 intern() 方法后存的地方、双引号直接引用的字符串
+运行时常量池：存放在方法区，属于元空间，是类加载后的一些存储区域，大多数是类中 constant_pool 的内容
+类文件常量池：constant_pool，JVM 定义的概念
+3、谈谈动态年龄判断 这里涉及到 -XX:TargetSurvivorRatio 参数，Survivor 区的目标使用率默认 50，即 Survivor 区对象目标使用率为 50%。
+Survivor 区相同年龄所有对象大小的总和 &amp;gt; (Survivor 区内存大小 * 这个目标使用率)时，大于或等于该年龄的对象直接进入老年代。
+当然，这里还需要考虑参数 -XX:MaxTenuringThreshold 晋升年龄最大阈值
+4、谈谈永久代 JDK 8 之前，Hotspot 中方法区的实现是永久代（Perm）
+JDK 7 开始把原本放在永久代的字符串常量池、静态变量等移出到堆，JDK 8 开始去除永久代，使用元空间（Metaspace），永久代剩余内容移至元空间，元空间直接在本地内存分配。
+5、JVM 有哪些运行时内存区域？ Java 8
+The pc Register，程序计数器
+Java Virtual Machine Stacks，Java 虚拟机栈
+Heap，堆
+Method Area，方法区
+Run-Time Constant Pool，运行时常量池
+Native Method Stacks，本地方法栈</description></item><item><title>JVM系列2</title><link>https://www.hotmindshare.com/interview/v4/jvm2/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/jvm2/</guid><description>JVM 高级面试题 一、Java 内存模型 1. 我们开发人员编写的 Java 代码是怎么让电脑认识的 首先先了解电脑是二进制的系统，他只认识 01010101 比如我们经常要编写 HelloWord.java 电脑是怎么认识运行的 HelloWord.java 是我们程序员编写的，我们人可以认识，但是电脑不认识 Java 文件编译的过程
+1、 程序员编写的.java 文件；
+2、 由 javac 编译成字节码文件.class：（为什么编译成 class 文件，因为 JVM 只认识.class 文件）；
+3、 在由 JVM 编译成电脑认识的文件（对于电脑系统来说文件代表一切）；
+（这是一个大概的观念 抽象画的概念）
+2. 为什么说 java 是跨平台语言 这个夸平台是中间语言（JVM）实现的夸平台 Java 有 JVM 从软件层面屏蔽了底层硬件、指令层面的细节让他兼容各种系统 难道 C 和 C++ 不能夸平台吗 其实也可以 C 和 C++需要在编译器层面去兼容不同操作系统的不同层面，写过 C 和 C++的就知道不同操作系统的有些代码是不一样
+3. Jdk 和 Jre 和 JVM 的区别 Jdk 包括了 Jre 和 Jvm，Jre 包括了 Jvm Jdk 是我们编写代码使用的开发工具包 Jre 是 Java 的运行时环境，他大部分都是 C 和 C++ 语言编写的，他是我们在编译 java 时所需要的基础的类库 Jvm 俗称 Java 虚拟机，他是 java 运行环境的一部分，它虚构出来的一台计算机，在通过在实际的计算机上仿真模拟各种计算机功能来实现 Java 应用程序 看 Java 官方的图片，Jdk 中包括了 Jre，Jre 中包括了 JVM!</description></item></channel></rss>

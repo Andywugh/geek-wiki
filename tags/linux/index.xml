@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>linux on 程序员安仔</title><link>https://www.hotmindshare.com/tags/linux/</link><description>Recent content in linux on 程序员安仔</description><generator>Hugo -- gohugo.io</generator><language>zh-hans</language><copyright>粤ICP备2023148789号</copyright><lastBuildDate>Sun, 10 Dec 2023 16:04:57 +0800</lastBuildDate><atom:link href="https://www.hotmindshare.com/tags/linux/index.xml" rel="self" type="application/rss+xml"/><item><title>Linux</title><link>https://www.hotmindshare.com/interview/v4/linux/</link><pubDate>Sun, 10 Dec 2023 16:04:57 +0800</pubDate><guid>https://www.hotmindshare.com/interview/v4/linux/</guid><description>Linux 面试题 一、Linux 概述 1. 什么是 Linux Linux 是一套免费使用和自由传播的类似 Unix 操作系统，一般的 WEB 项目都是部署都是放在 Linux 操作系统上面。 Linux 是一个基于 POSIX 和 Unix 的多用户、多任务、支持多线程和多 CPU 的操作系统。它能运行主要的 Unix 工具软件、应用程序和网络协议。它支持 32 位和 64 位硬件。Linux 继承了 Unix 以网络为核心的设计思想，是一个性能稳定的多用户网络操作系统。
+2. Windows 和 Linux 的区别 Windows 是微软开发的操作系统，民用操作系统，可用于娱乐、影音、上网。 Windows 操作系统具有强大的日志记录系统和强大的桌面应用。好处是它可以帮我们实现非常多绚丽多彩的效果，可以非常方便去进行娱乐、影音、上网。
+Linux 的应用相对单纯很多，没有什么绚丽多彩的效果，因此 Linux 的性能是非常出色的，可以完全针对机器的配置有针对性的优化，
+简单来说 Windows 适合普通用户进行娱乐办公使用，Linux 适合软件开发部署
+3. Unix 和 Linux 有什么区别？ Linux 和 Unix 都是功能强大的操作系统，都是应用广泛的服务器操作系统，有很多相似之处，甚至有一部分人错误地认为 Unix 和 Linux 操作系统是一样的，然而，事实并非如此，以下是两者的区别。
+1、 开源性；Linux 是一款开源操作系统，不需要付费，即可使用；Unix 是一款对源码实行知识产权保护的传统商业软件，使用需要付费授权使用。
+2、 跨平台性；Linux 操作系统具有良好的跨平台性能，可运行在多种硬件平台上；Unix 操作系统跨平台性能较弱，大多需与硬件配套使用。</description></item></channel></rss>
